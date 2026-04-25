@@ -1,0 +1,81 @@
+========================================
+FACULTY MULTIPLE CLASSES - SETUP STEPS
+========================================
+
+STEP 1: UPDATE DATABASE STRUCTURE
+----------------------------------
+Run this in your browser:
+http://localhost/dept/update_faculty_multiple_classes.php
+
+This will change the faculties.class_id column from INT to VARCHAR(255)
+to support comma-separated class IDs.
+
+After running, DELETE the file for security!
+
+
+STEP 2: ASSIGN CLASSES TO FACULTY
+----------------------------------
+Option A - Using Web Interface (Recommended):
+   1. Open: http://localhost/dept/admin_assign_faculty_classes.php
+   2. Select a faculty member
+   3. Check the classes they should access
+   4. Click "Save Class Assignments"
+
+Option B - Using SQL:
+   UPDATE faculties SET class_id = '1,2,3' WHERE faculty_id = 14;
+   (This assigns classes 1, 2, and 3 to faculty ID 14)
+
+
+STEP 3: TEST THE FEATURE
+-------------------------
+1. Login as faculty
+2. Go to Faculty Appreciations page
+3. You'll see a "Select Section" dropdown
+4. Choose a section to filter students
+5. Award points to test
+
+
+QUICK REFERENCE - CLASS IDs
+----------------------------
+1 = 4/4 CSD-A (2022-2026)
+2 = 3/4 CSD-A (2023-2027)
+3 = 3/4 CSIT-A (2023-2027)
+4 = 2/4 CSD-A (2024-2028)
+5 = 2/4 CSIT-A (2024-2028)
+6 = 2/4 CSIT-B (2024-2028)
+
+
+EXAMPLE ASSIGNMENTS
+-------------------
+Faculty ID 14 (Penmetsa Mouna) currently has class 3
+To add classes 5 and 6:
+   UPDATE faculties SET class_id = '3,5,6' WHERE faculty_id = 14;
+
+Faculty ID 8 (Dr N. Gopala Krishna Murthy) currently has class 3
+To add class 4:
+   UPDATE faculties SET class_id = '3,4' WHERE faculty_id = 8;
+
+
+SECURITY REMINDERS
+------------------
+After setup, DELETE these files:
+- update_faculty_multiple_classes.php
+- quick_assign_faculty_classes.php
+
+Keep these files:
+- admin_assign_faculty_classes.php (add authentication if needed)
+- faculty_appreciations.php (already updated)
+
+
+VERIFICATION
+------------
+To check current assignments, run this SQL:
+SELECT 
+    f.faculty_id,
+    f.faculty_name,
+    f.class_id,
+    GROUP_CONCAT(CONCAT(c.year, '/', c.branch, '-', c.section)) as classes
+FROM faculties f
+LEFT JOIN classes c ON FIND_IN_SET(c.class_id, f.class_id) > 0
+GROUP BY f.faculty_id
+ORDER BY f.faculty_name;
