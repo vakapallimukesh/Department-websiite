@@ -1601,24 +1601,24 @@ CREATE TABLE `faculties` (
 --
 
 INSERT INTO `faculties` (`faculty_id`, `faculty_name`, `email`, `password`, `class_id`, `phone_number`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'Dr.M.Suresh Babu', 'sureshbabu.k@srkrec.edu.in', 'suresh123', NULL, '9123456781', 1, '2025-08-22 16:19:03', '2025-12-13 04:11:46'),
-(2, 'Dr. K. Srinivasa Rao', 'ksinivasarao@srkrec.edu.in', 'srinivasa123', '2', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:29:09'),
-(3, 'Mr. K. Bhanu Rajesh Naidu', 'bhanurajeshnaidu@srkrec.edu.in', 'bhanu123', '6', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 03:51:30'),
-(4, 'A ASWINI PRIYANKA', 'aswini.areti@srkrec.edu.in', 'aswini123', '3', NULL, 1, '2025-08-22 16:19:03', '2026-04-02 04:27:34'),
-(5, 'ANGARA SATYAM', 'satyama@srkrec.edu.in', 'satyam123', '4', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:30:33'),
-(6, 'S MOHAN KRISHNA', 'mohankrishna.seerla@srkrec.edu.in', 'mohan123', '1,2,3,4,5,6', NULL, 1, '2025-08-22 16:19:03', '2026-02-12 16:07:43'),
-(7, 'P S V Surya Kumar', 'suryakumar.poduru@srkrec.edu.in', 'surya123', '3', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 03:48:24'),
-(8, 'Dr N. Gopala Krishna Murthy', 'gopinukala@srkrec.edu.in', 'gopala123', NULL, NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:11:50'),
-(9, 'Jonnapalli Tulasi Rajesh', 'jtulasirajesh@srkrec.edu.in', 'tulasi123', NULL, NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:35:49'),
-(10, 'Navya Nallaparaju', 'navyanallaparaju@srkrec.edu.in', 'navya123', '4', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:30:41'),
-(11, 'N PRAVEEN', 'neti.praveen@srkrec.edu.in', 'praveen123', '2', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:29:05'),
-(12, 'A. Krishna Veni', 'krishnaveni@srkrec.edu.in', 'krishna123', '5', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:31:27'),
-(13, 'Mr. K.V.V.S. Trinadh Naidu', 'kvvstrinadhnaidu@srkrec.edu.in', 'trinadh123', '1,2,3,4,5,6', NULL, 1, '2025-08-22 16:19:03', '2026-04-02 04:24:40'),
-(14, 'Penmetsa Mouna', 'mouna.nandyala@srkrec.edu.in', 'mouna123', '1,2,3,4,5,6', NULL, 1, '2025-08-22 16:19:03', '2026-04-02 04:27:38'),
-(15, 'Pericherla Manoj', 'manoj.p@srkrec.edu.in', 'manoj123', '3', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 03:46:02'),
-(16, 'K V Sunil Varma', 'sunil.kunuku@srkrec.edu.in', 'sunil123', '1,2,3,4,5,6', NULL, 1, '2025-08-22 16:19:03', '2026-04-02 04:27:52'),
-(17, 'N Aneela', 'aneela@srkrec.edu.in', 'aneela123', '1,2,3,4,5,6', '', 1, '2025-12-13 04:08:34', '2026-04-02 04:24:56'),
-(18, 'M S Suseela', 'm.s.suseela@srkrec.edu.in', 'suseela123', '4', '', 1, '2025-12-13 04:08:34', '2025-12-13 04:11:32');
+(1, 'Dr.M.Suresh Babu', 'sureshbabu.k@srkrec.edu.in', '', NULL, '9123456781', 1, '2025-08-22 16:19:03', '2025-12-13 04:11:46'),
+(2, 'Dr. K. Srinivasa Rao', 'ksinivasarao@srkrec.edu.in', '', '2', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:29:09'),
+(3, 'Mr. K. Bhanu Rajesh Naidu', 'bhanurajeshnaidu@srkrec.edu.in', '', '6', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 03:51:30'),
+(4, 'A ASWINI PRIYANKA', 'aswini.areti@srkrec.edu.in', '', '3', NULL, 1, '2025-08-22 16:19:03', '2026-04-02 04:27:34'),
+(5, 'ANGARA SATYAM', 'satyama@srkrec.edu.in', '', '4', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:30:33'),
+(6, 'S MOHAN KRISHNA', 'mohankrishna.seerla@srkrec.edu.in', '', '1,2,3,4,5,6', NULL, 1, '2025-08-22 16:19:03', '2026-02-12 16:07:43'),
+(7, 'P S V Surya Kumar', 'suryakumar.poduru@srkrec.edu.in', '', '3', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 03:48:24'),
+(8, 'Dr N. Gopala Krishna Murthy', 'gopinukala@srkrec.edu.in', '', NULL, NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:11:50'),
+(9, 'Jonnapalli Tulasi Rajesh', 'jtulasirajesh@srkrec.edu.in', '', NULL, NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:35:49'),
+(10, 'Navya Nallaparaju', 'navyanallaparaju@srkrec.edu.in', '', '4', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:30:41'),
+(11, 'N PRAVEEN', 'neti.praveen@srkrec.edu.in', '', '2', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:29:05'),
+(12, 'A. Krishna Veni', 'krishnaveni@srkrec.edu.in', '', '5', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 04:31:27'),
+(13, 'Mr. K.V.V.S. Trinadh Naidu', 'kvvstrinadhnaidu@srkrec.edu.in', '', '1,2,3,4,5,6', NULL, 1, '2025-08-22 16:19:03', '2026-04-02 04:24:40'),
+(14, 'Penmetsa Mouna', 'mouna.nandyala@srkrec.edu.in', '', '1,2,3,4,5,6', NULL, 1, '2025-08-22 16:19:03', '2026-04-02 04:27:38'),
+(15, 'Pericherla Manoj', 'manoj.p@srkrec.edu.in', '', '3', NULL, 1, '2025-08-22 16:19:03', '2025-12-13 03:46:02'),
+(16, 'K V Sunil Varma', 'sunil.kunuku@srkrec.edu.in', '', '1,2,3,4,5,6', NULL, 1, '2025-08-22 16:19:03', '2026-04-02 04:27:52'),
+(17, 'N Aneela', 'aneela@srkrec.edu.in', '', '1,2,3,4,5,6', '', 1, '2025-12-13 04:08:34', '2026-04-02 04:24:56'),
+(18, 'M S Suseela', 'm.s.suseela@srkrec.edu.in', '', '4', '', 1, '2025-12-13 04:08:34', '2025-12-13 04:11:32');
 
 -- --------------------------------------------------------
 
