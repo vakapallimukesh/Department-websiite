@@ -517,6 +517,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
     </style>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="login-container">
@@ -576,7 +579,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </form>
             
-            
+            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 16px;">
+                <a href="#" id="forgotMailLink" style="color: var(--primary-color); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease;">
+                    <i class="fas fa-envelope-open-text"></i> Forgot mail?
+                </a>
+                <span style="color: var(--border-color);">|</span>
+                <a href="#" id="forgotPasswordLink" style="color: var(--primary-color); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease;">
+                    <i class="fas fa-key"></i> Forgot Password?
+                </a>
+            </div>
             
             <div class="back-link">
                 <a href="index.php">
@@ -667,6 +678,179 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     e.preventDefault();
                     inputs[currentIndex + 1].focus();
                 }
+            }
+        });
+
+        // Forgot Mail Functionality
+        document.getElementById('forgotMailLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Forgot Email?',
+                text: 'Enter your Student ID',
+                input: 'text',
+                inputPlaceholder: 'e.g., 22B91A0512',
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#64748b',
+                showLoaderOnConfirm: true,
+                preConfirm: (studentId) => {
+                    if (!studentId) {
+                        Swal.showValidationMessage('Student ID is required');
+                        return false;
+                    }
+                    return fetch('api/get_student_email.php?student_id=' + encodeURIComponent(studentId))
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(response.statusText)
+                            }
+                            return response.json()
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(`Request failed: ${error}`)
+                        })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (result.value.success) {
+                        Swal.fire({
+                            title: 'Your Email',
+                            html: `The email linked to your Student ID is:<br><strong style="color: #2563eb; font-size: 1.2em;">${result.value.email}</strong><br><br><div style="font-size: 0.85em; color: #64748b; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;"><strong>Note:</strong> If your mail is wrong, contact your administrator to get the password. Once you log in, you can change your email.</div>`,
+                            icon: 'success',
+                            confirmButtonColor: '#2563eb'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Not Found',
+                            text: result.value.message || 'No student found with that ID.',
+                            icon: 'error',
+                            confirmButtonColor: '#2563eb'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Forgot Password Functionality
+        document.getElementById('forgotPasswordLink').addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            // Step 1: Get Student ID
+            const { value: studentId } = await Swal.fire({
+                title: 'Reset Password',
+                text: 'Enter your Student ID',
+                input: 'text',
+                inputPlaceholder: 'e.g., 22B91A0512',
+                showCancelButton: true,
+                confirmButtonText: 'Send OTP',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#64748b',
+                showLoaderOnConfirm: true,
+                preConfirm: async (sid) => {
+                    if (!sid) {
+                        Swal.showValidationMessage('Student ID is required');
+                        return false;
+                    }
+                    try {
+                        const response = await fetch('api/forgot_password_send_otp.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ student_id: sid })
+                        });
+                        const data = await response.json();
+                        if (!data.success) {
+                            throw new Error(data.message);
+                        }
+                        return data;
+                    } catch (error) {
+                        Swal.showValidationMessage(error.message || 'Request failed');
+                    }
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+            if (!studentId) return; // User cancelled
+
+            // Step 2: Get OTP
+            const { value: otp } = await Swal.fire({
+                title: 'Enter OTP',
+                text: studentId.message,
+                input: 'text',
+                inputPlaceholder: '6-digit OTP',
+                showCancelButton: true,
+                confirmButtonText: 'Verify OTP',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#64748b',
+                showLoaderOnConfirm: true,
+                preConfirm: async (code) => {
+                    if (!code) {
+                        Swal.showValidationMessage('OTP is required');
+                        return false;
+                    }
+                    try {
+                        const response = await fetch('api/forgot_password_verify_otp.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ otp: code })
+                        });
+                        const data = await response.json();
+                        if (!data.success) {
+                            throw new Error(data.message);
+                        }
+                        return data;
+                    } catch (error) {
+                        Swal.showValidationMessage(error.message || 'Verification failed');
+                    }
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+            if (!otp) return; // User cancelled
+
+            // Step 3: Get New Password
+            const { value: newPassword } = await Swal.fire({
+                title: 'Reset Password',
+                text: 'Enter your new password',
+                input: 'password',
+                inputPlaceholder: 'New Password',
+                showCancelButton: true,
+                confirmButtonText: 'Reset & Login',
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#64748b',
+                showLoaderOnConfirm: true,
+                preConfirm: async (pwd) => {
+                    if (!pwd || pwd.length < 6) {
+                        Swal.showValidationMessage('Password must be at least 6 characters');
+                        return false;
+                    }
+                    try {
+                        const response = await fetch('api/forgot_password_reset.php', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ new_password: pwd })
+                        });
+                        const data = await response.json();
+                        if (!data.success) {
+                            throw new Error(data.message);
+                        }
+                        return data;
+                    } catch (error) {
+                        Swal.showValidationMessage(error.message || 'Reset failed');
+                    }
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+            if (newPassword) {
+                await Swal.fire({
+                    title: 'Success!',
+                    text: newPassword.message,
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                window.location.href = 'student_dashboard.php';
             }
         });
     </script>

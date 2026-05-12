@@ -1,8 +1,8 @@
 <?php
 // Database configuration
-$servername = "127.0.0.1:4306";
+$servername = "localhost";
 $username = "root";
-$password = "password";
+$password = "";
 $dbname = "new_sem";
 
 // Create connection

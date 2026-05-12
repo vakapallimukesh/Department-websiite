@@ -1,8 +1,8 @@
 <?php
 
-$conn = mysqli_connect('127.0.0.1:4306', 'root', 'password', 'new_sem');
+$conn = mysqli_connect('localhost', 'root', '', 'new_sem');
 
-$sconn = new mysqli('127.0.0.1:4306', 'root', 'password', 'new_sem');
+$sconn = new mysqli('localhost', 'root', '', 'new_sem');
   
 ?>
 <!-- 
