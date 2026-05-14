@@ -237,6 +237,8 @@ $faculty_sections = $_SESSION['faculty_sections'] ?? '';
 $assigned_sections = array_filter(array_map('trim', explode(',', $faculty_sections)));
 $leave_error = '';
 $leave_success = '';
+$point_request_error = '';
+$point_request_success = '';
 $attendance_error = '';
 $attendance_success = '';
 
@@ -327,6 +329,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['faculty_leave_action'
         $leave_error = 'Error updating leave application.';
     }
 }
+
+// Handle faculty point request actions
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['faculty_point_request_action'])) {
+    $request_id = (int)($_POST['request_id'] ?? 0);
+    $action = $_POST['faculty_point_request_action'] ?? '';
+    $remarks = trim($_POST['faculty_remarks'] ?? '');
+
+    if ($request_id <= 0) {
+        $point_request_error = 'Invalid point request.';
+    } elseif (!in_array($action, ['approve', 'reject'], true)) {
+        $point_request_error = 'Invalid action.';
+    } elseif (empty($assigned_sections)) {
+        $point_request_error = 'No assigned sections found for your account.';
+    } else {
+        $class_ids_in = implode(',', array_map('intval', $assigned_sections));
+        $verify_query = "SELECT pr.id FROM point_requests pr
+                         JOIN students s ON pr.student_id = s.student_id
+                         WHERE pr.id = ? AND s.class_id IN ($class_ids_in)
+                         LIMIT 1";
+        $verify_stmt = mysqli_prepare($conn, $verify_query);
+
+        if (!$verify_stmt) {
+            $point_request_error = 'Database error while validating the request.';
+        } else {
+            mysqli_stmt_bind_param($verify_stmt, 'i', $request_id);
+            mysqli_stmt_execute($verify_stmt);
+            $verify_result = mysqli_stmt_get_result($verify_stmt);
+
+            if (!$verify_result || mysqli_num_rows($verify_result) === 0) {
+                $point_request_error = 'Request not found or not assigned to your sections.';
+            } else {
+                $status = $action === 'approve' ? 'Approved' : 'Rejected';
+                $update_query = "UPDATE point_requests SET status = ?, faculty_remark = ?, updated_at = NOW() WHERE id = ?";
+                $update_stmt = mysqli_prepare($conn, $update_query);
+
+                if (!$update_stmt) {
+                    $point_request_error = 'Database error while updating the request.';
+                } else {
+                    mysqli_stmt_bind_param($update_stmt, 'ssi', $status, $remarks, $request_id);
+                    if (mysqli_stmt_execute($update_stmt)) {
+                        $point_request_success = "Point request has been $status successfully.";
+                    } else {
+                        $point_request_error = 'Error updating point request.';
+                    }
+                    mysqli_stmt_close($update_stmt);
+                }
+            }
+
+            mysqli_stmt_close($verify_stmt);
+        }
+    }
+}
 // Fetch all leave applications for assigned section (not just pending)
 $all_leaves = [];
         if (!empty($assigned_sections)) {
@@ -413,6 +467,44 @@ $pending_leaves = [];
                 }
             }
         }
+
+// Fetch all point requests for assigned sections
+$point_requests = [];
+if (!empty($assigned_sections)) {
+    $class_ids_in = implode(',', array_map('intval', $assigned_sections));
+    if (!empty($class_ids_in)) {
+        $students_query = "SELECT student_id FROM students WHERE class_id IN ($class_ids_in)";
+        $students_result = mysqli_query($conn, $students_query);
+        if ($students_result) {
+            $student_ids = [];
+            while ($student_row = mysqli_fetch_assoc($students_result)) {
+                $student_ids[] = "'" . mysqli_real_escape_string($conn, $student_row['student_id']) . "'";
+            }
+            mysqli_free_result($students_result);
+
+            if (!empty($student_ids)) {
+                $student_ids_in = implode(',', $student_ids);
+                $query = "SELECT pr.id, pr.student_id, pr.student_name, pr.event_name, pr.points_requested,
+                                 pr.proof_file, pr.description, pr.status, pr.faculty_remark, pr.created_at,
+                                 s.student_id as register_no, c.year, c.branch, c.section
+                          FROM point_requests pr
+                          JOIN students s ON pr.student_id = s.student_id
+                          JOIN classes c ON s.class_id = c.class_id
+                          WHERE pr.student_id IN ($student_ids_in)
+                          ORDER BY pr.created_at DESC";
+                $result = mysqli_query($conn, $query);
+                if ($result) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $point_requests[] = $row;
+                    }
+                    mysqli_free_result($result);
+                } else {
+                    error_log('Point requests query failed: ' . mysqli_error($conn));
+                }
+            }
+        }
+    }
+}
 
 $attendance_calendar_data = [];
 if (!empty($assigned_sections)) {
@@ -515,6 +607,20 @@ echo "<!-- DEBUG: Final attendance data count: " . count($attendance_calendar_da
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php endif; ?>
+
+            <?php if (!empty($point_request_success)): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 10px;">
+                    <i class="fas fa-check-circle"></i> <?php echo htmlspecialchars($point_request_success); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!empty($point_request_error)): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 10px;">
+                    <i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($point_request_error); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
             
             <div class="back-nav">
                 <a href="index.php" class="back-btn">
@@ -581,6 +687,9 @@ echo "<!-- DEBUG: Final attendance data count: " . count($attendance_calendar_da
                             </button>
                             <a href="faculty_leave_management.php" class="action-btn">
                                 <i class="fas fa-address-book"></i> Leave Applications
+                            </a>
+                            <a href="#point-requests" class="action-btn">
+                                <i class="fas fa-star"></i> Point Requests
                             </a>
                             <a href="faculty_appreciations.php" class="action-btn">
                                 <i class="fas fa-award"></i> Appreciations
@@ -785,6 +894,91 @@ echo "<!-- DEBUG: Final attendance data count: " . count($attendance_calendar_da
             
           
               
+        </div>
+    </div>
+
+    <!-- Point Requests Review -->
+    <div class="container mb-4" id="point-requests">
+        <div class="card" style="border: none; box-shadow: 0 4px 16px rgba(7,101,147,0.1); border-radius: 15px;">
+            <div class="card-header" style="background: var(--light-blue); border-bottom: 1px solid #e3e6f0; border-radius: 15px 15px 0 0;">
+                <h5 class="mb-0" style="color: var(--primary-blue); font-weight: 600;">
+                    <i class="fas fa-star"></i> Point Requests Review
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Student ID</th>
+                                <th>Event Name</th>
+                                <th>Requested Points</th>
+                                <th>Proof</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Submitted</th>
+                                <th>Faculty Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($point_requests)): ?>
+                                <tr>
+                                    <td colspan="9" class="text-center py-4 text-muted">No point requests found for your assigned sections.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($point_requests as $request): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($request['student_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($request['register_no']); ?></td>
+                                        <td><?php echo htmlspecialchars($request['event_name']); ?></td>
+                                        <td><span class="badge bg-warning text-dark"><?php echo htmlspecialchars($request['points_requested']); ?> pts</span></td>
+                                        <td>
+                                            <?php if (!empty($request['proof_file']) && strpos($request['proof_file'], 'uploads/proofs/') === 0): ?>
+                                                <a href="<?php echo htmlspecialchars($request['proof_file']); ?>" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-external-link-alt"></i> View Proof
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="text-muted">Not available</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td style="min-width: 220px;"><?php echo nl2br(htmlspecialchars($request['description'])); ?></td>
+                                        <td>
+                                            <span class="badge bg-<?php echo strtolower($request['status']) === 'approved' ? 'success' : (strtolower($request['status']) === 'rejected' ? 'danger' : 'warning'); ?>">
+                                                <?php echo htmlspecialchars($request['status']); ?>
+                                            </span>
+                                        </td>
+                                        <td><?php echo date('d M Y, h:i A', strtotime($request['created_at'])); ?></td>
+                                        <td style="min-width: 260px;">
+                                            <?php if (strtolower($request['status']) === 'pending'): ?>
+                                                <form method="POST" class="mb-0">
+                                                    <input type="hidden" name="request_id" value="<?php echo (int)$request['id']; ?>">
+                                                    <div class="mb-2">
+                                                        <textarea name="faculty_remarks" class="form-control form-control-sm" rows="2" placeholder="Optional faculty remark"></textarea>
+                                                    </div>
+                                                    <div class="d-flex gap-2 flex-wrap">
+                                                        <button type="submit" name="faculty_point_request_action" value="approve" class="btn btn-sm btn-success">
+                                                            <i class="fas fa-check"></i> Approve
+                                                        </button>
+                                                        <button type="submit" name="faculty_point_request_action" value="reject" class="btn btn-sm btn-danger">
+                                                            <i class="fas fa-times"></i> Reject
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            <?php else: ?>
+                                                <small class="text-muted">Processed</small>
+                                                <?php if (!empty($request['faculty_remark'])): ?>
+                                                    <div class="small mt-1"><?php echo nl2br(htmlspecialchars($request['faculty_remark'])); ?></div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     

@@ -1762,10 +1762,13 @@ if ($class_result) {
                         <i class="fas fa-users"></i>
                         Students (${students.length})
                     </h3>
+                    <div class="mb-3">
+                        <input type="text" id="studentSearchInput" class="form-control" placeholder="Search students by name, email, or roll number...">
+                    </div>
                     ${students.length > 0 ? `
                         <div class="students-grid">
-                            ${students.map(student => `
-                                <div class="student-card">
+                            ${students.map((student, index) => `
+                                <div class="student-card" data-student-card data-student-index="${index}">
                                     <div class="student-header">
                                         <div class="student-avatar">
                                             ${student.profile_picture ? '<img src="' + student.profile_picture + '" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">' : student.name.split(' ').map(n => n.charAt(0)).join('').substring(0, 2).toUpperCase()}
@@ -1797,8 +1800,48 @@ if ($class_result) {
                             <p class="text-muted">This class currently has no enrolled students.</p>
                         </div>
                     `}
+                    <div id="studentSearchEmpty" class="text-center py-4 d-none">
+                        <i class="fas fa-search" style="font-size: 2.5rem; color: #e9ecef; margin-bottom: 1rem;"></i>
+                        <h5>No matching students found</h5>
+                        <p class="text-muted mb-0">Try a different name, email, or roll number.</p>
+                    </div>
                 </div>
             `;
+
+            const studentSearchInput = document.getElementById('studentSearchInput');
+            const studentCards = Array.from(modalContent.querySelectorAll('[data-student-card]'));
+            const studentSearchEmpty = document.getElementById('studentSearchEmpty');
+
+            function filterStudentCards() {
+                const searchTerm = studentSearchInput ? studentSearchInput.value.trim().toLowerCase() : '';
+                let visibleCount = 0;
+
+                studentCards.forEach(card => {
+                    const studentIndex = parseInt(card.getAttribute('data-student-index'), 10);
+                    const student = students[studentIndex] || {};
+                    const searchableText = [
+                        student.name,
+                        student.email,
+                        student.roll_no,
+                        student.student_id
+                    ].filter(Boolean).join(' ').toLowerCase();
+                    const isVisible = searchTerm === '' || searchableText.includes(searchTerm);
+
+                    card.style.display = isVisible ? '' : 'none';
+                    if (isVisible) {
+                        visibleCount++;
+                    }
+                });
+
+                if (studentSearchEmpty) {
+                    studentSearchEmpty.classList.toggle('d-none', visibleCount !== 0 || searchTerm === '');
+                }
+            }
+
+            if (studentSearchInput) {
+                studentSearchInput.addEventListener('input', filterStudentCards);
+                filterStudentCards();
+            }
         }
 
         // Close modal when clicking outside

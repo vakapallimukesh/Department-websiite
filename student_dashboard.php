@@ -171,6 +171,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_leave'])) {
     exit();
 }
 
+// Handle point request submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_point_request'])) {
+    $event_name = trim($_POST['event_name'] ?? '');
+    $points_requested = intval($_POST['points_requested'] ?? 0);
+    $description = trim($_POST['request_description'] ?? '');
+    
+    if (empty($event_name) || $points_requested <= 0 || empty($description)) {
+        $_SESSION['error_message'] = 'Please fill all required fields and request at least 1 point.';
+    } elseif (!isset($_FILES['proof_file']) || $_FILES['proof_file']['error'] === UPLOAD_ERR_NO_FILE) {
+        $_SESSION['error_message'] = 'Please upload proof file (image or PDF).';
+    } elseif ($_FILES['proof_file']['error'] !== UPLOAD_ERR_OK) {
+        $_SESSION['error_message'] = 'File upload error. Please try again.';
+    } else {
+        $upload_dir = 'uploads/proofs/';
+        
+        // Create directory if it doesn't exist
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0755, true);
+        }
+        
+        $file_extension = strtolower(pathinfo($_FILES['proof_file']['name'], PATHINFO_EXTENSION));
+        $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
+        $file_size_limit = 5 * 1024 * 1024; // 5MB
+        
+        if (!in_array($file_extension, $allowed_extensions)) {
+            $_SESSION['error_message'] = 'Invalid file type. Please upload JPG, PNG, GIF, or PDF files only.';
+        } elseif ($_FILES['proof_file']['size'] > $file_size_limit) {
+            $_SESSION['error_message'] = 'File size must not exceed 5MB.';
+        } else {
+            $filename = $student_id . '_' . time() . '.' . $file_extension;
+            $upload_path = $upload_dir . $filename;
+            
+            if (move_uploaded_file($_FILES['proof_file']['tmp_name'], $upload_path)) {
+                // Insert point request into database
+                $student_name = $student_data['name'] ?? $student_id;
+                $request_query = "INSERT INTO point_requests (student_id, student_name, event_name, points_requested, proof_file, description, status, created_at) VALUES (?, ?, ?, ?, ?, ?, 'Pending', NOW())";
+                $request_stmt = mysqli_prepare($conn, $request_query);
+                
+                if ($request_stmt) {
+                    mysqli_stmt_bind_param($request_stmt, "sssiss", $student_id, $student_name, $event_name, $points_requested, $upload_path, $description);
+                    
+                    if (mysqli_stmt_execute($request_stmt)) {
+                        $_SESSION['success_message'] = 'Point request submitted successfully. Your request is pending faculty approval.';
+                    } else {
+                        // Delete uploaded file if database insert fails
+                        unlink($upload_path);
+                        $_SESSION['error_message'] = 'Error saving point request. Please try again.';
+                    }
+                } else {
+                    unlink($upload_path);
+                    $_SESSION['error_message'] = 'Database error. Please try again.';
+                }
+            } else {
+                $_SESSION['error_message'] = 'Error uploading file. Please try again.';
+            }
+        }
+    }
+    
+    header('Location: student_dashboard.php');
+    exit();
+}
+
 // Handle skills update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_skills'])) {
     error_log("Skills update form submitted");
@@ -1132,6 +1194,11 @@ while ($row = mysqli_fetch_assoc($won_result)) {
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="requests-tab" data-bs-toggle="tab" data-bs-target="#requests" type="button" role="tab" aria-controls="requests" aria-selected="false">
+                                <i class="fas fa-star"></i> Point Requests
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="leave-tab" data-bs-toggle="tab" data-bs-target="#leave" type="button" role="tab" aria-controls="leave" aria-selected="false">
                                 <i class="fas fa-file-alt"></i> Leave Applications
                                 <?php if (!empty($leave_applications)): ?>
@@ -1254,6 +1321,59 @@ while ($row = mysqli_fetch_assoc($won_result)) {
                                     <i class="fas fa-calendar-times"></i>
                                     <h6>No Attendance Records</h6>
                                     <p class="text-muted mb-0">No recent attendance data available.</p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <div class="tab-pane fade" id="requests" role="tabpanel" aria-labelledby="requests-tab">
+                            <div class="text-end mb-3">
+                                <button type="button" class="btn-modern btn-primary" data-bs-toggle="modal" data-bs-target="#pointRequestModal">
+                                    <i class="fas fa-plus"></i> Request Points
+                                </button>
+                            </div>
+                            
+                            <?php 
+                            $requests_query = "SELECT * FROM point_requests WHERE student_id = ? ORDER BY created_at DESC";
+                            $requests_stmt = mysqli_prepare($conn, $requests_query);
+                            mysqli_stmt_bind_param($requests_stmt, "s", $student_id);
+                            mysqli_stmt_execute($requests_stmt);
+                            $requests_result = mysqli_stmt_get_result($requests_stmt);
+                            $point_requests = [];
+                            while ($req = mysqli_fetch_assoc($requests_result)) {
+                                $point_requests[] = $req;
+                            }
+                            ?>
+                            
+                            <?php if (!empty($point_requests)): ?>
+                                <div class="table-responsive">
+                                    <table class="table table-modern">
+                                        <thead>
+                                            <tr>
+                                                <th>Event Name</th>
+                                                <th>Points Requested</th>
+                                                <th>Status</th>
+                                                <th>Submitted Date</th>
+                                                <th>Faculty Remark</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($point_requests as $request): ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($request['event_name']); ?></td>
+                                                <td><span class="badge bg-warning"><?php echo htmlspecialchars($request['points_requested']); ?> pts</span></td>
+                                                <td><span class="badge bg-<?php echo ($request['status'] === 'Approved') ? 'success' : (($request['status'] === 'Rejected') ? 'danger' : 'info'); ?>"><?php echo htmlspecialchars($request['status']); ?></span></td>
+                                                <td><?php echo date('d M Y', strtotime($request['created_at'])); ?></td>
+                                                <td><?php if ($request['faculty_remark']): ?><small><?php echo htmlspecialchars($request['faculty_remark']); ?></small><?php else: ?><small class="text-muted">—</small><?php endif; ?></td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <?php else: ?>
+                                <div class="text-center py-5">
+                                    <i class="fas fa-star-half-alt" style="font-size: 3rem; color: #e9ecef; margin-bottom: 1rem; display: block;"></i>
+                                    <h6>No Point Requests Yet</h6>
+                                    <p class="text-muted">Submit your first point request by clicking the "Request Points" button above.</p>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -1706,6 +1826,59 @@ while ($row = mysqli_fetch_assoc($won_result)) {
                             </button>
                             <button type="submit" class="btn-modern btn-primary">
                                 <i class="fas fa-save"></i> Update Social Links
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Point Request Modal -->
+    <div class="modal fade" id="pointRequestModal" tabindex="-1" aria-labelledby="pointRequestModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pointRequestModalLabel">
+                        <i class="fas fa-star"></i> Request House Points
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="event_name" class="form-label">
+                                <i class="fas fa-calendar-alt"></i> Event Name
+                            </label>
+                            <input type="text" name="event_name" id="event_name" class="form-control" placeholder="e.g., Sports Competition, Cultural Event" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="points_requested" class="form-label">
+                                    <i class="fas fa-star"></i> Points Requested
+                                </label>
+                                <input type="number" name="points_requested" id="points_requested" class="form-control" min="1" max="100" placeholder="Number of points" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="proof_file" class="form-label">
+                                    <i class="fas fa-file-upload"></i> Proof File
+                                </label>
+                                <input type="file" name="proof_file" id="proof_file" class="form-control" accept=".jpg,.jpeg,.png,.gif,.pdf" required>
+                                <small class="form-text text-muted">JPG, PNG, GIF, or PDF (Max 5MB)</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="request_description" class="form-label">
+                                <i class="fas fa-comment"></i> Description
+                            </label>
+                            <textarea name="request_description" id="request_description" class="form-control" rows="4" placeholder="Describe your achievement or event participation..." required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn-modern btn-secondary me-2" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <button type="submit" name="submit_point_request" class="btn-modern btn-primary">
+                                <i class="fas fa-paper-plane"></i> Submit Request
                             </button>
                         </div>
                     </form>
