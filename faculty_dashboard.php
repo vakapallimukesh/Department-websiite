@@ -232,9 +232,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_whatsapp']))
 include_once dirname(__FILE__) . '/db_migration_helper.php';
 $db_helper = new DatabaseMigrationHelper($conn);
 
-$faculty_id = $_SESSION['faculty_id'] ?? null;
-$faculty_sections = $_SESSION['faculty_sections'] ?? '';
-$assigned_sections = array_filter(array_map('trim', explode(',', $faculty_sections)));
 $leave_error = '';
 $leave_success = '';
 $point_request_error = '';

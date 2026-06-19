@@ -756,6 +756,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         const response = await fetch('api/forgot_password_send_otp.php', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
                             body: JSON.stringify({ student_id: sid })
                         });
                         const data = await response.json();
@@ -792,6 +793,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         const response = await fetch('api/forgot_password_verify_otp.php', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
                             body: JSON.stringify({ otp: code })
                         });
                         const data = await response.json();
@@ -828,6 +830,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         const response = await fetch('api/forgot_password_reset.php', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
+                            credentials: 'include',
                             body: JSON.stringify({ new_password: pwd })
                         });
                         const data = await response.json();
