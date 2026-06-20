@@ -13,19 +13,65 @@
     
     body {
         margin: 0 !important;
-        padding: 0 !important;
+        padding-top: 100px !important;
+    }
+    
+    @media (max-width: 991px) {
+        body {
+            padding-top: 85px !important;
+        }
     }
     
     /* Navigation specific styles with high specificity */
     .navbar.navbar-expand-lg {
-        background-color: #ffffff !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
-        padding: 1rem 0 !important;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.1) 100%) !important;
+        backdrop-filter: blur(25px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(25px) saturate(180%) !important;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08), 
+                    inset 0 1px 0 0 rgba(255, 255, 255, 0.65), 
+                    inset 0 -1px 0 0 rgba(255, 255, 255, 0.15) !important;
+        padding: 0.7rem 2rem !important;
         font-family: 'Inter', sans-serif !important;
-        border-bottom: 1px solid #e2e8f0 !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
         margin: 0 !important;
-        position: relative;
-        top: 0;
+        position: fixed !important;
+        top: 25px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 90% !important;
+        max-width: 1200px !important;
+        border-radius: 50px !important;
+        z-index: 1000 !important;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .navbar.navbar-expand-lg.nav-scrolled {
+        top: 12px !important;
+        padding: 0.5rem 2rem !important;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.25) 100%) !important;
+        box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12), 
+                    inset 0 1px 0 0 rgba(255, 255, 255, 0.75), 
+                    inset 0 -1px 0 0 rgba(255, 255, 255, 0.2) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+    }
+
+    @media (max-width: 991px) {
+        .navbar.navbar-expand-lg {
+            width: 94% !important;
+            top: 15px !important;
+            border-radius: 20px !important;
+            padding: 0.5rem 1.2rem !important;
+        }
+        
+        .navbar.navbar-expand-lg.nav-scrolled {
+            top: 8px !important;
+            padding: 0.4rem 1.2rem !important;
+        }
+
+        .navbar-collapse {
+            padding-top: 12px !important;
+            padding-bottom: 8px !important;
+        }
     }
     
     .navbar .navbar-brand {
@@ -34,44 +80,81 @@
         color: #1a365d !important;
         text-decoration: none !important;
         font-size: 1.125rem !important;
+        transition: transform 0.3s ease !important;
+    }
+
+    .navbar .navbar-brand:hover {
+        transform: scale(1.03) !important;
     }
     
     .navbar .nav-link {
         font-family: 'Inter', sans-serif !important;
-        font-weight: 500 !important;
-        color: #4a5568 !important;
-        transition: color 0.2s ease !important;
+        font-weight: 600 !important;
+        color: #334155 !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
         text-decoration: none !important;
-        padding: 0.5rem 1rem !important;
+        padding: 0.5rem 1.1rem !important;
         font-size: 0.9rem !important;
+        border-radius: 25px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+    
+    .navbar .nav-link i {
+        font-size: 0.95rem !important;
+        opacity: 0.8 !important;
+        transition: transform 0.3s ease !important;
+    }
+    
+    .navbar .nav-link:hover i {
+        transform: translateY(-2px) !important;
     }
     
     .navbar .nav-link:hover {
-        color: #1a365d !important;
+        color: #2563eb !important;
+        background: rgba(255, 255, 255, 0.45) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .navbar .nav-link.active {
+        color: #1d4ed8 !important;
+        background: rgba(255, 255, 255, 0.65) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
     }
     
     .navbar .btn-outline-primary {
         font-family: 'Inter', sans-serif !important;
-        font-weight: 500 !important;
-        border-radius: 6px !important;
-        border-color: #3182ce !important;
-        color: #3182ce !important;
-        padding: 0.5rem 1rem !important;
+        font-weight: 600 !important;
+        border-radius: 25px !important;
+        border: 1.5px solid #2563eb !important;
+        color: #2563eb !important;
+        padding: 0.5rem 1.3rem !important;
         text-decoration: none !important;
         font-size: 0.875rem !important;
+        background: rgba(37, 99, 235, 0.03) !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.05) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
     }
     
     .navbar .btn-outline-primary:hover {
-        background-color: #3182ce !important;
-        border-color: #3182ce !important;
+        background-color: #2563eb !important;
+        border-color: #2563eb !important;
         color: #ffffff !important;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3) !important;
+        transform: translateY(-1px) !important;
     }
     
     /* Ensure navbar toggler works properly */
     .navbar-toggler {
         border: none !important;
         padding: 0.25rem 0.5rem !important;
-        border-radius: 4px !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.35) !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
     }
     
     .navbar-toggler:focus {
@@ -96,46 +179,53 @@
     
     /* Dropdown menu styles */
     .navbar .dropdown-menu {
-        background-color: #ffffff !important;
-        border: 1px solid #e2e8f0 !important;
-        border-radius: 8px !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.07) !important;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.75) 100%) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.45) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 10px 30px rgba(31, 38, 135, 0.08), 
+                    inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
         padding: 8px 0 !important;
-        margin-top: 8px !important;
+        margin-top: 12px !important;
         min-width: 220px !important;
+        overflow: hidden !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
     
     .navbar .dropdown-item {
         font-family: 'Inter', sans-serif !important;
-        font-weight: 500 !important;
-        color: #4a5568 !important;
-        padding: 8px 16px !important;
-        transition: all 0.2s ease !important;
+        font-weight: 550 !important;
+        color: #334155 !important;
+        padding: 10px 18px !important;
+        transition: all 0.25s ease !important;
         display: flex !important;
         align-items: center !important;
-        gap: 8px !important;
+        gap: 10px !important;
         font-size: 0.875rem !important;
     }
     
     .navbar .dropdown-item:hover {
-        background-color: #f7fafc !important;
-        color: #1a365d !important;
+        background: rgba(37, 99, 235, 0.08) !important;
+        color: #2563eb !important;
+        padding-left: 22px !important;
     }
     
     .navbar .dropdown-item i {
         width: 16px !important;
         text-align: center !important;
         font-size: 14px !important;
-        color: #718096 !important;
+        color: #64748b !important;
+        transition: color 0.25s ease !important;
     }
     
     .navbar .dropdown-item:hover i {
-        color: #3182ce !important;
+        color: #2563eb !important;
     }
     
     .navbar .dropdown-divider {
         margin: 6px 0 !important;
-        border-top: 1px solid #e2e8f0 !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.4) !important;
     }
     
     .navbar .dropdown-toggle::after {
@@ -146,21 +236,27 @@
     /* Mobile dropdown improvements */
     @media (max-width: 991px) {
         .navbar .dropdown-menu {
-            background-color: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            margin-top: 0 !important;
-            padding-left: 16px !important;
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+            margin-top: 6px !important;
+            padding-left: 10px !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            border-radius: 12px !important;
         }
         
         .navbar .dropdown-item {
             padding: 8px 12px !important;
-            border-radius: 4px !important;
+            border-radius: 8px !important;
             margin: 2px 0 !important;
+            color: #475569 !important;
         }
         
         .navbar .dropdown-item:hover {
-            background-color: rgba(49, 130, 206, 0.1) !important;
+            background-color: rgba(37, 99, 235, 0.1) !important;
+            color: #2563eb !important;
+            padding-left: 16px !important;
         }
     }
 </style>
@@ -291,8 +387,26 @@
                     </li>
                 <?php endif; ?>
 
-               
+                
             </ul>
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nav = document.querySelector('.navbar');
+        if (!nav) return;
+        
+        function checkScroll() {
+            if (window.scrollY > 20) {
+                nav.classList.add('nav-scrolled');
+            } else {
+                nav.classList.remove('nav-scrolled');
+            }
+        }
+        
+        window.addEventListener('scroll', checkScroll);
+        checkScroll();
+    });
+</script>

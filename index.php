@@ -625,19 +625,608 @@ include "./head.php";
         /* Target the specific hero section with houses by its inline styles */
         section[style*="padding: 150px"],
         section[style*="margin-top: -180px"] {
-            display: none !important;
-            padding: 0 !important;
+        padding: 0 !important;
             margin: 0 !important;
             height: 0 !important;
+        }
+    }
+
+    /* ========================================== */
+    /* SPLIT SCROLL REVEAL SECTION STYLES        */
+    /* ========================================== */
+    .reveal-showcase-section {
+        position: relative;
+        background: transparent; /* seamless integration */
+        height: 260vh; /* scrollable distance */
+        overflow: visible;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Desktop View Layout */
+    .showcase-desktop-view {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .showcase-desktop-view .container {
+        height: 100%;
+    }
+
+    .showcase-desktop-view .row {
+        height: 100%;
+    }
+
+    /* Left Column: Narrative Content */
+    .showcase-text-col {
+        position: relative;
+        height: 100%;
+    }
+
+    /* Sticky text container */
+    .showcase-sticky-text-wrapper {
+        position: sticky;
+        top: 20vh;
+        height: 60vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    /* Scroll items stacked absolute in same spot */
+    .showcase-scroll-item {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0;
+        opacity: 0;
+        transform: translateX(-150px); /* entering from the left */
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+    }
+
+    /* Active state centered */
+    .showcase-scroll-item.active {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: auto;
+        z-index: 5;
+    }
+
+    /* Exiting state: offset to the right */
+    .showcase-scroll-item.exit {
+        opacity: 0;
+        transform: translateX(150px);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .showcase-card-badge {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #2563eb;
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+    }
+
+    .showcase-card-title {
+        font-size: 2.1rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+        color: #0f172a;
+        line-height: 1.25;
+    }
+
+    .showcase-card-text {
+        font-size: 0.95rem;
+        color: #475569;
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+
+    .showcase-card-stats {
+        display: flex;
+        gap: 24px;
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        padding-top: 20px;
+    }
+
+    .showcase-stat-box {
+        flex: 1;
+    }
+
+    .showcase-stat-val {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .showcase-stat-lbl {
+        font-size: 0.75rem;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    /* Right Column: Sticky Graphic Viewport */
+    .showcase-graphic-col {
+        position: relative;
+        height: 100%;
+    }
+
+    .showcase-sticky-graphic {
+        position: sticky;
+        top: 20vh;
+        height: 60vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    /* Soft ambient blobs that change color */
+    .showcase-ambient-glow {
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        width: 380px;
+        height: 380px;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.12;
+        transition: background 1.2s ease, transform 1.2s ease;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .showcase-sticky-graphic.step-0 .showcase-ambient-glow {
+        background: #10b981;
+        transform: translate(0, 0) scale(1);
+    }
+    .showcase-sticky-graphic.step-1 .showcase-ambient-glow {
+        background: #f97316;
+        transform: translate(-40px, 40px) scale(1.1);
+    }
+    .showcase-sticky-graphic.step-2 .showcase-ambient-glow {
+        background: #3b82f6;
+        transform: translate(40px, -40px) scale(0.95);
+    }
+    .showcase-sticky-graphic.step-3 .showcase-ambient-glow {
+        background: #8b5cf6;
+        transform: translate(0, 40px) scale(1.05);
+    }
+
+    .showcase-graphic-item {
+        position: absolute;
+        width: 100%;
+        max-width: 440px;
+        height: 390px;
+        opacity: 0;
+        transform: scale(0.92) translateY(20px);
+        filter: blur(10px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    .showcase-graphic-item.active {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+        pointer-events: auto;
+    }
+
+    /* Graphic 0: SDC Dashboard styling */
+    .showcase-dash-card {
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        border-radius: 24px;
+        padding: 28px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.04);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .showcase-dash-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #0f172a;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding-bottom: 12px;
+    }
+
+    .showcase-dash-header i {
+        font-size: 1.1rem;
+    }
+
+    .showcase-project-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.015);
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+    }
+
+    .project-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-name {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .project-status {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #10b981;
+        text-transform: uppercase;
+        margin-top: 2px;
+    }
+
+    .project-status.font-amber { color: #f59e0b; }
+    .project-status.font-blue { color: #3b82f6; }
+
+    .project-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .project-indicator.progress-green { background: #10b981; box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); }
+    .project-indicator.progress-amber { background: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.5); }
+    .project-indicator.progress-blue { background: #3b82f6; box-shadow: 0 0 8px rgba(59, 130, 246, 0.5); }
+
+    .showcase-dash-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding-top: 12px;
+    }
+
+    .gauge-container {
+        position: relative;
+        width: 56px;
+        height: 56px;
+    }
+
+    .gauge-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: #10b981;
+    }
+
+    .footer-stats {
+        text-align: right;
+    }
+
+    .fs-num {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .fs-lbl {
+        font-size: 0.7rem;
+        color: #64748b;
+        font-weight: 600;
+    }
+
+    /* Graphic 1: Houses Orbit styling */
+    .showcase-houses-circle-wrapper {
+        position: relative;
+        width: 290px;
+        height: 290px;
+    }
+
+    .showcase-houses-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 76px;
+        height: 76px;
+        background: #ffffff;
+        border-radius: 50%;
+        padding: 5px;
+        border: 2px solid rgba(0, 0, 0, 0.04);
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.12);
+        z-index: 5;
+    }
+
+    .showcase-houses-center img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .showcase-houses-orbit-ring {
+        position: absolute;
+        inset: 0;
+        border: 2px dashed rgba(0, 0, 0, 0.05);
+        border-radius: 50%;
+        transition: transform 0.1s linear;
+    }
+
+    .showcase-house-node {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        padding: 2px;
+        background: #ffffff;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .showcase-house-node img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .showcase-house-node:hover {
+        transform: translate(-50%, -50%) scale(1.15);
+        z-index: 10;
+    }
+
+    .node-agni { top: calc(50% - 130px * 1); left: 50%; border: 2px solid #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+    .node-vayu { top: calc(50% - 130px * 0.309); left: calc(50% + 130px * 0.951); border: 2px solid #eab308; box-shadow: 0 0 15px rgba(234, 179, 8, 0.2); }
+    .node-prudhvi { top: calc(50% + 130px * 0.809); left: calc(50% + 130px * 0.588); border: 2px solid #f97316; box-shadow: 0 0 15px rgba(249, 115, 22, 0.2); }
+    .node-jal { top: calc(50% + 130px * 0.809); left: calc(50% - 130px * 0.588); border: 2px solid #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+    .node-aakash { top: calc(50% - 130px * 0.309); left: calc(50% - 130px * 0.951); border: 2px solid #06b6d4; box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); }
+
+    /* Graphic 2: Placements card styling */
+    .showcase-placements-card {
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        border-radius: 24px;
+        padding: 24px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .sp-card-title {
+        font-weight: 700;
+        font-size: 1rem;
+        color: #0f172a;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding-bottom: 12px;
+    }
+
+    .sp-card-title i {
+        margin-right: 8px;
+    }
+
+    .sp-chart-area {
+        height: 150px;
+        width: 100%;
+        position: relative;
+    }
+
+    .sp-stats-row {
+        display: flex;
+        gap: 16px;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding-top: 12px;
+    }
+
+    .sp-stat-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: rgba(0, 0, 0, 0.015);
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.02);
+    }
+
+    .sp-label {
+        font-size: 0.65rem;
+        color: #64748b;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+
+    .sp-value {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #2563eb;
+    }
+
+    .sp-value.color-indigo {
+        color: #4f46e5;
+    }
+
+    /* Graphic 3: Startups Ecosystem styling */
+    .showcase-startups-card {
+        position: relative;
+        width: 380px;
+        height: 380px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ss-core {
+        position: relative;
+        width: 90px;
+        height: 90px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.02) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+        border: 2px solid rgba(139, 92, 246, 0.2);
+        box-shadow: 0 0 25px rgba(139, 92, 246, 0.15);
+    }
+
+    .ss-core i {
+        font-size: 2.2rem;
+        color: #8b5cf6;
+        animation: pulseBulb 2s ease-in-out infinite;
+    }
+
+    .ss-wave-rings {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .ss-wave {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.2);
+        width: 380px;
+        height: 380px;
+        border: 1px solid rgba(139, 92, 246, 0.06);
+        border-radius: 50%;
+        opacity: 1;
+        animation: pulseRing 4s linear infinite;
+    }
+
+    .ss-wave:nth-child(2) { animation-delay: 2s; }
+    .ss-bubble {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ss-bubble img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.06));
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ss-bubble:hover img {
+        transform: scale(1.1);
+        filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.12));
+    }
+    .ss-b1 { top: 10px; left: 5px; animation: bubbleFloat 5s ease-in-out infinite; }
+    .ss-b2 { top: 20px; right: -15px; animation: bubbleFloat 6s ease-in-out infinite 1s; }
+    .ss-b3 { bottom: 10px; left: 20px; animation: bubbleFloat 5.5s ease-in-out infinite 0.5s; }
+    .ss-b4 { bottom: 20px; right: 5px; animation: bubbleFloat 6.5s ease-in-out infinite 1.5s; }
+
+    @keyframes bubbleFloat {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(3deg); }
+    }
+
+    @keyframes pulseBulb {
+        0%, 100% { opacity: 0.8; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.08); filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.6)); }
+    }
+
+    @keyframes pulseRing {
+        0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0.8; }
+        100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0; }
+    }
+
+    /* Show/Hide Views */
+    .showcase-desktop-view {
+        display: block;
+        width: 100%;
+    }
+
+    .showcase-mobile-view {
+        display: none;
+    }
+
+    /* Mobile styles */
+    @media (max-width: 991px) {
+        .showcase-desktop-view {
+            display: none !important;
+        }
+
+        .showcase-mobile-view {
+            display: block;
+            padding: 80px 20px;
+            background: #f8fafc;
+        }
+
+        .showcase-mobile-title-block {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .showcase-mobile-title-block h3 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .showcase-mobile-title-block p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+
+        .showcase-mobile-card {
+            background: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            padding: 35px 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.02);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .showcase-mobile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+        }
+
+        .showcase-mobile-card:last-child {
+            margin-bottom: 0;
         }
     }
 </style>
 
 <body>
+    <div id="intro-overlay"></div>
     <?php include "nav.php"; ?>
-
-
-    <!-- Combined Hero and Houses Section -->
     <section class="hero-section" style="display: flex; min-height: 100vh; align-items: center; position: relative; overflow: hidden; background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);">
         <!-- Animated Background Elements -->
         <div class="hero-bg-effects">
@@ -718,187 +1307,338 @@ include "./head.php";
                 <div class="col-lg-6">
                     <div class="hero-visual" style="display: flex; align-items: center; justify-content: center; min-height: 80vh; position: relative;">
                         <!-- Central Innovation Hub -->
-                        <div style="position: relative; width: 500px; height: 500px;">
+                        <div class="loader-visual-container">
                             <!-- Floating Achievement Cards -->
 
-                        <!-- Achievement Cards Container with cyclic rotation and effects -->
+                        <!-- Premium Intro Loader with dynamic entry transition styling -->
                         <style>
-                            @keyframes rotateCard {
-                                0% { transform: rotateY(0deg); }
-                                50% { transform: rotateY(15deg); }
-                                100% { transform: rotateY(0deg); }
+                            /* Intro full-screen overlay backdrop */
+                            #intro-overlay {
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: #fefefe;
+                                z-index: 9999;
+                                opacity: 1;
+                                transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+                                pointer-events: auto;
                             }
-                            .achievement-cards-container {
+                            #intro-overlay.fade-out {
+                                opacity: 0;
+                                pointer-events: none;
+                            }
+
+                            /* Premium Loader Container */
+                            /* Premium Loader Container */
+                            .premium-hero-loader {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                width: 420px;
+                                height: 420px;
                                 display: flex;
-                                flex-wrap: wrap;
+                                align-items: center;
                                 justify-content: center;
-                                gap: 20px;
-                                max-width: 600px;
-                                margin: 0 auto;
-                                padding: 20px;
-                                perspective: 1000px;
-                            }
-                            .achievement-card {
-                                flex: 1 1 140px;
-                                min-width: 140px;
-                                padding: 20px;
-                                border-radius: 15px;
-                                text-align: center;
-                                color: white;
-                                box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-                                cursor: pointer;
-                                transition: transform 0.6s ease, box-shadow 0.3s ease;
-                                animation: rotateCard 6s ease-in-out infinite;
+                                pointer-events: none;
+                                z-index: 5;
                                 will-change: transform;
-                                user-select: none;
                             }
-                            .achievement-card:hover {
-                                transform: scale(1.1) rotateY(0deg);
-                                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-                                animation-play-state: paused;
+
+                            .premium-hero-loader.preloading {
+                                z-index: 10000 !important;
+                            }
+
+                            /* Responsive Loader Visual Container */
+                            .loader-visual-container {
+                                position: relative;
+                                width: 500px;
+                                height: 500px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                max-width: 100%;
+                            }
+
+                            @media (max-width: 768px) {
+                                .loader-visual-container {
+                                    width: 320px;
+                                    height: 320px;
+                                }
+                            }
+
+                            /* Background Pulsing Ambient Glow */
+                            .loader-glow {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                width: 300px;
+                                height: 300px;
+                                background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.02) 70%, transparent 100%);
+                                border-radius: 50%;
+                                filter: blur(40px);
+                                animation: pulseGlow 4s ease-in-out infinite alternate;
+                            }
+
+                            /* Central Core Glassmorphic Disk */
+                            .loader-core {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                width: 190px;
+                                height: 190px;
+                                background: rgba(255, 255, 255, 0.85);
+                                backdrop-filter: blur(25px);
+                                -webkit-backdrop-filter: blur(25px);
+                                border: 1.5px solid rgba(255, 255, 255, 0.5);
+                                border-radius: 50%;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                box-shadow: 0 20px 45px rgba(0, 0, 0, 0.05),
+                                            inset 0 0 25px rgba(99, 102, 241, 0.04);
                                 z-index: 10;
+                                animation: floatCore 5s ease-in-out infinite;
                             }
-                            .achievement-card > div:first-child {
-                                font-size: 2rem;
-                                margin-bottom: 8px;
-                                transition: transform 0.3s ease;
+
+                            .loader-core-text {
+                                font-family: 'Poppins', sans-serif;
+                                font-size: 1.7rem;
+                                font-weight: 800;
+                                letter-spacing: -0.5px;
+                                background: linear-gradient(135deg, #1d4ed8, #7c3aed, #db2777);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                                text-align: center;
+                                line-height: 1.2;
+                                margin-bottom: 2px;
                             }
-                            .achievement-card:hover > div:first-child {
-                                transform: scale(1.3) rotate(15deg);
+
+                            .loader-core-tagline {
+                                font-family: 'Inter', sans-serif;
+                                font-size: 0.75rem;
+                                font-weight: 700;
+                                text-transform: uppercase;
+                                letter-spacing: 2px;
+                                color: #64748b;
+                                text-align: center;
                             }
-                            /* Staggered animation delays for cyclic effect */
-                            .achievement-card:nth-child(1) { animation-delay: 0s; }
-                            .achievement-card:nth-child(2) { animation-delay: 0.75s; }
-                            .achievement-card:nth-child(3) { animation-delay: 1.5s; }
-                            .achievement-card:nth-child(4) { animation-delay: 2.25s; }
-                            .achievement-card:nth-child(5) { animation-delay: 3s; }
-                            .achievement-card:nth-child(6) { animation-delay: 3.75s; }
-                            .achievement-card:nth-child(7) { animation-delay: 4.5s; }
-                            .achievement-card:nth-child(8) { animation-delay: 5.25s; }
-                            /* Gradient backgrounds */
-                            .ai-research { background: linear-gradient(135deg, #667eea, #764ba2); }
-                            .startups { background: linear-gradient(135deg, #10b981, #059669); }
-                            .industry { background: linear-gradient(135deg, #f59e0b, #d97706); }
-                            .innovation { background: linear-gradient(135deg, #ec4899, #be185d); }
-                            .excellence { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-                            .community { background: linear-gradient(135deg, #06b6d4, #0891b2); }
-                            .research { background: linear-gradient(135deg, #ef4444, #dc2626); }
-                            .skills { background: linear-gradient(135deg, #84cc16, #65a30d); }
+
+                            .loader-progress-text {
+                                font-family: 'Inter', sans-serif;
+                                font-size: 0.8rem;
+                                font-weight: 700;
+                                color: #3b82f6;
+                                margin-top: 6px;
+                                letter-spacing: 0.5px;
+                                opacity: 0.8;
+                                transition: opacity 0.4s ease;
+                            }
+
+                            .premium-hero-loader.fade-progress .loader-progress-text {
+                                opacity: 0;
+                            }
+
+                            .premium-hero-loader.loaded .loader-progress-text {
+                                display: none !important;
+                            }
+
+                            /* Concentric Animated Neon Rings */
+                            .loader-ring {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                border-radius: 50%;
+                                border: 2px solid transparent;
+                            }
+
+                            /* Ring 1: Outer Neon Blue/Indigo */
+                            .ring-1 {
+                                width: 360px;
+                                height: 360px;
+                                border-top-color: #3b82f6;
+                                border-right-color: rgba(59, 130, 246, 0.05);
+                                border-bottom-color: #6366f1;
+                                border-left-color: rgba(99, 102, 241, 0.05);
+                                animation: spinClockwise 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                                filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.45));
+                            }
+
+                            /* Ring 2: Middle Neon Violet/Purple */
+                            .ring-2 {
+                                width: 300px;
+                                height: 300px;
+                                border-left-color: #8b5cf6;
+                                border-top-color: rgba(139, 92, 246, 0.05);
+                                border-right-color: #a855f7;
+                                border-bottom-color: rgba(168, 85, 247, 0.05);
+                                animation: spinCounterClockwise 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                                filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+                            }
+
+                            /* Ring 3: Inner Neon Rose/Pink */
+                            .ring-3 {
+                                width: 240px;
+                                height: 240px;
+                                border-bottom-color: #ec4899;
+                                border-left-color: rgba(236, 72, 153, 0.05);
+                                border-top-color: #f43f5e;
+                                border-right-color: rgba(244, 63, 94, 0.05);
+                                animation: spinClockwise 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+                                filter: drop-shadow(0 0 6px rgba(236, 72, 153, 0.35));
+                            }
+
+                            /* Orbiting Glowing Particles */
+                            .loader-orbit-particle {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                width: 10px;
+                                height: 10px;
+                                border-radius: 50%;
+                                z-index: 5;
+                            }
+
+                            .particle-blue {
+                                background: #3b82f6;
+                                box-shadow: 0 0 15px #3b82f6, 0 0 30px #3b82f6;
+                                animation: orbitBlue 12s linear infinite;
+                            }
+
+                            .particle-purple {
+                                background: #8b5cf6;
+                                box-shadow: 0 0 12px #8b5cf6, 0 0 25px #8b5cf6;
+                                animation: orbitPurple 9s linear infinite;
+                            }
+
+                            .particle-rose {
+                                background: #ec4899;
+                                box-shadow: 0 0 10px #ec4899, 0 0 20px #ec4899;
+                                animation: orbitRose 6s linear infinite;
+                            }
+
+                            /* Ripple waves spreading outwards */
+                            .loader-ripple {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                border-radius: 50%;
+                                border: 1.5px solid rgba(99, 102, 241, 0.06);
+                                width: 420px;
+                                height: 420px;
+                                pointer-events: none;
+                            }
+
+                            .ripple-1 {
+                                animation: rippleEffect 5s ease-out infinite;
+                            }
+
+                            .ripple-2 {
+                                animation: rippleEffect 5s ease-out infinite 2.5s;
+                            }
+
+                            /* Animations Keyframes */
+                            @keyframes spinClockwise {
+                                0% { transform: translate(-50%, -50%) rotate(0deg); }
+                                100% { transform: translate(-50%, -50%) rotate(360deg); }
+                            }
+
+                            @keyframes spinCounterClockwise {
+                                0% { transform: translate(-50%, -50%) rotate(360deg); }
+                                100% { transform: translate(-50%, -50%) rotate(0deg); }
+                            }
+
+                            @keyframes pulseGlow {
+                                0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.6; }
+                                100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.95; }
+                            }
+
+                            @keyframes floatCore {
+                                0%, 100% { transform: translate(-50%, -50%) translateY(0px) scale(1); }
+                                50% { transform: translate(-50%, -50%) translateY(-6px) scale(1.02); }
+                            }
+
+                            @keyframes rippleEffect {
+                                0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+                                100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
+                            }
+
+                            /* Orbit calculations using translate offsets */
+                            @keyframes orbitBlue {
+                                0% { transform: translate(-50%, -50%) rotate(0deg) translateX(180px) rotate(0deg); }
+                                100% { transform: translate(-50%, -50%) rotate(360deg) translateX(180px) rotate(-360deg); }
+                            }
+
+                            @keyframes orbitPurple {
+                                0% { transform: translate(-50%, -50%) rotate(360deg) translateX(150px) rotate(-360deg); }
+                                100% { transform: translate(-50%, -50%) rotate(0deg) translateX(150px) rotate(0deg); }
+                            }
+
+                            @keyframes orbitRose {
+                                0% { transform: translate(-50%, -50%) rotate(0deg) translateX(120px) rotate(0deg); }
+                                100% { transform: translate(-50%, -50%) rotate(360deg) translateX(120px) rotate(-360deg); }
+                            }
+
                             /* Responsive adjustments */
                             @media (max-width: 768px) {
-                                .achievement-cards-container {
-                                    max-width: 100%;
-                                    padding: 10px;
+                                .premium-hero-loader {
+                                    width: 320px;
+                                    height: 320px;
                                 }
-                                .achievement-card {
-                                    flex: 1 1 45%;
-                                    min-width: auto;
-                                    margin-bottom: 15px;
+                                .loader-core {
+                                    width: 150px;
+                                    height: 150px;
                                 }
-                            }
-                            @media (max-width: 576px) {
-                                .houses-container {
-                                    width: 280px !important;
-                                    height: 280px !important;
-                                    position: relative !important;
-                                    display: block !important;
-                                    padding: 0 !important;
+                                .loader-core-text {
+                                    font-size: 1.4rem;
                                 }
-                                .house-item {
-                                    position: absolute !important;
-                                    width: 60px !important;
-                                    height: 60px !important;
-                                    margin: 0 !important;
-                                    text-align: center !important;
+                                .ring-1 { width: 280px; height: 280px; }
+                                .ring-2 { width: 230px; height: 230px; }
+                                .ring-3 { width: 180px; height: 180px; }
+                                @keyframes orbitBlue {
+                                    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(140px) rotate(0deg); }
+                                    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(140px) rotate(-360deg); }
                                 }
-                                .house-item.house-agni {
-                                    top: 10px !important;
-                                    left: 50% !important;
-                                    transform: translateX(-50%) !important;
+                                @keyframes orbitPurple {
+                                    0% { transform: translate(-50%, -50%) rotate(360deg) translateX(115px) rotate(-360deg); }
+                                    100% { transform: translate(-50%, -50%) rotate(0deg) translateX(115px) rotate(0deg); }
                                 }
-                                .house-item.house-vayu {
-                                    top: 80px !important;
-                                    right: 10px !important;
-                                    left: auto !important;
-                                    transform: none !important;
-                                }
-                                .house-item.house-prudhvi {
-                                    bottom: 70px !important;
-                                    right: 40px !important;
-                                    left: auto !important;
-                                    transform: none !important;
-                                }
-                                .house-item.house-jal {
-                                    bottom: 20px !important;
-                                    left: 50% !important;
-                                    transform: translateX(-50%) !important;
-                                }
-                                .house-item.house-aakash {
-                                    bottom: 70px !important;
-                                    left: 40px !important;
-                                    transform: none !important;
+                                @keyframes orbitRose {
+                                    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(90px) rotate(0deg); }
+                                    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(90px) rotate(-360deg); }
                                 }
                             }
 
-                            @media (max-width: 480px) {
-                                .achievement-card {
-                                    flex: 1 1 100%;
-                                }
-                            }
                         </style>
-                        <div class="achievement-cards-container">
-                            <div class="achievement-card ai-research" style="background: white; border: 2px solid #667eea;">
-                                <div style="font-weight: 700; font-size: 0.9rem; color: #667eea;">AI Research</div>
-                                <div style="font-size: 0.7rem; opacity: 0.7; color: #667eea;">Neural Networks</div>
+                        <div class="premium-hero-loader">
+                            <!-- Background Glowing Aura -->
+                            <div class="loader-glow"></div>
+                            
+                            <!-- Spreading Ripple Waves -->
+                            <div class="loader-ripple ripple-1"></div>
+                            <div class="loader-ripple ripple-2"></div>
+                            
+                            <!-- Spinning Concentric Rings -->
+                            <div class="loader-ring ring-1"></div>
+                            <div class="loader-ring ring-2"></div>
+                            <div class="loader-ring ring-3"></div>
+                            
+                            <!-- Orbiting Particles -->
+                            <div class="loader-orbit-particle particle-blue"></div>
+                            <div class="loader-orbit-particle particle-purple"></div>
+                            <div class="loader-orbit-particle particle-rose"></div>
+                            
+                            <!-- Central Glassmorphic Core with Text -->
+                            <div class="loader-core">
+                                <h1 class="loader-core-text">CSD & CSIT</h1>
+                                <span class="loader-core-tagline">Department</span>
+                                <span class="loader-progress-text">0%</span>
                             </div>
-                            <div class="achievement-card startups" style="background: white; border: 2px solid #10b981;">
-                                <div style="font-weight: 700; font-size: 0.9rem; color: #10b981;">Startups</div>
-                                <div style="font-size: 0.7rem; opacity: 0.7; color: #10b981;">6+ Incubated</div>
-                            </div>
-                            <div class="achievement-card industry" style="background: white; border: 2px solid #f59e0b;">
-                                <div style="font-weight: 700; font-size: 0.9rem; color: #f59e0b;">Industry</div>
-                                <div style="font-size: 0.7rem; opacity: 0.7; color: #f59e0b;">Top MNCs</div>
-                            </div>
-                            <div class="achievement-card innovation" style="background: white; border: 2px solid #ec4899;">
-                                <div style="font-weight: 700; font-size: 0.9rem; color: #ec4899;">Innovation</div>
-                                <div style="font-size: 0.7rem; opacity: 0.7; color: #ec4899;">Patent Filed</div>
-                            </div>
-                            <div class="achievement-card excellence" style="background: white; border: 2px solid #8b5cf6;">
-                                <div style="font-weight: 700; font-size: 0.9rem; color: #8b5cf6;">Excellence</div>
-                                <div style="font-size: 0.7rem; opacity: 0.7; color: #8b5cf6;">Since 2021</div>
-                            </div>
-                            <div class="achievement-card community" style="background: white; border: 2px solid #06b6d4;">
-                                <div style="font-weight: 700; font-size: 0.9rem; color: #06b6d4;">Community</div>
-                                <div style="font-size: 0.7rem; opacity: 0.7; color: #06b6d4;">70+ Alumni</div>
-                            </div>
-                            <div class="achievement-card research" style="background: white; border: 2px solid #ef4444;">
-                                <div style="font-weight: 700; font-size: 0.9rem; color: #ef4444;">Research</div>
-                                <div style="font-size: 0.7rem; opacity: 0.7; color: #ef4444;">₹1.2Cr Funded</div>
-                            </div>
-                            <div class="achievement-card skills" style="background: white; border: 2px solid #84cc16;">
-                                <div style="font-weight: 700; font-size: 0.9rem; color: #84cc16;">Skills</div>
-                                <div style="font-size: 0.7rem; opacity: 0.7; color: #84cc16;">Future Ready</div>
-                            </div>
-
-                            <!-- Connecting Lines Animation -->
-                            <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
-                                <defs>
-                                    <filter id="glow">
-                                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-                                        <feMerge>
-                                            <feMergeNode in="coloredBlur" />
-                                            <feMergeNode in="SourceGraphic" />
-                                        </feMerge>
-                                    </filter>
-                                </defs>
-                                <!-- Animated connecting lines to center -->
-                                <circle cx="250" cy="250" r="120" fill="none" stroke="rgba(102, 126, 234, 0.2)" stroke-width="1" stroke-dasharray="5,5">
-                                    <animateTransform attributeName="transform" type="rotate" values="0 250 250;360 250 250" dur="30s" repeatCount="indefinite" />
-                                </circle>
-                                <circle cx="250" cy="250" r="150" fill="none" stroke="rgba(16, 185, 129, 0.2)" stroke-width="1" stroke-dasharray="3,7">
-                                    <animateTransform attributeName="transform" type="rotate" values="360 250 250;0 250 250" dur="25s" repeatCount="indefinite" />
-                                </circle>
-                            </svg>
                         </div>
                     </div>
                 </div>
@@ -1018,6 +1758,304 @@ include "./head.php";
                                 "We nurture innovative minds and create technology leaders who will shape the future through excellence in education and innovation in research."
                             </blockquote>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Split-Scroll Reveal Showcase Section -->
+    <section class="reveal-showcase-section">
+        <!-- Desktop View (Seamless scrolling with sticky graphics) -->
+        <div class="showcase-desktop-view">
+            <div class="container">
+                <div class="row">
+                    <!-- Left Column: Scrolling Narrative with Timeline -->
+                    <div class="col-lg-5 showcase-text-col">
+                        <div class="showcase-sticky-text-wrapper">
+                            <!-- Step 0: SDC -->
+                            <div class="showcase-scroll-item active" data-index="0">
+                                <span class="showcase-card-badge">Pillar 1: Innovation Hub</span>
+                                <h2 class="showcase-card-title">Software Development Centre (SDC)</h2>
+                                <p class="showcase-card-text">Step into our 50-seated software engineering lab. CSD & CSIT students build real-world, production-ready applications that power local department functions, while earning hands-on paid internships.</p>
+                                <div class="showcase-card-stats">
+                                    <div class="showcase-stat-box">
+                                        <div class="showcase-stat-val">20+</div>
+                                        <div class="showcase-stat-lbl">Apps Built</div>
+                                    </div>
+                                    <div class="showcase-stat-box">
+                                        <div class="showcase-stat-val">50+</div>
+                                        <div class="showcase-stat-lbl">Paid Internships</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 1: House System -->
+                            <div class="showcase-scroll-item" data-index="1">
+                                <span class="showcase-card-badge">Pillar 2: Student Culture</span>
+                                <h2 class="showcase-card-title">Vibrant House System</h2>
+                                <p class="showcase-card-text">Belong to one of our five elemental leagues: Agni, Vayu, Prudhvi, Jal, or Aakash. Compete in continuous hackathons, coding contests, sports, and cultural battles for the annual championship shield.</p>
+                                <div class="showcase-card-stats">
+                                    <div class="showcase-stat-box">
+                                        <div class="showcase-stat-val">5</div>
+                                        <div class="showcase-stat-lbl">Active Houses</div>
+                                    </div>
+                                    <div class="showcase-stat-box">
+                                        <div class="showcase-stat-val">10+</div>
+                                        <div class="showcase-stat-lbl">Events Semwise</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Placements -->
+                            <div class="showcase-scroll-item" data-index="2">
+                                <span class="showcase-card-badge">Pillar 3: Careers</span>
+                                <h2 class="showcase-card-title">Exceptional Placements</h2>
+                                <p class="showcase-card-text">Align with global tech standards. Leverage our extensive placement training and industry partnerships to secure core engineering positions with top multinational partners.</p>
+                                <div class="showcase-card-stats">
+                                    <div class="showcase-stat-box">
+                                        <div class="showcase-stat-val">₹12 LPA</div>
+                                        <div class="showcase-stat-lbl">Highest Pkg</div>
+                                    </div>
+                                    <div class="showcase-stat-box">
+                                        <div class="showcase-stat-val">₹5.1 LPA</div>
+                                        <div class="showcase-stat-lbl">Average CTC</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Incubator -->
+                            <div class="showcase-scroll-item" data-index="3">
+                                <span class="showcase-card-badge">Pillar 4: Ventures</span>
+                                <h2 class="showcase-card-title">Startup Incubation</h2>
+                                <p class="showcase-card-text">Launch your ideas. Our incubation program provides legal support, workspace facilities, technical mentorship, and connects you with early stage capital to launch student-led startups.</p>
+                                <div class="showcase-card-stats">
+                                    <div class="showcase-stat-box">
+                                        <div class="showcase-stat-val">6+</div>
+                                        <div class="showcase-stat-lbl">Incubated Teams</div>
+                                    </div>
+                                    <div class="showcase-stat-box">
+                                        <div class="showcase-stat-val">3</div>
+                                        <div class="showcase-stat-lbl">Alumni Startups</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Sticky Graphic Viewport -->
+                    <div class="col-lg-7 showcase-graphic-col">
+                        <div class="showcase-sticky-graphic step-0">
+                            <!-- Ambient colorful glow blob -->
+                            <div class="showcase-ambient-glow"></div>
+
+                            <!-- Graphic 0: SDC Dashboard -->
+                            <div class="showcase-graphic-item showcase-vis-sdc active">
+                                <div class="showcase-dash-card">
+                                    <div class="showcase-dash-header">
+                                        <i class="fas fa-cubes text-[#10b981]" style="color: #10b981; margin-right: 8px;"></i>
+                                        <span>SDC Project Board</span>
+                                    </div>
+                                    <div class="showcase-dash-body">
+                                        <div class="showcase-project-row">
+                                            <div class="project-info">
+                                                <div class="project-name">Attendance Portal</div>
+                                                <div class="project-status">Live</div>
+                                            </div>
+                                            <div class="project-indicator progress-green"></div>
+                                        </div>
+                                        <div class="showcase-project-row" style="margin-top: 10px;">
+                                            <div class="project-info">
+                                                <div class="project-name">House League Tracker</div>
+                                                <div class="project-status font-amber">Testing</div>
+                                            </div>
+                                            <div class="project-indicator progress-amber"></div>
+                                        </div>
+                                        <div class="showcase-project-row" style="margin-top: 10px;">
+                                            <div class="project-info">
+                                                <div class="project-name">Faculty Appraisals System</div>
+                                                <div class="project-status font-blue">Deploying</div>
+                                            </div>
+                                            <div class="project-indicator progress-blue"></div>
+                                        </div>
+                                    </div>
+                                    <div class="showcase-dash-footer">
+                                        <div class="gauge-container">
+                                            <svg width="60" height="60" viewBox="0 0 36 36">
+                                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="3" />
+                                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="92, 100" />
+                                            </svg>
+                                            <div class="gauge-text">92%</div>
+                                        </div>
+                                        <div class="footer-stats">
+                                            <div class="fs-num">24</div>
+                                            <div class="fs-lbl">Active Devs</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Graphic 1: Houses Orbit -->
+                            <div class="showcase-graphic-item showcase-vis-houses">
+                                <div class="showcase-houses-circle-wrapper">
+                                    <div class="showcase-houses-center">
+                                        <img src="./assets/logos/allhouses.webp" alt="All Houses">
+                                    </div>
+                                    <div class="showcase-houses-orbit-ring">
+                                        <!-- Agni -->
+                                        <div class="showcase-house-node node-agni">
+                                            <img src="./assets/logos/3.jpg" alt="Agni">
+                                        </div>
+                                        <!-- Vayu -->
+                                        <div class="showcase-house-node node-vayu">
+                                            <img src="./assets/logos/2.jpg" alt="Vayu">
+                                        </div>
+                                        <!-- Prudhvi -->
+                                        <div class="showcase-house-node node-prudhvi">
+                                            <img src="./assets/logos/4.jpg" alt="Prudhvi">
+                                        </div>
+                                        <!-- Jal -->
+                                        <div class="showcase-house-node node-jal">
+                                            <img src="./assets/logos/1.jpg" alt="Jal">
+                                        </div>
+                                        <!-- Aakash -->
+                                        <div class="showcase-house-node node-aakash">
+                                            <img src="./assets/logos/5.jpg" alt="Aakash">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Graphic 2: Placements Graph -->
+                            <div class="showcase-graphic-item showcase-vis-placements">
+                                <div class="showcase-placements-card">
+                                    <div class="sp-card-title"><i class="fas fa-chart-line" style="color: #3b82f6; margin-right: 8px;"></i>Salary Packages Trend</div>
+                                    <div class="sp-chart-area">
+                                        <svg width="100%" height="100%" viewBox="0 0 400 150" style="overflow: visible;">
+                                            <defs>
+                                                <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                    <stop offset="0%" stop-color="#3b82f6" />
+                                                    <stop offset="50%" stop-color="#6366f1" />
+                                                    <stop offset="100%" stop-color="#8b5cf6" />
+                                                </linearGradient>
+                                                <filter id="glowShadow">
+                                                    <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#6366f1" flood-opacity="0.3" />
+                                                </filter>
+                                            </defs>
+                                            <line x1="10" y1="130" x2="390" y2="130" stroke="rgba(0,0,0,0.04)" stroke-width="1" />
+                                            <line x1="10" y1="85" x2="390" y2="85" stroke="rgba(0,0,0,0.04)" stroke-width="1" />
+                                            <line x1="10" y1="40" x2="390" y2="40" stroke="rgba(0,0,0,0.04)" stroke-width="1" />
+                                            <path class="sp-chart-path" d="M 10 120 Q 80 110 150 70 T 290 40 T 390 15" fill="none" stroke="url(#glowGrad)" stroke-width="4" filter="url(#glowShadow)" stroke-linecap="round" />
+                                            <circle class="sp-chart-tip" r="7" fill="#ffffff" stroke="#6366f1" stroke-width="3" style="filter: drop-shadow(0 0 6px #6366f1);" />
+                                        </svg>
+                                    </div>
+                                    <div class="sp-stats-row">
+                                        <div class="sp-stat-item">
+                                            <span class="sp-label">Highest Package</span>
+                                            <span class="sp-value">₹12.0 LPA</span>
+                                        </div>
+                                        <div class="sp-stat-item" style="margin-left: 10px;">
+                                            <span class="sp-label">Average CTC</span>
+                                            <span class="sp-value color-indigo">₹5.1 LPA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Graphic 3: Startup Ecosystem -->
+                            <div class="showcase-graphic-item showcase-vis-startups">
+                                <div class="showcase-startups-card">
+                                    <div class="ss-wave-rings">
+                                        <div class="ss-wave"></div>
+                                        <div class="ss-wave"></div>
+                                    </div>
+                                    <div class="ss-core">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <!-- Floating bubbles -->
+                                    <div class="ss-bubble ss-b1"><img src="./assets/company_logos/logos/21.png" alt="S1"></div>
+                                    <div class="ss-bubble ss-b2"><img src="./assets/company_logos/logos/22.png" alt="S2"></div>
+                                    <div class="ss-bubble ss-b3"><img src="./assets/company_logos/logos/23.png" alt="S3"></div>
+                                    <div class="ss-bubble ss-b4"><img src="./assets/company_logos/logos/24.png" alt="S4"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile View (Clean linear cards vertical layout) -->
+        <div class="showcase-mobile-view">
+            <div class="showcase-mobile-title-block">
+                <h3>Department Pillars</h3>
+                <p>Nurturing innovation, culture, and career success</p>
+            </div>
+
+            <!-- Card 0: SDC -->
+            <div class="showcase-mobile-card">
+                <span class="showcase-card-badge">Pillar 1: Innovation Hub</span>
+                <h2 class="showcase-card-title" style="font-size: 1.7rem;">Software Development Centre (SDC)</h2>
+                <p class="showcase-card-text">Step into our 50-seated software engineering lab. CSD & CSIT students build real-world, production-ready applications that power local department functions, while earning hands-on paid internships.</p>
+                <div class="showcase-card-stats">
+                    <div class="showcase-stat-box">
+                        <div class="showcase-stat-val" style="font-size: 1.5rem;">20+</div>
+                        <div class="showcase-stat-lbl">Apps Built</div>
+                    </div>
+                    <div class="showcase-stat-box">
+                        <div class="showcase-stat-val" style="font-size: 1.5rem;">50+</div>
+                        <div class="showcase-stat-lbl">Paid Internships</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 1: Houses -->
+            <div class="showcase-mobile-card">
+                <span class="showcase-card-badge">Pillar 2: Student Culture</span>
+                <h2 class="showcase-card-title" style="font-size: 1.7rem;">Vibrant House System</h2>
+                <p class="showcase-card-text">Belong to one of our five elemental leagues: Agni, Vayu, Prudhvi, Jal, or Aakash. Compete in continuous hackathons, coding contests, sports, and cultural battles for the annual championship shield.</p>
+                <div class="showcase-card-stats">
+                    <div class="showcase-stat-box">
+                        <div class="showcase-stat-val" style="font-size: 1.5rem;">5</div>
+                        <div class="showcase-stat-lbl">Active Houses</div>
+                    </div>
+                    <div class="showcase-stat-box">
+                        <div class="showcase-stat-val" style="font-size: 1.5rem;">10+</div>
+                        <div class="showcase-stat-lbl">Events Semwise</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Placements -->
+            <div class="showcase-mobile-card">
+                <span class="showcase-card-badge">Pillar 3: Careers</span>
+                <h2 class="showcase-card-title" style="font-size: 1.7rem;">Exceptional Placements</h2>
+                <p class="showcase-card-text">Align with global tech standards. Leverage our extensive placement training and industry partnerships to secure core engineering positions with top multinational partners.</p>
+                <div class="showcase-card-stats">
+                    <div class="showcase-stat-box">
+                        <div class="showcase-stat-val" style="font-size: 1.5rem;">₹12 LPA</div>
+                        <div class="showcase-stat-lbl">Highest Pkg</div>
+                    </div>
+                    <div class="showcase-stat-box">
+                        <div class="showcase-stat-val" style="font-size: 1.5rem;">₹5.1 LPA</div>
+                        <div class="showcase-stat-lbl">Average CTC</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Incubator -->
+            <div class="showcase-mobile-card">
+                <span class="showcase-card-badge">Pillar 4: Ventures</span>
+                <h2 class="showcase-card-title" style="font-size: 1.7rem;">Startup Incubation</h2>
+                <p class="showcase-card-text">Launch your ideas. Our incubation program provides legal support, workspace facilities, technical mentorship, and connects you with early stage capital to launch student-led startups.</p>
+                <div class="showcase-card-stats">
+                    <div class="showcase-stat-box">
+                        <div class="showcase-stat-val" style="font-size: 1.5rem;">6+</div>
+                        <div class="showcase-stat-lbl">Incubated Teams</div>
+                    </div>
+                    <div class="showcase-stat-box">
+                        <div class="showcase-stat-val" style="font-size: 1.5rem;">3</div>
+                        <div class="showcase-stat-lbl">Alumni Startups</div>
                     </div>
                 </div>
             </div>
@@ -1164,85 +2202,126 @@ include "./head.php";
                     transition: all 0.3s ease;
                 }
 
-                .primary-section {
-                    padding: 60px 0;
-                    min-height: 500px;
+                /* PLACEMENTS ZOOM-REVEAL SECTION STYLES */
+                /* ========================================== */
+                .placement-scroll-container {
+                    position: relative;
+                    height: 240vh; /* scrollable distance */
+                    background: #ffffff;
+                    margin: 0;
+                    padding: 0;
                 }
 
-                .main-container {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 0 20px;
-                }
-
-                .main-content {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 80px;
-                    align-items: flex-start;
-                }
-
-                .content-left h1 {
-                    font-size: 48px;
-                    font-weight: 400;
-                    color: #000;
-                    line-height: 1.2;
-                    letter-spacing: -0.02em;
-                }
-
-                .content-left h2 {
-                    font-size: 48px;
-                    font-weight: 400;
-                    color: #000;
-                    line-height: 1.2;
-                    margin-bottom: 20px;
-                    letter-spacing: -0.02em;
-                }
-
-                .content-left p {
-                    font-size: 16px;
-                    color: #6b7280;
-                    line-height: 1.5;
-                    margin-bottom: 40px;
-                    max-width: 400px;
-                }
-
-                .primary-button {
-                    display: inline-flex;
+                .placement-sticky-viewport {
+                    position: sticky;
+                    top: 0;
+                    height: 100vh;
+                    width: 100%;
+                    display: flex;
                     align-items: center;
-                    gap: 8px;
-                    background: #000;
-                    color: white;
-                    padding: 12px 24px;
-                    border-radius: 25px;
-                    text-decoration: none;
-                    font-size: 14px;
-                    font-weight: 500;
-                    border: none;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
+                    overflow: hidden;
+                    z-index: 5;
+                    background: #ffffff;
                 }
 
-                .primary-button:hover {
-                    background: #333;
-                    transform: translateY(-1px);
+                .placement-content-wrapper {
+                    width: 100%;
+                    position: relative;
+                    z-index: 10;
                 }
 
-                .content-right {
+                .placement-zoom-card-wrapper {
+                    position: relative;
+                    margin-top: 30px;
+                    width: 100%;
+                    max-width: 440px;
+                    height: 250px; /* placeholder layout space */
+                }
+
+                .placement-zoom-card {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    background: rgba(255, 255, 255, 0.7);
+                    backdrop-filter: blur(25px);
+                    -webkit-backdrop-filter: blur(25px);
+                    border: 1.5px solid rgba(255, 255, 255, 0.55);
+                    border-radius: 28px;
+                    padding: 28px;
+                    box-shadow: 0 30px 60px rgba(15, 23, 42, 0.08);
+                    transform-origin: center center;
+                    width: 100%;
+                    max-width: 440px;
+                    will-change: transform;
+                    z-index: 20;
+                }
+
+                .zoom-card-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-weight: 700;
+                    color: #0f172a;
+                    font-size: 0.95rem;
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+                    padding-bottom: 12px;
+                    margin-bottom: 16px;
+                }
+
+                .zoom-card-header i {
+                    color: #ef4444;
+                    font-size: 1.1rem;
+                }
+
+                .growth-chart-container {
+                    position: relative;
+                    width: 100%;
+                }
+
+                .zoom-card-footer {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-top: 1px solid rgba(0, 0, 0, 0.06);
+                    padding-top: 12px;
+                    margin-top: 16px;
+                    font-size: 0.82rem;
+                    font-weight: 600;
+                    color: #64748b;
+                }
+
+                .placement-text-reveal {
+                    opacity: 0;
+                    transform: translateY(35px);
+                    will-change: opacity, transform;
+                }
+
+                .placement-meta {
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    color: #ef4444;
+                    letter-spacing: 2px;
+                    margin-bottom: 12px;
+                    display: inline-block;
+                }
+
+                .placement-metrics-reveal {
+                    opacity: 0;
+                    transform: translateY(35px);
+                    will-change: opacity, transform;
                     display: flex;
                     flex-direction: column;
-                    align-items: flex-end;
-                    position: relative;
+                    gap: 40px;
+                    width: 100%;
                 }
 
-                /* Revenue Display */
                 .revenue-display {
                     text-align: right;
-                    margin-bottom: 50px;
                 }
 
                 .revenue-amount {
-                    font-size: 120px;
+                    font-size: 110px;
                     font-weight: 700;
                     color: #000;
                     line-height: 1;
@@ -1256,35 +2335,18 @@ include "./head.php";
                     font-weight: 400;
                 }
 
-                /* Wavy Growth Chart */
-                .growth-chart {
-                    width: 350px;
-                    height: 120px;
-                    position: relative;
-                    margin: 30px 0;
-                    overflow: hidden;
-                }
-
-                .chart-background {
-                    width: 100%;
-                    height: 100%;
-                    position: relative;
-                    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(249, 115, 22, 0.05) 100%);
-                    border-radius: 8px;
-                }
-
-                /* Metrics Grid */
                 .metrics-container {
                     display: grid;
                     grid-template-columns: 1fr 1fr;
-                    gap: 40px 60px;
-                    max-width: 400px;
+                    gap: 30px 40px;
+                    width: 100%;
                 }
 
-                .metric-box {
+                .metric-box-reveal {
                     text-align: left;
                     opacity: 0;
                     transform: translateY(20px);
+                    will-change: opacity, transform;
                 }
 
                 .metric-value {
@@ -1301,81 +2363,45 @@ include "./head.php";
                     font-weight: 400;
                 }
 
-                /* Animations */
-                @keyframes drawLine {
-                    to {
-                        stroke-dashoffset: 0;
-                    }
-                }
-
-                @keyframes growArea {
-                    from {
-                        opacity: 0;
-                        transform: scaleY(0);
+                /* Mobile responsive adjustments */
+                @media (max-width: 991px) {
+                    .placement-scroll-container {
+                        height: auto !important;
                     }
 
-                    to {
-                        opacity: 1;
-                        transform: scaleY(1);
-                    }
-                }
-
-                @keyframes showPoint {
-                    to {
-                        opacity: 1;
-                        transform: scale(1.2);
-                    }
-                }
-
-                @keyframes slideUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
+                    .placement-sticky-viewport {
+                        position: relative !important;
+                        height: auto !important;
+                        overflow: visible !important;
+                        padding: 80px 0 !important;
                     }
 
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                .slide-in {
-                    animation: slideUp 0.6s ease forwards;
-                }
-
-                /* Responsive */
-                @media (max-width: 768px) {
-                    .main-content {
-                        grid-template-columns: 1fr;
-                        gap: 40px;
-                        text-align: center;
+                    .placement-zoom-card-wrapper {
+                        height: auto !important;
+                        margin-top: 20px !important;
                     }
 
-                    .content-left h1,
-                    .content-left h2 {
-                        font-size: 32px;
+                    .placement-zoom-card {
+                        position: relative !important;
+                        transform: none !important;
+                        margin: 0 auto !important;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
                     }
 
-                    .revenue-amount {
-                        font-size: 72px;
+                    .placement-text-reveal,
+                    .placement-metrics-reveal,
+                    .metric-box-reveal {
+                        opacity: 1 !important;
+                        transform: none !important;
                     }
 
-                    .growth-chart {
-                        width: 280px;
-                        margin: 20px auto;
-                    }
-
-                    .metrics-container {
-                        max-width: none;
-                        margin: 0 auto;
-                    }
-
-                    .content-right {
-                        align-items: center;
+                    .placement-right-col {
+                        margin-top: 50px !important;
+                        align-items: flex-start !important;
                     }
 
                     .revenue-display {
-                        text-align: center;
+                        text-align: left !important;
                     }
                 }
             </style>
@@ -1463,109 +2489,77 @@ include "./head.php";
         </style>
     </section>
 
-
-
-    <!-- Statistics Section -->
-    <section class="primary-section">
-        <div class="main-container">
-            <div class="main-content">
-                <div class="content-left">
-                    <h1>Exceptional Placement</h1>
-                    <h2>Record at CSD & CSIT</h2>
-                    <p>66% placement rate, 50+ students placed in top MNCs out of 70, and average CTC of ₹5.1L with highest reaching ₹12L.</p>
-                    <!-- <button class="primary-button">
-                        View Placements
-                        <i class="fas fa-chevron-right"></i>
-                    </button> -->
-
-                    <div class="growth-chart">
-                        <div class="chart-background">
-                            <svg class="growth-line" width="100%" height="100%" viewBox="0 0 310 80" style="position: absolute; bottom: 20px; left: 20px; right: 20px;">
-                                <defs>
-                                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
-                                        <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
-                                    </linearGradient>
-                                    <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.3" />
-                                        <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0" />
-                                    </linearGradient>
-                                </defs>
-                                <!-- Area under curve -->
-                                <path d="M 0 60 Q 50 45 100 35 T 200 25 T 310 15 L 310 80 L 0 80 Z"
-                                    fill="url(#areaGradient)"
-                                    style="animation: growArea 2s ease-out;">
-                                </path>
-                                <!-- Growth line -->
-                                <path d="M 0 60 Q 50 45 100 35 T 200 25 T 310 15"
-                                    stroke="url(#lineGradient)"
-                                    stroke-width="3"
-                                    fill="none"
-                                    stroke-linecap="round"
-                                    style="stroke-dasharray: 400; stroke-dashoffset: 400; animation: drawLine 2s ease-out forwards;">
-                                </path>
-                                <!-- Data points -->
-                                <circle cx="0" cy="60" r="4" fill="#ef4444" style="animation: showPoint 2.2s ease-out forwards; opacity: 0;"></circle>
-                                <circle cx="100" cy="35" r="4" fill="#f97316" style="animation: showPoint 2.4s ease-out forwards; opacity: 0;"></circle>
-                                <circle cx="200" cy="25" r="4" fill="#f97316" style="animation: showPoint 2.6s ease-out forwards; opacity: 0;"></circle>
-                                <circle cx="310" cy="15" r="4" fill="#f97316" style="animation: showPoint 2.8s ease-out forwards; opacity: 0;"></circle>
-                            </svg>
+           <!-- Zoom Reveal Placements Section -->
+    <section class="placement-scroll-container">
+        <div class="placement-sticky-viewport">
+            <div class="container main-container placement-content-wrapper">
+                <div class="row align-items-center">
+                    <!-- Left Column: Title and Zoom Card -->
+                    <div class="col-lg-6 placement-left-col">
+                        <div class="placement-text-reveal">
+                            <span class="placement-meta">Academics & Careers</span>
+                            <h1 style="font-size: 3.2rem; font-weight: 800; color: #0f172a; line-height: 1.15; margin-bottom: 8px;">Exceptional Placement</h1>
+                            <h2 style="font-size: 2.2rem; font-weight: 700; color: #475569; margin-bottom: 20px;">Record at CSD & CSIT</h2>
+                            <p style="font-size: 1rem; color: #64748b; line-height: 1.6; max-width: 480px; margin-bottom: 30px;">66% placement rate, 50+ students placed in top MNCs out of 70, and average CTC of ₹5.1L with highest reaching ₹12L.</p>
+                        </div>
+                        
+                        <div class="placement-zoom-card-wrapper">
+                            <div class="placement-zoom-card">
+                                <div class="zoom-card-header">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Placement Growth Index</span>
+                                </div>
+                                <div class="growth-chart-container">
+                                    <svg class="placement-growth-svg" viewBox="0 0 310 100" style="width: 100%; height: 120px; overflow: visible;">
+                                        <defs>
+                                            <linearGradient id="lineGradReveal" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" style="stop-color:#ef4444;" />
+                                                <stop offset="100%" style="stop-color:#f97316;" />
+                                            </linearGradient>
+                                            <linearGradient id="areaGradReveal" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.25" />
+                                                <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0" />
+                                            </linearGradient>
+                                        </defs>
+                                        <path d="M 0 80 Q 50 60 100 45 T 200 35 T 310 20 L 310 100 L 0 100 Z" fill="url(#areaGradReveal)"></path>
+                                        <path class="growth-path-reveal" d="M 0 80 Q 50 60 100 45 T 200 35 T 310 20" stroke="url(#lineGradReveal)" stroke-width="4.5" fill="none" stroke-linecap="round"></path>
+                                        <circle cx="0" cy="80" r="5.5" fill="#ef4444"></circle>
+                                        <circle cx="100" cy="45" r="5.5" fill="#f97316"></circle>
+                                        <circle cx="200" cy="35" r="5.5" fill="#f97316"></circle>
+                                        <circle cx="310" cy="20" r="5.5" fill="#f97316"></circle>
+                                    </svg>
+                                </div>
+                                <div class="zoom-card-footer">
+                                    <span>Department Growth Trend</span>
+                                    <span class="badge bg-success" style="background-color: #10b981 !important;">+24%</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <style>
-                        @keyframes drawLine {
-                            to {
-                                stroke-dashoffset: 0;
-                            }
-                        }
-
-                        @keyframes growArea {
-                            from {
-                                opacity: 0;
-                                transform: scaleY(0);
-                            }
-
-                            to {
-                                opacity: 1;
-                                transform: scaleY(1);
-                            }
-                        }
-
-                        @keyframes showPoint {
-                            to {
-                                opacity: 1;
-                                transform: scale(1.2);
-                            }
-                        }
-                    </style>
-                </div>
-
-                <div class="content-right">
-                    <div class="revenue-display">
-                        <div class="revenue-amount">₹5.1L</div>
-                        <div class="revenue-label">Average CTC</div>
-                    </div>
-
-
-
-                    <div class="metrics-container">
-                        <div class="metric-box">
-                            <div class="metric-value">500+</div>
-                            <div class="metric-description">Students</div>
+                    
+                    <!-- Right Column: Metrics -->
+                    <div class="col-lg-6 placement-right-col d-flex flex-column align-items-lg-end justify-content-center">
+                        <div class="placement-metrics-reveal" style="width: 100%; max-width: 440px;">
+                            <div class="revenue-display" style="text-align: right; margin-bottom: 40px;">
+                                <div class="revenue-amount" style="font-size: 110px; font-weight: 700; color: #000; line-height: 1; letter-spacing: -0.02em;">₹5.1L</div>
+                                <div class="revenue-label" style="font-size: 14px; color: #6b7280; margin-top: 5px; font-weight: 400;">Average CTC</div>
+                            </div>
+                            
+                            <div class="metrics-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px 40px; width: 100%;">
+                                <div class="metric-box-reveal">
+                                    <div class="metric-value" style="font-size: 36px; font-weight: 700; color: #000; line-height: 1.2; margin-bottom: 5px;">500+</div>
+                                    <div class="metric-description" style="font-size: 14px; color: #6b7280; font-weight: 400;">Students</div>
+                                </div>
+                                <div class="metric-box-reveal">
+                                    <div class="metric-value" style="font-size: 36px; font-weight: 700; color: #000; line-height: 1.2; margin-bottom: 5px;">50+</div>
+                                    <div class="metric-description" style="font-size: 14px; color: #6b7280; font-weight: 400;">Internships from 2nd year</div>
+                                </div>
+                                <div class="metric-box-reveal" style="grid-column: span 2;">
+                                    <div class="metric-value" style="font-size: 36px; font-weight: 700; color: #000; line-height: 1.2; margin-bottom: 5px;">20+</div>
+                                    <div class="metric-description" style="font-size: 14px; color: #6b7280; font-weight: 400;">Top Faculty</div>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="metric-box">
-                            <div class="metric-value">50+</div>
-                            <div class="metric-description">Internships from 2nd year</div>
-                        </div>
-
-                        <div class="metric-box">
-                            <div class="metric-value">20+</div>
-                            <div class="metric-description">Top Faculty</div>
-                        </div>
-
-
                     </div>
                 </div>
             </div>
@@ -2364,6 +3358,319 @@ include "./head.php";
                 behavior: 'smooth'
             });
         });
+
+        // ==========================================
+        // SPLIT SCROLL REVEAL OBSERVER
+        // ==========================================
+        const initScrollReveal = () => {
+            const showcaseSection = document.querySelector('.reveal-showcase-section');
+            const scrollItems = document.querySelectorAll('.showcase-scroll-item');
+            const graphicItems = document.querySelectorAll('.showcase-graphic-item');
+            const stickyGraphic = document.querySelector('.showcase-sticky-graphic');
+            
+            if (!showcaseSection || scrollItems.length === 0 || graphicItems.length === 0) return;
+
+            function updateScrollReveal() {
+                // If screen width is less than 992px, reset classes and return
+                if (window.innerWidth < 992) {
+                    scrollItems.forEach(c => c.classList.remove('active', 'exit'));
+                    graphicItems.forEach(g => g.classList.remove('active'));
+                    return;
+                }
+
+                const sectionRect = showcaseSection.getBoundingClientRect();
+                const sectionHeight = sectionRect.height;
+                const viewportHeight = window.innerHeight;
+
+                const scrollStart = sectionRect.top;
+                const scrollableDist = sectionHeight - viewportHeight;
+
+                if (scrollableDist <= 0) return;
+
+                let progress = -scrollStart / scrollableDist;
+                progress = Math.max(0, Math.min(1, progress));
+
+                // Determine active step
+                const totalSteps = 4;
+                let activeStep = Math.floor(progress * totalSteps);
+                if (activeStep >= totalSteps) activeStep = totalSteps - 1;
+
+                // 2. Set step-X classes on the sticky graphic container for background shift
+                if (stickyGraphic) {
+                    stickyGraphic.className = `showcase-sticky-graphic step-${activeStep}`;
+                }
+
+                // 3. Toggle active/exit classes for horizontal slide conveyor
+                scrollItems.forEach((el, idx) => {
+                    el.classList.remove('active', 'exit');
+                    if (idx === activeStep) {
+                        el.classList.add('active');
+                    } else if (idx < activeStep) {
+                        el.classList.add('exit');
+                    }
+                });
+
+                graphicItems.forEach((el, idx) => {
+                    if (idx === activeStep) el.classList.add('active');
+                    else el.classList.remove('active');
+                });
+
+                // 4. Rotate houses orbit ring dynamically based on progress in step 1 (progress: 0.25 to 0.5)
+                const orbitRing = document.querySelector('.showcase-houses-orbit-ring');
+                if (orbitRing) {
+                    const stepProgress = (progress - 0.25) / 0.25;
+                    const clampedProgress = Math.max(0, Math.min(1, stepProgress));
+                    const angle = clampedProgress * 180; // Rotate up to 180 degrees
+                    orbitRing.style.transform = `rotate(${angle}deg)`;
+                    
+                    const houseNodes = orbitRing.querySelectorAll('.showcase-house-node');
+                    houseNodes.forEach(node => {
+                        const img = node.querySelector('img');
+                        if (img) img.style.transform = `rotate(${-angle}deg)`;
+                    });
+                }
+
+                // 5. Draw placements path chart dynamically based on progress in step 2 (progress: 0.5 to 0.75)
+                const chartPath = document.querySelector('.sp-chart-path');
+                const chartTip = document.querySelector('.sp-chart-tip');
+                if (chartPath && chartTip) {
+                    const stepProgress = (progress - 0.5) / 0.25;
+                    const clampedProgress = Math.max(0, Math.min(1, stepProgress));
+
+                    const pathLength = 600;
+                    chartPath.style.strokeDasharray = pathLength;
+                    chartPath.style.strokeDashoffset = pathLength * (1 - clampedProgress);
+
+                    try {
+                        const actualLength = chartPath.getTotalLength ? chartPath.getTotalLength() : pathLength;
+                        const point = chartPath.getPointAtLength(actualLength * Math.min(0.98, clampedProgress));
+                        chartTip.setAttribute('cx', point.x);
+                        chartTip.setAttribute('cy', point.y);
+                    } catch(err) {
+                        const posX = 10 + 380 * clampedProgress;
+                        const posY = 120 - 105 * Math.sin(clampedProgress * Math.PI / 2);
+                        chartTip.setAttribute('cx', posX);
+                        chartTip.setAttribute('cy', posY);
+                    }
+                }
+            }
+
+            window.addEventListener('scroll', updateScrollReveal);
+            window.addEventListener('resize', updateScrollReveal);
+            updateScrollReveal(); // Run initial calculation on page load
+        };
+
+        // ==========================================
+        // PLACEMENTS ZOOM-REVEAL OBSERVER
+        // ==========================================
+        const initPlacementZoomReveal = () => {
+            const scrollContainer = document.querySelector('.placement-scroll-container');
+            const zoomCard = document.querySelector('.placement-zoom-card');
+            const cardWrapper = document.querySelector('.placement-zoom-card-wrapper');
+            const textReveal = document.querySelector('.placement-text-reveal');
+            const metricsReveal = document.querySelector('.placement-metrics-reveal');
+            const metricBoxes = document.querySelectorAll('.metric-box-reveal');
+            const pathReveal = document.querySelector('.growth-path-reveal');
+            
+            if (!scrollContainer || !zoomCard || !cardWrapper) return;
+
+            let tx = 0;
+            let ty = 0;
+
+            function calculateOffsets() {
+                // Save current transform to restore after measurement
+                const originalTransform = zoomCard.style.transform;
+                zoomCard.style.transform = 'none';
+
+                const viewportCenterX = window.innerWidth / 2;
+                const viewportCenterY = window.innerHeight / 2;
+
+                const wrapperRect = cardWrapper.getBoundingClientRect();
+                const containerRect = scrollContainer.getBoundingClientRect();
+
+                // Compute exact position of card relative to container (static layout coordinates)
+                const stickyCardCenterX = (wrapperRect.left - containerRect.left) + wrapperRect.width / 2;
+                const stickyCardCenterY = (wrapperRect.top - containerRect.top) + wrapperRect.height / 2;
+
+                tx = viewportCenterX - stickyCardCenterX;
+                ty = viewportCenterY - stickyCardCenterY;
+
+                // Restore original transform
+                zoomCard.style.transform = originalTransform;
+            }
+
+            function setProgressStyle(el, progress, start, end, translateYStart = 30) {
+                if (!el) return;
+                let p = (progress - start) / (end - start);
+                p = Math.max(0, Math.min(1, p));
+                
+                const opacity = p;
+                const ty = translateYStart * (1 - p);
+                el.style.opacity = opacity;
+                el.style.transform = `translateY(${ty}px)`;
+            }
+
+            function updatePlacementReveal() {
+                if (window.innerWidth < 992) {
+                    // Reset mobile overrides
+                    zoomCard.style.transform = '';
+                    if (textReveal) { textReveal.style.opacity = ''; textReveal.style.transform = ''; }
+                    if (metricsReveal) { metricsReveal.style.opacity = ''; metricsReveal.style.transform = ''; }
+                    metricBoxes.forEach(box => { box.style.opacity = ''; box.style.transform = ''; });
+                    if (pathReveal) {
+                        pathReveal.style.strokeDasharray = '';
+                        pathReveal.style.strokeDashoffset = '';
+                    }
+                    return;
+                }
+
+                const containerRect = scrollContainer.getBoundingClientRect();
+                const containerHeight = containerRect.height;
+                const viewportHeight = window.innerHeight;
+
+                const scrollStart = containerRect.top;
+                const scrollableDist = containerHeight - viewportHeight;
+
+                if (scrollableDist <= 0) return;
+
+                let progress = -scrollStart / scrollableDist;
+                progress = Math.max(0, Math.min(1, progress));
+
+                // 1. Zoom Out and Translate Card (using cached static offsets)
+                let zoomProgress = progress / 0.6; // zoom ends at 60%
+                zoomProgress = Math.max(0, Math.min(1, zoomProgress));
+
+                const easedZoom = 1 - Math.pow(1 - zoomProgress, 3); // cubic ease-out
+
+                const currentScale = 3.0 - (3.0 - 1.0) * easedZoom;
+                const currentTx = tx * (1 - easedZoom);
+                const currentTy = ty * (1 - easedZoom);
+
+                zoomCard.style.transform = `translate(${currentTx}px, ${currentTy}px) scale(${currentScale})`;
+
+                // 2. Staggered Reveals
+                setProgressStyle(textReveal, progress, 0.45, 0.75);
+                setProgressStyle(metricsReveal, progress, 0.45, 0.75);
+                
+                // Stagger individual metric boxes
+                metricBoxes.forEach((box, idx) => {
+                    const startRange = 0.55 + idx * 0.08;
+                    const endRange = startRange + 0.25;
+                    setProgressStyle(box, progress, startRange, endRange, 20);
+                });
+
+                // 3. Draw Path on Scroll
+                if (pathReveal) {
+                    let drawProgress = (progress - 0.5) / 0.35; // draws between 50% and 85%
+                    drawProgress = Math.max(0, Math.min(1, drawProgress));
+                    const pathLength = 400;
+                    pathReveal.style.strokeDasharray = pathLength;
+                    pathReveal.style.strokeDashoffset = pathLength * (1 - drawProgress);
+                }
+            }
+
+            // Calculate static offsets initially and on window resize
+            calculateOffsets();
+            window.addEventListener('resize', () => {
+                calculateOffsets();
+                updatePlacementReveal();
+            });
+
+            window.addEventListener('scroll', updatePlacementReveal);
+            updatePlacementReveal();
+        };
+
+        const initIntroLoader = () => {
+            const loader = document.querySelector('.premium-hero-loader');
+            const overlay = document.getElementById('intro-overlay');
+            const progressText = document.querySelector('.loader-progress-text');
+            
+            if (!loader || !overlay) return;
+            
+            // Disable scrolling during preloader phase
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
+            
+            // Force scroll to top on reload so coordinates are static
+            window.scrollTo(0, 0);
+
+            // Measure layout positions
+            const rect = loader.getBoundingClientRect();
+            const loaderX = rect.left + rect.width / 2;
+            const loaderY = rect.top + rect.height / 2;
+            
+            const viewportX = window.innerWidth / 2;
+            const viewportY = window.innerHeight / 2;
+            
+            const deltaX = viewportX - loaderX;
+            const deltaY = viewportY - loaderY;
+            
+            // Center the loader in the middle of the screen initial state (keeping -50%, -50% centering offset)
+            loader.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px)) scale(1.35)`;
+            loader.classList.add('preloading');
+            
+            // Track page loading status
+            let isPageLoaded = false;
+            if (document.readyState === 'complete') {
+                isPageLoaded = true;
+            }
+            window.addEventListener('load', () => {
+                isPageLoaded = true;
+            });
+            
+            // Simulated progress loading counter
+            let currentProgress = 0;
+            const progressInterval = setInterval(() => {
+                // If page has loaded, increment faster, otherwise buffer at 92%
+                const step = isPageLoaded ? Math.floor(Math.random() * 8) + 3 : Math.floor(Math.random() * 3) + 1;
+                currentProgress += step;
+                
+                if (currentProgress >= 92 && !isPageLoaded) {
+                    currentProgress = 92;
+                }
+                
+                if (currentProgress >= 100) {
+                    currentProgress = 100;
+                    clearInterval(progressInterval);
+                    
+                    // Trigger fly-in entry animation
+                    setTimeout(() => {
+                        loader.classList.add('fade-progress');
+                        loader.style.transition = 'transform 1.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                        overlay.classList.add('fade-out');
+                        
+                        // Animate to final position inside hero visual (preserving center anchor)
+                        loader.style.transform = 'translate(-50%, -50%) scale(1)';
+                        
+                        setTimeout(() => {
+                            document.documentElement.style.overflow = '';
+                            document.body.style.overflow = '';
+                            loader.classList.remove('preloading', 'fade-progress');
+                            loader.classList.add('loaded');
+                            loader.style.transform = ''; // remove inline transform override
+                            loader.style.transition = ''; // remove inline transition override
+                            overlay.remove();
+                        }, 1600);
+                    }, 250); // slight pause at 100% for satisfaction
+                }
+                
+                if (progressText) {
+                    progressText.textContent = `${currentProgress}%`;
+                }
+            }, 30);
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                initIntroLoader();
+                initScrollReveal();
+                initPlacementZoomReveal();
+            });
+        } else {
+            initIntroLoader();
+            initScrollReveal();
+            initPlacementZoomReveal();
+        }
     </script>
 </body>
 
