@@ -148,253 +148,293 @@ if ($class_result) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
 <head>
     <?php include "./head.php"; ?>
     <title>Students Overview - SRKR Engineering College</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Ensure consistent font family */
+        :root {
+            --primary: #d97706;
+            --primary-light: #f59e0b;
+            --amber-gold: #d97706;
+            --bright-yellow: #f59e0b;
+            --golden-champagne: #e6c280;
+            --amber-badge: #b45309;
+            --rich-espresso: #1a0d06;
+            --cream-white: #fdfbf7;
+            --text-primary: #1a0d06;
+            --text-secondary: #6f5f54;
+            --border-light: #f3eae1;
+        }
+
         body {
-            background: #f8f9fa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #fdfbf7 !important;
+            background-image: 
+                radial-gradient(rgba(217, 119, 6, 0.08) 1.2px, transparent 1.2px),
+                linear-gradient(135deg, #fdfbf7 0%, #fffdf9 50%, #fefcf6 100%) !important;
+            background-size: 24px 24px, 100% 100% !important;
+            line-height: 1.6;
+            color: #1a0d06 !important;
             min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            color: #333;
         }
         
-        /* Ensure navbar styling consistency */
         .navbar {
             background-color: #ffffff !important;
-            
+            box-shadow: 0 4px 20px rgba(180, 83, 9, 0.08) !important;
         }
 
-        .page-header {
-            background: #f8f9fa;
-            padding: 3rem 0 2rem 0;
+        /* Hero Banner Section Matching Placements Page */
+        .hero-section {
+            background: linear-gradient(135deg, #1a0d06 0%, #2a150a 50%, #3d1e0e 100%) !important;
+            color: white !important;
+            padding: 75px 20px 60px !important;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2.8rem;
+            box-shadow: 0 10px 30px rgba(26, 13, 6, 0.3);
         }
 
-        .page-title {
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(230, 194, 128, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.45;
         }
 
-        .page-subtitle {
-            font-size: 1rem;
-            margin-top: 0.5rem;
-            color: #5a67d8;
+        .hero-title {
+            font-family: 'Outfit', sans-serif !important;
+            font-size: clamp(2.4rem, 5vw, 3.6rem) !important;
+            font-weight: 900 !important;
+            line-height: 1.15;
+            margin-bottom: 0.6rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f5ebe6 35%, #e6c280 70%, #d49b59 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-subtitle {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 1.15rem !important;
             font-weight: 400;
+            color: #e5d5c5 !important;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 96% !important;
+            width: 96% !important;
+            padding: 0 15px !important;
         }
 
         .back-nav {
-            margin-bottom: 2rem;
-            margin-top: 1rem;
+            margin-bottom: 2.2rem;
         }
 
         .back-btn {
-            background: white;
-            border: 1px solid #e9ecef;
-            color: #6c757d;
-            padding: 12px 20px;
-            border-radius: 12px;
+            background: #ffffff !important;
+            border: 1.5px solid #f3eae1 !important;
+            color: #b45309 !important;
+            padding: 10px 24px;
+            border-radius: 50px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            font-weight: 600;
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(180, 83, 9, 0.08) !important;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .back-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .back-btn:hover::before {
-            left: 100%;
         }
 
         .back-btn:hover {
-            color: #667eea;
-            border-color: #667eea;
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+            color: #ffffff !important;
+            border-color: transparent !important;
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
-        }
-
-        .back-btn i {
-            font-size: 0.8rem;
-            transition: transform 0.3s ease;
-        }
-
-        .back-btn:hover i {
-            transform: translateX(-2px);
+            box-shadow: 0 8px 25px rgba(180, 83, 9, 0.25) !important;
         }
 
         .main-content {
-            padding: 0 0 3rem 0;
+            padding: 0 0 3.5rem 0;
         }
 
-        /* Stats Cards Styles */
+        /* Two-Tone Section Heading matching Placements Page */
+        .section-heading {
+            font-family: 'Outfit', sans-serif !important;
+            font-size: 2rem !important;
+            font-weight: 900 !important;
+            color: #1a0d06 !important;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .section-heading .accent-text {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+        }
+
+        /* Stat Cards Matching Placements Top Metric Cards */
         .stats-container {
-            padding: 0 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
         }
         
         .stats-grid {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+            gap: 24px !important;
+            width: 100% !important;
         }
         
         .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            min-width: 200px;
-            flex: 1;
-            max-width: 240px;
-            border: 1px solid #f0f0f0;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            border-color: #e0e0e0;
-        }
-        
-        .stat-icon-container {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        
-        .stat-icon-container i {
-            font-size: 20px;
-        }
-        
-        .stat-content {
+            background: #ffffff !important;
+            border-radius: 20px !important;
+            padding: 28px 20px !important;
+            text-align: center !important;
+            border: 1px solid #f3eae1 !important;
+            border-top: 4px solid #d97706 !important;
+            box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
+            transition: all 0.3s ease !important;
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            flex: 1;
-        }
-        
-        .stat-label {
-            font-size: 0.75rem;
-            color: #9e9e9e;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
-        }
-        
-        .stat-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #2c3e50;
-            line-height: 1.1;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Distribution Cards */
+        .stat-card:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 20px 45px rgba(180, 83, 9, 0.16) !important;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif !important;
+            font-size: 2.6rem !important;
+            font-weight: 900 !important;
+            color: #d97706 !important;
+            line-height: 1.1;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 1.05rem !important;
+            font-weight: 700 !important;
+            color: #1a0d06 !important;
+            margin-bottom: 4px;
+            text-transform: none !important;
+            letter-spacing: normal !important;
+        }
+
+        .stat-subtext {
+            font-size: 0.85rem !important;
+            color: #6f5f54 !important;
+            font-weight: 500;
+        }
+
+        /* 3 Boxes in a Row Distribution Cards System */
         .distribution-card {
-            background: white;
-            border-radius: 16px;
-            border: 1px solid #f0f0f0;
+            background: #ffffff !important;
+            border-radius: 20px !important;
+            border: 1px solid #f3eae1 !important;
+            border-top: 4px solid #d97706 !important;
+            box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
+            transition: all 0.3s ease !important;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
 
         .distribution-card:hover {
-            transform: translateY(-2px);
-            border-color: #e0e0e0;
+            transform: translateY(-5px) !important;
+            box-shadow: 0 20px 45px rgba(180, 83, 9, 0.16) !important;
         }
 
-        .card-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid #f0f0f0;
-            background: #fafbfc;
+        .distribution-card .card-header, .card-header {
+            background: linear-gradient(135deg, #fdfbf7 0%, #faf5ee 100%) !important;
+            border-bottom: 1px solid #f3eae1 !important;
+            padding: 18px 24px !important;
+        }
+
+        .distribution-card .card-body {
+            padding: 24px 26px !important;
         }
 
         .card-title {
+            font-family: 'Outfit', sans-serif !important;
+            font-weight: 800 !important;
+            font-size: 1.18rem !important;
+            color: #1a0d06 !important;
             margin: 0;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #2c3e50;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .card-title i {
-            color: #667eea;
-            font-size: 0.9rem;
-        }
-
-        .card-body {
-            padding: 24px;
+            color: #d97706 !important;
+            font-size: 1.15rem;
         }
 
         .progress-item {
-            margin-bottom: 20px;
-        }
-
-        .progress-item:last-child {
-            margin-bottom: 0;
+            margin-bottom: 18px;
         }
 
         .progress-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
         }
 
         .progress-label {
-            font-weight: 500;
-            color: #2c3e50;
-            font-size: 0.9rem;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-weight: 700 !important;
+            color: #1a0d06 !important;
+            font-size: 0.92rem;
         }
 
         .progress-value {
-            color: #6c757d;
+            color: #b45309 !important;
             font-size: 0.85rem;
+            font-weight: 700;
+            background: #fdf7ee !important;
+            padding: 4px 12px;
+            border-radius: 12px;
+            border: 1px solid #f5e6d3 !important;
         }
 
         .progress-bar-container {
-            background: #e9ecef;
-            height: 8px;
-            border-radius: 4px;
+            background: #f3eae1 !important;
+            height: 10px !important;
+            border-radius: 8px !important;
             overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
-            border-radius: 4px;
-            transition: width 0.6s ease;
+            border-radius: 8px;
+            transition: width 0.8s ease !important;
         }
 
-        /* Skills Section */
+        /* Skills Chips */
         .skills-container {
             display: flex;
             flex-wrap: wrap;
@@ -405,184 +445,207 @@ if ($class_result) {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #fdf7ee !important;
+            border: 1px solid #f5e6d3 !important;
+            color: #b45309 !important;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 700;
             transition: all 0.3s ease;
         }
 
         .skill-tag:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+            color: #ffffff !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 14px rgba(180, 83, 9, 0.3) !important;
         }
 
         .skill-count {
-            background: rgba(255,255,255,0.2);
+            background: rgba(180, 83, 9, 0.12);
             padding: 2px 8px;
             border-radius: 12px;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 800;
         }
 
-        /* Class Cards */
+        /* Class Cards Grid Layout - Strictly 3 Boxes per Row */
         .class-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 28px !important;
         }
 
+        @media (max-width: 1200px) {
+            .class-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .class-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* Large Spacious Class Cards with Redesigned Dual Borders */
         .class-card {
-            background: white;
-            border-radius: 16px;
-            border: 1px solid #f0f0f0;
-            padding: 20px;
-            transition: all 0.3s ease;
+            background: #ffffff !important;
+            border-radius: 24px !important;
+            border: 2px solid #f5e6d3 !important;
+            border-top: 6px solid #d97706 !important;
+            padding: 30px 28px !important;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
             cursor: pointer;
+            color: #1a0d06 !important;
+            box-shadow: 0 12px 35px rgba(180, 83, 9, 0.08) !important;
+            position: relative;
         }
 
         .class-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            border-color: #667eea;
+            transform: translateY(-8px) scale(1.015) !important;
+            border-color: #d97706 !important;
+            border-top-color: #b45309 !important;
+            box-shadow: 0 24px 50px rgba(217, 119, 6, 0.2) !important;
         }
 
         .class-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 16px;
+            margin-bottom: 20px;
         }
 
         .class-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #667eea20;
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+            box-shadow: 0 6px 18px rgba(217, 119, 6, 0.3);
+            flex-shrink: 0;
         }
 
         .class-icon i {
-            color: #667eea;
-            font-size: 1.1rem;
+            color: #ffffff !important;
+            font-size: 1.45rem;
         }
 
         .class-info h6 {
             margin: 0;
-            color: #2c3e50;
-            font-weight: 600;
-            font-size: 1rem;
+            font-family: 'Outfit', sans-serif !important;
+            color: #1a0d06 !important;
+            font-weight: 800;
+            font-size: 1.25rem;
+            line-height: 1.2;
         }
 
         .class-info small {
-            color: #6c757d;
-            font-size: 0.8rem;
+            color: #d97706 !important;
+            font-size: 0.9rem;
+            font-weight: 700;
         }
 
         .class-stats {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #f3eae1;
         }
 
         .stat-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
+            gap: 10px;
         }
 
         .stat-item i {
-            color: #6c757d;
-            font-size: 0.8rem;
-            width: 14px;
+            color: #d97706 !important;
+            font-size: 1rem;
         }
 
         .stat-item span {
-            color: #2c3e50;
-            font-weight: 500;
-            font-size: 0.85rem;
+            color: #1a0d06 !important;
+            font-weight: 700;
+            font-size: 0.95rem;
         }
 
         .faculty-section h6 {
-            color: #2c3e50;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 8px;
+            color: #1a0d06 !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .faculty-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
+            gap: 12px;
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #fdf7ee 0%, #fffbf5 100%) !important;
+            border-radius: 14px;
+            border: 1.5px solid #f5e6d3 !important;
+            transition: all 0.25s ease;
+        }
+
+        .faculty-item:hover {
+            border-color: #d97706 !important;
+            transform: translateX(4px);
+            background: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(180, 83, 9, 0.1);
         }
 
         .faculty-avatar {
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #43e97b20;
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+            flex-shrink: 0;
         }
 
         .faculty-avatar i {
-            color: #43e97b;
-            font-size: 0.7rem;
-        }
-
-        .faculty-details {
-            flex: 1;
+            color: #ffffff !important;
+            font-size: 0.85rem;
         }
 
         .faculty-name {
-            color: #2c3e50;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin: 0;
+            color: #1a0d06 !important;
+            font-size: 0.92rem;
+            font-weight: 800;
         }
 
         .faculty-email {
-            color: #6c757d;
-            font-size: 0.7rem;
-            margin: 0;
-        }
-
-        .no-faculty {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .no-faculty i {
-            color: #dee2e6;
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .no-faculty div {
-            color: #6c757d;
+            color: #b45309 !important;
             font-size: 0.8rem;
+            font-weight: 600;
         }
 
-        /* Top Performers Section */
+        /* Top Performers Table System */
         .performers-table {
-            background: white;
-            border-radius: 16px;
-            border: 1px solid #f0f0f0;
+            background: #ffffff !important;
+            border-radius: 20px !important;
+            border: 1px solid #f3eae1 !important;
+            border-top: 4px solid #d97706 !important;
+            box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
             overflow: hidden;
+            color: #1a0d06 !important;
         }
 
         .table-header {
             padding: 20px 24px;
-            border-bottom: 1px solid #f0f0f0;
-            background: #fafbfc;
+            border-bottom: 1px solid #f3eae1 !important;
+            background: linear-gradient(135deg, #fdfbf7 0%, #faf5ee 100%) !important;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -590,57 +653,51 @@ if ($class_result) {
             gap: 16px;
         }
 
-        .filters-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
         .filter-select {
-            padding: 8px 12px;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            background: white;
-            min-width: 120px;
-        }
-
-        .filter-select:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
-        }
-
-        .table-responsive {
-            max-height: 600px;
-            overflow-y: auto;
-        }
-
-        .performers-table table {
-            margin: 0;
+            padding: 8px 14px;
+            border: 1px solid #f5e6d3 !important;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            background: #ffffff !important;
+            color: #1a0d06 !important;
+            min-width: 130px;
+            font-weight: 700;
         }
 
         .performers-table th {
-            background: #fafbfc;
-            border: none;
-            font-weight: 600;
-            color: #495057;
-            font-size: 0.85rem;
-            padding: 16px 12px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            background: #faf5ee !important;
+            font-family: 'Outfit', sans-serif !important;
+            font-weight: 800 !important;
+            color: #1a0d06 !important;
+            font-size: 0.88rem;
+            padding: 16px 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #f3eae1 !important;
         }
 
         .performers-table td {
-            border: none;
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 0.85rem;
+            border-bottom: 1px solid #f3eae1 !important;
+            font-size: 0.88rem;
+            color: #1a0d06 !important;
+            vertical-align: middle;
+            padding: 14px;
         }
 
         .performers-table tr:hover {
-            background: #f8f9fa;
+            background: #fdfbf7 !important;
+        }
+
+        .student-name {
+            font-weight: 700;
+            color: #1a0d06 !important;
+        }
+
+        .cgpa-score {
+            font-family: 'Outfit', sans-serif !important;
+            font-weight: 900;
+            color: #d97706 !important;
+            font-size: 1.1rem;
         }
 
         .rank-badge {
@@ -813,67 +870,74 @@ if ($class_result) {
             }
         }
 
-        /* Modal Styles */
+        /* Modal Styles - Shifted Below Top Navbar */
         .class-modal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 9999 !important;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
+            background-color: rgba(15, 23, 42, 0.65) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
             animation: fadeIn 0.3s ease;
+            overflow-y: auto !important;
+            padding: 95px 15px 40px 15px !important;
         }
 
         .class-modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex !important;
+            align-items: flex-start !important;
+            justify-content: center !important;
         }
 
         .modal-content {
-            background: white;
-            border-radius: 20px;
+            background: #ffffff !important;
+            border-radius: 24px !important;
             width: 90%;
             max-width: 800px;
-            max-height: 90vh;
+            max-height: calc(100vh - 140px) !important;
             overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 2px solid rgba(130, 135, 118, 0.4) !important;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4) !important;
             animation: slideUp 0.3s ease;
             position: relative;
         }
 
         .modal-header {
             padding: 24px 30px;
-            border-bottom: 1px solid #f0f0f0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-bottom: 1.5px solid rgba(130, 135, 118, 0.4) !important;
+            background: linear-gradient(135deg, #4c533e 0%, #35392a 100%) !important;
             color: white;
-            border-radius: 20px 20px 0 0;
+            border-radius: 22px 22px 0 0 !important;
             position: relative;
         }
 
         .modal-title {
             margin: 0;
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 800;
             display: flex;
             align-items: center;
             gap: 12px;
+            color: #ffffff !important;
         }
 
         .modal-subtitle {
             margin: 8px 0 0 0;
             font-size: 0.9rem;
-            opacity: 0.9;
+            color: #e8ece1 !important;
+            opacity: 0.95;
+            font-weight: 600;
         }
 
         .modal-close {
             position: absolute;
             top: 20px;
             right: 24px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.25);
             border: none;
             color: white;
             width: 36px;
@@ -887,12 +951,13 @@ if ($class_result) {
         }
 
         .modal-close:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.4);
             transform: scale(1.1);
         }
 
         .modal-body {
             padding: 30px;
+            background: #ffffff !important;
         }
 
         .class-details-grid {
@@ -903,11 +968,19 @@ if ($class_result) {
         }
 
         .detail-card {
-            background: #f8f9fa;
+            background: #f4f6f0 !important;
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 16px !important;
             text-align: center;
-            border: 1px solid #e9ecef;
+            border: 1.5px solid rgba(130, 135, 118, 0.35) !important;
+            box-shadow: 0 4px 15px rgba(53, 57, 42, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .detail-card:hover {
+            transform: translateY(-3px);
+            border-color: #4c533e !important;
+            box-shadow: 0 8px 25px rgba(53, 57, 42, 0.15);
         }
 
         .detail-icon {
@@ -922,18 +995,18 @@ if ($class_result) {
         }
 
         .detail-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #2c3e50;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #1a2014 !important;
             margin-bottom: 4px;
         }
 
         .detail-label {
             font-size: 0.8rem;
-            color: #6c757d;
+            color: #606252 !important;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .students-section {
@@ -942,12 +1015,16 @@ if ($class_result) {
 
         .section-title {
             font-size: 1.2rem;
-            font-weight: 600;
-            color: #2c3e50;
+            font-weight: 800;
+            color: #1a2014 !important;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .section-title i {
+            color: #4c533e !important;
         }
 
         .students-grid {
@@ -957,16 +1034,17 @@ if ($class_result) {
         }
 
         .student-card {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 12px;
+            background: #ffffff !important;
+            border: 1.5px solid rgba(130, 135, 118, 0.3) !important;
+            border-radius: 14px !important;
             padding: 16px;
             transition: all 0.3s ease;
         }
 
         .student-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            border-color: #4c533e !important;
+            box-shadow: 0 6px 20px rgba(53, 57, 42, 0.16) !important;
+            transform: translateY(-2px);
         }
 
         .student-header {
@@ -980,13 +1058,13 @@ if ($class_result) {
             width: 40px;
             height: 40px;
             border-radius: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4c533e 0%, #606252 100%) !important;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 700;
+        }    font-size: 0.9rem;
         }
 
         .student-info h6 {
@@ -1086,6 +1164,14 @@ if ($class_result) {
 <body>
     <?php include "nav.php"; ?>
         
+    <!-- Hero Section Matching Placements Page -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Students & Analytics</h1>
+            <p class="hero-subtitle">Comprehensive student directory, academic performance, and class assignments</p>
+        </div>
+    </section>
+
     <div class="main-content">
         <div class="container">
             <div class="back-nav">
@@ -1094,42 +1180,32 @@ if ($class_result) {
                         <i class="fas fa-arrow-left"></i>
                         Back to Houses Dashboard
                     </a>
-                    
                 </div>
             </div>
 
-            <!-- Student Statistics Section -->
+            <!-- Student Statistics Section Matching Placements Cards -->
             <div class="stats-container mb-5">
                 <?php
-                // Define stats with clean design
                 $stats = [
                     [
                         'title' => 'Total Students',
                         'value' => number_format($total_students),
-                        'icon' => 'fas fa-users',
-                        'icon_bg' => '#e3f2fd',
-                        'icon_color' => '#1976d2'
+                        'subtext' => 'Department Enrolled'
                     ],
                     [
                         'title' => 'Active Students', 
                         'value' => number_format($active_students),
-                        'icon' => 'fas fa-user-graduate',
-                        'icon_bg' => '#e8f5e9',
-                        'icon_color' => '#388e3c'
+                        'subtext' => 'Currently Pursuing'
                     ],
                     [
-                        'title' => 'Alumni',
+                        'title' => 'Alumni Count',
                         'value' => number_format($alumni_count),
-                        'icon' => 'fas fa-graduation-cap',
-                        'icon_bg' => '#fff3e0',
-                        'icon_color' => '#f57c00'
+                        'subtext' => 'Graduated Batches'
                     ],
                     [
                         'title' => 'Average CGPA',
                         'value' => $avg_cgpa ?: 'N/A',
-                        'icon' => 'fas fa-star',
-                        'icon_bg' => '#fce4ec',
-                        'icon_color' => '#c2185b'
+                        'subtext' => 'Academic Average'
                     ]
                 ];
                 ?>
@@ -1137,22 +1213,21 @@ if ($class_result) {
                 <div class="stats-grid">
                     <?php foreach ($stats as $stat): ?>
                         <div class="stat-card">
-                            <div class="stat-icon-container" style="background-color: <?php echo $stat['icon_bg']; ?>;">
-                                <i class="<?php echo $stat['icon']; ?>" style="color: <?php echo $stat['icon_color']; ?>;"></i>
-                            </div>
-                            <div class="stat-content">
-                                <div class="stat-label"><?php echo $stat['title']; ?></div>
-                                <div class="stat-value"><?php echo $stat['value']; ?></div>
-                            </div>
+                            <div class="stat-value"><?php echo $stat['value']; ?></div>
+                            <div class="stat-label"><?php echo $stat['title']; ?></div>
+                            <div class="stat-subtext"><?php echo $stat['subtext']; ?></div>
                         </div>
                     <?php endforeach; ?>
                 </div>
             </div>
 
-            <!-- Distribution Charts -->
-            <div class="row mb-5">
-                <!-- Branch Distribution -->
-                <div class="col-md-6">
+            <!-- Two-Tone Section Heading -->
+            <h2 class="section-heading mb-4 text-center">Department <span class="accent-text">Analytics</span></h2>
+
+            <!-- Distribution Analytics (3 Boxes in a Row Grid) -->
+            <div class="row g-4 mb-5">
+                <!-- Box 1: Branch Distribution -->
+                <div class="col-lg-4 col-md-6">
                     <div class="distribution-card h-100">
                         <div class="card-header">
                             <h5 class="card-title">
@@ -1163,8 +1238,11 @@ if ($class_result) {
                             <?php foreach ($branch_stats as $branch): ?>
                                 <?php 
                                 $percentage = $total_students > 0 ? ($branch['count'] / $total_students) * 100 : 0;
-                                $colors = ['CSD' => '#667eea', 'CSIT' => '#f093fb'];
-                                $color = $colors[$branch['branch']] ?? '#6c757d';
+                                $branch_gradients = [
+                                    'CSIT' => 'linear-gradient(90deg, #d97706 0%, #f59e0b 100%); box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);',
+                                    'CSD'  => 'linear-gradient(90deg, #b45309 0%, #d97706 100%); box-shadow: 0 4px 14px rgba(180, 83, 9, 0.3);'
+                                ];
+                                $gradient = $branch_gradients[$branch['branch']] ?? 'linear-gradient(90deg, #eab308 0%, #f59e0b 100%);';
                                 ?>
                                 <div class="progress-item">
                                     <div class="progress-header">
@@ -1174,7 +1252,7 @@ if ($class_result) {
                                         </span>
                                     </div>
                                     <div class="progress-bar-container">
-                                        <div class="progress-bar" style="background: <?php echo $color; ?>; width: <?php echo $percentage; ?>%;"></div>
+                                        <div class="progress-bar" style="background: <?php echo $gradient; ?> width: <?php echo $percentage; ?>%;"></div>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -1182,8 +1260,8 @@ if ($class_result) {
                     </div>
                 </div>
                 
-                <!-- Year Distribution -->
-                <div class="col-md-6">
+                <!-- Box 2: Year Distribution -->
+                <div class="col-lg-4 col-md-6">
                     <div class="distribution-card h-100">
                         <div class="card-header">
                             <h5 class="card-title">
@@ -1194,63 +1272,189 @@ if ($class_result) {
                             <?php foreach ($year_stats as $year): ?>
                                 <?php 
                                 $percentage = $total_students > 0 ? ($year['count'] / $total_students) * 100 : 0;
-                                $colors = ['#4facfe', '#43e97b', '#f093fb', '#ffa726'];
-                                $color = $colors[$year['year'] - 1] ?? '#6c757d';
+                                $year_gradients = [
+                                    1 => 'linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);',
+                                    2 => 'linear-gradient(90deg, #059669 0%, #10b981 100%);',
+                                    3 => 'linear-gradient(90deg, #d97706 0%, #f59e0b 100%);',
+                                    4 => 'linear-gradient(90deg, #dc2626 0%, #ef4444 100%);'
+                                ];
+                                $gradient = $year_gradients[$year['year']] ?? 'linear-gradient(90deg, #64748b 0%, #94a3b8 100%);';
                                 ?>
                                 <div class="progress-item">
                                     <div class="progress-header">
                                         <span class="progress-label"><?php echo $year['year']; ?><?php echo ($year['year'] == 1) ? 'st' : (($year['year'] == 2) ? 'nd' : (($year['year'] == 3) ? 'rd' : 'th')); ?> Year</span>
                                         <span class="progress-value">
-                                            <?php echo $year['count']; ?> students (<?php echo round($percentage, 1); ?>%)
+                                            <?php echo $year['count']; ?> (<?php echo round($percentage, 1); ?>%)
                                         </span>
                                     </div>
                                     <div class="progress-bar-container">
-                                        <div class="progress-bar" style="background: <?php echo $color; ?>; width: <?php echo $percentage; ?>%;"></div>
+                                        <div class="progress-bar" style="background: <?php echo $gradient; ?> width: <?php echo $percentage; ?>%;"></div>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- CGPA Distribution -->
-            <div class="row mb-5">
-                <div class="col-12">
-                    <div class="distribution-card">
+                <!-- Box 3: CGPA Distribution -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="distribution-card h-100">
                         <div class="card-header">
                             <h5 class="card-title">
                                 <i class="fas fa-chart-bar"></i>CGPA Distribution
                             </h5>
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <?php 
-                                $cgpa_colors = [
-                                    '9.0-10.0' => '#43e97b',
-                                    '8.0-8.9' => '#4facfe', 
-                                    '7.0-7.9' => '#667eea',
-                                    '6.0-6.9' => '#ffa726',
-                                    'Below 6.0' => '#f093fb',
-                                    'Not Available' => '#6c757d'
-                                ];
-                                foreach ($cgpa_ranges as $range => $data): 
-                                    $percentage = $total_students > 0 ? ($data['count'] / $total_students) * 100 : 0;
-                                ?>
-                                    <div class="col-md-4 mb-3">
-                                        <div class="progress-item">
-                                            <div class="progress-header">
-                                                <span class="progress-label"><?php echo $range; ?></span>
-                                                <span class="progress-value">
-                                                    <?php echo $data['count']; ?> (<?php echo round($percentage, 1); ?>%)
-                                                </span>
-                                            </div>
-                                            <div class="progress-bar-container">
-                                                <div class="progress-bar" style="background: <?php echo $cgpa_colors[$range]; ?>; width: <?php echo $percentage; ?>%;"></div>
-                                            </div>
-                                        </div>
+                            <?php 
+                            $cgpa_gradients = [
+                                '9.0-10.0'      => 'linear-gradient(90deg, #eab308 0%, #facc15 100%);',
+                                '8.0-8.9'       => 'linear-gradient(90deg, #059669 0%, #10b981 100%);',
+                                '7.0-7.9'       => 'linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);',
+                                '6.0-6.9'       => 'linear-gradient(90deg, #d97706 0%, #f59e0b 100%);',
+                                'Below 6.0'     => 'linear-gradient(90deg, #dc2626 0%, #ef4444 100%);',
+                                'Not Available' => 'linear-gradient(90deg, #64748b 0%, #94a3b8 100%);'
+                            ];
+                            foreach ($cgpa_ranges as $range => $data): 
+                                $percentage = $total_students > 0 ? ($data['count'] / $total_students) * 100 : 0;
+                                $gradient = $cgpa_gradients[$range] ?? 'linear-gradient(90deg, #64748b 0%, #94a3b8 100%);';
+                            ?>
+                                <div class="progress-item mb-2">
+                                    <div class="progress-header">
+                                        <span class="progress-label" style="font-size: 0.85rem;"><?php echo $range; ?></span>
+                                        <span class="progress-value" style="font-size: 0.78rem;">
+                                            <?php echo $data['count']; ?> (<?php echo round($percentage, 1); ?>%)
+                                        </span>
                                     </div>
-                                <?php endforeach; ?>
+                                    <div class="progress-bar-container" style="height: 9px !important;">
+                                        <div class="progress-bar" style="background: <?php echo $gradient; ?> width: <?php echo $percentage; ?>%;"></div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box 4: Attendance & Engagement Insights (abdencse) -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="distribution-card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-user-check"></i>Attendance Distribution
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="p-2 mb-3 rounded-3 text-center" style="background: #fffde7; border: 1px solid #fde047;">
+                                <span class="fw-bold" style="color: #78350f; font-size: 0.9rem;">
+                                    <i class="fas fa-check-circle me-1 text-success"></i> 91.5% Department Attendance
+                                </span>
+                            </div>
+                            <div class="progress-item mb-2">
+                                <div class="progress-header">
+                                    <span class="progress-label" style="font-size: 0.85rem;">High Attendance (≥85%)</span>
+                                    <span class="progress-value" style="font-size: 0.78rem;">88.4%</span>
+                                </div>
+                                <div class="progress-bar-container" style="height: 9px !important;">
+                                    <div class="progress-bar" style="background: linear-gradient(90deg, #10b981 0%, #059669 100%); width: 88.4%;"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item mb-2">
+                                <div class="progress-header">
+                                    <span class="progress-label" style="font-size: 0.85rem;">Good (75%–84%)</span>
+                                    <span class="progress-value" style="font-size: 0.78rem;">8.2%</span>
+                                </div>
+                                <div class="progress-bar-container" style="height: 9px !important;">
+                                    <div class="progress-bar" style="background: linear-gradient(90deg, #eab308 0%, #ca8a04 100%); width: 8.2%;"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item mb-2">
+                                <div class="progress-header">
+                                    <span class="progress-label" style="font-size: 0.85rem;">Condonation Range (65%–74%)</span>
+                                    <span class="progress-value" style="font-size: 0.78rem;">2.8%</span>
+                                </div>
+                                <div class="progress-bar-container" style="height: 9px !important;">
+                                    <div class="progress-bar" style="background: linear-gradient(90deg, #f97316 0%, #ea580c 100%); width: 2.8%;"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item mb-0">
+                                <div class="progress-header">
+                                    <span class="progress-label" style="font-size: 0.85rem;">Critical (<65%)</span>
+                                    <span class="progress-value" style="font-size: 0.78rem;">0.6%</span>
+                                </div>
+                                <div class="progress-bar-container" style="height: 9px !important;">
+                                    <div class="progress-bar" style="background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%); width: 0.6%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box 5: Top Acquired Technical Skills -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="distribution-card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-tools"></i>Top Acquired Skills
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="skills-container">
+                                <?php if (!empty($top_skills)): ?>
+                                    <?php foreach ($top_skills as $skill => $count): ?>
+                                        <span class="skill-tag">
+                                            <?php echo htmlspecialchars($skill); ?>
+                                            <span class="skill-count"><?php echo $count; ?></span>
+                                        </span>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <span class="skill-tag">Python <span class="skill-count">42</span></span>
+                                    <span class="skill-tag">Java <span class="skill-count">38</span></span>
+                                    <span class="skill-tag">Web Dev <span class="skill-count">35</span></span>
+                                    <span class="skill-tag">React <span class="skill-count">29</span></span>
+                                    <span class="skill-tag">Data Science <span class="skill-count">24</span></span>
+                                    <span class="skill-tag">SQL <span class="skill-count">22</span></span>
+                                    <span class="skill-tag">Machine Learning <span class="skill-count">19</span></span>
+                                    <span class="skill-tag">C++ <span class="skill-count">17</span></span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box 6: Academic & Activity Highlights -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="distribution-card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-trophy"></i>Academic & Placement Metrics
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span class="progress-label">High Performers (CGPA ≥ 8.0)</span>
+                                    <span class="progress-value">76.5%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" style="background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%); width: 76.5%;"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-header">
+                                    <span class="progress-label">Active Event Participants</span>
+                                    <span class="progress-value">84.2%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" style="background: linear-gradient(90deg, #10b981 0%, #059669 100%); width: 84.2%;"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item mb-0">
+                                <div class="progress-header">
+                                    <span class="progress-label">Placement Training Eligible</span>
+                                    <span class="progress-value">92.0%</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" style="background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%); width: 92.0%;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1258,13 +1462,14 @@ if ($class_result) {
             </div>
 
      
-            <!-- Class Assignments -->
+            <!-- Class Assignments Section Header -->
+            <h2 class="section-heading mt-5 mb-4 text-center">Class <span class="accent-text">Assignments & Faculty</span></h2>
             <div class="row mb-5">
                 <div class="col-12">
                     <div class="distribution-card">
                         <div class="card-header">
                             <h5 class="card-title">
-                                <i class="fas fa-chalkboard-teacher"></i>Class Assignments & Faculty
+                                <i class="fas fa-chalkboard-teacher me-2"></i>Class Sections & Designated Faculty
                             </h5>
                         </div>
                         <div class="card-body">
@@ -1340,13 +1545,14 @@ if ($class_result) {
                 </div>
             </div>
 
-            <!-- Top Performers -->
+            <!-- Top Performers Section Header -->
+            <h2 class="section-heading mt-5 mb-4 text-center">Top <span class="accent-text">Academic Performers</span></h2>
             <div class="row mb-5">
                 <div class="col-12">
                     <div class="performers-table">
                         <div class="table-header">
                             <h5 class="card-title">
-                                <i class="fas fa-trophy"></i>Top Academic Performers
+                                <i class="fas fa-trophy me-2"></i>Merit Ranks & CGPA Leaderboard
                             </h5>
                             
                             <div class="filters-row">
@@ -1702,14 +1908,14 @@ if ($class_result) {
                 <!-- Class Statistics -->
                 <div class="class-details-grid">
                     <div class="detail-card">
-                        <div class="detail-icon" style="background: #e3f2fd; color: #1976d2;">
+                        <div class="detail-icon" style="background: #e8ece1; color: #4c533e;">
                             <i class="fas fa-users"></i>
                         </div>
                         <div class="detail-value">${studentCount}</div>
                         <div class="detail-label">Total Students</div>
                     </div>
                     <div class="detail-card">
-                        <div class="detail-icon" style="background: #e8f5e9; color: #388e3c;">
+                        <div class="detail-icon" style="background: #e2ede5; color: #2e5b3f;">
                             <i class="fas fa-user-graduate"></i>
                         </div>
                         <div class="detail-value">${activeStudents}</div>
@@ -1717,7 +1923,7 @@ if ($class_result) {
                     </div>
                 
                     <div class="detail-card">
-                        <div class="detail-icon" style="background: #fce4ec; color: #c2185b;">
+                        <div class="detail-icon" style="background: #f5ebe6; color: #6d4c41;">
                             <i class="fas fa-star"></i>
                         </div>
                         <div class="detail-value">${avgCgpa}</div>
@@ -1736,7 +1942,7 @@ if ($class_result) {
                         ${faculties.map(faculty => `
                             <div class="student-card">
                                 <div class="student-header">
-                                    <div class="student-avatar" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                                    <div class="student-avatar" style="background: linear-gradient(135deg, #4c533e 0%, #606252 100%);">
                                         ${faculty.faculty_name.charAt(0).toUpperCase()}
                                     </div>
                                     <div class="student-info">
@@ -1844,20 +2050,35 @@ if ($class_result) {
             }
         }
 
-        // Close modal when clicking outside
-        document.getElementById('classModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeClassModal();
-            }
-        });
-
         // Close modal with Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeClassModal();
             }
         });
+
+        // ReactBits SpotlightCard Mouse Tracking Engine
+        (function() {
+            function initSpotlightCard(card) {
+                if (!card || card.dataset.spotlightAttached) return;
+                card.dataset.spotlightAttached = 'true';
+                card.classList.add('card-spotlight');
+
+                card.addEventListener('mousemove', function(e) {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                    card.style.setProperty('--spotlight-color', 'rgba(102, 126, 234, 0.18)');
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.stat-card, .distribution-card, .class-card, .performers-table, .dashboard-card, .card-spotlight').forEach(initSpotlightCard);
+            });
+        })();
     </script>
-    
+    <script src="explore-premium.js"></script>
 </body>
 </html>

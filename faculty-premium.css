@@ -1,0 +1,900 @@
+/* ================================================
+   PREMIUM FACULTY PAGE - SRKREC CSD-CSIT
+   Apple + Microsoft Fluent Inspired Design
+   ================================================ */
+
+/* Color Variables */
+:root {
+    --primary-blue: #2563EB;
+    --cyan-accent: #06B6D4;
+    --emerald-green: #10B981;
+    --dark-text: #0F172A;
+    --secondary-text: #64748B;
+    --background: #F8FAFC;
+    --card-bg: #FFFFFF;
+    --border-color: #E2E8F0;
+    --hover-bg: #EFF6FF;
+    --gradient-primary: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+}
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--background);
+    color: var(--dark-text);
+    overflow-x: hidden;
+    line-height: 1.8;
+    padding-top: 80px;
+}
+
+/* Premium Background */
+.premium-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.gradient-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.1;
+    animation: float-blob 25s infinite ease-in-out;
+}
+
+.blob-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--primary-blue) 0%, transparent 70%);
+    top: 10%;
+    left: 5%;
+}
+
+.blob-2 {
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, var(--cyan-accent) 0%, transparent 70%);
+    top: 50%;
+    right: 10%;
+    animation-delay: 8s;
+}
+
+.blob-3 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--emerald-green) 0%, transparent 70%);
+    bottom: 15%;
+    left: 20%;
+    animation-delay: 15s;
+}
+
+@keyframes float-blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(60px, -80px) scale(1.1); }
+    66% { transform: translate(-50px, 60px) scale(0.9); }
+}
+
+/* Page Header */
+.faculty-page-header {
+    position: relative;
+    z-index: 1;
+    padding: 60px 20px 40px;
+    text-align: center;
+}
+
+.page-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+}
+
+.page-subtitle {
+    font-size: 18px;
+    color: var(--secondary-text);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Main Container */
+.faculty-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px 60px;
+    display: grid;
+    grid-template-columns: 1fr 340px; /* Profile on LEFT, List on RIGHT ASIDE */
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Left Panel - Faculty List */
+.faculty-list-panel {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 30px 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+}
+
+/* Custom Scrollbar */
+.faculty-list-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.faculty-list-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.faculty-list-panel::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+
+.faculty-list-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-blue);
+}
+
+/* Search Container */
+.search-container {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-text);
+    font-size: 16px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px 20px 14px 50px;
+    border: 2px solid var(--border-color);
+    border-radius: 14px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+    background: var(--card-bg);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+}
+
+/* Filter Section */
+.filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 25px;
+}
+
+.filter-chip {
+    padding: 8px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    background: var(--card-bg);
+    color: var(--secondary-text);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.filter-chip:hover {
+    background: var(--hover-bg);
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+.filter-chip.active {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+}
+
+/* Faculty Cards List */
+.faculty-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faculty-mini-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--card-bg);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faculty-mini-card:hover {
+    background: var(--hover-bg);
+    border-left: 4px solid var(--primary-blue);
+    transform: translateX(5px);
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+}
+
+.faculty-mini-card.active {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 15px 40px rgba(37, 99, 235, 0.3);
+}
+
+.faculty-mini-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.faculty-mini-card.active .faculty-mini-photo {
+    border-color: white;
+}
+
+.faculty-mini-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.faculty-mini-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.faculty-mini-card.active .faculty-mini-name {
+    color: white;
+}
+
+.faculty-mini-designation {
+    font-size: 12px;
+    color: var(--secondary-text);
+    margin-bottom: 6px;
+}
+
+.faculty-mini-card.active .faculty-mini-designation {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.dept-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--hover-bg);
+    color: var(--primary-blue);
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.faculty-mini-card.active .dept-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Right Panel - Faculty Profile */
+.faculty-profile-panel {
+    background: transparent;
+}
+
+/* Profile Navigation */
+.profile-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--dark-text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(37, 99, 235, 0.25);
+}
+
+.nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.nav-btn:disabled:hover {
+    transform: none;
+    background: var(--card-bg);
+    color: var(--dark-text);
+}
+
+/* Profile Content */
+.profile-content {
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 40px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+    margin-bottom: 30px;
+}
+
+.profile-header {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 40px;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* Left Side - Photo & Basic Info */
+.profile-left {
+    text-align: center;
+}
+
+.faculty-large-photo {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 25px;
+    border: 5px solid var(--border-color);
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+}
+
+.faculty-name {
+    font-family: 'Sora', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 8px;
+}
+
+.faculty-designation {
+    font-size: 18px;
+    color: var(--secondary-text);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.faculty-department {
+    display: inline-block;
+    padding: 8px 20px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.basic-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+    margin: 25px 0;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    background: var(--background);
+    border-radius: 10px;
+}
+
+.info-item i {
+    width: 20px;
+    color: var(--primary-blue);
+    font-size: 16px;
+}
+
+.info-label {
+    font-size: 13px;
+    color: var(--secondary-text);
+    font-weight: 600;
+}
+
+.info-value {
+    font-size: 14px;
+    color: var(--dark-text);
+    font-weight: 600;
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.social-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 18px;
+}
+
+.social-btn:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 15px 35px rgba(37, 99, 235, 0.35);
+}
+
+/* Right Side - Detailed Info */
+.profile-right {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.info-card {
+    background: var(--background);
+    border-radius: 18px;
+    padding: 25px;
+    border: 1px solid var(--border-color);
+}
+
+.info-card-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-card-title i {
+    color: var(--primary-blue);
+    font-size: 22px;
+}
+
+.about-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--secondary-text);
+}
+
+/* Education Timeline */
+.education-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.education-item {
+    padding-left: 25px;
+    border-left: 3px solid var(--primary-blue);
+    position: relative;
+}
+
+.education-item::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 5px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--primary-blue);
+    border: 3px solid var(--card-bg);
+}
+
+.education-degree {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 4px;
+}
+
+.education-institution {
+    font-size: 14px;
+    color: var(--secondary-text);
+}
+
+/* Research Tags */
+.research-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.research-tag {
+    padding: 10px 18px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.research-tag:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+}
+
+/* Publications List */
+.publications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.publication-item {
+    padding: 15px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-blue);
+}
+
+.publication-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 6px;
+}
+
+.publication-meta {
+    font-size: 12px;
+    color: var(--secondary-text);
+}
+
+/* Subject Chips */
+.subject-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.subject-chip {
+    padding: 8px 16px;
+    background: var(--hover-bg);
+    color: var(--primary-blue);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid var(--border-color);
+}
+
+/* Achievements Grid */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.achievement-card {
+    padding: 20px;
+    background: var(--card-bg);
+    border-radius: 14px;
+    text-align: center;
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.achievement-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-blue);
+    box-shadow: 0 15px 40px rgba(37, 99, 235, 0.15);
+}
+
+.achievement-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.achievement-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark-text);
+}
+
+/* Faculty Statistics */
+.faculty-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 30px 25px;
+    border-radius: 24px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+    transition: all 0.4s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 80px rgba(37, 99, 235, 0.18);
+}
+
+.stat-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: white;
+}
+
+.stat-number {
+    font-family: 'Sora', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--dark-text);
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--secondary-text);
+    font-weight: 600;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(37, 99, 235, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .faculty-container {
+        grid-template-columns: 35% 65%;
+        gap: 30px;
+        padding: 0 30px 50px;
+    }
+
+    .profile-header {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .profile-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .faculty-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .faculty-container {
+        grid-template-columns: 1fr;
+        padding: 0 20px 40px;
+    }
+
+    .faculty-list-panel {
+        position: relative;
+        top: 0;
+        max-height: none;
+        margin-bottom: 30px;
+    }
+
+    .page-title {
+        font-size: 38px;
+    }
+
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 32px;
+    }
+
+    .profile-content {
+        padding: 25px;
+    }
+
+    .faculty-large-photo {
+        width: 180px;
+        height: 180px;
+    }
+
+    .faculty-name {
+        font-size: 26px;
+    }
+
+    .faculty-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-navigation {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ================================================
+   CHROMAGRID REACTBITS SPOTLIGHT CARD STYLES
+   ================================================ */
+.chroma-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    background: var(--card-gradient, linear-gradient(145deg, #1E293B, #0F172A));
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+    --spotlight-color: rgba(255, 255, 255, 0.35);
+}
+
+.chroma-card:hover {
+    border-color: var(--card-border, #2563EB);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(37, 99, 235, 0.25);
+}
+
+.chroma-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2;
+}
+
+.chroma-card:hover::before {
+    opacity: 1;
+}
+
+.chroma-img-wrapper {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    padding: 12px;
+    box-sizing: border-box;
+    background: transparent;
+    transition: background 0.3s ease;
+}
+
+.chroma-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    max-height: 380px;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.chroma-info {
+    position: relative;
+    z-index: 1;
+    padding: 1rem 1.25rem;
+    color: #fff;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    row-gap: 0.25rem;
+    column-gap: 0.75rem;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+.chroma-info .name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.chroma-info .role {
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.chroma-info .handle {
+    font-size: 0.85rem;
+    color: #38bdf8;
+    align-self: center;
+    font-weight: 600;
+}

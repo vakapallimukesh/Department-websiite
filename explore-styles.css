@@ -1,0 +1,430 @@
+/* ================================================
+   EXPLORE PAGE STYLES - SRKREC CSD-CSIT Department
+   Premium Modern University Design
+   ================================================ */
+
+/* Color Variables */
+:root {
+    --primary: #2563EB;
+    --secondary: #10B981;
+    --accent: #06B6D4;
+    --background: #F8FAFC;
+    --card-bg: #FFFFFF;
+    --text-primary: #0F172A;
+    --text-secondary: #64748B;
+    --gradient-primary: linear-gradient(135deg, #2563EB 0%, #06B6D4 50%, #10B981 100%);
+    --gradient-hover: linear-gradient(135deg, #1d4ed8 0%, #0891b2 50%, #059669 100%);
+}
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    padding-top: 80px;
+}
+
+/* Explore Page Section */
+.explore-page {
+    position: relative;
+    min-height: 100vh;
+    padding: 80px 20px;
+    overflow: hidden;
+}
+
+.explore-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+/* Page Header */
+.explore-header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.explore-title {
+    font-family: 'Sora', 'Poppins', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+
+.explore-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Dashboard Cards Grid */
+.explore-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+/* Individual Card */
+.explore-card {
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 40px 35px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(37, 99, 235, 0.1);
+}
+
+/* Glassmorphism Effect */
+.explore-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(37, 99, 235, 0.03) 0%, 
+        rgba(6, 182, 212, 0.03) 50%, 
+        rgba(16, 185, 129, 0.03) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.explore-card:hover::before {
+    opacity: 1;
+}
+
+/* Card Hover Effect */
+.explore-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+    border-color: rgba(37, 99, 235, 0.3);
+}
+
+/* Glowing Border on Hover */
+.explore-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    padding: 2px;
+    background: var(--gradient-primary);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                   linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.explore-card:hover::after {
+    opacity: 0.6;
+}
+
+/* Card Icon Wrapper */
+.card-icon-wrapper {
+    margin-bottom: 25px;
+}
+
+.card-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    position: relative;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.explore-card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Icon Gradient Backgrounds */
+.card-icon.academics {
+    background: linear-gradient(135deg, #2563EB, #3b82f6);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+}
+
+.card-icon.faculty {
+    background: linear-gradient(135deg, #10B981, #34d399);
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+.card-icon.placements {
+    background: linear-gradient(135deg, #06B6D4, #22d3ee);
+    box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
+}
+
+.card-icon.clubs {
+    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+}
+
+.card-icon.students {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+}
+
+.card-icon.highlights {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+}
+
+/* Card Title */
+.card-title {
+    font-family: 'Sora', 'Poppins', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
+}
+
+/* Card Description */
+.card-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 25px;
+}
+
+/* Card Button */
+.card-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: var(--gradient-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+}
+
+.card-button:hover {
+    background: var(--gradient-hover);
+    transform: translateX(5px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+}
+
+.card-button i {
+    transition: transform 0.3s ease;
+}
+
+.card-button:hover i {
+    transform: translateX(5px);
+}
+
+/* Floating Background Shapes */
+.floating-shapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    animation: float-shape 20s ease-in-out infinite;
+}
+
+.shape-1 {
+    top: 10%;
+    left: 5%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #2563EB 0%, transparent 70%);
+    animation-delay: 0s;
+    animation-duration: 25s;
+}
+
+.shape-2 {
+    top: 50%;
+    right: 10%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, #10B981 0%, transparent 70%);
+    animation-delay: 5s;
+    animation-duration: 30s;
+}
+
+.shape-3 {
+    bottom: 10%;
+    left: 20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, #06B6D4 0%, transparent 70%);
+    animation-delay: 10s;
+    animation-duration: 28s;
+}
+
+@keyframes float-shape {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(50px, -50px) scale(1.1);
+    }
+    66% {
+        transform: translate(-40px, 40px) scale(0.9);
+    }
+}
+
+/* Responsive Design */
+
+/* Tablet View (768px - 1024px) */
+@media (max-width: 1024px) {
+    .explore-title {
+        font-size: 3.5rem;
+    }
+    
+    .explore-subtitle {
+        font-size: 1.3rem;
+    }
+    
+    .explore-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 35px;
+    }
+}
+
+/* Tablet Portrait (768px - 991px) */
+@media (max-width: 991px) {
+    .explore-page {
+        padding: 60px 20px;
+    }
+    
+    .explore-header {
+        margin-bottom: 60px;
+    }
+    
+    .explore-title {
+        font-size: 3rem;
+    }
+    
+    .explore-grid {
+        gap: 30px;
+    }
+}
+
+/* Mobile View (< 768px) */
+@media (max-width: 768px) {
+    body {
+        padding-top: 70px;
+    }
+    
+    .explore-page {
+        padding: 50px 15px;
+    }
+    
+    .explore-header {
+        margin-bottom: 50px;
+    }
+    
+    .explore-title {
+        font-size: 2.5rem;
+    }
+    
+    .explore-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .explore-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .explore-card {
+        padding: 30px 25px;
+    }
+    
+    .card-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.75rem;
+    }
+    
+    .card-title {
+        font-size: 1.5rem;
+    }
+    
+    .card-description {
+        font-size: 0.95rem;
+    }
+    
+    .floating-shape {
+        filter: blur(60px);
+    }
+}
+
+/* Small Mobile (< 480px) */
+@media (max-width: 480px) {
+    .explore-title {
+        font-size: 2rem;
+    }
+    
+    .explore-subtitle {
+        font-size: 1rem;
+    }
+    
+    .card-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .floating-shapes {
+        display: none;
+    }
+    
+    .explore-card {
+        page-break-inside: avoid;
+    }
+}

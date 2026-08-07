@@ -751,7 +751,7 @@ while ($row = mysqli_fetch_assoc($won_result)) {
 <head>
     <?php include "./head.php"; ?>
     <title>Student Dashboard - SRKR Engineering College</title>
-    <link rel="stylesheet" href="student_dashboard.css">   
+    <link rel="stylesheet" href="student_dashboard.css">
 </head>
 <body>
     <?php include "nav.php"; ?>
@@ -2488,7 +2488,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ReactBits SpotlightCard Mouse Tracking Engine
+    (function() {
+        function initSpotlightCard(card) {
+            if (!card || card.dataset.spotlightAttached) return;
+            card.dataset.spotlightAttached = 'true';
+            card.classList.add('card-spotlight');
 
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+                card.style.setProperty('--spotlight-color', 'rgba(102, 126, 234, 0.18)');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.dashboard-card, .stat-item, .card, .card-spotlight').forEach(initSpotlightCard);
+        });
+    })();
     </script>
 </body>
 </html>

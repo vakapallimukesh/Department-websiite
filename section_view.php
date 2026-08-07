@@ -70,116 +70,215 @@ sort($all_skills);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <?php include "./head.php"; ?>
     <title><?php echo "$year/4 $branch-$section"; ?> - SRKR Engineering College</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #0061f2 0%, #6900f2 100%);
-            --secondary-gradient: linear-gradient(135deg, #0061f2 0%, #6900f2 100%);
-            --card-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
-            --transition: all 0.3s ease;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --accent-emerald: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --accent-cyan: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
         }
         
         body {
-            background-color: #f8f9fc;
+            background-color: #f8fafc !important;
+            font-family: 'Outfit', 'Poppins', sans-serif !important;
+            color: #1e293b !important;
+            min-height: 100vh;
         }
-        
-        .page-header {
-            background: var(--primary-gradient);
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            color: white;
-            box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
-        }
-        
-        .page-header h1 {
-            margin: 0;
-            font-size: 2rem;
-            font-weight: 600;
-        }
-        
-        .controls-card {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 2rem;
-            border: none;
-            transition: var(--transition);
-        }
-        
-        .controls-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .controls-header {
-            background: var(--secondary-gradient);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 1rem 1rem 0 0;
-        }
-        
-        .search-box {
+
+        /* Hero Header */
+        .section-view-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #31103f 100%);
+            padding: 45px 0 65px 0;
             position: relative;
-            margin-bottom: 1rem;
+            overflow: hidden;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+            margin-bottom: -35px;
         }
-        
-        .search-box input {
-            padding: 1rem 1rem 1rem 3rem;
-            border-radius: 2rem;
-            border: 2px solid #e3e6f0;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-        
-        .search-box input:focus {
-            border-color: #6900f2;
-            box-shadow: 0 0 0 0.25rem rgba(105, 0, 242, 0.25);
-        }
-        
-        .search-box i {
+
+        .section-view-hero::before {
+            content: '';
             position: absolute;
-            left: 1rem;
+            top: -50%;
+            left: -20%;
+            width: 140%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(99, 102, 241, 0.25) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 60%, rgba(236, 72, 153, 0.2) 0%, transparent 55%);
+            animation: pulseGlow 8s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            100% { transform: scale(1.1) rotate(3deg); opacity: 1; }
+        }
+
+        .hero-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c7d2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .hero-title i {
+            color: #818cf8;
+        }
+
+        .back-btn-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 50px !important;
+            padding: 10px 24px !important;
+            font-weight: 700 !important;
+            font-size: 0.9rem !important;
+            text-decoration: none !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease !important;
+        }
+
+        .back-btn-pill:hover {
+            background: #ffffff !important;
+            color: #0f172a !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.25) !important;
+        }
+
+        .full-width-container {
+            width: 100%;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .full-width-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .hero-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Controls Card */
+        .controls-card-fancy {
+            background: #ffffff;
+            border-radius: 22px;
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+            margin-bottom: 35px;
+            overflow: hidden;
+        }
+        
+        .controls-header-fancy {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-bottom: 1px solid #e2e8f0;
+            padding: 18px 26px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .controls-header-fancy i {
+            color: #4f46e5;
+        }
+
+        .search-box-wrap {
+            position: relative;
+        }
+        
+        .search-box-wrap input {
+            padding: 14px 20px 14px 50px;
+            border-radius: 50px;
+            border: 1.5px solid #cbd5e1;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .search-box-wrap input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            outline: none;
+        }
+        
+        .search-box-wrap i {
+            position: absolute;
+            left: 20px;
             top: 50%;
             transform: translateY(-50%);
-            color: #6900f2;
+            color: #6366f1;
             font-size: 1.2rem;
         }
         
         .skill-filters {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            padding: 1rem;
+            gap: 8px;
         }
         
         .skill-filter-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            border: 2px solid #e3e6f0;
-            background: white;
-            color: #6900f2;
-            font-size: 0.875rem;
-            transition: var(--transition);
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 1.5px solid #e2e8f0;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
             cursor: pointer;
         }
         
         .skill-filter-btn:hover {
-            background: #f8f9fc;
-            border-color: #6900f2;
+            background: #e0e7ff;
+            border-color: #818cf8;
+            color: #4f46e5;
         }
         
         .skill-filter-btn.active {
-            background: #6900f2;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             color: white;
-            border-color: #6900f2;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
         }
         
-        .students-card {
+        /* Students Table Box */
+        .students-card-fancy {
             background: white;
-            border-radius: 1rem;
-            box-shadow: var(--card-shadow);
-            border: none;
+            border-radius: 22px;
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+            overflow: hidden;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .students-table {
@@ -187,193 +286,176 @@ sort($all_skills);
         }
         
         .students-table th {
-            background: #f8f9fc;
-            color: #5a5c69;
-            font-weight: 600;
-            border: none;
-            padding: 1rem;
+            background: #f8fafc !important;
+            color: #4f46e5 !important;
+            font-weight: 800 !important;
+            font-size: 0.85rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            border-bottom: 2px solid #e2e8f0 !important;
+            padding: 18px 20px !important;
         }
         
         .students-table td {
-            padding: 1rem;
-            border-color: #f8f9fc;
-            vertical-align: middle;
+            padding: 18px 20px !important;
+            border-color: #f1f5f9 !important;
+            vertical-align: middle !important;
+            font-weight: 500;
         }
         
         .students-table tbody tr {
-            transition: var(--transition);
+            transition: all 0.3s ease;
         }
         
         .students-table tbody tr:hover {
-            background: #f8f9fc;
+            background: rgba(99, 102, 241, 0.04) !important;
         }
         
         .skill-badge {
             display: inline-block;
-            padding: 0.35rem 0.75rem;
-            border-radius: 1rem;
-            background: #e3e6f0;
-            color: #5a5c69;
-            font-size: 0.875rem;
-            margin: 0.25rem;
-            transition: var(--transition);
-        }
-        
-        .skill-badge:hover {
-            background: #6900f2;
-            color: white;
+            padding: 5px 14px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #e0e7ff 0%, #eef2ff 100%);
+            border: 1px solid #c7d2fe;
+            color: #4f46e5;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 3px;
         }
         
         .points-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 1rem;
-            background: var(--primary-gradient);
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            font-weight: 600;
-        }
-        
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 2rem;
-            background: white;
-            color: #6900f2;
-            text-decoration: none;
-            transition: var(--transition);
-            margin-bottom: 1rem;
-        }
-        
-        .back-btn:hover {
-            transform: translateX(-5px);
-            box-shadow: var(--card-shadow);
+            font-weight: 800;
+            font-size: 0.88rem;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+            display: inline-block;
         }
         
         .sort-btn {
-            background: none;
+            background: #e0e7ff;
             border: none;
-            color: #6900f2;
+            color: #4f46e5;
             cursor: pointer;
-            padding: 0.25rem;
-            margin-left: 0.5rem;
-            transition: var(--transition);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 6px;
+            transition: all 0.3s ease;
         }
         
         .sort-btn:hover {
-            transform: scale(1.2);
-        }
-        
-        @media (max-width: 768px) {
-            .page-header {
-                padding: 1.5rem 0;
-            }
-            
-            .page-header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .controls-header {
-                padding: 1rem;
-            }
-            
-            .search-box input {
-                padding: 0.75rem 0.75rem 0.75rem 2.5rem;
-            }
-            
-            .skill-filter-btn {
-                padding: 0.35rem 0.75rem;
-            }
+            transform: scale(1.15);
+            background: #4f46e5;
+            color: white;
         }
     </style>
 </head>
 <body>
     <?php include "nav.php"; ?>
     
-    <div class="page-header">
-        <div class="container">
-            <a href="hod_dashboard.php" class="back-btn">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
-            <h1>
-                <i class="fas fa-users"></i> 
-                <?php echo "$year/4 $branch" . ($section ? "-$section" : ""); ?> Students
-            </h1>
+    <!-- Hero Header -->
+    <div class="section-view-hero mb-5">
+        <div class="full-width-container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h1 class="hero-title">
+                        <i class="fas fa-users"></i> 
+                        <?php echo "$year/4 $branch" . ($section ? "-$section" : ""); ?> Roster
+                    </h1>
+                    <p class="text-slate mb-0" style="color: #94a3b8; font-weight: 500;">Section Student List, Skill Badges & Attendance Summary</p>
+                </div>
+                <div>
+                    <a href="hod_dashboard.php" class="back-btn-pill">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
     
-    <div class="container">
-        <!-- Search and Filter Controls -->
-        <div class="controls-card">
-            <div class="controls-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-filter"></i> Search and Filter Options
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="search-box">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="studentSearch" class="form-control" 
-                                   placeholder="Search by name or registration number...">
+    <!-- Main Content -->
+    <div class="main-content pb-5">
+        <div class="full-width-container">
+            <!-- Search and Filter Controls -->
+            <div class="controls-card-fancy">
+                <div class="controls-header-fancy">
+                    <i class="fas fa-filter"></i> Search & Skill Filtering Options
+                </div>
+                <div class="p-4">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-lg-5">
+                            <div class="search-box-wrap">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="studentSearch" class="form-control" 
+                                       placeholder="Search student by name or reg. number...">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="skill-filters">
-                            <?php foreach ($all_skills as $skill): ?>
-                                <button class="skill-filter-btn" data-skill="<?php echo htmlspecialchars($skill); ?>">
-                                    <?php echo htmlspecialchars($skill); ?>
-                                </button>
-                            <?php endforeach; ?>
+                        <div class="col-lg-7">
+                            <div class="skill-filters">
+                                <?php foreach ($all_skills as $skill): ?>
+                                    <button class="skill-filter-btn" data-skill="<?php echo htmlspecialchars($skill); ?>">
+                                        <?php echo htmlspecialchars($skill); ?>
+                                    </button>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Students Table -->
-        <div class="students-card">
-            <div class="table-responsive">
-                <table class="table students-table">
-                    <thead>
-                        <tr>
-                            <th>Reg No</th>
-                            <th>Name</th>
-                            <th>
-                                Attendance Points
-                                <button class="sort-btn" data-sort="points">
-                                    <i class="fas fa-sort"></i>
-                                </button>
-                            </th>
-                            <th>Skills</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($students as $student): ?>
-                            <tr class="student-row" 
-                                data-name="<?php echo strtolower(htmlspecialchars($student['name'])); ?>"
-                                data-regno="<?php echo strtolower(htmlspecialchars($student['reg_no'])); ?>"
-                                data-skills="<?php echo strtolower(htmlspecialchars($student['skills'])); ?>">
-                                <td><?php echo htmlspecialchars($student['reg_no']); ?></td>
-                                <td><?php echo htmlspecialchars($student['name']); ?></td>
-                                <td data-points="<?php echo $student['attendance_points']; ?>">
-                                    <span class="points-badge">
-                                        <?php echo $student['attendance_points']; ?> pts
-                                    </span>
-                                </td>
-                                <td>
-                                    <?php
-                                    $skills = array_filter(explode(',', $student['skills']));
-                                    foreach ($skills as $skill) {
-                                        echo '<span class="skill-badge">' . htmlspecialchars(trim($skill)) . '</span>';
-                                    }
-                                    ?>
-                                </td>
+            
+            <!-- Students Table -->
+            <div class="students-card-fancy">
+                <div class="table-responsive">
+                    <table class="table students-table">
+                        <thead>
+                            <tr>
+                                <th>Registration No</th>
+                                <th>Student Name</th>
+                                <th>
+                                    Attendance Points
+                                    <button class="sort-btn" data-sort="points" title="Sort by Points">
+                                        <i class="fas fa-sort"></i>
+                                    </button>
+                                </th>
+                                <th>Acquired Skills</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($students as $student): ?>
+                                <tr class="student-row" 
+                                    data-name="<?php echo strtolower(htmlspecialchars($student['name'])); ?>"
+                                    data-regno="<?php echo strtolower(htmlspecialchars($student['reg_no'])); ?>"
+                                    data-skills="<?php echo strtolower(htmlspecialchars($student['skills'])); ?>">
+                                    <td class="fw-bold" style="color: #475569;"><?php echo htmlspecialchars($student['reg_no']); ?></td>
+                                    <td class="fw-bold" style="color: #0f172a;"><?php echo htmlspecialchars($student['name']); ?></td>
+                                    <td data-points="<?php echo $student['attendance_points']; ?>">
+                                        <span class="points-badge">
+                                            <i class="fas fa-check-circle me-1"></i> <?php echo $student['attendance_points']; ?> pts
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $skills = array_filter(explode(',', $student['skills']));
+                                        if (!empty($skills)) {
+                                            foreach ($skills as $skill) {
+                                                echo '<span class="skill-badge">' . htmlspecialchars(trim($skill)) . '</span>';
+                                            }
+                                        } else {
+                                            echo '<span class="text-muted small">No skills listed</span>';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

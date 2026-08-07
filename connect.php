@@ -6,9 +6,14 @@ $password = "";
 $dbname = "new_sem";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = @new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
+// If connection to new_sem fails, attempt fallback to dept database
+if ($conn->connect_error) {
+    $conn = @new mysqli($servername, $username, $password, "dept");
+}
+
+// Check connection after fallback attempt
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }

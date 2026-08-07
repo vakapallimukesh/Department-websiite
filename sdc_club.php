@@ -5,65 +5,143 @@ include "./head.php";
 
 <style>
 body {
-    font-family: 'Poppins', sans-serif;
-    background: #ffffff;
-    color: #333333;
+    font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
+    background: #f8fafc;
+    color: #334155;
+    overflow-x: hidden;
 }
 
+/* Animated Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #0f172a);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
     color: white;
-    padding: 60px 0;
+    padding: 85px 0;
     margin-bottom: 40px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.7;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes floatCode {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes pulseBadge {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(99, 102, 241, 0); }
+}
+
+.hero-icon-container {
+    width: 130px;
+    height: 130px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    animation: floatCode 6s ease-in-out infinite;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
 .contribution-card {
     background: #ffffff;
-    border-radius: 8px;
-    padding: 25px;
-    margin-bottom: 25px;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border-left: 3px solid #4158D0;
+    border-radius: 28px;
+    padding: 35px;
+    margin-bottom: 35px;
+    transition: all 0.35s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e2e8f0;
 }
 
 .contribution-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transform: translateY(-1px);
+    box-shadow: 0 18px 40px rgba(99, 102, 241, 0.1);
 }
 
-.project-area {
+.contribution-header {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.project-area, .workshop-area {
     border: none;
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-    border-left: 3px solid #4158D0;
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+    border-left: 4px solid #6366f1;
+    border-top: 1px solid #f1f5f9;
+    border-right: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
     height: 100%;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    justify-content: space-between;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .workshop-area {
-    border: none;
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-    border-left: 3px solid #C850C0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 4px solid #ec4899;
+}
+
+.project-area:hover, .workshop-area:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 35px rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.project-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 10px;
+}
+
+.project-badge {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 99px;
+    display: inline-block;
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    margin-top: 10px;
+}
+
+.workshop-badge {
+    background: rgba(236, 72, 153, 0.1);
+    color: #ec4899;
 }
 
 .row {
-    margin-right: -15px;
-    margin-left: -15px;
     display: flex;
     flex-wrap: wrap;
 }
@@ -72,137 +150,26 @@ body {
     display: flex;
     flex-direction: column;
 }
-
-@media (max-width: 768px) {
-    .row {
-        margin-right: -10px;
-        margin-left: -10px;
-    }
-    .col-md-4 {
-        padding-right: 10px;
-        padding-left: 10px;
-    }
-}
-
-.team-badge {
-    display: none;
-}
-
-/* Additional styles for better typography and spacing */
-h1 {
-    background: linear-gradient(135deg, #FF0080, #7928CA);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    text-shadow: 0px 2px 4px rgba(0,0,0,0.1);
-    font-size: 3.5rem;
-}
-
-h2 {
-    color: #2d3748;
-    font-weight: 600;
-    margin-bottom: 2rem;
-    text-align: center;
-    font-size: 2rem;
-    letter-spacing: 0.3px;
-}
-
-h3 {
-    color: #4a5568;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    letter-spacing: 0.2px;
-}
-
-h4 {
-    color: #2d3748;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-}
-
-p {
-    color: #6c757d;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
-
-ul {
-    padding-left: 20px;
-    margin-bottom: 1rem;
-}
-
-ul li {
-    color: #6c757d;
-    margin-bottom: 0.5rem;
-}
-
-.section-padding {
-    padding: 60px 0;
-}
-
-/* Container width adjustment for better readability */
-.container {
-    max-width: 1140px;
-    margin: 0 auto;
-}
-
-/* Animation keyframes */
-@keyframes gradientBG {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .contribution-card {
-        padding: 20px;
-    }
-    
-    h1 {
-        font-size: 2rem;
-    }
-    
-    .hero-section {
-        padding: 40px 0;
-    }
-}
-
-/* Hover effects */
-.contribution-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-}
-
-.project-area:hover, .workshop-area:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
-}
 </style>
 
 <body>
     <?php include "nav.php"; ?>
     
-    <!-- Hero Section -->
+    <!-- Animated Hero Section -->
     <section class="hero-section">
-        <div class="container">
+        <div class="container position-relative" style="z-index: 2;">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h1 style="color: white; -webkit-text-fill-color: white;">Software Development Club</h1>
-                    <p style="font-size: 1.1rem; color: rgba(255,255,255,0.9);">Empowering students through practical software development experience and real-world projects</p>
+                    <span style="color: #6366f1; background: rgba(99, 102, 241, 0.15); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.82rem; display: inline-block; padding: 6px 16px; border-radius: 99px; margin-bottom: 16px; border: 1px solid rgba(99, 102, 241, 0.3);">
+                        <i class="fas fa-terminal" style="margin-right: 6px;"></i>SRKREC SDC Lab
+                    </span>
+                    <h1 style="font-family: 'Outfit', sans-serif; font-size: 3.4rem; font-weight: 900; margin-bottom: 15px; color: #ffffff; line-height: 1.15; text-shadow: none;">Software Development Club</h1>
+                    <p style="font-size: 1.25rem; opacity: 0.92; color: #cbd5e1; max-width: 650px; line-height: 1.6;">Empowering students through practical software engineering, real-world fullstack projects, and industry-level technical workshops.</p>
                 </div>
-                <div class="col-md-4 text-center">
-                    <i class="fas fa-code" style="font-size: 64px; color: #495057;"></i>
+                <div class="col-md-4 text-center d-none d-md-block">
+                    <div class="hero-icon-container">
+                        <i class="fas fa-code" style="font-size: 60px; color: #818cf8; filter: drop-shadow(0 0 15px rgba(129, 140, 248, 0.6));"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -214,7 +181,7 @@ ul li {
            
             <!-- Website Development Projects -->
             <div class="contribution-card">
-                <h3 style="color: #4a5568; margin-bottom: 20px;">Website Development Projects</h3>
+                <h3 class="contribution-header"><i class="fas fa-laptop-code" style="color: #6366f1;"></i> Website Development Projects</h3>
                 <div class="row">
                     <div class="col-md-4 mb-4">
                         <div class="project-area h-100">
@@ -285,7 +252,7 @@ ul li {
 
             <!-- Workshops and Training -->
             <div class="contribution-card">
-                <h3 style="color: #4a5568; margin-bottom: 20px;">Workshops and Training Programs</h3>
+                <h3 class="contribution-header"><i class="fas fa-graduation-cap" style="color: #ec4899;"></i> Workshops and Training Programs</h3>
                 <div class="row">
                     <div class="col-md-4 mb-4">
                         <div class="workshop-area h-100">
@@ -362,7 +329,7 @@ ul li {
 
             <!-- Event Organization and Technical Support -->
             <div class="contribution-card">
-                <h3 style="color: #4a5568; margin-bottom: 20px;">Event Organization and Technical Support</h3>
+                <h3 class="contribution-header"><i class="fas fa-cogs" style="color: #3b82f6;"></i> Event Organization & Technical Support</h3>
                 <div class="row">
                     <div class="col-md-4 mb-4">
                         <div class="project-area h-100">
@@ -403,7 +370,7 @@ ul li {
 
             <!-- Hackathons and Events -->
             <div class="contribution-card">
-                <h3 style="color: #4a5568; margin-bottom: 20px;">Hackathons and Events</h3>
+                <h3 class="contribution-header"><i class="fas fa-trophy" style="color: #f59e0b;"></i> Hackathons and Events</h3>
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <div class="project-area h-100">
@@ -429,7 +396,7 @@ ul li {
 
             <!-- Internship Guidance -->
             <div class="contribution-card">
-                <h3 style="color: #4a5568; margin-bottom: 20px;">Internship Guidance</h3>
+                <h3 class="contribution-header"><i class="fas fa-user-tie" style="color: #10b981;"></i> Internship Guidance</h3>
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <div class="workshop-area h-100">
@@ -449,7 +416,7 @@ ul li {
 
             <!-- Weekend Sessions -->
             <div class="contribution-card">
-                <h3 style="color: #4a5568; margin-bottom: 20px;">Weekend Sessions</h3>
+                <h3 class="contribution-header"><i class="fas fa-calendar-alt" style="color: #8b5cf6;"></i> Weekend Sessions</h3>
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <div class="workshop-area h-100">

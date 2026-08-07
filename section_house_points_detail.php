@@ -46,7 +46,7 @@ $class_data = [
 
 $section_name = $class_data['year'] . '/4 ' . strtoupper($class_data['branch']) . '-' . strtoupper($class_data['section']);
 
-// First, get all students using a regular query to avoid statement conflicts
+// Get all students
 $students_query = "
     SELECT s.student_id, s.name, h.name as house_name
     FROM students s
@@ -65,7 +65,6 @@ if ($students_result) {
             'house_name' => $row['house_name']
         ];
         
-        // Calculate total house points from all valid sources using regular queries
         $house_points = 0;
         
         // Points from participants
@@ -92,7 +91,7 @@ if ($students_result) {
             $house_points += (int)($appreciations_data['points'] ?? 0);
         }
 
-        // Add penalties (penalties are already negative values in database)
+        // Add penalties
         $penalties_query = "SELECT COALESCE(SUM(points), 0) as points FROM penalties WHERE student_id = '" . mysqli_real_escape_string($conn, $student['student_id']) . "'";
         $penalties_result = mysqli_query($conn, $penalties_query);
         if ($penalties_result) {
@@ -100,12 +99,12 @@ if ($students_result) {
             $house_points += (int)($penalties_data['points'] ?? 0);
         }
 
-        // Get attendance stats and convert percentage to points (round to whole number)
+        // Attendance stats
         $attendance_stats = $db_helper->getStudentAttendanceStats($student['student_id']);
         $attendance_percentage = $attendance_stats['attendance_percentage'] ?? 0;
-        $attendance_points = round($attendance_percentage); // Round to whole number
+        $attendance_points = round($attendance_percentage);
 
-        // Get detailed appreciations data - using regular query since it's complex
+        // Appreciations detail
         $appreciations_detail_query = "
             SELECT 'participant' as source, e.title as event_title, p.points, 'Participation' as reason, p.registered_at as created_at
             FROM participants p
@@ -136,7 +135,7 @@ if ($students_result) {
             }
         }
 
-        // Get detailed penalties data - using regular query since it's simpler
+        // Penalties detail
         $penalties_detail_query = "
             SELECT e.title as event_title, p.points, p.reason, p.created_at
             FROM penalties p
@@ -167,19 +166,367 @@ $student_count = count($students);
 <head>
     <?php include "./head.php"; ?>
     <title><?php echo htmlspecialchars($section_name); ?> - House Points</title>
+    <style>
+        /* Clean Normal Light Theme for Section Detail Page */
+        body {
+            background: #f8fafc !important;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            color: #1e293b !important;
+        }
+
+        .page-title {
+            background: #ffffff !important;
+            border-bottom: 1.5px solid #e2e8f0 !important;
+            padding: 30px 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .page-title h2 {
+            color: #0f172a !important;
+            font-weight: 800;
+            font-size: 2.2rem;
+            margin-bottom: 6px;
+        }
+
+        .page-title h2 i {
+            color: #8B4513 !important;
+        }
+
+        .page-title p {
+            color: #64748b !important;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .btn-back-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #8B4513 !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 50px !important;
+            padding: 10px 24px !important;
+            font-weight: 700 !important;
+            font-size: 0.9rem !important;
+            text-decoration: none !important;
+            box-shadow: 0 4px 14px rgba(139, 69, 19, 0.25) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .btn-back-pill:hover {
+            background: #70370f !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.35) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-back-pill i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-back-pill:hover i {
+            transform: translateX(-4px);
+        }
+
+        /* Clean Container Cards */
+        .card-custom {
+            background: #ffffff !important;
+            border-radius: 18px !important;
+            border: 1.5px solid #e2e8f0 !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
+            overflow: hidden;
+        }
+
+        .info-card-header {
+            background: #ffffff !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            padding: 18px 24px;
+        }
+
+        .info-card-header h5 {
+            color: #0f172a !important;
+            font-weight: 800;
+        }
+
+        .info-card-header h5 i {
+            color: #8B4513 !important;
+            margin-right: 8px;
+        }
+
+        .graphic-stat-box {
+            padding: 20px;
+            border-radius: 16px;
+            background: #f8fafc !important;
+            border: 1.5px solid #e2e8f0 !important;
+            transition: all 0.3s ease;
+        }
+
+        .graphic-stat-box:hover {
+            transform: translateY(-4px);
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .graphic-icon-wrap {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 12px auto;
+            border-radius: 14px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s ease;
+        }
+
+        .graphic-stat-box:hover .graphic-icon-wrap {
+            transform: scale(1.1);
+        }
+
+        .graphic-icon-wrap i {
+            font-size: 1.5rem;
+            color: #8B4513;
+        }
+
+        .graphic-stat-box h4 {
+            color: #0f172a;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .graphic-stat-box p {
+            color: #8B4513;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .table-card-header {
+            background: #ffffff !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            padding: 18px 24px;
+        }
+
+        .table-card-header h5 {
+            color: #0f172a !important;
+            font-weight: 800;
+        }
+
+        .table-card-header h5 i {
+            color: #8B4513 !important;
+            margin-right: 8px;
+        }
+
+        .btn-download-pdf {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9 !important;
+            color: #8B4513 !important;
+            border: 1.5px solid #cbd5e1 !important;
+            border-radius: 50px !important;
+            padding: 8px 20px !important;
+            font-weight: 700 !important;
+            font-size: 0.85rem !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer;
+        }
+
+        .btn-download-pdf:hover {
+            background: #8B4513 !important;
+            color: #ffffff !important;
+            border-color: transparent !important;
+            box-shadow: 0 4px 14px rgba(139, 69, 19, 0.3) !important;
+        }
+
+        .form-check-input:checked {
+            background-color: #8B4513 !important;
+            border-color: #8B4513 !important;
+        }
+
+        .form-check-label {
+            color: #0f172a !important;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .table-responsive {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .table {
+            background: transparent !important;
+            color: #1e293b !important;
+        }
+
+        .table th {
+            background: #f1f5f9 !important;
+            color: #8B4513 !important;
+            font-weight: 700 !important;
+            font-size: 0.85rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            border-bottom: 2px solid #e2e8f0 !important;
+            padding: 16px 14px !important;
+        }
+
+        .table td {
+            background: transparent !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+            color: #1e293b !important;
+            padding: 14px !important;
+            vertical-align: middle !important;
+            font-weight: 500;
+        }
+
+        .table tbody tr {
+            transition: all 0.3s ease !important;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(139, 69, 19, 0.03) !important;
+        }
+
+        /* Graphic House Badges */
+        .house-badge-graphic {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .house-badge-aakash {
+            background: linear-gradient(135deg, #1e88e5 0%, #4fc3f7 100%);
+            color: #ffffff;
+        }
+
+        .house-badge-agni {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: #ffffff;
+        }
+
+        .house-badge-prudhvi {
+            background: linear-gradient(135deg, #8d6e63 0%, #6d4c41 100%);
+            color: #ffffff;
+        }
+
+        .house-badge-jal {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: #ffffff;
+        }
+
+        .house-badge-vayu {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: #ffffff;
+        }
+
+        .house-badge-default {
+            background: #e2e8f0;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        /* Points Badges */
+        .points-badge-gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            padding: 6px 14px !important;
+            border-radius: 20px !important;
+            font-size: 0.82rem !important;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25) !important;
+            display: inline-block;
+        }
+
+        .points-badge-green {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            padding: 6px 14px !important;
+            border-radius: 20px !important;
+            font-size: 0.82rem !important;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25) !important;
+            display: inline-block;
+        }
+
+        /* Appreciations & Penalties */
+        .appreciation-details, .penalty-details {
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 0.78rem;
+        }
+
+        .app-item-pill {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 4px 10px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .pen-item-pill {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            padding: 4px 10px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        @media print {
+            body > *:not(.main-content) {
+                display: none !important;
+            }
+
+            .main-content > .container > .card-custom:first-child {
+                display: none !important;
+            }
+
+            .main-content > .container > .card-custom:nth-child(2) {
+                display: block !important;
+                border: none !important;
+                box-shadow: none !important;
+                background: white !important;
+            }
+
+            .table-card-header, .form-check {
+                display: none !important;
+            }
+
+            .table {
+                font-size: 12px !important;
+                width: 100% !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <?php include "nav.php"; ?>
 
     <div class="page-title">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
                     <h2><i class="fas fa-trophy"></i> <?php echo htmlspecialchars($section_name); ?> - House Points</h2>
                     <p><?php echo $student_count; ?> students in this section</p>
                 </div>
                 <div>
-                    <a href="section_house_points.php" class="btn btn-secondary">
+                    <a href="section_house_points.php" class="btn-back-pill">
                         <i class="fas fa-arrow-left"></i> Back to Sections
                     </a>
                 </div>
@@ -187,64 +534,72 @@ $student_count = count($students);
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content mb-5">
         <div class="container">
             <!-- Section Info Card -->
-            <div class="card mb-4" style="border: none; box-shadow: 0 4px 16px rgba(7,101,147,0.1); border-radius: 15px;">
-                <div class="card-header" style="background: var(--light-blue); border-bottom: 1px solid #e3e6f0; border-radius: 15px 15px 0 0;">
-                    <h5 class="mb-0" style="color: var(--primary-blue); font-weight: 600;">
+            <div class="card-custom mb-4">
+                <div class="info-card-header">
+                    <h5 class="mb-0">
                         <i class="fas fa-info-circle"></i> Section Information
                     </h5>
                 </div>
-                <div class="card-body p-4">
-                    <div class="row">
-                        <div class="col-md-3 text-center">
-                            <div class="info-item">
-                                <i class="fas fa-graduation-cap" style="font-size: 2rem; color: var(--primary-blue); margin-bottom: 10px;"></i>
-                                <h4 class="text-primary"><?php echo $class_data['year']; ?>/4</h4>
-                                <p class="text-muted mb-0">Year</p>
+                <div class="p-4">
+                    <div class="row g-3">
+                        <div class="col-md-3 col-6 text-center">
+                            <div class="graphic-stat-box">
+                                <div class="graphic-icon-wrap">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <h4><?php echo $class_data['year']; ?>/4</h4>
+                                <p>Year</p>
                             </div>
                         </div>
-                        <div class="col-md-3 text-center">
-                            <div class="info-item">
-                                <i class="fas fa-code-branch" style="font-size: 2rem; color: var(--success); margin-bottom: 10px;"></i>
-                                <h4 class="text-success"><?php echo strtoupper($class_data['branch']); ?></h4>
-                                <p class="text-muted mb-0">Branch</p>
+                        <div class="col-md-3 col-6 text-center">
+                            <div class="graphic-stat-box">
+                                <div class="graphic-icon-wrap">
+                                    <i class="fas fa-code-branch"></i>
+                                </div>
+                                <h4><?php echo strtoupper($class_data['branch']); ?></h4>
+                                <p>Branch</p>
                             </div>
                         </div>
-                        <div class="col-md-3 text-center">
-                            <div class="info-item">
-                                <i class="fas fa-layer-group" style="font-size: 2rem; color: var(--info); margin-bottom: 10px;"></i>
-                                <h4 class="text-info"><?php echo strtoupper($class_data['section']); ?></h4>
-                                <p class="text-muted mb-0">Section</p>
+                        <div class="col-md-3 col-6 text-center">
+                            <div class="graphic-stat-box">
+                                <div class="graphic-icon-wrap">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <h4><?php echo strtoupper($class_data['section']); ?></h4>
+                                <p>Section</p>
                             </div>
                         </div>
-                        <div class="col-md-3 text-center">
-                            <div class="info-item">
-                                <i class="fas fa-calendar-alt" style="font-size: 2rem; color: var(--warning); margin-bottom: 10px;"></i>
-                                <h4 class="text-warning"><?php echo $class_data['semester']; ?></h4>
-                                <p class="text-muted mb-0">Semester</p>
+                        <div class="col-md-3 col-6 text-center">
+                            <div class="graphic-stat-box">
+                                <div class="graphic-icon-wrap">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <h4><?php echo $class_data['semester']; ?></h4>
+                                <p>Semester</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Students Table -->
+            <!-- Students Table Card -->
             <?php if (!empty($students)): ?>
-                <div class="card" style="border: none; box-shadow: 0 4px 16px rgba(7,101,147,0.1); border-radius: 15px;">
-                    <div class="card-header" style="background: var(--primary-blue); color: white; border-radius: 15px 15px 0 0;">
-                        <div class="d-flex justify-content-between align-items-center">
+                <div class="card-custom">
+                    <div class="table-card-header">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <h5 class="mb-0"><i class="fas fa-list"></i> Student House Points</h5>
-                            <button onclick="downloadPDF()" class="btn btn-light btn-sm">
+                            <button onclick="downloadPDF()" class="btn-download-pdf">
                                 <i class="fas fa-download"></i> Download PDF
                             </button>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="p-4">
                         <!-- Toggle Attendance Points -->
                         <div class="mb-3">
-                            <div class="form-check">
+                            <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="toggleAttendance" checked onchange="toggleAttendancePoints()">
                                 <label class="form-check-label" for="toggleAttendance">
                                     Show Attendance Points
@@ -252,8 +607,8 @@ $student_count = count($students);
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover" id="housePointsTable">
-                                <thead class="table-dark">
+                            <table class="table align-middle mb-0" id="housePointsTable">
+                                <thead>
                                     <tr>
                                         <th>Registration Number</th>
                                         <th>Student Name</th>
@@ -266,23 +621,36 @@ $student_count = count($students);
                                 </thead>
                                 <tbody>
                                     <?php foreach ($students as $student): ?>
+                                        <?php 
+                                        $h_name = strtoupper($student['house_name'] ?? '');
+                                        $badge_class = 'house-badge-default';
+                                        if (strpos($h_name, 'AAKASH') !== false) $badge_class = 'house-badge-aakash';
+                                        elseif (strpos($h_name, 'AGNI') !== false) $badge_class = 'house-badge-agni';
+                                        elseif (strpos($h_name, 'PRUDHVI') !== false || strpos($h_name, 'PRUTHVI') !== false) $badge_class = 'house-badge-prudhvi';
+                                        elseif (strpos($h_name, 'JAL') !== false) $badge_class = 'house-badge-jal';
+                                        elseif (strpos($h_name, 'VAYU') !== false) $badge_class = 'house-badge-vayu';
+                                        ?>
                                         <tr>
-                                            <td data-label="Registration Number"><?php echo htmlspecialchars($student['student_id']); ?></td>
+                                            <td data-label="Registration Number">
+                                                <strong><?php echo htmlspecialchars($student['student_id']); ?></strong>
+                                            </td>
                                             <td data-label="Student Name"><?php echo htmlspecialchars($student['name']); ?></td>
                                             <td data-label="House">
                                                 <?php if ($student['house_name']): ?>
-                                                    <span class="badge bg-info"><?php echo htmlspecialchars($student['house_name']); ?></span>
+                                                    <span class="house-badge-graphic <?php echo $badge_class; ?>">
+                                                        <?php echo htmlspecialchars($student['house_name']); ?>
+                                                    </span>
                                                 <?php else: ?>
                                                     <span class="text-muted">-</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td data-label="House Points">
-                                                <span class="badge bg-warning text-dark">
+                                                <span class="points-badge-gold">
                                                     <?php echo htmlspecialchars($student['house_points']); ?> pts
                                                 </span>
                                             </td>
                                             <td class="attendance-column" data-label="Attendance Points">
-                                                <span class="badge bg-success">
+                                                <span class="points-badge-green">
                                                     <?php echo htmlspecialchars($student['attendance_points']); ?> pts
                                                 </span>
                                             </td>
@@ -290,21 +658,20 @@ $student_count = count($students);
                                                 <?php if (!empty($student['appreciations_details'])): ?>
                                                     <div class="appreciation-details">
                                                         <?php foreach ($student['appreciations_details'] as $appreciation): ?>
-                                                            <div class="mb-1">
-                                                                <small class="text-success">
+                                                            <div class="app-item-pill">
+                                                                <small class="text-success fw-bold">
                                                                     <?php
-                                                                    // Different icons for different sources
                                                                     $icon = 'fas fa-star';
-                                                                    $badge_class = 'badge bg-success';
+                                                                    $source_badge = 'bg-success';
                                                                     if ($appreciation['source'] == 'participant') {
                                                                         $icon = 'fas fa-user-check';
-                                                                        $badge_class = 'badge bg-primary';
+                                                                        $source_badge = 'bg-primary';
                                                                     } elseif ($appreciation['source'] == 'organizer') {
                                                                         $icon = 'fas fa-users-cog';
-                                                                        $badge_class = 'badge bg-info';
+                                                                        $source_badge = 'bg-info';
                                                                     }
                                                                     ?>
-                                                                    <span class="<?php echo $badge_class; ?>" style="font-size: 0.7rem; margin-right: 3px;">
+                                                                    <span class="badge <?php echo $source_badge; ?>" style="font-size: 0.68rem; margin-right: 3px;">
                                                                         <?php echo ucfirst($appreciation['source']); ?>
                                                                     </span>
                                                                     <i class="<?php echo $icon; ?>"></i> <?php echo htmlspecialchars($appreciation['event_title']); ?>
@@ -317,15 +684,15 @@ $student_count = count($students);
                                                         <?php endforeach; ?>
                                                     </div>
                                                 <?php else: ?>
-                                                    <span class="text-muted">No points earned</span>
+                                                    <span class="text-muted" style="font-size: 0.85rem;">No points earned</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td data-label="Penalties">
                                                 <?php if (!empty($student['penalties_details'])): ?>
                                                     <div class="penalty-details">
                                                         <?php foreach ($student['penalties_details'] as $penalty): ?>
-                                                            <div class="mb-1">
-                                                                <small class="text-danger">
+                                                            <div class="pen-item-pill">
+                                                                <small class="text-danger fw-bold">
                                                                     <i class="fas fa-minus-circle"></i> <?php echo htmlspecialchars($penalty['event_title']); ?>
                                                                     (<?php echo htmlspecialchars($penalty['points']); ?> pts)
                                                                     <?php if ($penalty['reason']): ?>
@@ -336,7 +703,7 @@ $student_count = count($students);
                                                         <?php endforeach; ?>
                                                     </div>
                                                 <?php else: ?>
-                                                    <span class="text-muted">No penalties</span>
+                                                    <span class="text-muted" style="font-size: 0.85rem;">No penalties</span>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
@@ -348,7 +715,7 @@ $student_count = count($students);
                 </div>
             <?php else: ?>
                 <div class="text-center py-5">
-                    <i class="fas fa-user-graduate" style="font-size: 4rem; color: var(--gray-medium); margin-bottom: 20px;"></i>
+                    <i class="fas fa-user-graduate" style="font-size: 4rem; color: #8B4513; margin-bottom: 20px;"></i>
                     <h4 class="text-muted">No students found</h4>
                     <p class="text-muted">This section doesn't have any students yet.</p>
                 </div>
@@ -358,136 +725,8 @@ $student_count = count($students);
 
     <?php include "footer.php"; ?>
 
-    <style>
-        .info-item {
-            padding: 15px;
-        }
-
-        .info-item h4 {
-            margin: 10px 0;
-            font-weight: 600;
-        }
-
-        .table th {
-            font-weight: 600;
-        }
-
-        .badge {
-            font-size: 0.8rem;
-        }
-
-        .appreciation-details, .penalty-details {
-            max-height: 100px;
-            overflow-y: auto;
-            font-size: 0.75rem;
-        }
-
-        @media (max-width: 768px) {
-            .table-responsive {
-                font-size: 0.9rem;
-            }
-
-            #housePointsTable thead {
-                display: none;
-            }
-
-            #housePointsTable tbody tr {
-                display: block;
-                border: 1px solid #ddd;
-                margin-bottom: 15px;
-                padding: 10px;
-                border-radius: 5px;
-                background: #f8f9fa;
-            }
-
-            #housePointsTable tbody td {
-                display: block;
-                text-align: left;
-                border: none;
-                border-bottom: 1px solid #eee;
-                padding: 5px 0;
-                background: transparent;
-            }
-
-            #housePointsTable tbody td:last-child {
-                border-bottom: none;
-            }
-
-            #housePointsTable tbody td:before {
-                content: attr(data-label) ": ";
-                font-weight: bold;
-                color: #495057;
-                display: inline-block;
-                min-width: 140px;
-            }
-
-            .appreciation-details, .penalty-details {
-                max-height: none;
-                overflow: visible;
-                font-size: 0.8rem;
-            }
-        }
-
-        @media print {
-            /* Hide everything except the table */
-            body > *:not(.main-content) {
-                display: none !important;
-            }
-
-            .main-content > .container > .card:first-child {
-                display: none !important;
-            }
-
-            .main-content > .container > .card:nth-child(2) {
-                display: block !important;
-                border: none !important;
-                box-shadow: none !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .card-body > .form-check {
-                display: none !important;
-            }
-
-            .card-header {
-                display: none !important;
-            }
-
-            .table-responsive {
-                overflow: visible !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .table {
-                font-size: 12px !important;
-                margin: 0 !important;
-                width: 100% !important;
-            }
-
-            .badge {
-                border: 1px solid #000 !important;
-                background: white !important;
-                color: black !important;
-            }
-
-            .appreciation-details, .penalty-details {
-                max-height: none !important;
-                overflow: visible !important;
-                font-size: 10px !important;
-            }
-
-            /* Hide attendance column if checkbox is unchecked */
-            .attendance-column[style*="display: none"] {
-                display: none !important;
-            }
-        }
-    </style>
-
     <script>
         function downloadPDF() {
-            // Hide attendance points column if hidden before printing
             const attendanceVisible = document.getElementById('toggleAttendance').checked;
             const attendanceCols = document.querySelectorAll('.attendance-column');
             attendanceCols.forEach(col => {

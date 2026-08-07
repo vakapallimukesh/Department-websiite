@@ -3,6 +3,10 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 include "./head.php";
 ?>
 <link rel="stylesheet" href="./index.css">
+<link rel="stylesheet" href="./premium-hero.css">
+<link rel="stylesheet" href="./assets/css/depth-carousel.css">
+<link rel="stylesheet" href="./assets/css/scroll-stack.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
     /* Ensure consistent font family and body styling with nav.php */
     body {
@@ -641,6 +645,64 @@ include "./head.php";
         overflow: visible;
         margin: 0;
         padding: 0;
+        position: relative;
+    }
+
+    /* Pillar Navigation Tabs Header */
+    .pillar-tabs-container {
+        position: sticky;
+        top: 85px;
+        z-index: 100;
+        text-align: center;
+        padding: 15px 0;
+        background: transparent;
+        pointer-events: auto;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        transform: translate3d(0, 0, 0);
+        will-change: transform;
+    }
+
+    .pillar-tabs-pill {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 9999px;
+        background: #ffffff !important;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(217, 119, 6, 0.25);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        transform: translate3d(0, 0, 0);
+    }
+
+    .btn-pillar-tab {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 0.88rem;
+        padding: 8px 18px;
+        border-radius: 9999px;
+        color: #475569;
+        border: none;
+        background: transparent;
+        transition: all 0.25s ease;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-pillar-tab:hover {
+        color: #d97706;
+        background: rgba(217, 119, 6, 0.1);
+    }
+
+    .btn-pillar-tab.active {
+        color: #ffffff !important;
+        background: #d97706 !important;
+        box-shadow: 0 4px 15px rgba(217, 119, 6, 0.35);
     }
 
     /* Desktop View Layout */
@@ -1225,432 +1287,347 @@ include "./head.php";
 </style>
 
 <body>
-    <div id="intro-overlay"></div>
     <?php include "nav.php"; ?>
-    <section class="hero-section" style="display: flex; min-height: 100vh; align-items: center; position: relative; overflow: hidden; background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);">
+
+    <style>
+        /* Scoped Homepage Hero Styles */
+        #homepage-hero.hero-section {
+            min-height: 90vh !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: #fafafa;
+            padding: 80px 0;
+        }
+
+        #homepage-hero .hero-bg-effects {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #homepage-hero .blur-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.35;
+            mix-blend-mode: multiply;
+            animation: floatCircle 20s infinite alternate ease-in-out;
+        }
+
+        #homepage-hero .circle-1 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, rgba(5, 150, 105, 0.1) 70%);
+            top: 10%;
+            left: 15%;
+            animation-duration: 25s;
+        }
+
+        #homepage-hero .circle-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, rgba(8, 145, 178, 0.1) 70%);
+            bottom: 15%;
+            right: 15%;
+            animation-duration: 30s;
+            animation-delay: -5s;
+        }
+
+        #homepage-hero .circle-3 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(79, 70, 229, 0.05) 70%);
+            top: 40%;
+            left: 45%;
+            animation-duration: 22s;
+            animation-delay: -10s;
+        }
+
+        @keyframes floatCircle {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(40px, -60px) scale(1.15);
+            }
+            100% {
+                transform: translate(-30px, 40px) scale(0.9);
+            }
+        }
+
+        #homepage-hero .hero-header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            padding: 8px 18px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #homepage-hero .badge-tag {
+            color: #dc2626;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        #homepage-hero .badge-divider {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+        }
+
+        #homepage-hero .badge-text {
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        #homepage-hero .hero-main-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            color: #0f172a;
+            margin-bottom: 25px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+        }
+
+        #homepage-hero .hero-main-title .gradient-text {
+            background: linear-gradient(135deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        #homepage-hero .hero-description-text {
+            font-size: 1.25rem;
+            color: #475569;
+            line-height: 1.6;
+            max-width: 680px;
+            margin: 0 auto 35px auto;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+        }
+
+        #homepage-hero .hero-cta-wrapper {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+        }
+
+        #homepage-hero .btn-explore-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff !important;
+            padding: 16px 42px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-decoration: none !important;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        #homepage-hero .btn-explore-pill:hover {
+            transform: scale(1.04) translateY(-2px);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.35);
+        }
+
+        #homepage-hero .btn-explore-pill:active {
+            transform: scale(0.98) translateY(0);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 991px) {
+            #homepage-hero .hero-main-title {
+                font-size: 3.5rem;
+                letter-spacing: -1px;
+            }
+            #homepage-hero .hero-description-text {
+                font-size: 1.15rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #homepage-hero.hero-section {
+                min-height: 80vh !important;
+                padding: 60px 0;
+            }
+            #homepage-hero .hero-main-title {
+                font-size: 2.8rem;
+                letter-spacing: -0.5px;
+            }
+            #homepage-hero .hero-description-text {
+                font-size: 1.05rem;
+                padding: 0 15px;
+            }
+            #homepage-hero .btn-explore-pill {
+                padding: 14px 36px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+
+    <!-- PREMIUM HERO SECTION -->
+    <section class="premium-hero-section">
         <!-- Animated Background Elements -->
-        <div class="hero-bg-effects">
-            <!-- Floating Shapes -->
-            <div style="position: absolute; top: 10%; left: 5%; width: 100px; height: 100px; background: linear-gradient(45deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1)); border-radius: 50%; animation: float 6s ease-in-out infinite;"></div>
-            <div style="position: absolute; top: 60%; right: 10%; width: 80px; height: 80px; background: linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1)); border-radius: 30% 70% 70% 30%; animation: float 8s ease-in-out infinite reverse;"></div>
-            <div style="position: absolute; bottom: 20%; left: 15%; width: 60px; height: 60px; background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1)); border-radius: 40% 60% 30% 70%; animation: float 7s ease-in-out infinite;"></div>
+        <div class="hero-background">
+            <!-- Background Video Player -->
+            <video id="bgHeroVideo" class="hero-video-bg" autoplay muted loop playsinline preload="auto">
+                <source src="assets/videos/hero-background.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
 
-            <!-- Grid Pattern -->
-            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle at 2px 2px, rgba(0,0,0,0.02) 1px, transparent 0); background-size: 40px 40px; opacity: 0.5;"></div>
+            <!-- Gradient & Dark Overlay Veil for crisp text readability -->
+            <div class="hero-overlay-veil"></div>
+
+            <!-- Floating Particles -->
+            <div class="hero-particle particle-blue"></div>
+            <div class="hero-particle particle-cyan"></div>
+            <div class="hero-particle particle-green"></div>
+            
+            <!-- Glowing Circles -->
+            <div class="glow-circle glow-1"></div>
+            <div class="glow-circle glow-2"></div>
+            
+            <!-- Animated Blurred Blobs -->
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
         </div>
 
-        <div class="container" style="position: relative; z-index: 10;">
-            <div class="row align-items-center min-vh-100">
-                <!-- Left Side - Hero Content -->
-                <div class="col-lg-6">
-                    <div class="hero-content" style="padding: 40px 0;">
-                        <!-- Department Badge -->
-                        <div class="hero-logo">
-                            <img src="logo.png" alt="SRKR Logo">
-                            <span style="color: #dc2626; font-weight: 700; font-size: 1.2rem;">SRKREC</span>
-                            <span style="color: #1f2937; font-weight: 700; font-size: 1rem;">CSD & CSIT Department</span>
-                        </div>
+        <!-- Hero Content -->
+        <div class="hero-content-wrapper">
+            <!-- Main Heading with Blur Text Effect -->
+            <h1 class="hero-main-heading blur-text-animate">
+                <span class="srkrec-text">SRKREC</span>
+                <span class="csd-csit-text">CSD-CSIT</span>
+                <span class="department-text">Department</span>
+            </h1>
 
-                        <!-- Main Tagline -->
-                        <h1 class="hero-title" style="font-size: 4rem; font-weight: 900; line-height: 1.1; margin-bottom: 30px; color: #1e293b;">
-                            Where Learning
-                            <span style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></span>
-                            <br>Meets
-                            <span style="color: #10b981; position: relative;">
-                                Innovation
-                                <div style="position: absolute; bottom: -5px; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, #10b981, #059669); border-radius: 2px; animation: slideIn 2s ease-out;"></div>
-                            </span>
-                        </h1>
+            <!-- Secondary Heading -->
+            <h2 class="hero-secondary-heading blur-text-animate" data-delay="300">
+                <span class="where-learning-text">Where Learning</span>
+                <br>
+                <span class="meets-innovation-text" data-text="Meets Innovation">Meets Innovation</span>
+            </h2>
 
-                        <!-- Subtitle with Impact -->
-                        <div style="margin-bottom: 35px;">
-                            <p style="font-size: 1.3rem; color: #374151; line-height: 1.5; margin-bottom: 15px; font-weight: 500;">
-                                 <strong style="color: #1e293b;">Innovation Meets Opportunity</strong>
-                            </p>
-                            <p style="font-size: 1.1rem; color: #64748b; line-height: 1.6; max-width: 520px;">
-                                Join 500+ bright minds in India’s leading computer science department. From coding fundamentals to career-defining projects – your journey to success begins here.
-                            </p>
-                        </div>
+            <!-- Subtitle -->
+            <p class="hero-subtitle blur-text-animate" data-delay="600">
+                Empowering future innovators through technology, research, creativity and industry-focused education.
+            </p>
 
-                        <!-- Achievement Highlights -->
-                        <div style="background: rgba(255,255,255,0.8); border-radius: 20px; padding: 25px; margin-bottom: 35px; backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.05);">
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center;">
-                                <div>
-                                    <div style="font-size: 2.2rem; font-weight: 800; color: #10b981; margin-bottom: 5px;">₹5.1L</div>
-                                    <div style="font-size: 0.9rem; color: #64748b; font-weight: 600;">Average Ctc</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 2.2rem; font-weight: 800; color: #3b82f6; margin-bottom: 5px;">₹12L</div>
-                                    <div style="font-size: 0.9rem; color: #64748b; font-weight: 600;">Highest Package</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 2.2rem; font-weight: 800; color: #f59e0b; margin-bottom: 5px;">50+</div>
-                                    <div style="font-size: 0.9rem; color: #64748b; font-weight: 600;">MNC Partners</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Power-packed Action Buttons -->
-                        <div class="hero-buttons" style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px;">
-
-                            <a href="houses_dashboard.php" class="btn-secondary" style="background: rgba(255,255,255,0.9); color: #374151; padding: 18px 35px; border-radius: 30px; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px; border: 2px solid rgba(0,0,0,0.1); backdrop-filter: blur(10px); transition: all 0.3s ease; font-size: 1.1rem;">
-                                <i class="fas fa-rocket" style="font-size: 1.2rem;"></i> Explore House System
-
-                            </a>
-                        </div>
-
-
-                    </div>
-                </div>
-
-                <!-- Right Side - Interactive Visual -->
-                <div class="col-lg-6">
-                    <div class="hero-visual" style="display: flex; align-items: center; justify-content: center; min-height: 80vh; position: relative;">
-                        <!-- Central Innovation Hub -->
-                        <div class="loader-visual-container">
-                            <!-- Floating Achievement Cards -->
-
-                        <!-- Premium Intro Loader with dynamic entry transition styling -->
-                        <style>
-                            /* Intro full-screen overlay backdrop */
-                            #intro-overlay {
-                                position: fixed;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                                background: #fefefe;
-                                z-index: 9999;
-                                opacity: 1;
-                                transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-                                pointer-events: auto;
-                            }
-                            #intro-overlay.fade-out {
-                                opacity: 0;
-                                pointer-events: none;
-                            }
-
-                            /* Premium Loader Container */
-                            /* Premium Loader Container */
-                            .premium-hero-loader {
-                                position: absolute;
-                                top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -50%);
-                                width: 420px;
-                                height: 420px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                pointer-events: none;
-                                z-index: 5;
-                                will-change: transform;
-                            }
-
-                            .premium-hero-loader.preloading {
-                                z-index: 10000 !important;
-                            }
-
-                            /* Responsive Loader Visual Container */
-                            .loader-visual-container {
-                                position: relative;
-                                width: 500px;
-                                height: 500px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                max-width: 100%;
-                            }
-
-                            @media (max-width: 768px) {
-                                .loader-visual-container {
-                                    width: 320px;
-                                    height: 320px;
-                                }
-                            }
-
-                            /* Background Pulsing Ambient Glow */
-                            .loader-glow {
-                                position: absolute;
-                                top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -50%);
-                                width: 300px;
-                                height: 300px;
-                                background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.02) 70%, transparent 100%);
-                                border-radius: 50%;
-                                filter: blur(40px);
-                                animation: pulseGlow 4s ease-in-out infinite alternate;
-                            }
-
-                            /* Central Core Glassmorphic Disk */
-                            .loader-core {
-                                position: absolute;
-                                top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -50%);
-                                width: 190px;
-                                height: 190px;
-                                background: rgba(255, 255, 255, 0.85);
-                                backdrop-filter: blur(25px);
-                                -webkit-backdrop-filter: blur(25px);
-                                border: 1.5px solid rgba(255, 255, 255, 0.5);
-                                border-radius: 50%;
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                                justify-content: center;
-                                box-shadow: 0 20px 45px rgba(0, 0, 0, 0.05),
-                                            inset 0 0 25px rgba(99, 102, 241, 0.04);
-                                z-index: 10;
-                                animation: floatCore 5s ease-in-out infinite;
-                            }
-
-                            .loader-core-text {
-                                font-family: 'Poppins', sans-serif;
-                                font-size: 1.7rem;
-                                font-weight: 800;
-                                letter-spacing: -0.5px;
-                                background: linear-gradient(135deg, #1d4ed8, #7c3aed, #db2777);
-                                -webkit-background-clip: text;
-                                -webkit-text-fill-color: transparent;
-                                text-align: center;
-                                line-height: 1.2;
-                                margin-bottom: 2px;
-                            }
-
-                            .loader-core-tagline {
-                                font-family: 'Inter', sans-serif;
-                                font-size: 0.75rem;
-                                font-weight: 700;
-                                text-transform: uppercase;
-                                letter-spacing: 2px;
-                                color: #64748b;
-                                text-align: center;
-                            }
-
-                            .loader-progress-text {
-                                font-family: 'Inter', sans-serif;
-                                font-size: 0.8rem;
-                                font-weight: 700;
-                                color: #3b82f6;
-                                margin-top: 6px;
-                                letter-spacing: 0.5px;
-                                opacity: 0.8;
-                                transition: opacity 0.4s ease;
-                            }
-
-                            .premium-hero-loader.fade-progress .loader-progress-text {
-                                opacity: 0;
-                            }
-
-                            .premium-hero-loader.loaded .loader-progress-text {
-                                display: none !important;
-                            }
-
-                            /* Concentric Animated Neon Rings */
-                            .loader-ring {
-                                position: absolute;
-                                top: 50%;
-                                left: 50%;
-                                border-radius: 50%;
-                                border: 2px solid transparent;
-                            }
-
-                            /* Ring 1: Outer Neon Blue/Indigo */
-                            .ring-1 {
-                                width: 360px;
-                                height: 360px;
-                                border-top-color: #3b82f6;
-                                border-right-color: rgba(59, 130, 246, 0.05);
-                                border-bottom-color: #6366f1;
-                                border-left-color: rgba(99, 102, 241, 0.05);
-                                animation: spinClockwise 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                                filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.45));
-                            }
-
-                            /* Ring 2: Middle Neon Violet/Purple */
-                            .ring-2 {
-                                width: 300px;
-                                height: 300px;
-                                border-left-color: #8b5cf6;
-                                border-top-color: rgba(139, 92, 246, 0.05);
-                                border-right-color: #a855f7;
-                                border-bottom-color: rgba(168, 85, 247, 0.05);
-                                animation: spinCounterClockwise 9s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                                filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
-                            }
-
-                            /* Ring 3: Inner Neon Rose/Pink */
-                            .ring-3 {
-                                width: 240px;
-                                height: 240px;
-                                border-bottom-color: #ec4899;
-                                border-left-color: rgba(236, 72, 153, 0.05);
-                                border-top-color: #f43f5e;
-                                border-right-color: rgba(244, 63, 94, 0.05);
-                                animation: spinClockwise 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                                filter: drop-shadow(0 0 6px rgba(236, 72, 153, 0.35));
-                            }
-
-                            /* Orbiting Glowing Particles */
-                            .loader-orbit-particle {
-                                position: absolute;
-                                top: 50%;
-                                left: 50%;
-                                width: 10px;
-                                height: 10px;
-                                border-radius: 50%;
-                                z-index: 5;
-                            }
-
-                            .particle-blue {
-                                background: #3b82f6;
-                                box-shadow: 0 0 15px #3b82f6, 0 0 30px #3b82f6;
-                                animation: orbitBlue 12s linear infinite;
-                            }
-
-                            .particle-purple {
-                                background: #8b5cf6;
-                                box-shadow: 0 0 12px #8b5cf6, 0 0 25px #8b5cf6;
-                                animation: orbitPurple 9s linear infinite;
-                            }
-
-                            .particle-rose {
-                                background: #ec4899;
-                                box-shadow: 0 0 10px #ec4899, 0 0 20px #ec4899;
-                                animation: orbitRose 6s linear infinite;
-                            }
-
-                            /* Ripple waves spreading outwards */
-                            .loader-ripple {
-                                position: absolute;
-                                top: 50%;
-                                left: 50%;
-                                border-radius: 50%;
-                                border: 1.5px solid rgba(99, 102, 241, 0.06);
-                                width: 420px;
-                                height: 420px;
-                                pointer-events: none;
-                            }
-
-                            .ripple-1 {
-                                animation: rippleEffect 5s ease-out infinite;
-                            }
-
-                            .ripple-2 {
-                                animation: rippleEffect 5s ease-out infinite 2.5s;
-                            }
-
-                            /* Animations Keyframes */
-                            @keyframes spinClockwise {
-                                0% { transform: translate(-50%, -50%) rotate(0deg); }
-                                100% { transform: translate(-50%, -50%) rotate(360deg); }
-                            }
-
-                            @keyframes spinCounterClockwise {
-                                0% { transform: translate(-50%, -50%) rotate(360deg); }
-                                100% { transform: translate(-50%, -50%) rotate(0deg); }
-                            }
-
-                            @keyframes pulseGlow {
-                                0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.6; }
-                                100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.95; }
-                            }
-
-                            @keyframes floatCore {
-                                0%, 100% { transform: translate(-50%, -50%) translateY(0px) scale(1); }
-                                50% { transform: translate(-50%, -50%) translateY(-6px) scale(1.02); }
-                            }
-
-                            @keyframes rippleEffect {
-                                0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
-                                100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
-                            }
-
-                            /* Orbit calculations using translate offsets */
-                            @keyframes orbitBlue {
-                                0% { transform: translate(-50%, -50%) rotate(0deg) translateX(180px) rotate(0deg); }
-                                100% { transform: translate(-50%, -50%) rotate(360deg) translateX(180px) rotate(-360deg); }
-                            }
-
-                            @keyframes orbitPurple {
-                                0% { transform: translate(-50%, -50%) rotate(360deg) translateX(150px) rotate(-360deg); }
-                                100% { transform: translate(-50%, -50%) rotate(0deg) translateX(150px) rotate(0deg); }
-                            }
-
-                            @keyframes orbitRose {
-                                0% { transform: translate(-50%, -50%) rotate(0deg) translateX(120px) rotate(0deg); }
-                                100% { transform: translate(-50%, -50%) rotate(360deg) translateX(120px) rotate(-360deg); }
-                            }
-
-                            /* Responsive adjustments */
-                            @media (max-width: 768px) {
-                                .premium-hero-loader {
-                                    width: 320px;
-                                    height: 320px;
-                                }
-                                .loader-core {
-                                    width: 150px;
-                                    height: 150px;
-                                }
-                                .loader-core-text {
-                                    font-size: 1.4rem;
-                                }
-                                .ring-1 { width: 280px; height: 280px; }
-                                .ring-2 { width: 230px; height: 230px; }
-                                .ring-3 { width: 180px; height: 180px; }
-                                @keyframes orbitBlue {
-                                    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(140px) rotate(0deg); }
-                                    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(140px) rotate(-360deg); }
-                                }
-                                @keyframes orbitPurple {
-                                    0% { transform: translate(-50%, -50%) rotate(360deg) translateX(115px) rotate(-360deg); }
-                                    100% { transform: translate(-50%, -50%) rotate(0deg) translateX(115px) rotate(0deg); }
-                                }
-                                @keyframes orbitRose {
-                                    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(90px) rotate(0deg); }
-                                    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(90px) rotate(-360deg); }
-                                }
-                            }
-
-                        </style>
-                        <div class="premium-hero-loader">
-                            <!-- Background Glowing Aura -->
-                            <div class="loader-glow"></div>
-                            
-                            <!-- Spreading Ripple Waves -->
-                            <div class="loader-ripple ripple-1"></div>
-                            <div class="loader-ripple ripple-2"></div>
-                            
-                            <!-- Spinning Concentric Rings -->
-                            <div class="loader-ring ring-1"></div>
-                            <div class="loader-ring ring-2"></div>
-                            <div class="loader-ring ring-3"></div>
-                            
-                            <!-- Orbiting Particles -->
-                            <div class="loader-orbit-particle particle-blue"></div>
-                            <div class="loader-orbit-particle particle-purple"></div>
-                            <div class="loader-orbit-particle particle-rose"></div>
-                            
-                            <!-- Central Glassmorphic Core with Text -->
-                            <div class="loader-core">
-                                <h1 class="loader-core-text">CSD & CSIT</h1>
-                                <span class="loader-core-tagline">Department</span>
-                                <span class="loader-progress-text">0%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Explore Button -->
+            <a href="#pillars-section" id="exploreBtn" class="hero-explore-button">
+                Explore Department
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
+
+        <!-- ReactBits BlurText Animation Script -->
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const blurContainers = document.querySelectorAll('.blur-text-animate');
+            blurContainers.forEach(container => {
+                const baseDelay = parseInt(container.getAttribute('data-delay') || '0', 10);
+                const spans = container.querySelectorAll('span');
+                
+                if (spans.length > 0) {
+                    spans.forEach((span, idx) => {
+                        span.classList.add('blur-word');
+                        span.style.animationDelay = `${(baseDelay + (idx * 200)) / 1000}s`;
+                    });
+                } else {
+                    const text = container.innerText.trim();
+                    const words = text.split(/\s+/);
+                    container.innerHTML = words.map((w, idx) => 
+                        `<span class="blur-word" style="animation-delay: ${(baseDelay + (idx * 150)) / 1000}s">${w}</span>`
+                    ).join(' ');
+                }
+            });
+        });
+        </script>
     </section>
 
 
-    <section class="combined-overview-section" style="padding: 60px 0;">
+
+    <style>
+    /* Scroll-Triggered ReactBits BlurText Animation matching Hero Section */
+    .scroll-blur-animate {
+        opacity: 1;
+    }
+
+    .scroll-blur-word {
+        display: inline-block;
+        opacity: 0;
+        filter: blur(14px);
+        transform: translateY(-28px);
+        will-change: transform, filter, opacity;
+    }
+
+    .scroll-blur-animate.animated-in .scroll-blur-word {
+        animation: blurTextInScroll 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes blurTextInScroll {
+        0% {
+            filter: blur(14px);
+            opacity: 0;
+            transform: translateY(-28px);
+        }
+        50% {
+            filter: blur(5px);
+            opacity: 0.6;
+            transform: translateY(-5px);
+        }
+        100% {
+            filter: blur(0px);
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    </style>
+
+    <section id="faculty-section" class="combined-overview-section" style="padding: 60px 0;">
         <div class="container">
             <div class="mb-5">
-                <h2 style="color: #1e293b; font-size: 2.5rem; font-weight: 700;">Know CSD & CSIT Department</h2>
+                <h2 style="color: #1e293b; font-size: 2.5rem; font-weight: 700;" class="scroll-blur-animate">Know CSD & CSIT Department</h2>
             </div>
 
             <div class="row align-items-stretch">
@@ -1660,7 +1637,7 @@ include "./head.php";
                 <div class="col-md-7">
                     <!-- About Department Section -->
                     <div class="dept-about-card" style="border-radius: 20px; margin-bottom: 30px;">
-                        <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 25px; text-align: justify;">
+                        <p class="scroll-blur-animate" style="color: #64748b; font-size: 1.1rem; margin-bottom: 25px; text-align: justify;">
                             Founded in 2021, the Department of Computer Science Design at SRKREC stands at the intersection of multidisciplinary applied education and translational research. With state-of-the-art facilities across our campus, the department empowers students to discover their ikigai through global perspectives, industry collaborations, and holistic development. Guided by integrity and the pursuit of knowledge and moral values, CSD & CSIT shapes future-ready citizens who drive entrepreneurship, innovation, and create meaningful societal impact.
                         </p>
 
@@ -1683,7 +1660,7 @@ include "./head.php";
                             <!-- Vision Tab -->
                             <div id="vision-tab" class="tab-pane active" style="background: white; padding: 40px; border-radius: 0 20px 20px 20px; border-top: 3px solid #16a085;">
 
-                                <p style="color: #64748b; font-size: 1.15rem; margin-bottom: 25px; text-align: justify;">
+                                <p class="scroll-blur-animate" style="color: #64748b; font-size: 1.15rem; margin-bottom: 25px; text-align: justify;">
                                     CSD & CSIT will be an exceptional knowledge-driven department advancing on a culture of honesty and compassion to make a difference to the world. We aspire to be a premier center that produces globally competent computer science professionals and researchers who contribute significantly to technological advancement and societal development.
                                 </p>
                                 <div style="padding: 20px; background: linear-gradient(135deg, #e8f8f5, #d5f4e6); border-radius: 15px; border-left: 5px solid #16a085;">
@@ -1698,7 +1675,7 @@ include "./head.php";
                             <div id="mission-tab" class="tab-pane" style="background: white; padding: 40px; border-radius: 0 20px 20px 20px; border-top: 3px solid #16a085; display: none;">
                                 <div style="display: flex; align-items: center; margin-bottom: 25px;">
                                 </div>
-                                <p style="color: #64748b; font-size: 1.15rem; margin-bottom: 25px; text-align: justify;">
+                                <p class="scroll-blur-animate" style="color: #64748b; font-size: 1.15rem; margin-bottom: 25px; text-align: justify;">
                                     To provide quality education in computer science and information technology, foster innovation through research, and develop ethical professionals ready to meet industry challenges. We are committed to nurturing entrepreneurship, promoting lifelong learning, and creating meaningful industry partnerships that bridge academia and real-world applications.
                                 </p>
                                 <div style="padding: 20px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 15px; border-left: 5px solid #3b82f6;">
@@ -1719,6 +1696,39 @@ include "./head.php";
                         </div>
                     </div>
                 </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Scroll-Triggered ReactBits BlurText Animation for Know CSD & CSIT Department
+        const scrollBlurElements = document.querySelectorAll('.scroll-blur-animate');
+        
+        scrollBlurElements.forEach(container => {
+            const text = container.innerText.trim();
+            const words = text.split(/\s+/);
+            
+            container.innerHTML = words.map((w, idx) => 
+                `<span class="scroll-blur-word" style="animation-delay: ${idx * 35}ms">${w}</span>`
+            ).join(' ');
+        });
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -50px 0px',
+            threshold: 0.12
+        };
+
+        const scrollObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated-in');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        scrollBlurElements.forEach(el => scrollObserver.observe(el));
+    });
+    </script>
 
                 <!-- HOD Message - 40% width -->
                 <div class="col-md-5">
@@ -1764,299 +1774,189 @@ include "./head.php";
         </div>
     </section>
 
-    <!-- Split-Scroll Reveal Showcase Section -->
-    <section class="reveal-showcase-section">
-        <!-- Desktop View (Seamless scrolling with sticky graphics) -->
-        <div class="showcase-desktop-view">
-            <div class="container">
-                <div class="row">
-                    <!-- Left Column: Scrolling Narrative with Timeline -->
-                    <div class="col-lg-5 showcase-text-col">
-                        <div class="showcase-sticky-text-wrapper">
-                            <!-- Step 0: SDC -->
-                            <div class="showcase-scroll-item active" data-index="0">
-                                <span class="showcase-card-badge">Pillar 1: Innovation Hub</span>
-                                <h2 class="showcase-card-title">Software Development Centre (SDC)</h2>
-                                <p class="showcase-card-text">Step into our 50-seated software engineering lab. CSD & CSIT students build real-world, production-ready applications that power local department functions, while earning hands-on paid internships.</p>
-                                <div class="showcase-card-stats">
-                                    <div class="showcase-stat-box">
-                                        <div class="showcase-stat-val">20+</div>
-                                        <div class="showcase-stat-lbl">Apps Built</div>
-                                    </div>
-                                    <div class="showcase-stat-box">
-                                        <div class="showcase-stat-val">50+</div>
-                                        <div class="showcase-stat-lbl">Paid Internships</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 1: House System -->
-                            <div class="showcase-scroll-item" data-index="1">
-                                <span class="showcase-card-badge">Pillar 2: Student Culture</span>
-                                <h2 class="showcase-card-title">Vibrant House System</h2>
-                                <p class="showcase-card-text">Belong to one of our five elemental leagues: Agni, Vayu, Prudhvi, Jal, or Aakash. Compete in continuous hackathons, coding contests, sports, and cultural battles for the annual championship shield.</p>
-                                <div class="showcase-card-stats">
-                                    <div class="showcase-stat-box">
-                                        <div class="showcase-stat-val">5</div>
-                                        <div class="showcase-stat-lbl">Active Houses</div>
-                                    </div>
-                                    <div class="showcase-stat-box">
-                                        <div class="showcase-stat-val">10+</div>
-                                        <div class="showcase-stat-lbl">Events Semwise</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 2: Placements -->
-                            <div class="showcase-scroll-item" data-index="2">
-                                <span class="showcase-card-badge">Pillar 3: Careers</span>
-                                <h2 class="showcase-card-title">Exceptional Placements</h2>
-                                <p class="showcase-card-text">Align with global tech standards. Leverage our extensive placement training and industry partnerships to secure core engineering positions with top multinational partners.</p>
-                                <div class="showcase-card-stats">
-                                    <div class="showcase-stat-box">
-                                        <div class="showcase-stat-val">₹12 LPA</div>
-                                        <div class="showcase-stat-lbl">Highest Pkg</div>
-                                    </div>
-                                    <div class="showcase-stat-box">
-                                        <div class="showcase-stat-val">₹5.1 LPA</div>
-                                        <div class="showcase-stat-lbl">Average CTC</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Step 3: Incubator -->
-                            <div class="showcase-scroll-item" data-index="3">
-                                <span class="showcase-card-badge">Pillar 4: Ventures</span>
-                                <h2 class="showcase-card-title">Startup Incubation</h2>
-                                <p class="showcase-card-text">Launch your ideas. Our incubation program provides legal support, workspace facilities, technical mentorship, and connects you with early stage capital to launch student-led startups.</p>
-                                <div class="showcase-card-stats">
-                                    <div class="showcase-stat-box">
-                                        <div class="showcase-stat-val">6+</div>
-                                        <div class="showcase-stat-lbl">Incubated Teams</div>
-                                    </div>
-                                    <div class="showcase-stat-box">
-                                        <div class="showcase-stat-val">3</div>
-                                        <div class="showcase-stat-lbl">Alumni Startups</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Column: Sticky Graphic Viewport -->
-                    <div class="col-lg-7 showcase-graphic-col">
-                        <div class="showcase-sticky-graphic step-0">
-                            <!-- Ambient colorful glow blob -->
-                            <div class="showcase-ambient-glow"></div>
-
-                            <!-- Graphic 0: SDC Dashboard -->
-                            <div class="showcase-graphic-item showcase-vis-sdc active">
-                                <div class="showcase-dash-card">
-                                    <div class="showcase-dash-header">
-                                        <i class="fas fa-cubes text-[#10b981]" style="color: #10b981; margin-right: 8px;"></i>
-                                        <span>SDC Project Board</span>
-                                    </div>
-                                    <div class="showcase-dash-body">
-                                        <div class="showcase-project-row">
-                                            <div class="project-info">
-                                                <div class="project-name">Attendance Portal</div>
-                                                <div class="project-status">Live</div>
-                                            </div>
-                                            <div class="project-indicator progress-green"></div>
-                                        </div>
-                                        <div class="showcase-project-row" style="margin-top: 10px;">
-                                            <div class="project-info">
-                                                <div class="project-name">House League Tracker</div>
-                                                <div class="project-status font-amber">Testing</div>
-                                            </div>
-                                            <div class="project-indicator progress-amber"></div>
-                                        </div>
-                                        <div class="showcase-project-row" style="margin-top: 10px;">
-                                            <div class="project-info">
-                                                <div class="project-name">Faculty Appraisals System</div>
-                                                <div class="project-status font-blue">Deploying</div>
-                                            </div>
-                                            <div class="project-indicator progress-blue"></div>
-                                        </div>
-                                    </div>
-                                    <div class="showcase-dash-footer">
-                                        <div class="gauge-container">
-                                            <svg width="60" height="60" viewBox="0 0 36 36">
-                                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="3" />
-                                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="92, 100" />
-                                            </svg>
-                                            <div class="gauge-text">92%</div>
-                                        </div>
-                                        <div class="footer-stats">
-                                            <div class="fs-num">24</div>
-                                            <div class="fs-lbl">Active Devs</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Graphic 1: Houses Orbit -->
-                            <div class="showcase-graphic-item showcase-vis-houses">
-                                <div class="showcase-houses-circle-wrapper">
-                                    <div class="showcase-houses-center">
-                                        <img src="./assets/logos/allhouses.webp" alt="All Houses">
-                                    </div>
-                                    <div class="showcase-houses-orbit-ring">
-                                        <!-- Agni -->
-                                        <div class="showcase-house-node node-agni">
-                                            <img src="./assets/logos/3.jpg" alt="Agni">
-                                        </div>
-                                        <!-- Vayu -->
-                                        <div class="showcase-house-node node-vayu">
-                                            <img src="./assets/logos/2.jpg" alt="Vayu">
-                                        </div>
-                                        <!-- Prudhvi -->
-                                        <div class="showcase-house-node node-prudhvi">
-                                            <img src="./assets/logos/4.jpg" alt="Prudhvi">
-                                        </div>
-                                        <!-- Jal -->
-                                        <div class="showcase-house-node node-jal">
-                                            <img src="./assets/logos/1.jpg" alt="Jal">
-                                        </div>
-                                        <!-- Aakash -->
-                                        <div class="showcase-house-node node-aakash">
-                                            <img src="./assets/logos/5.jpg" alt="Aakash">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Graphic 2: Placements Graph -->
-                            <div class="showcase-graphic-item showcase-vis-placements">
-                                <div class="showcase-placements-card">
-                                    <div class="sp-card-title"><i class="fas fa-chart-line" style="color: #3b82f6; margin-right: 8px;"></i>Salary Packages Trend</div>
-                                    <div class="sp-chart-area">
-                                        <svg width="100%" height="100%" viewBox="0 0 400 150" style="overflow: visible;">
-                                            <defs>
-                                                <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                                    <stop offset="0%" stop-color="#3b82f6" />
-                                                    <stop offset="50%" stop-color="#6366f1" />
-                                                    <stop offset="100%" stop-color="#8b5cf6" />
-                                                </linearGradient>
-                                                <filter id="glowShadow">
-                                                    <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#6366f1" flood-opacity="0.3" />
-                                                </filter>
-                                            </defs>
-                                            <line x1="10" y1="130" x2="390" y2="130" stroke="rgba(0,0,0,0.04)" stroke-width="1" />
-                                            <line x1="10" y1="85" x2="390" y2="85" stroke="rgba(0,0,0,0.04)" stroke-width="1" />
-                                            <line x1="10" y1="40" x2="390" y2="40" stroke="rgba(0,0,0,0.04)" stroke-width="1" />
-                                            <path class="sp-chart-path" d="M 10 120 Q 80 110 150 70 T 290 40 T 390 15" fill="none" stroke="url(#glowGrad)" stroke-width="4" filter="url(#glowShadow)" stroke-linecap="round" />
-                                            <circle class="sp-chart-tip" r="7" fill="#ffffff" stroke="#6366f1" stroke-width="3" style="filter: drop-shadow(0 0 6px #6366f1);" />
-                                        </svg>
-                                    </div>
-                                    <div class="sp-stats-row">
-                                        <div class="sp-stat-item">
-                                            <span class="sp-label">Highest Package</span>
-                                            <span class="sp-value">₹12.0 LPA</span>
-                                        </div>
-                                        <div class="sp-stat-item" style="margin-left: 10px;">
-                                            <span class="sp-label">Average CTC</span>
-                                            <span class="sp-value color-indigo">₹5.1 LPA</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Graphic 3: Startup Ecosystem -->
-                            <div class="showcase-graphic-item showcase-vis-startups">
-                                <div class="showcase-startups-card">
-                                    <div class="ss-wave-rings">
-                                        <div class="ss-wave"></div>
-                                        <div class="ss-wave"></div>
-                                    </div>
-                                    <div class="ss-core">
-                                        <i class="fas fa-lightbulb"></i>
-                                    </div>
-                                    <!-- Floating bubbles -->
-                                    <div class="ss-bubble ss-b1"><img src="./assets/company_logos/logos/21.png" alt="S1"></div>
-                                    <div class="ss-bubble ss-b2"><img src="./assets/company_logos/logos/22.png" alt="S2"></div>
-                                    <div class="ss-bubble ss-b3"><img src="./assets/company_logos/logos/23.png" alt="S3"></div>
-                                    <div class="ss-bubble ss-b4"><img src="./assets/company_logos/logos/24.png" alt="S4"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- Department Pillars Section (ReactBits ScrollStack Component) -->
+    <section class="pillars-section" id="pillars-section" style="padding: 80px 0 0; background: #ffffff;">
+        <div class="container">
+            <div class="section-title text-center mb-4">
+                <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; color: #1a0d06; margin-bottom: 10px;">Department <span style="color: #d97706;">Pillars</span></h2>
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem; color: #64748b; max-width: 650px; margin: 0 auto;">Nurturing innovation, student culture, career excellence, and entrepreneurial ventures</p>
             </div>
         </div>
 
-        <!-- Mobile View (Clean linear cards vertical layout) -->
-        <div class="showcase-mobile-view">
-            <div class="showcase-mobile-title-block">
-                <h3>Department Pillars</h3>
-                <p>Nurturing innovation, culture, and career success</p>
-            </div>
+        <div class="scroll-stack-wrapper">
+            <div class="scroll-stack-scroller">
+                <div class="scroll-stack-inner">
+                    <!-- Pillar 1: SDC Card -->
+                    <div class="scroll-stack-card">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 mb-4 mb-lg-0">
+                                <span class="showcase-card-badge" style="color: #d97706; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.82rem;">Pillar 1: Innovation Hub</span>
+                                <h2 class="showcase-card-title" style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #1a0d06; margin: 10px 0 15px;">Software Development Centre (SDC)</h2>
+                                <p class="showcase-card-text" style="color: #475569; font-size: 1rem; line-height: 1.7; margin-bottom: 25px;">Step into our 50-seated software engineering lab. CSD & CSIT students build real-world, production-ready applications that power local department functions, while earning hands-on paid internships.</p>
+                                <div class="d-flex gap-4">
+                                    <div style="background: #fdfbf7; padding: 16px 28px; border-radius: 16px; border: 1px solid #f3eae1;">
+                                        <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 900; color: #d97706;">20+</div>
+                                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 700;">Apps Built</div>
+                                    </div>
+                                    <div style="background: #fdfbf7; padding: 16px 28px; border-radius: 16px; border: 1px solid #f3eae1;">
+                                        <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 900; color: #d97706;">50+</div>
+                                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 700;">Paid Internships</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="showcase-dash-card" style="background: #ffffff; border-radius: 24px; padding: 30px; border: 1px solid #f3eae1; box-shadow: 0 15px 40px rgba(0,0,0,0.06);">
+                                    <div class="showcase-dash-header mb-3 d-flex align-items-center">
+                                        <i class="fas fa-cubes text-[#10b981]" style="color: #10b981; margin-right: 10px; font-size: 1.2rem;"></i>
+                                        <span style="font-weight: 800; color: #1a0d06; font-size: 1.05rem;">SDC Project Board</span>
+                                    </div>
+                                    <div class="showcase-dash-body mb-3">
+                                        <div class="showcase-project-row d-flex justify-content-between align-items-center p-3 mb-2" style="background: #f8fafc; border-radius: 12px;">
+                                            <div>
+                                                <div style="font-weight: 700; color: #1e293b;">Attendance Portal</div>
+                                                <div style="font-size: 0.75rem; color: #10b981; font-weight: 700;">LIVE</div>
+                                            </div>
+                                            <div style="width: 12px; height: 12px; border-radius: 50%; background: #10b981;"></div>
+                                        </div>
+                                        <div class="showcase-project-row d-flex justify-content-between align-items-center p-3 mb-2" style="background: #f8fafc; border-radius: 12px;">
+                                            <div>
+                                                <div style="font-weight: 700; color: #1e293b;">House League Tracker</div>
+                                                <div style="font-size: 0.75rem; color: #f59e0b; font-weight: 700;">TESTING</div>
+                                            </div>
+                                            <div style="width: 12px; height: 12px; border-radius: 50%; background: #f59e0b;"></div>
+                                        </div>
+                                        <div class="showcase-project-row d-flex justify-content-between align-items-center p-3" style="background: #f8fafc; border-radius: 12px;">
+                                            <div>
+                                                <div style="font-weight: 700; color: #1e293b;">Faculty Appraisals System</div>
+                                                <div style="font-size: 0.75rem; color: #3b82f6; font-weight: 700;">DEPLOYING</div>
+                                            </div>
+                                            <div style="width: 12px; height: 12px; border-radius: 50%; background: #3b82f6;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="showcase-dash-footer d-flex justify-content-between align-items-center pt-2">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 900; color: #10b981;">92%</div>
+                                            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Completion Rate</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 900; color: #1a0d06;">24</div>
+                                            <div style="font-size: 0.8rem; color: #64748b; font-weight: 600;">Active Devs</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- Card 0: SDC -->
-            <div class="showcase-mobile-card">
-                <span class="showcase-card-badge">Pillar 1: Innovation Hub</span>
-                <h2 class="showcase-card-title" style="font-size: 1.7rem;">Software Development Centre (SDC)</h2>
-                <p class="showcase-card-text">Step into our 50-seated software engineering lab. CSD & CSIT students build real-world, production-ready applications that power local department functions, while earning hands-on paid internships.</p>
-                <div class="showcase-card-stats">
-                    <div class="showcase-stat-box">
-                        <div class="showcase-stat-val" style="font-size: 1.5rem;">20+</div>
-                        <div class="showcase-stat-lbl">Apps Built</div>
+                    <!-- Pillar 2: House System Card -->
+                    <div class="scroll-stack-card">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                                <span class="showcase-card-badge" style="color: #d97706; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.82rem;">Pillar 2: Student Culture</span>
+                                <h2 class="showcase-card-title" style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #1a0d06; margin: 10px 0 15px;">Vibrant House System</h2>
+                                <p class="showcase-card-text" style="color: #475569; font-size: 1rem; line-height: 1.7; margin-bottom: 25px;">Belong to one of our five elemental leagues: Agni, Vayu, Prudhvi, Jal, or Aakash. Compete in continuous hackathons, coding contests, sports, and cultural battles for the annual championship shield.</p>
+                                <div class="d-flex gap-4">
+                                    <div style="background: #fdfbf7; padding: 16px 28px; border-radius: 16px; border: 1px solid #f3eae1;">
+                                        <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 900; color: #d97706;">5</div>
+                                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 700;">Active Houses</div>
+                                    </div>
+                                    <div style="background: #fdfbf7; padding: 16px 28px; border-radius: 16px; border: 1px solid #f3eae1;">
+                                        <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 900; color: #d97706;">10+</div>
+                                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 700;">Events Semwise</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 order-lg-1">
+                                <div style="background: #fdfbf7; border-radius: 24px; padding: 30px; border: 1px solid #f3eae1; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.06);">
+                                    <img src="./assets/logos/allhouses.webp" alt="All Houses" style="max-height: 250px; width: auto; object-fit: contain;">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="showcase-stat-box">
-                        <div class="showcase-stat-val" style="font-size: 1.5rem;">50+</div>
-                        <div class="showcase-stat-lbl">Paid Internships</div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Card 1: Houses -->
-            <div class="showcase-mobile-card">
-                <span class="showcase-card-badge">Pillar 2: Student Culture</span>
-                <h2 class="showcase-card-title" style="font-size: 1.7rem;">Vibrant House System</h2>
-                <p class="showcase-card-text">Belong to one of our five elemental leagues: Agni, Vayu, Prudhvi, Jal, or Aakash. Compete in continuous hackathons, coding contests, sports, and cultural battles for the annual championship shield.</p>
-                <div class="showcase-card-stats">
-                    <div class="showcase-stat-box">
-                        <div class="showcase-stat-val" style="font-size: 1.5rem;">5</div>
-                        <div class="showcase-stat-lbl">Active Houses</div>
+                    <!-- Pillar 3: Placements Card -->
+                    <div class="scroll-stack-card">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 mb-4 mb-lg-0">
+                                <span class="showcase-card-badge" style="color: #d97706; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.82rem;">Pillar 3: Careers</span>
+                                <h2 class="showcase-card-title" style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #1a0d06; margin: 10px 0 15px;">Exceptional Placements</h2>
+                                <p class="showcase-card-text" style="color: #475569; font-size: 1rem; line-height: 1.7; margin-bottom: 25px;">Align with global tech standards. Leverage our extensive placement training and industry partnerships to secure core engineering positions with top multinational partners.</p>
+                                <div class="d-flex gap-4">
+                                    <div style="background: #fdfbf7; padding: 16px 28px; border-radius: 16px; border: 1px solid #f3eae1;">
+                                        <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 900; color: #d97706;">₹12 LPA</div>
+                                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 700;">Highest Pkg</div>
+                                    </div>
+                                    <div style="background: #fdfbf7; padding: 16px 28px; border-radius: 16px; border: 1px solid #f3eae1;">
+                                        <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 900; color: #d97706;">₹5.1 LPA</div>
+                                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 700;">Average CTC</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="showcase-placements-card" style="background: #ffffff; border-radius: 24px; padding: 30px; border: 1px solid #f3eae1; box-shadow: 0 15px 40px rgba(0,0,0,0.06);">
+                                    <div class="sp-card-title mb-3" style="font-weight: 800; color: #1a0d06; font-size: 1.05rem;"><i class="fas fa-chart-line" style="color: #3b82f6; margin-right: 8px;"></i>Salary Packages Trend</div>
+                                    <div class="sp-chart-area mb-3" style="height: 140px;">
+                                        <svg width="100%" height="100%" viewBox="0 0 400 150">
+                                            <defs>
+                                                <linearGradient id="glowGradNorm" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                    <stop offset="0%" stop-color="#3b82f6" />
+                                                    <stop offset="100%" stop-color="#8b5cf6" />
+                                                </linearGradient>
+                                            </defs>
+                                            <line x1="10" y1="130" x2="390" y2="130" stroke="rgba(0,0,0,0.06)" stroke-width="1" />
+                                            <line x1="10" y1="85" x2="390" y2="85" stroke="rgba(0,0,0,0.06)" stroke-width="1" />
+                                            <line x1="10" y1="40" x2="390" y2="40" stroke="rgba(0,0,0,0.06)" stroke-width="1" />
+                                            <path d="M 10 120 Q 80 110 150 70 T 290 40 T 390 15" fill="none" stroke="url(#glowGradNorm)" stroke-width="4" stroke-linecap="round" />
+                                            <circle cx="390" cy="15" r="7" fill="#ffffff" stroke="#6366f1" stroke-width="3" />
+                                        </svg>
+                                    </div>
+                                    <div class="sp-stats-row d-flex justify-content-between pt-2">
+                                        <div>
+                                            <span style="font-size: 0.8rem; color: #64748b; font-weight: 600; display: block;">Highest Package</span>
+                                            <span style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 800; color: #1a0d06;">₹12.0 LPA</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <span style="font-size: 0.8rem; color: #64748b; font-weight: 600; display: block;">Average CTC</span>
+                                            <span style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; font-weight: 800; color: #6366f1;">₹5.1 LPA</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="showcase-stat-box">
-                        <div class="showcase-stat-val" style="font-size: 1.5rem;">10+</div>
-                        <div class="showcase-stat-lbl">Events Semwise</div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Card 2: Placements -->
-            <div class="showcase-mobile-card">
-                <span class="showcase-card-badge">Pillar 3: Careers</span>
-                <h2 class="showcase-card-title" style="font-size: 1.7rem;">Exceptional Placements</h2>
-                <p class="showcase-card-text">Align with global tech standards. Leverage our extensive placement training and industry partnerships to secure core engineering positions with top multinational partners.</p>
-                <div class="showcase-card-stats">
-                    <div class="showcase-stat-box">
-                        <div class="showcase-stat-val" style="font-size: 1.5rem;">₹12 LPA</div>
-                        <div class="showcase-stat-lbl">Highest Pkg</div>
+                    <!-- Pillar 4: Ventures Card -->
+                    <div class="scroll-stack-card">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                                <span class="showcase-card-badge" style="color: #d97706; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.82rem;">Pillar 4: Ventures</span>
+                                <h2 class="showcase-card-title" style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 800; color: #1a0d06; margin: 10px 0 15px;">Startup Incubation</h2>
+                                <p class="showcase-card-text" style="color: #475569; font-size: 1rem; line-height: 1.7; margin-bottom: 25px;">Launch your ideas. Our incubation program provides legal support, workspace facilities, technical mentorship, and connects you with early stage capital to launch student-led startups.</p>
+                                <div class="d-flex gap-4">
+                                    <div style="background: #fdfbf7; padding: 16px 28px; border-radius: 16px; border: 1px solid #f3eae1;">
+                                        <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 900; color: #d97706;">6+</div>
+                                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 700;">Incubated Teams</div>
+                                    </div>
+                                    <div style="background: #fdfbf7; padding: 16px 28px; border-radius: 16px; border: 1px solid #f3eae1;">
+                                        <div style="font-family: 'Outfit', sans-serif; font-size: 2.2rem; font-weight: 900; color: #d97706;">3</div>
+                                        <div style="font-size: 0.85rem; color: #64748b; font-weight: 700;">Alumni Startups</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 order-lg-1">
+                                <div style="background: #fdfbf7; border-radius: 24px; padding: 40px 30px; border: 1px solid #f3eae1; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.06);">
+                                    <div style="width: 70px; height: 70px; border-radius: 50%; background: #f59e0b; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; color: #1a0d06; margin-bottom: 10px;">Innovation & Incubation Hub</h4>
+                                    <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 0;">Providing mentorship, seed capital, legal guidance, and office infrastructure for student entrepreneurs.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="showcase-stat-box">
-                        <div class="showcase-stat-val" style="font-size: 1.5rem;">₹5.1 LPA</div>
-                        <div class="showcase-stat-lbl">Average CTC</div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Card 3: Incubator -->
-            <div class="showcase-mobile-card">
-                <span class="showcase-card-badge">Pillar 4: Ventures</span>
-                <h2 class="showcase-card-title" style="font-size: 1.7rem;">Startup Incubation</h2>
-                <p class="showcase-card-text">Launch your ideas. Our incubation program provides legal support, workspace facilities, technical mentorship, and connects you with early stage capital to launch student-led startups.</p>
-                <div class="showcase-card-stats">
-                    <div class="showcase-stat-box">
-                        <div class="showcase-stat-val" style="font-size: 1.5rem;">6+</div>
-                        <div class="showcase-stat-lbl">Incubated Teams</div>
-                    </div>
-                    <div class="showcase-stat-box">
-                        <div class="showcase-stat-val" style="font-size: 1.5rem;">3</div>
-                        <div class="showcase-stat-lbl">Alumni Startups</div>
-                    </div>
+                    <!-- End Marker for Pin release -->
+                    <div class="scroll-stack-end"></div>
                 </div>
             </div>
         </div>
@@ -2203,23 +2103,23 @@ include "./head.php";
                 }
 
                 /* PLACEMENTS ZOOM-REVEAL SECTION STYLES */
+                /* PLACEMENTS SECTION STYLES */
                 /* ========================================== */
                 .placement-scroll-container {
                     position: relative;
-                    height: 240vh; /* scrollable distance */
+                    height: auto;
                     background: #ffffff;
                     margin: 0;
-                    padding: 0;
+                    padding: 80px 0;
                 }
 
                 .placement-sticky-viewport {
-                    position: sticky;
-                    top: 0;
-                    height: 100vh;
+                    position: relative;
+                    height: auto;
                     width: 100%;
                     display: flex;
                     align-items: center;
-                    overflow: hidden;
+                    overflow: visible;
                     z-index: 5;
                     background: #ffffff;
                 }
@@ -2235,24 +2135,18 @@ include "./head.php";
                     margin-top: 30px;
                     width: 100%;
                     max-width: 440px;
-                    height: 250px; /* placeholder layout space */
+                    height: auto;
                 }
 
                 .placement-zoom-card {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    background: rgba(255, 255, 255, 0.7);
-                    backdrop-filter: blur(25px);
-                    -webkit-backdrop-filter: blur(25px);
-                    border: 1.5px solid rgba(255, 255, 255, 0.55);
-                    border-radius: 28px;
-                    padding: 28px;
-                    box-shadow: 0 30px 60px rgba(15, 23, 42, 0.08);
-                    transform-origin: center center;
+                    position: relative;
+                    background: #ffffff;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 24px;
+                    padding: 24px;
+                    box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
                     width: 100%;
                     max-width: 440px;
-                    will-change: transform;
                     z-index: 20;
                 }
 
@@ -2291,9 +2185,8 @@ include "./head.php";
                 }
 
                 .placement-text-reveal {
-                    opacity: 0;
-                    transform: translateY(35px);
-                    will-change: opacity, transform;
+                    opacity: 1 !important;
+                    transform: none !important;
                 }
 
                 .placement-meta {
@@ -2307,9 +2200,8 @@ include "./head.php";
                 }
 
                 .placement-metrics-reveal {
-                    opacity: 0;
-                    transform: translateY(35px);
-                    will-change: opacity, transform;
+                    opacity: 1 !important;
+                    transform: none !important;
                     display: flex;
                     flex-direction: column;
                     gap: 40px;
@@ -2321,18 +2213,18 @@ include "./head.php";
                 }
 
                 .revenue-amount {
-                    font-size: 110px;
-                    font-weight: 700;
-                    color: #000;
+                    font-size: 100px;
+                    font-weight: 800;
+                    color: #0f172a;
                     line-height: 1;
                     letter-spacing: -0.02em;
                 }
 
                 .revenue-label {
-                    font-size: 14px;
+                    font-size: 15px;
                     color: #6b7280;
                     margin-top: 5px;
-                    font-weight: 400;
+                    font-weight: 500;
                 }
 
                 .metrics-container {
@@ -2344,9 +2236,8 @@ include "./head.php";
 
                 .metric-box-reveal {
                     text-align: left;
-                    opacity: 0;
-                    transform: translateY(20px);
-                    will-change: opacity, transform;
+                    opacity: 1 !important;
+                    transform: none !important;
                 }
 
                 .metric-value {
@@ -2413,77 +2304,178 @@ include "./head.php";
     </section>
 
 
-    <!-- Startup Partners Section -->
-    <section class="startup-testimonials-section" style="padding: 100px 0; position: relative; overflow: hidden;">
-        <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px; position: relative;">
-            <!-- Floating Images Background -->
-            <div class="floating-images" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 1;">
-                <!-- Top Left Cluster -->
-                <img src="./assets/company_logos/logos/21.png" alt="" style="position: absolute; top: 10%; left: -2%; margin: 10; width: 400px; height: 400px;  object-fit: cover;  ">
-                <img src="./assets/company_logos/logos/22.png" alt="" style="position: absolute; top: 45%; left: 5%; margin: 10; width: 400px; height: 400px;  object-fit: cover; ">
-
-                <!-- Top Right Cluster -->
-                <img src="./assets/company_logos/logos/23.png" alt="" style="position: absolute; top: 18%; right: 1%; margin: 10; width: 400px; height: 400px;  object-fit: cover; ">
-                <img src="./assets/company_logos/logos/24.png" alt="" style="position: absolute; top: 45%; right: 5%; margin: 10; width: 400px; height: 400px;  object-fit: cover; ">
-
-                <!-- Bottom Left Cluster -->
-                <img src="./assets/company_logos/logos/25.png" alt="" style="position: absolute; bottom: 20%; left: 2%; margin: 10; width: 400px; height: 400px;  object-fit: cover; ">
-
-                <!-- Bottom Right Cluster -->
-                <img src="./assets/company_logos/logos/26.png" alt="" style="position: absolute; bottom: 20%; right: 2%; margin: 10; width: 400px; height: 400px;  object-fit: cover; ">
+    <!-- Startup Partners & Incubation Ecosystem Section -->
+    <section class="startup-testimonials-section" style="padding: 80px 0 60px; position: relative; background: #f8fafc; overflow: hidden;">
+        <div class="container" style="max-width: 1280px; margin: 0 auto; padding: 0 20px;">
+            <!-- Header Text -->
+            <div class="text-center" style="margin-bottom: 50px;">
+                <p style="color: #7c3aed; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">Startup Ecosystem</p>
+                <h2 style="color: #0f172a; font-size: 3.2rem; font-weight: 800; margin-bottom: 15px; line-height: 1.15;">
+                    Empowering <span style="color: #7c3aed;">entrepreneurs</span>
+                </h2>
+                <h3 style="color: #475569; font-size: 1.8rem; font-weight: 500; margin-bottom: 20px;">
+                    across diverse sectors
+                </h3>
+                <p style="color: #64748b; font-size: 1.1rem; max-width: 680px; margin: 0 auto; line-height: 1.6;">
+                    Discover how our startup incubation program nurtures innovative student ideas and transforms them into successful ventures across various industries.
+                </p>
             </div>
 
-            <!-- Main Content -->
-            <div style="position: relative; z-index: 2; text-align: center; margin-top:-100px">
-                <div class="testimonials-header" style="margin-bottom: 60px;">
-                    <h2 style="color: #1a202c; font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; line-height: 1.1;">
-                        Empowering <span style="color: #7c3aed;">entrepreneurs</span>
-                    </h2>
-                    <h3 style="color: #718096; font-size: 2.2rem; font-weight: 400; margin-bottom: 30px; line-height: 1.2;">
-                        across diverse sectors
-                    </h3>
-                    <p style="color: #4a5568; font-size: 1.2rem; max-width: 700px; margin: 0 auto; line-height: 1.6;">
-                        Discover how our startup incubation program nurtures innovative ideas and transforms them into successful ventures across various industries.
-                    </p>
-                </div>
-                <p style="color: #7c3aed; font-weight: 600; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Startup Ecosystem</p>
+            <!-- ReactBits Interactive 3D DepthCarousel Component -->
+            <div class="depth-carousel-wrapper">
+                <div class="depth-carousel">
+                    <div class="depth-carousel__stage">
+                        <!-- Card 1: Lunchbox -->
+                        <div class="depth-carousel__card">
+                            <div class="depth-carousel__logo-box">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/21.png" alt="Lunchbox">
+                            </div>
+                            <div class="depth-carousel__content">
+                                <h3 class="depth-carousel__title">Lunchbox</h3>
+                                <span class="depth-carousel__badge">Incubated Venture</span>
+                            </div>
+                            <span class="depth-carousel__tint"></span>
+                        </div>
 
-                <!-- Success Stories Button -->
-                <!-- <div style="margin-top: 50px;">
-                    <a href="startup-incubator.php" class="success-stories-btn" style="display: inline-flex; align-items: center; background: #1a202c; color: white; padding: 18px 35px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(26, 32, 44, 0.2);">
-                        <span>Read Success Stories</span>
-                        <svg style="margin-left: 10px; width: 20px; height: 20px;" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </a>
-                </div> --> 
+                        <!-- Card 2: Campus Online -->
+                        <div class="depth-carousel__card">
+                            <div class="depth-carousel__logo-box">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/22.png" alt="Campus Online">
+                            </div>
+                            <div class="depth-carousel__content">
+                                <h3 class="depth-carousel__title">Campus Online</h3>
+                                <span class="depth-carousel__badge">EdTech Startup</span>
+                            </div>
+                            <span class="depth-carousel__tint"></span>
+                        </div>
+
+                        <!-- Card 3: Bhimavaram Foods -->
+                        <div class="depth-carousel__card">
+                            <div class="depth-carousel__logo-box">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/23.png" alt="Bhimavaram Foods">
+                            </div>
+                            <div class="depth-carousel__content">
+                                <h3 class="depth-carousel__title">Bhimavaram Foods</h3>
+                                <span class="depth-carousel__badge">Food Tech</span>
+                            </div>
+                            <span class="depth-carousel__tint"></span>
+                        </div>
+
+                        <!-- Card 4: Smart Wash -->
+                        <div class="depth-carousel__card">
+                            <div class="depth-carousel__logo-box">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/24.png" alt="Smart Wash">
+                            </div>
+                            <div class="depth-carousel__content">
+                                <h3 class="depth-carousel__title">Smart Wash</h3>
+                                <span class="depth-carousel__badge">Services Platform</span>
+                            </div>
+                            <span class="depth-carousel__tint"></span>
+                        </div>
+
+                        <!-- Card 5: Bhimavaram Online -->
+                        <div class="depth-carousel__card">
+                            <div class="depth-carousel__logo-box">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/25.png" alt="Bhimavaram Online">
+                            </div>
+                            <div class="depth-carousel__content">
+                                <h3 class="depth-carousel__title">Bhimavaram Online</h3>
+                                <span class="depth-carousel__badge">Local Commerce</span>
+                            </div>
+                            <span class="depth-carousel__tint"></span>
+                        </div>
+
+                        <!-- Card 6: NutriDelight -->
+                        <div class="depth-carousel__card">
+                            <div class="depth-carousel__logo-box">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/26.png" alt="NutriDelight">
+                            </div>
+                            <div class="depth-carousel__content">
+                                <h3 class="depth-carousel__title">NutriDelight</h3>
+                                <span class="depth-carousel__badge">Health & Wellness</span>
+                            </div>
+                            <span class="depth-carousel__tint"></span>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Arrows -->
+                    <button type="button" class="depth-carousel__arrow depth-carousel__arrow--prev" aria-label="Previous slide">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="depth-carousel__arrow depth-carousel__arrow--next" aria-label="Next slide">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+
+                    <!-- Indicators -->
+                    <div class="depth-carousel__dots" role="tablist">
+                        <button type="button" class="depth-carousel__dot is-active" aria-label="Slide 1"></button>
+                        <button type="button" class="depth-carousel__dot" aria-label="Slide 2"></button>
+                        <button type="button" class="depth-carousel__dot" aria-label="Slide 3"></button>
+                        <button type="button" class="depth-carousel__dot" aria-label="Slide 4"></button>
+                        <button type="button" class="depth-carousel__dot" aria-label="Slide 5"></button>
+                        <button type="button" class="depth-carousel__dot" aria-label="Slide 6"></button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <style>
-            .startup-testimonials-section .floating-images img:hover {
-                transform: scale(1.1) rotate(0deg) !important;
-                z-index: 10;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2) !important;
+            .startup-logos-orderly-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 25px;
+                margin-top: 20px;
+                margin-bottom: 20px;
             }
 
-            .success-stories-btn:hover {
-                background: #2d3748 !important;
-                transform: translateY(-2px);
-                box-shadow: 0 15px 35px rgba(26, 32, 44, 0.3) !important;
+            .startup-logo-card {
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 20px;
+                padding: 30px 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 210px;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
-            @media (max-width: 768px) {
-                .startup-testimonials-section .floating-images {
-                    display: none;
-                }
+            .startup-logo-card:hover {
+                transform: translateY(-8px);
+                border-color: #7c3aed;
+                box-shadow: 0 15px 35px rgba(124, 58, 237, 0.18);
+            }
 
-                .testimonials-header h2 {
-                    font-size: 2.5rem !important;
-                }
+            .startup-logo-card img {
+                max-width: 90%;
+                max-height: 115px;
+                object-fit: contain;
+                margin-bottom: 15px;
+                transition: transform 0.3s ease;
+            }
 
-                .testimonials-header h3 {
-                    font-size: 1.8rem !important;
+            .startup-logo-card:hover img {
+                transform: scale(1.1);
+            }
+
+            .startup-name {
+                font-size: 1rem;
+                font-weight: 700;
+                color: #1e293b;
+                text-align: center;
+            }
+
+            @media (max-width: 992px) {
+                .startup-logos-orderly-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            @media (max-width: 576px) {
+                .startup-logos-orderly-grid {
+                    grid-template-columns: 1fr;
                 }
             }
         </style>
@@ -2969,91 +2961,137 @@ include "./head.php";
     <!-- Photo Gallery Section -->
     <section class="photo-gallery-section" style="padding: 80px 0; margin-top: -80px;">
         <div class="container">
-            <div class="section-title text-center" style="margin-bottom: 60px       ;">
-                <h2 style="font-size: 2.8rem; font-weight: 800; margin-bottom: 15px; line-height: 1.1;">Moments & <span style="color: #3b82f6;">Memories</span></h2>
-                <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.5;">A glimpse into the vibrant life of our department through photos</p>
+            <!-- Header with Right-Side Purple "See All Images" Button -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-5">
+                <div class="text-start">
+                    <h2 style="font-size: 2.8rem; font-weight: 800; margin-bottom: 8px; line-height: 1.1;">Moments & <span style="color: #3b82f6;">Memories</span></h2>
+                    <p style="font-size: 1.1rem; color: #64748b; margin: 0;">A glimpse into the vibrant life of our department through photos</p>
+                </div>
+                <div>
+                    <button class="see-all-photos-btn" data-bs-toggle="modal" data-bs-target="#allPhotosModal">
+                        <i class="fas fa-images"></i>
+                        <span>See All Images</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
             </div>
+
             <div class="gallery-carousel-wrapper" style="overflow: hidden; margin-bottom: 40px;">
                 <!-- First Row -->
                 <div class="gallery-carousel-row" style="display: flex; animation: gallery-scroll-left 25s linear infinite; margin-bottom: 20px; gap: 15px;">
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/1.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/1.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/2.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/2.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/3.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/3.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/4.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/4.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/5.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/5.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
                     <!-- Duplicate items for seamless loop -->
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/6.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/6.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/9.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/9.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
                 </div>
 
                 <!-- Second Row -->
                 <div class="gallery-carousel-row" style="display: flex; animation: gallery-scroll-right 25s linear infinite; margin-bottom: 20px; gap: 15px;">
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/10.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/10.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/11.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/11.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/12.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/12.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/13.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/13.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/14.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/14.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
                     <!-- Duplicate items for seamless loop -->
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/17.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/17.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/18.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/18.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
                 </div>
 
                 <!-- Third Row -->
                 <div class="gallery-carousel-row" style="display: flex; animation: gallery-scroll-left 25s linear infinite; gap: 15px;">
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/19.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/19.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/20.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/20.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/21.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/21.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/1.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/1.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/2.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/2.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
                     <!-- Duplicate items for seamless loop -->
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/3.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/3.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
+                    <div class="gallery-item" onclick="openSinglePhotoModal('./assets/memories/4.jpg')" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
                         <img src="./assets/memories/4.jpg" alt="Department Memory" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
                     </div>
                 </div>
             </div>
 
             <style>
+                /* Matching Purple Theme See All Images Button */
+                .see-all-photos-btn {
+                    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+                    color: #ffffff !important;
+                    border: none !important;
+                    padding: 13px 28px !important;
+                    border-radius: 50px !important;
+                    font-family: 'Outfit', sans-serif !important;
+                    font-size: 1.02rem !important;
+                    font-weight: 700 !important;
+                    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.35) !important;
+                    cursor: pointer !important;
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    gap: 10px !important;
+                    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                    text-decoration: none !important;
+                }
+
+                .see-all-photos-btn:hover {
+                    background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%) !important;
+                    transform: translateY(-3px) scale(1.03) !important;
+                    box-shadow: 0 15px 35px rgba(124, 58, 237, 0.5) !important;
+                    color: #ffffff !important;
+                }
+
+                .see-all-photos-btn i {
+                    font-size: 0.95rem;
+                    transition: transform 0.3s ease !important;
+                }
+
+                .see-all-photos-btn:hover i.fa-arrow-right {
+                    transform: translateX(4px) !important;
+                }
+
                 @keyframes gallery-scroll-left {
                     0% {
                         transform: translateX(0);
@@ -3096,6 +3134,69 @@ include "./head.php";
                 }
             </style>
         </div>
+
+        <!-- Full Gallery Lightbox Modal -->
+        <div class="modal fade" id="allPhotosModal" tabindex="-1" aria-labelledby="allPhotosModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content" style="border-radius: 24px; border: none; overflow: hidden; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);">
+                    <div class="modal-header" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; padding: 20px 30px; border-bottom: none;">
+                        <h5 class="modal-title" id="allPhotosModalLabel" style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.5rem;">
+                            <i class="fas fa-camera-retro me-2"></i> Department Memories Gallery (All Images)
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="background: #fdfbf7; padding: 30px;">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+                            <?php 
+                            $all_photos = [1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20, 21];
+                            foreach ($all_photos as $p):
+                            ?>
+                                <div class="col">
+                                    <div class="gallery-modal-card" onclick="openSinglePhotoModal('./assets/memories/<?php echo $p; ?>.jpg')" style="border-radius: 16px; overflow: hidden; position: relative; cursor: pointer; aspect-ratio: 4/3; box-shadow: 0 6px 18px rgba(0,0,0,0.1); transition: all 0.3s ease;">
+                                        <img src="./assets/memories/<?php echo $p; ?>.jpg" alt="Memory <?php echo $p; ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
+                                        <div class="gallery-modal-overlay" style="position: absolute; inset: 0; background: rgba(124, 58, 237, 0.65); opacity: 0; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.3s ease;">
+                                            <i class="fas fa-search-plus" style="font-size: 1.8rem;"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Single Image Zoom Lightbox Modal -->
+        <div class="modal fade" id="singlePhotoModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content" style="background: transparent; border: none;">
+                    <div class="modal-body text-center p-0 position-relative">
+                        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" style="z-index: 1055; background-color: rgba(0,0,0,0.5); padding: 10px; border-radius: 50%;"></button>
+                        <img id="zoomPhotoImg" src="" alt="Enlarged Memory" style="max-width: 100%; max-height: 85vh; border-radius: 18px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); object-fit: contain;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        function openSinglePhotoModal(imgSrc) {
+            document.getElementById('zoomPhotoImg').src = imgSrc;
+            const singleModal = new bootstrap.Modal(document.getElementById('singlePhotoModal'));
+            singleModal.show();
+        }
+        </script>
+        <style>
+            .gallery-modal-card:hover {
+                transform: translateY(-5px) scale(1.03);
+                box-shadow: 0 15px 35px rgba(124, 58, 237, 0.3) !important;
+            }
+            .gallery-modal-card:hover .gallery-modal-overlay {
+                opacity: 1 !important;
+            }
+            .gallery-modal-card:hover img {
+                transform: scale(1.1);
+            }
+        </style>
         <style>
             .gallery-item:hover img {
                 transform: scale(1.1);
@@ -3362,11 +3463,29 @@ include "./head.php";
         // ==========================================
         // SPLIT SCROLL REVEAL OBSERVER
         // ==========================================
+        window.switchPillarStep = function(stepIndex) {
+            const showcaseSection = document.querySelector('.reveal-showcase-section');
+            if (!showcaseSection) return;
+
+            const sectionRect = showcaseSection.getBoundingClientRect();
+            const sectionHeight = sectionRect.height;
+            const viewportHeight = window.innerHeight;
+            const scrollableDist = sectionHeight - viewportHeight;
+
+            if (scrollableDist > 0) {
+                const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+                const sectionTopDoc = currentScrollY + sectionRect.top;
+                const targetScroll = sectionTopDoc + (stepIndex / 3) * scrollableDist;
+                window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            }
+        };
+
         const initScrollReveal = () => {
             const showcaseSection = document.querySelector('.reveal-showcase-section');
             const scrollItems = document.querySelectorAll('.showcase-scroll-item');
             const graphicItems = document.querySelectorAll('.showcase-graphic-item');
             const stickyGraphic = document.querySelector('.showcase-sticky-graphic');
+            const pillarTabs = document.querySelectorAll('.btn-pillar-tab');
             
             if (!showcaseSection || scrollItems.length === 0 || graphicItems.length === 0) return;
 
@@ -3394,6 +3513,12 @@ include "./head.php";
                 const totalSteps = 4;
                 let activeStep = Math.floor(progress * totalSteps);
                 if (activeStep >= totalSteps) activeStep = totalSteps - 1;
+
+                // Sync Tab Buttons Active State
+                pillarTabs.forEach((tab, idx) => {
+                    if (idx === activeStep) tab.classList.add('active');
+                    else tab.classList.remove('active');
+                });
 
                 // 2. Set step-X classes on the sticky graphic container for background shift
                 if (stickyGraphic) {
@@ -3580,98 +3705,105 @@ include "./head.php";
             updatePlacementReveal();
         };
 
-        const initIntroLoader = () => {
-            const loader = document.querySelector('.premium-hero-loader');
-            const overlay = document.getElementById('intro-overlay');
-            const progressText = document.querySelector('.loader-progress-text');
+        const initParticles = () => {
+            const canvas = document.getElementById('particleCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
             
-            if (!loader || !overlay) return;
+            let width = canvas.width = canvas.offsetWidth;
+            let height = canvas.height = canvas.offsetHeight;
             
-            // Disable scrolling during preloader phase
-            document.documentElement.style.overflow = 'hidden';
-            document.body.style.overflow = 'hidden';
-            
-            // Force scroll to top on reload so coordinates are static
-            window.scrollTo(0, 0);
-
-            // Measure layout positions
-            const rect = loader.getBoundingClientRect();
-            const loaderX = rect.left + rect.width / 2;
-            const loaderY = rect.top + rect.height / 2;
-            
-            const viewportX = window.innerWidth / 2;
-            const viewportY = window.innerHeight / 2;
-            
-            const deltaX = viewportX - loaderX;
-            const deltaY = viewportY - loaderY;
-            
-            // Center the loader in the middle of the screen initial state (keeping -50%, -50% centering offset)
-            loader.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px)) scale(1.35)`;
-            loader.classList.add('preloading');
-            
-            // Track page loading status
-            let isPageLoaded = false;
-            if (document.readyState === 'complete') {
-                isPageLoaded = true;
-            }
-            window.addEventListener('load', () => {
-                isPageLoaded = true;
+            window.addEventListener('resize', () => {
+                if (canvas.offsetWidth && canvas.offsetHeight) {
+                    width = canvas.width = canvas.offsetWidth;
+                    height = canvas.height = canvas.offsetHeight;
+                }
             });
             
-            // Simulated progress loading counter
-            let currentProgress = 0;
-            const progressInterval = setInterval(() => {
-                // If page has loaded, increment faster, otherwise buffer at 92%
-                const step = isPageLoaded ? Math.floor(Math.random() * 8) + 3 : Math.floor(Math.random() * 3) + 1;
-                currentProgress += step;
-                
-                if (currentProgress >= 92 && !isPageLoaded) {
-                    currentProgress = 92;
+            const particles = [];
+            const particleCount = 40;
+            
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 2 + 1;
+                    this.xSpeed = Math.random() * 0.4 - 0.2;
+                    this.ySpeed = Math.random() * 0.4 - 0.2;
+                    this.opacity = Math.random() * 0.5 + 0.2;
                 }
                 
-                if (currentProgress >= 100) {
-                    currentProgress = 100;
-                    clearInterval(progressInterval);
+                update() {
+                    this.x += this.xSpeed;
+                    this.y += this.ySpeed;
                     
-                    // Trigger fly-in entry animation
-                    setTimeout(() => {
-                        loader.classList.add('fade-progress');
-                        loader.style.transition = 'transform 1.6s cubic-bezier(0.16, 1, 0.3, 1)';
-                        overlay.classList.add('fade-out');
-                        
-                        // Animate to final position inside hero visual (preserving center anchor)
-                        loader.style.transform = 'translate(-50%, -50%) scale(1)';
-                        
-                        setTimeout(() => {
-                            document.documentElement.style.overflow = '';
-                            document.body.style.overflow = '';
-                            loader.classList.remove('preloading', 'fade-progress');
-                            loader.classList.add('loaded');
-                            loader.style.transform = ''; // remove inline transform override
-                            loader.style.transition = ''; // remove inline transition override
-                            overlay.remove();
-                        }, 1600);
-                    }, 250); // slight pause at 100% for satisfaction
+                    if (this.x < 0) this.x = width;
+                    if (this.x > width) this.x = 0;
+                    if (this.y < 0) this.y = height;
+                    if (this.y > height) this.y = 0;
                 }
                 
-                if (progressText) {
-                    progressText.textContent = `${currentProgress}%`;
+                draw() {
+                    ctx.fillStyle = `rgba(16, 185, 129, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
                 }
-            }, 30);
+            }
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+            
+            const animate = () => {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            };
+            
+            animate();
+        };
+
+        const initExploreBtn = () => {
+            const exploreBtn = document.getElementById('exploreBtn') || document.querySelector('.hero-explore-button');
+            if (!exploreBtn) return;
+            
+            exploreBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Smoothly scroll down to the Department Pillars & Industry Partners section
+                const targetSection = document.getElementById('pillars-section') || document.querySelector('.pillars-section');
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         };
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
-                initIntroLoader();
+                initParticles();
+                initExploreBtn();
                 initScrollReveal();
                 initPlacementZoomReveal();
             });
         } else {
-            initIntroLoader();
+            initParticles();
+            initExploreBtn();
             initScrollReveal();
             initPlacementZoomReveal();
         }
-    </script>
+    <!-- Interactive 3D Lanyard Badge Script -->
+    <script src="assets/js/lanyard.js"></script>
+    <!-- Interactive ReactBits DepthCarousel Component Engine -->
+    <script src="assets/js/depth-carousel.js"></script>
+    <!-- Interactive ReactBits ScrollStack Component Engine -->
+    <script src="assets/js/scroll-stack.js"></script>
 </body>
 
 </html>

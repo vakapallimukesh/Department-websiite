@@ -60,64 +60,321 @@ $student_count = count($students);
 <head>
     <?php include "./head.php"; ?>
     <title><?php echo htmlspecialchars($section_name); ?> - Students</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #f8fafc !important;
+            font-family: 'Outfit', 'Poppins', sans-serif !important;
+            color: #1e293b !important;
+            min-height: 100vh;
+        }
+
+        /* Hero Header */
+        .section-students-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #31103f 100%);
+            padding: 45px 0 65px 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+            margin-bottom: -35px;
+        }
+
+        .section-students-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 140%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(99, 102, 241, 0.25) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 60%, rgba(236, 72, 153, 0.2) 0%, transparent 55%);
+            animation: pulseGlow 8s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            100% { transform: scale(1.1) rotate(3deg); opacity: 1; }
+        }
+
+        .hero-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c7d2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .hero-title i {
+            color: #818cf8;
+        }
+
+        .hero-subtitle {
+            color: #94a3b8;
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .back-btn-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 50px !important;
+            padding: 10px 24px !important;
+            font-weight: 700 !important;
+            font-size: 0.9rem !important;
+            text-decoration: none !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease !important;
+        }
+
+        .back-btn-pill:hover {
+            background: #ffffff !important;
+            color: #0f172a !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.25) !important;
+        }
+
+        .full-width-container {
+            width: 100%;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .full-width-container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            .hero-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Section Info Banner */
+        .info-card-box {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+            padding: 24px;
+            margin-bottom: 35px;
+        }
+
+        .info-metric-tile {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 18px 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .info-metric-tile:hover {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+        }
+
+        .tile-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .tile-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .tile-label {
+            font-size: 0.78rem;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* Student Card */
+        .student-item-col {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .student-card-fancy {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .student-card-fancy:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.15);
+            border-color: #818cf8;
+        }
+
+        .avatar-wrap {
+            position: relative;
+            margin-bottom: 14px;
+            display: inline-block;
+        }
+
+        .avatar-img {
+            width: 84px;
+            height: 84px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid #6366f1;
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
+            transition: transform 0.3s ease;
+        }
+
+        .student-card-fancy:hover .avatar-img {
+            transform: scale(1.08);
+        }
+
+        .avatar-placeholder {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            color: #4f46e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin: 0 auto;
+            border: 3px solid #6366f1;
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.2);
+        }
+
+        .student-title-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .regd-badge {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+        }
+
+        .hp-badge-pill {
+            background: linear-gradient(135deg, #fffbe0 0%, #fef3c7 100%);
+            border: 1px solid #fde68a;
+            color: #b45309;
+            font-weight: 800;
+            font-size: 0.88rem;
+            padding: 6px 16px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .house-tag-chip {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 4px 14px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
     <?php include "nav.php"; ?>
     
-    <div class="page-title">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
+    <!-- Hero Banner -->
+    <div class="section-students-hero mb-5">
+        <div class="full-width-container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
-                    <h2><i class="fas fa-users"></i> <?php echo htmlspecialchars($section_name); ?></h2>
-                    <p><?php echo $student_count; ?> students in this section</p>
+                    <h1 class="hero-title"><i class="fas fa-users"></i> <?php echo htmlspecialchars($section_name); ?></h1>
+                    <p class="hero-subtitle"><?php echo $student_count; ?> registered students in this section roster</p>
                 </div>
                 <div>
-                    <a href="sections_overview.php" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Back to Sections
+                    <a href="sections_overview.php" class="back-btn-pill">
+                        <i class="fas fa-arrow-left"></i> Back to All Sections
                     </a>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="main-content">
-        <div class="container">
+    <!-- Main Content -->
+    <div class="main-content pb-5">
+        <div class="full-width-container">
             <!-- Section Info Card -->
-            <div class="card mb-4" style="border: none; box-shadow: 0 4px 16px rgba(7,101,147,0.1); border-radius: 15px;">
-                <div class="card-header" style="background: var(--light-blue); border-bottom: 1px solid #e3e6f0; border-radius: 15px 15px 0 0;">
-                    <h5 class="mb-0" style="color: var(--primary-blue); font-weight: 600;">
-                        <i class="fas fa-info-circle"></i> Section Information
-                    </h5>
-                </div>
-                <div class="card-body p-4">
-                    <div class="row">
-                        <div class="col-md-3 text-center">
-                            <div class="info-item">
-                                <i class="fas fa-graduation-cap" style="font-size: 2rem; color: var(--primary-blue); margin-bottom: 10px;"></i>
-                                <h4 class="text-primary"><?php echo $class_data['year']; ?>/4</h4>
-                                <p class="text-muted mb-0">Year</p>
-                            </div>
+            <div class="info-card-box">
+                <div class="row g-3">
+                    <div class="col-md-3 col-6">
+                        <div class="info-metric-tile">
+                            <i class="fas fa-graduation-cap tile-icon text-primary"></i>
+                            <div class="tile-value text-primary"><?php echo $class_data['year']; ?>/4</div>
+                            <div class="tile-label">Academic Year</div>
                         </div>
-                        <div class="col-md-3 text-center">
-                            <div class="info-item">
-                                <i class="fas fa-code-branch" style="font-size: 2rem; color: var(--success); margin-bottom: 10px;"></i>
-                                <h4 class="text-success"><?php echo strtoupper($class_data['branch']); ?></h4>
-                                <p class="text-muted mb-0">Branch</p>
-                            </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="info-metric-tile">
+                            <i class="fas fa-code-branch tile-icon text-success"></i>
+                            <div class="tile-value text-success"><?php echo strtoupper($class_data['branch']); ?></div>
+                            <div class="tile-label">Branch</div>
                         </div>
-                        <div class="col-md-3 text-center">
-                            <div class="info-item">
-                                <i class="fas fa-layer-group" style="font-size: 2rem; color: var(--info); margin-bottom: 10px;"></i>
-                                <h4 class="text-info"><?php echo strtoupper($class_data['section']); ?></h4>
-                                <p class="text-muted mb-0">Section</p>
-                            </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="info-metric-tile">
+                            <i class="fas fa-layer-group tile-icon text-info"></i>
+                            <div class="tile-value text-info"><?php echo strtoupper($class_data['section']); ?></div>
+                            <div class="tile-label">Section</div>
                         </div>
-                        <div class="col-md-3 text-center">
-                            <div class="info-item">
-                                <i class="fas fa-calendar-alt" style="font-size: 2rem; color: var(--warning); margin-bottom: 10px;"></i>
-                                <h4 class="text-warning"><?php echo $class_data['semester']; ?></h4>
-                                <p class="text-muted mb-0">Semester</p>
-                            </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="info-metric-tile">
+                            <i class="fas fa-calendar-alt tile-icon text-warning"></i>
+                            <div class="tile-value text-warning"><?php echo $class_data['semester']; ?></div>
+                            <div class="tile-label">Semester</div>
                         </div>
                     </div>
                 </div>
@@ -125,75 +382,50 @@ $student_count = count($students);
             
             <!-- Students Grid -->
             <?php if (!empty($students)): ?>
-                <div class="row">
-                    <?php foreach ($students as $student): ?>
-                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-4">
-                            <div class="card student-card h-100" style="border: none; box-shadow: 0 4px 16px rgba(7,101,147,0.1); border-radius: 15px; transition: all 0.3s ease; cursor: pointer;" 
-                                 onclick="window.location.href='student_profile.php?student_id=<?php echo urlencode($student['student_id']); ?>'">
-                                <div class="card-body p-4 text-center">
-                                    <!-- Profile Picture -->
-                                    <div class="profile-picture-container mb-3">
-                                        <?php if (!empty($student['profile_picture']) && file_exists($student['profile_picture'])): ?>
-                                            <img src="<?php echo htmlspecialchars($student['profile_picture']); ?>" 
-                                                 alt="Profile Picture" 
-                                                 class="rounded-circle" 
-                                                 style="width: 80px; height: 80px; object-fit: cover; border: 3px solid var(--primary-blue);">
-                                        <?php else: ?>
-                                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto" 
-                                                 style="width: 80px; height: 80px; border: 3px solid var(--primary-blue);">
-                                                <i class="fas fa-user" style="font-size: 2rem; color: var(--gray-medium);"></i>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-                                    
-                                    <!-- Student Info -->
-                                    <h6 class="student-name" style="color: var(--primary-blue); font-weight: 600; margin-bottom: 5px;">
-                                        <?php echo htmlspecialchars($student['name']); ?>
-                                    </h6>
-                                    <p class="student-id text-muted mb-2" style="font-size: 0.9rem;">
-                                        <i class="fas fa-id-card"></i> <?php echo htmlspecialchars($student['student_id']); ?>
-                                    </p>
-                                    
-                                    <!-- House Points -->
-                                    <p class="student-house-points mb-2" style="font-size: 0.9rem;">
-                                        <i class="fas fa-trophy" style="color: gold;"></i> 
-                                        House Points: <?php echo isset($student['total_points']) ? htmlspecialchars($student['total_points']) : '0'; ?>
-                                    </p>
-                                    
-                                    <!-- Additional Info -->
-                                    <div class="student-details">
-                                        <?php if ($student['house_name']): ?>
-                                            <span class="badge bg-info mb-2" style="border-radius: 15px;">
-                                                <i class="fas fa-home"></i> <?php echo htmlspecialchars($student['house_name']); ?>
+                <div class="row g-4">
+                    <?php foreach ($students as $index => $student): ?>
+                        <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-12 student-item-col" style="animation-delay: <?php echo ($index * 0.04); ?>s;">
+                            <div class="student-card-fancy p-4 text-center" onclick="window.location.href='student_profile.php?student_id=<?php echo urlencode($student['student_id']); ?>'">
+                                <!-- Profile Picture -->
+                                <div class="avatar-wrap">
+                                    <?php if (!empty($student['profile_picture']) && file_exists($student['profile_picture'])): ?>
+                                        <img src="<?php echo htmlspecialchars($student['profile_picture']); ?>" alt="Profile" class="avatar-img">
+                                    <?php else: ?>
+                                        <div class="avatar-placeholder">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <!-- Student Name & ID -->
+                                <h3 class="student-title-name"><?php echo htmlspecialchars($student['name']); ?></h3>
+                                <div>
+                                    <span class="regd-badge"><i class="fas fa-id-card me-1"></i> <?php echo htmlspecialchars($student['student_id']); ?></span>
+                                </div>
+                                
+                                <!-- House Points -->
+                                <div>
+                                    <span class="hp-badge-pill">
+                                        <i class="fas fa-trophy"></i>
+                                        <span><?php echo isset($student['total_points']) ? htmlspecialchars($student['total_points']) : '0'; ?> House Pts</span>
+                                    </span>
+                                </div>
+                                
+                                <!-- House Name & Details -->
+                                <div class="mt-auto">
+                                    <?php if (!empty($student['house_name'])): ?>
+                                        <div class="mb-2">
+                                            <span class="house-tag-chip">
+                                                <i class="fas fa-home me-1"></i> <?php echo htmlspecialchars($student['house_name']); ?>
                                             </span>
-                                        <?php endif; ?>
-                                        
-                                        <?php if ($student['cgpa']): ?>
-                                            <div class="cgpa-info">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-chart-line"></i> CGPA: <?php echo htmlspecialchars($student['cgpa']); ?>
-                                                </small>
-                                            </div>
-                                        <?php endif; ?>
-                                        
-                                        <?php 
-                                        $skills = [];
-                                        if (!empty($student['skills'])) {
-                                            $skills = json_decode($student['skills'], true);
-                                        }
-                                        if (!empty($skills) && is_array($skills) && count($skills) > 0): 
-                                        ?>
-                                            <div class="skills-preview mt-2">
-                                                <?php foreach (array_slice($skills, 0, 2) as $skill): ?>
-                                                    <span class="badge bg-light text-dark me-1 mb-1" style="font-size: 0.7rem;">
-                                                        <?php echo htmlspecialchars(trim($skill)); ?>
-                                                    </span>
-                                                <?php endforeach; ?>
-                                                <?php if (count($skills) > 2): ?>
-                                                    <span class="badge bg-secondary" style="font-size: 0.7rem;">
-                                                        +<?php echo count($skills) - 2; ?> more
-                                                    </span>
-                                                <?php endif; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    
+                                    <?php if (!empty($student['cgpa'])): ?>
+                                        <div class="text-muted small fw-bold mt-1">
+                                            <i class="fas fa-chart-line text-success me-1"></i> CGPA: <?php echo htmlspecialchars($student['cgpa']); ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -201,92 +433,14 @@ $student_count = count($students);
                 </div>
             <?php else: ?>
                 <div class="text-center py-5">
-                    <i class="fas fa-user-graduate" style="font-size: 4rem; color: var(--gray-medium); margin-bottom: 20px;"></i>
-                    <h4 class="text-muted">No students found</h4>
-                    <p class="text-muted">This section doesn't have any students yet.</p>
+                    <i class="fas fa-user-graduate text-muted mb-3" style="font-size: 4rem;"></i>
+                    <h4 class="fw-bold text-slate">No Students Enrolled</h4>
+                    <p class="text-muted">This section currently has no registered students.</p>
                 </div>
             <?php endif; ?>
         </div>
     </div>
     
     <?php include "footer.php"; ?>
-    
-    <style>
-        .student-card {
-            transition: all 0.3s ease;
-        }
-        
-        .student-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 32px rgba(7,101,147,0.2) !important;
-        }
-        
-        .info-item {
-            padding: 15px;
-        }
-        
-        .info-item h4 {
-            margin: 10px 0;
-            font-weight: 600;
-        }
-        
-        .student-name {
-            font-size: 1.1rem;
-            line-height: 1.3;
-        }
-        
-        .student-details {
-            min-height: 60px;
-        }
-        
-        .skills-preview {
-            max-height: 40px;
-            overflow: hidden;
-        }
-        
-        @media (max-width: 768px) {
-            .student-card {
-                margin-bottom: 20px;
-            }
-            
-            .card-body {
-                padding: 20px 15px;
-            }
-            
-            .profile-picture-container img,
-            .profile-picture-container div {
-                width: 70px !important;
-                height: 70px !important;
-            }
-            
-            .profile-picture-container i {
-                font-size: 1.5rem !important;
-            }
-            
-            .student-name {
-                font-size: 1rem;
-            }
-            
-            .student-id {
-                font-size: 0.85rem;
-            }
-        }
-        
-        @media (max-width: 576px) {
-            .card-body {
-                padding: 15px 10px;
-            }
-            
-            .profile-picture-container img,
-            .profile-picture-container div {
-                width: 60px !important;
-                height: 60px !important;
-            }
-            
-            .profile-picture-container i {
-                font-size: 1.3rem !important;
-            }
-        }
-    </style>
 </body>
 </html>

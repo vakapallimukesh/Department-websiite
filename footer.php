@@ -66,16 +66,16 @@
                         </div>
                         
                         <div class="social-links">
-                            <a href="https://www.facebook.com/SRKRECOFFICIAL" target="_blank" class="social-link facebook">
+                            <a href="https://www.facebook.com/share/1QswEKfvKa/" target="_blank" rel="noopener noreferrer" class="social-link facebook" title="Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="https://www.instagram.com/srkr_engineering_college" target="_blank" class="social-link instagram">
+                            <a href="https://www.instagram.com/srkrcsdcsit?igsh=MWFheWsycTNoZ3UzZw==" target="_blank" rel="noopener noreferrer" class="social-link instagram" title="Instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="https://twitter.com/SRKR_EC" target="_blank" class="social-link twitter">
+                            <a href="https://twitter.com/SRKR_EC" target="_blank" rel="noopener noreferrer" class="social-link twitter" title="Twitter">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a href="https://www.youtube.com/channel/UCW7vjllBR9k_zSAYBzh9Iiw" target="_blank" class="social-link youtube">
+                            <a href="https://youtube.com/@srkrcsdcsitofficial?si=3uw70To5Nv7WN-cJ" target="_blank" rel="noopener noreferrer" class="social-link youtube" title="YouTube">
                                 <i class="fab fa-youtube"></i>
                             </a>
                         </div>

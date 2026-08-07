@@ -1,0 +1,55 @@
+<!-- ==================================================================
+     NEW CENTERED HERO SECTION FOR CSD-CSIT DEPARTMENT
+     Replace the existing hero section (lines 1515-1941) with this code
+     ================================================================== -->
+
+<!-- NEW CENTERED HERO SECTION -->
+<section class="hero-section-new">
+    <!-- Animated Background Particles -->
+    <div class="hero-particles">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+    </div>
+
+    <!-- Centered Hero Content -->
+    <div class="hero-centered-content">
+        <!-- Small Heading -->
+        <div class="hero-small-heading">
+            SRKREC
+            <span class="dept-name">CSD-CSIT Department</span>
+        </div>
+
+        <!-- Large Title -->
+        <h1 class="hero-main-title">
+            Where Learning Meets <span class="innovation-text">Innovation</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="hero-subtitle">
+            Empowering future innovators through technology, creativity, research, and industry-focused learning.
+        </p>
+
+        <!-- Explore Button -->
+        <a href="faculty.php" class="hero-explore-btn" id="heroExploreBtn">
+            Explore
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
+
+<!-- JavaScript for smooth scroll and navigation (add before closing </body> tag) -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const heroExploreBtn = document.getElementById('heroExploreBtn');
+    
+    if (heroExploreBtn) {
+        heroExploreBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Navigate to faculty page
+            window.location.href = 'faculty.php';
+        });
+    }
+});
+</script>

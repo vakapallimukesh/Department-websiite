@@ -3,16 +3,18 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 include "./head.php"; 
 ?>
 
+<link rel="stylesheet" href="./assets/css/orbit-images.css">
 <style>
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
     background: #f8fafc;
+    color: #334155;
 }
 
 .hero-section {
-    background: #0870A4;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
     color: white;
-    padding: 80px 0;
+    padding: 85px 0;
     position: relative;
     overflow: hidden;
 }
@@ -24,30 +26,59 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h20v20H0z" fill="none"/><circle cx="3" cy="3" r="1" fill="rgba(255,255,255,0.2)"/></svg>') repeat;
-    opacity: 0.3;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.6;
 }
 
 .startup-card {
     background: white;
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     margin-bottom: 25px;
     transition: all 0.3s ease;
-    border: 1px solid rgba(99, 102, 241, 0.1);
+    border: 1px solid #e2e8f0;
 }
 
 .startup-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 15px 35px rgba(79, 70, 229, 0.12);
+    border-color: rgba(79, 70, 229, 0.3);
+}
+
+.impact-card {
+    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+    color: #ffffff;
+    padding: 35px 25px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(79, 70, 229, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.impact-num {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #fbbf24;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.impact-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    opacity: 0.95;
+    margin: 0;
 }
 
 .program-stage {
     background: white;
     color: #1e293b;
     padding: 25px;
-    border-radius: 15px;
+    border-radius: 20px;
     margin-bottom: 25px;
     text-align: center;
     border: 2px solid;
@@ -65,14 +96,17 @@ body {
     
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container">
+        <div class="container position-relative" style="z-index: 2;">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 20px;">Startup Club</h1>
-                    <p style="font-size: 1.2rem; opacity: 0.9; color:white">Empowering student entrepreneurs to build innovative solutions</p>
+                    <span style="color: #fbbf24; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem; display: inline-block; margin-bottom: 12px;">Student Innovation Hub</span>
+                    <h1 style="font-family: 'Outfit', sans-serif; font-size: 3.2rem; font-weight: 900; margin-bottom: 15px; color: #ffffff; line-height: 1.15;">Startup Club</h1>
+                    <p style="font-size: 1.25rem; opacity: 0.92; color: #e2e8f0; max-width: 620px; font-weight: 500;">Empowering student entrepreneurs to build innovative solutions, access seed mentorship, and launch real-world ventures.</p>
                 </div>
-                <div class="col-md-4 text-center">
-                    <i class="fas fa-lightbulb" style="font-size: 120px; opacity: 0.2;"></i>
+                <div class="col-md-4 text-center d-none d-md-block">
+                    <div style="width: 140px; height: 140px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); display: inline-flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15);">
+                        <i class="fas fa-lightbulb" style="font-size: 70px; color: #fbbf24; filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.5));"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,16 +115,16 @@ body {
     <!-- Club Overview -->
     <section style="padding: 60px 0;">
         <div class="container">
-            <div class="row">
+            <div class="row g-4 align-items-stretch">
                 <div class="col-md-8">
-                    <div class="startup-card">
-                        <h2 style="color: #1e293b; margin-bottom: 20px;">About Our Startup Club</h2>
-                        <p style="color: #64748b; line-height: 1.8; margin-bottom: 20px;">
+                    <div class="startup-card h-100">
+                        <h2 style="font-family: 'Outfit', sans-serif; color: #0f172a; font-weight: 800; font-size: 2rem; margin-bottom: 20px;">About Our Startup Club</h2>
+                        <p style="color: #475569; line-height: 1.85; margin-bottom: 20px; font-size: 1.05rem;">
                             The SRKREC Startup Club is a dynamic ecosystem designed to foster innovation and entrepreneurship 
                             among students and faculty. We provide comprehensive support including mentorship, funding guidance, workspace, 
                             and resources to transform innovative ideas into successful businesses.
                         </p>
-                        <p style="color: #64748b; line-height: 1.8;">
+                        <p style="color: #475569; line-height: 1.85; margin: 0; font-size: 1.05rem;">
                             Our mission is to create a culture of entrepreneurship and innovation that contributes to economic development 
                             and societal progress through technology-driven solutions. We help students take their first steps into 
                             the startup world and connect them with the right resources and opportunities.
@@ -98,19 +132,19 @@ body {
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 30px; border-radius: 15px; text-align: center;">
-                        <h4>Our Impact</h4>
-                        <div style="margin: 25px 0;">
-                            <h3>5+</h3>
-                            <p>Active Startups</p>
+                    <div class="impact-card h-100 d-flex flex-column justify-content-between">
+                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.5rem; margin-bottom: 25px; color: #ffffff;">Our Impact</h4>
+                        <div style="margin: 10px 0;">
+                            <div class="impact-num">5+</div>
+                            <div class="impact-label">Active Startups</div>
                         </div>
-                        <div style="margin: 25px 0;">
-                            <h3>200+</h3>
-                            <p>Daily Customers</p>
+                        <div style="margin: 10px 0;">
+                            <div class="impact-num">200+</div>
+                            <div class="impact-label">Daily Customers</div>
                         </div>
-                        <div style="margin: 25px 0;">
-                            <h3>3+</h3>
-                            <p>Industry Sectors</p>
+                        <div style="margin: 10px 0;">
+                            <div class="impact-num">3+</div>
+                            <div class="impact-label">Industry Sectors</div>
                         </div>
                     </div>
                 </div>
@@ -128,6 +162,10 @@ body {
     }
 
     .section-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #0f172a;
         text-align: center;
         margin-bottom: 50px;
         position: relative;
@@ -138,51 +176,37 @@ body {
         display: block;
         width: 80px;
         height: 4px;
-        background: linear-gradient(to right, #3b82f6, #2563eb);
-        margin: 15px auto 0;
+        background: linear-gradient(to right, #4f46e5, #3b82f6);
+        margin: 12px auto 0;
         border-radius: 2px;
     }
 
-    .startup-card {
-        border: 2px solid transparent;
-        transition: all 0.3s ease;
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        margin-bottom: 25px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .startup-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
-    }
-    
     .startup-logo-container {
-        width: 200px;
-        height: 120px;
-        margin: 0 auto 20px auto;
+        width: 100%;
+        height: 140px;
+        margin: 0 0 18px 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #f8fafc;
-        border-radius: 10px;
-        padding: 15px;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        padding: 16px;
         overflow: hidden;
     }
     
     .startup-logo {
-        width: 300px;
-        height: 280px;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
         object-fit: contain;
+        filter: drop-shadow(0 4px 10px rgba(0,0,0,0.06));
         transition: transform 0.3s ease;
     }
 
     .startup-logo-container:hover .startup-logo {
-        transform: scale(1.05);
+        transform: scale(1.08);
     }
 
     .startup-info {
@@ -255,110 +279,188 @@ body {
     }
     </style>
 
-    <!-- Featured Startups -->
-    <section class="startups-section">
-        <div class="container">
+    <!-- Featured Startups (ReactBits OrbitImages Component) -->
+    <section class="orbit-section">
+        <div class="container text-center mb-4">
             <h2 class="section-title">Our Successful Startups</h2>
-            <div class="row row-eq-height">
-                <!-- Bhimavaram Online -->
-                <div class="col-md-4 mb-4">
-                    <div class="startup-card bo-card">
-                        <div class="startup-logo-container">
-                            <img src="assets/company_logos/logos/22.png" alt="Bhimavaram Online" class="startup-logo">
-                        </div>
-                        <div class="startup-info">
-                            <h5 class="startup-title">Bhimavaram Online</h5>
-                            <p class="startup-subtitle">E-Commerce Platform</p>
-                        </div>
-                        <p class="startup-description">
-                            First ONDC enabled app in AP & Telangana. A one-stop portal for shopping, food ordering, and local services in Bhimavaram.
-                        </p>
-                        <div class="startup-tags">
-                            <span class="badge bg-primary">E-Commerce</span>
-                            <span class="badge bg-info">ONDC</span>
-                        </div>
-                    </div>
+            <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: -30px auto 30px;">
+                Explore student-led ventures launched through our incubation program
+            </p>
+        </div>
+
+        <!-- ReactBits OrbitImages Engine Container -->
+        <div class="orbit-container">
+            <div class="orbit-rotation-wrapper">
+                <svg class="orbit-path-svg">
+                    <path fill="none" stroke="rgba(37, 99, 235, 0.2)" stroke-width="2" stroke-dasharray="6 6" />
+                </svg>
+
+                <!-- Orbit Item 1: Lunchbox -->
+                <div class="orbit-item" title="Lunchbox - School Lunch Delivery">
+                    <img class="orbit-image" src="assets/company_logos/logos/25.png" alt="Lunchbox">
                 </div>
 
-                <!-- Lunch Box -->
-                <div class="col-md-4 mb-4">
-                    <div class="startup-card lb-card">
-                        <div class="startup-logo-container">
-                            <img src="assets/company_logos/logos/25.png" alt="Lunch Box" class="startup-logo">
-                        </div>
-                        <div class="text-center" style="margin-bottom: 20px;">
-                            <h5 style="margin: 0; color: #1e293b; font-size: 1.5rem;">Lunch Box</h5>
-                            <p style="margin-top: 5px; color: #64748b;">School Lunch Delivery</p>
-                        </div>
-                        <p style="color: #64748b; margin-bottom: 15px;">
-                            Delivering 200+ lunchboxes daily. Monthly subscription-based school lunch delivery from home to school.
-                        </p>
-                        <div style="display: flex; gap: 10px">
-                            <span class="badge bg-success">FoodTech</span>
-                            <span class="badge bg-warning">Logistics</span>
-                        </div>
-                    </div>
+                <!-- Orbit Item 2: Bhimavaram Online -->
+                <div class="orbit-item" title="Bhimavaram Online - E-Commerce Platform">
+                    <img class="orbit-image" src="assets/company_logos/logos/22.png" alt="Bhimavaram Online">
                 </div>
 
-                <!-- Bhimavaram Digitals -->
-                <div class="col-md-4 mb-4">
-                    <div class="startup-card bd-card">
-                        <div class="startup-logo-container">
-                            <img src="assets/company_logos/logos/20.png" alt="Bhimavaram Digitals" class="startup-logo">
-                        </div>
-                        <div class="text-center" style="margin-bottom: 20px;">
-                            <h5 style="margin: 0; color: #1e293b; font-size: 1.5rem;">Bhimavaram Digitals</h5>
-                            <p style="margin-top: 5px; color: #64748b;">Digital Marketing</p>
-                        </div>
-                        <p style="color: #64748b; margin-bottom: 15px;">
-                            Digital marketing startup specializing in digital billboards, SEO, social media management, and content creation.
-                        </p>
-                        <div style="display: flex; gap: 10px">
-                            <span class="badge bg-primary">Marketing</span>
-                            <span class="badge bg-info">Digital</span>
-                        </div>
-                    </div>
+                <!-- Orbit Item 3: Bhimavaram Digitals -->
+                <div class="orbit-item" title="Bhimavaram Digitals - Digital Marketing">
+                    <img class="orbit-image" src="assets/company_logos/logos/20.png" alt="Bhimavaram Digitals">
+                </div>
+
+                <!-- Orbit Item 4: Smart Wash -->
+                <div class="orbit-item" title="Smart Wash - Laundry Services">
+                    <img class="orbit-image" src="assets/company_logos/logos/23.png" alt="Smart Wash">
+                </div>
+
+                <!-- Orbit Item 5: Campus Online -->
+                <div class="orbit-item" title="Campus Online - Learning Portal">
+                    <img class="orbit-image" src="assets/company_logos/logos/21.png" alt="Campus Online">
+                </div>
+
+                <!-- Orbit Item 6: NutriDelight -->
+                <div class="orbit-item" title="NutriDelight - Health Food Delivery">
+                    <img class="orbit-image" src="assets/company_logos/logos/26.png" alt="NutriDelight">
                 </div>
             </div>
 
-            <div class="row mt-4">
-                <!-- Smart Wash -->
-                <div class="col-md-6 mb-4">
-                    <div class="startup-card sw-card">
-                        <div class="startup-logo-container">
-                            <img src="assets/company_logos/logos/23.png" alt="Smart Wash" class="startup-logo">
-                        </div>
-                        <div class="text-center" style="margin-bottom: 20px;">
-                            <h5 style="margin: 0; color: #1e293b; font-size: 1.5rem;">Smart Wash</h5>
-                            <p style="margin-top: 5px; color: #64748b;">Laundry Services</p>
-                        </div>
-                        <p style="color: #64748b; margin-bottom: 15px;">
-                            Student-run laundry startup offering dry cleaning, shoe cleaning, and saree rolling with eco-friendly methods.
-                        </p>
-                        <div style="display: flex; gap: 10px">
-                            <span class="badge bg-success">Service</span>
-                            <span class="badge bg-warning">EcoFriendly</span>
-                        </div>
+            <!-- Orbit Center Content Card -->
+            <div class="orbit-center-content">
+                <div class="orbit-center-card">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(37, 99, 235, 0.1); color: #2563eb; display: inline-flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px;">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Startups Hub</h3>
+                    <p>6+ Active Ventures</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Scrollable Row for ALL Startups Below -->
+        <div class="startups-horizontal-container">
+            <div class="startups-header-bar">
+                <div>
+                    <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; color: #1e293b; margin: 0; font-size: 1.5rem;">Explore All Incubated Startups</h3>
+                    <p style="color: #64748b; font-size: 0.9rem; margin: 4px 0 0;">Swipe or click left/right arrows to scroll through all student ventures</p>
+                </div>
+                <div class="startups-scroll-controls">
+                    <button type="button" class="startups-scroll-btn startups-scroll-prev" aria-label="Scroll left">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button type="button" class="startups-scroll-btn startups-scroll-next" aria-label="Scroll right">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="startups-scroll-row">
+                <!-- Startup 1: Bhimavaram Online -->
+                <div class="startup-scroll-card bo-card">
+                    <div class="startup-logo-container">
+                        <img src="assets/company_logos/logos/22.png" alt="Bhimavaram Online" class="startup-logo">
+                    </div>
+                    <div class="startup-info">
+                        <h5 class="startup-title">Bhimavaram Online</h5>
+                        <p class="startup-subtitle">E-Commerce Platform</p>
+                    </div>
+                    <p class="startup-description">
+                        First ONDC enabled app in AP & Telangana. A one-stop portal for shopping, food ordering, and local services in Bhimavaram.
+                    </p>
+                    <div class="startup-tags">
+                        <span class="badge bg-primary">E-Commerce</span>
+                        <span class="badge bg-info">ONDC</span>
                     </div>
                 </div>
 
-                <!-- NutriDelight -->
-                <div class="col-md-6 mb-4">
-                    <div class="startup-card nd-card">
-                        <div class="startup-logo-container">
-                            <img src="assets/company_logos/logos/25.png" alt="NutriDelight" class="startup-logo">
-                        </div>
-                        <div class="text-center" style="margin-bottom: 20px;">
-                            <h5 style="margin: 0; color: #1e293b; font-size: 1.5rem;">NutriDelight</h5>
-                            <p style="margin-top: 5px; color: #64748b;">Health Food Delivery</p>
-                        </div>
-                        <p style="color: #64748b; margin-bottom: 15px;">
-                            Health-focused cloud kitchen startup delivering nutritious meals using fresh, locally-sourced ingredients.
-                        </p>
-                        <div style="display: flex; gap: 10px">
-                            <span class="badge bg-success">FoodTech</span>
-                            <span class="badge bg-info">Health</span>
-                        </div>
+                <!-- Startup 2: Lunch Box -->
+                <div class="startup-scroll-card lb-card">
+                    <div class="startup-logo-container">
+                        <img src="assets/company_logos/logos/25.png" alt="Lunch Box" class="startup-logo">
+                    </div>
+                    <div class="startup-info">
+                        <h5 class="startup-title">Lunch Box</h5>
+                        <p class="startup-subtitle">School Lunch Delivery</p>
+                    </div>
+                    <p class="startup-description">
+                        Delivering 200+ lunchboxes daily. Monthly subscription-based school lunch delivery from home to school.
+                    </p>
+                    <div class="startup-tags">
+                        <span class="badge bg-success">FoodTech</span>
+                        <span class="badge bg-warning">Logistics</span>
+                    </div>
+                </div>
+
+                <!-- Startup 3: Bhimavaram Digitals -->
+                <div class="startup-scroll-card bd-card">
+                    <div class="startup-logo-container">
+                        <img src="assets/company_logos/logos/20.png" alt="Bhimavaram Digitals" class="startup-logo">
+                    </div>
+                    <div class="startup-info">
+                        <h5 class="startup-title">Bhimavaram Digitals</h5>
+                        <p class="startup-subtitle">Digital Marketing</p>
+                    </div>
+                    <p class="startup-description">
+                        Digital marketing startup specializing in digital billboards, SEO, social media management, and content creation.
+                    </p>
+                    <div class="startup-tags">
+                        <span class="badge bg-primary">Marketing</span>
+                        <span class="badge bg-info">Digital</span>
+                    </div>
+                </div>
+
+                <!-- Startup 4: Smart Wash -->
+                <div class="startup-scroll-card sw-card">
+                    <div class="startup-logo-container">
+                        <img src="assets/company_logos/logos/23.png" alt="Smart Wash" class="startup-logo">
+                    </div>
+                    <div class="startup-info">
+                        <h5 class="startup-title">Smart Wash</h5>
+                        <p class="startup-subtitle">Laundry Services</p>
+                    </div>
+                    <p class="startup-description">
+                        Student-run laundry startup offering dry cleaning, shoe cleaning, and saree rolling with eco-friendly methods.
+                    </p>
+                    <div class="startup-tags">
+                        <span class="badge bg-success">Service</span>
+                        <span class="badge bg-warning">EcoFriendly</span>
+                    </div>
+                </div>
+
+                <!-- Startup 5: Campus Online -->
+                <div class="startup-scroll-card bo-card">
+                    <div class="startup-logo-container">
+                        <img src="assets/company_logos/logos/21.png" alt="Campus Online" class="startup-logo">
+                    </div>
+                    <div class="startup-info">
+                        <h5 class="startup-title">Campus Online</h5>
+                        <p class="startup-subtitle">EdTech Startup</p>
+                    </div>
+                    <p class="startup-description">
+                        Comprehensive learning management portal connecting faculty and students with interactive course materials.
+                    </p>
+                    <div class="startup-tags">
+                        <span class="badge bg-primary">EdTech</span>
+                        <span class="badge bg-info">Platform</span>
+                    </div>
+                </div>
+
+                <!-- Startup 6: NutriDelight -->
+                <div class="startup-scroll-card nd-card">
+                    <div class="startup-logo-container">
+                        <img src="assets/company_logos/logos/26.png" alt="NutriDelight" class="startup-logo">
+                    </div>
+                    <div class="startup-info">
+                        <h5 class="startup-title">NutriDelight</h5>
+                        <p class="startup-subtitle">Health Food Delivery</p>
+                    </div>
+                    <p class="startup-description">
+                        Health-focused cloud kitchen startup delivering nutritious meals using fresh, locally-sourced ingredients.
+                    </p>
+                    <div class="startup-tags">
+                        <span class="badge bg-success">FoodTech</span>
+                        <span class="badge bg-info">Health</span>
                     </div>
                 </div>
             </div>
@@ -369,6 +471,8 @@ body {
     
     
 
+    <!-- ReactBits OrbitImages Component Engine -->
+    <script src="assets/js/orbit-images.js"></script>
     <?php include "footer.php"; ?>
 </body>
 </html>

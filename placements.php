@@ -3,19 +3,31 @@ if (session_status() == PHP_SESSION_NONE) session_start();
 include "./head.php"; 
 ?>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/dome-gallery.css">
+
 <style>
 :root {
-    --primary: #6366f1;
-    --primary-light: #a5b4fc;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
+    --primary: #d97706;
+    --primary-light: #f59e0b;
+    --amber-gold: #d97706;
+    --bright-yellow: #f59e0b;
+    --golden-champagne: #e6c280;
+    --amber-badge: #b45309;
+    --rich-espresso: #1a0d06;
+    --cream-white: #fdfbf7;
+    
+    --text-primary: #1a0d06;
+    --text-secondary: #6f5f54;
     --text-light: #94a3b8;
-    --bg-light: #fafafa;
-    --border-light: #e2e8f0;
+    --bg-light: #fdfbf7;
+    --border-light: #f3eae1;
     --white: #ffffff;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 10px 30px rgba(180, 83, 9, 0.08);
+    --shadow-lg: 0 20px 45px rgba(180, 83, 9, 0.16);
 }
 
 * {
@@ -26,84 +38,120 @@ include "./head.php";
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg-light);
-    line-height: 1.5;
-    color: var(--text-primary);
+    background: #fdfbf7;
+    line-height: 1.6;
+    color: #1a0d06;
     font-size: 14px;
 }
 
 .hero-section {
-    background:#0870A4;
+    background: linear-gradient(135deg, #1a0d06 0%, #2a150a 50%, #3d1e0e 100%);
     color: white;
-    padding: 60px 0 40px;
+    padding: 85px 20px 65px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(230, 194, 128, 0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.45;
 }
 
 .hero-title {
-    font-size: 2rem;
-    font-weight: 600;
-    line-height: 1.2;
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 900;
+    line-height: 1.15;
     margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f5ebe6 35%, #e6c280 70%, #d49b59 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
-    font-size: 1rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.15rem;
     font-weight: 400;
-    opacity: 0.8;
-    color: white;
+    color: #e5d5c5;
     margin-bottom: 0;
 }
 
 .stats-section {
-    padding: 40px 0;
+    padding: 55px 0;
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
 }
 
 .stat-card {
-    background: var(--white);
-    border-radius: 8px;
-    padding: 20px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 28px 20px;
     text-align: center;
-    border: 1px solid var(--border-light);
-    box-shadow: var(--shadow-sm);
-    transition: all 0.2s ease;
+    border: 1px solid #f3eae1;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08);
+    transition: all 0.3s ease;
     margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
 }
 
 .stat-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    box-shadow: 0 20px 45px rgba(180, 83, 9, 0.16);
+    transform: translateY(-4px);
+    border-color: rgba(217, 119, 6, 0.4);
 }
 
 .stat-number {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--primary);
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-bottom: 4px;
 }
 
 .stat-label {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-bottom: 2px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1a0d06;
+    margin-bottom: 3px;
 }
 
 .stat-sublabel {
-    font-size: 0.75rem;
-    color: var(--text-light);
+    font-size: 0.84rem;
+    color: #6f5f54;
+    font-weight: 500;
 }
 
 .recruiters-section {
-    padding: 40px 0;
-    background: var(--white);
+    padding: 60px 0;
+    background: #fdfbf7;
 }
 
 .section-title {
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 900;
     text-align: center;
     margin-bottom: 30px;
-    color: var(--text-primary);
+    color: #1a0d06;
 }
 
 .company-card {
@@ -361,328 +409,33 @@ body {
         </div>
     </section>
 
-    <!-- Top Recruiters -->
-    <section class="recruiters-section">
+    <!-- Top Recruiters Section -->
+    <section class="recruiters-section" style="background: #fdfbf7; padding: 60px 0;">
         <div class="container">
-            <h2 class="section-title">Top Recruiters</h2>
+            <h2 class="section-title" style="color: #1a0d06; font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; text-align: center; margin-bottom: 20px;">Top <span style="color: #d97706;">Recruiters</span></h2>
             
-            <!-- Initial 8 cards -->
-            <div class="row g-3">
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card fade-in">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/4.png" alt="TCS">
-                        </div>
-                        <h5 class="company-name">TCS</h5>
-                        <p class="company-domain">Software Development</p>
-                        <p class="package-info">₹3.36L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-success">9 Offers</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card fade-in">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/6.png" alt="Akrivia HCM">
-                        </div>
-                        <h5 class="company-name">Akirivia HCM</h5>
-                        <p class="company-domain">Cloud & AI Solutions</p>
-                        <p class="package-info">₹10L - ₹12L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-primary">1 Offer</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card fade-in">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/7.png" alt="Boson">
-                        </div>
-                        <h5 class="company-name">Boson</h5>
-                        <p class="company-domain">Cloud Services</p>
-                        <p class="package-info">₹3.5L - ₹9.5L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-warning">1 Offer</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card fade-in">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/1.png" alt="BLUCONN">
-                        </div>
-                        <h5 class="company-name">BLUCONN</h5>
-                        <p class="company-domain">Software Engineering</p>
-                        <p class="package-info">₹7.8L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-info">11 Offers</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card fade-in">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/12.png" alt="Meeami">
-                        </div>
-                        <h5 class="company-name">Meeami</h5>
-                        <p class="company-domain">Digital Services</p>
-                        <p class="package-info">₹6L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-success">1 Offer</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card fade-in">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/9.png" alt="intelliPaat">
-                        </div>
-                        <h5 class="company-name">intelliPaat</h5>
-                        <p class="company-domain">Consulting</p>
-                        <p class="package-info">₹5L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-secondary">1 Offer</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card fade-in">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/8.png" alt="SmartED">
-                        </div>
-                        <h5 class="company-name">SmartED</h5>
-                        <p class="company-domain">IT Services</p>
-                        <p class="package-info">₹4.8L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-success">1 Offer</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card fade-in">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/11.png" alt="Quanteon">
-                        </div>
-                        <h5 class="company-name">Quanteon</h5>
-                        <p class="company-domain">AI & Cloud</p>
-                        <p class="package-info">₹4.5L - ₹6.5L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-primary">1 Offer</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Remaining cards -->
-            <div class="row g-3 remaining-cards">
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/10.png" alt="AteliaHealth">
-                        </div>
-                        <h5 class="company-name">AteliaHealth</h5>
-                        <p class="company-domain">Healthcare Tech</p>
-                        <p class="package-info">₹4L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-primary">3 Offers</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/15.png" alt="achala">
-                        </div>
-                        <h5 class="company-name">Achala</h5>
-                        <p class="company-domain">Digital Innovation</p>
-                        <p class="package-info">₹4L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-primary">1 Offer</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/2.png" alt="Cognizant">
-                        </div>
-                        <h5 class="company-name">Cognizant</h5>
-                        <p class="company-domain">Digital Transformation</p>
-                        <p class="package-info">₹4L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-primary">9 Offers</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="company-card">
-                        <div class="company-logo">
-                            <img src="assets/company_logos/logos/3.png" alt="Infosys">
-                        </div>
-                        <h5 class="company-name">Infosys</h5>
-                        <p class="company-domain">Next-Gen Services</p>
-                        <p class="package-info">₹3.6L</p>
-                        <div class="text-center">
-                            <span class="offer-badge badge-primary">6 Offers</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-4">
-                <button id="viewAllBtn" class="view-all-btn" onclick="toggleRecruiters()">
-                    View All
-                </button>
-            </div>
+            <!-- ReactBits Interactive Circular Gallery for Top Recruiters -->
+            <div id="topRecruitersCircularGallery" style="height: 520px; width: 100%; position: relative; overflow: hidden; background: #ffffff; border-radius: 24px; border: 1px solid #f3eae1; box-shadow: 0 15px 40px rgba(0,0,0,0.07); margin-top: 10px;"></div>
         </div>
     </section>
 
 
 
-    <section class="photo-gallery-section" style="padding: 80px 0; margin-top: -80px; background: rgba(255, 255, 255, 1);">
+    <!-- 3D Placement Dome Gallery Section -->
+    <section class="photo-gallery-section" style="padding: 80px 0; background: #1a0d06; color: white;">
         <div class="container">
-            <div class="section-title text-center" style="margin-bottom: 60px;">
-                <h2 style="font-size: 2.8rem; font-weight: 800; margin-bottom: 15px; line-height: 1.1;">Placement <span style="color: #3b82f6;">Gallery</span></h2>
-                <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto; line-height: 1.5;">Celebrating our students' success stories and achievements</p>
+            <div class="section-title text-center" style="margin-bottom: 30px;">
+                <h2 style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; line-height: 1.1; color: white;">Placement <span style="color: var(--amber-gold);">3D Dome Gallery</span></h2>
+                <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto; color: #e5d5c5; font-family: var(--font-heading);">Drag to rotate the interactive 3D sphere dome. Click any placement poster to expand.</p>
             </div>
-            <div class="gallery-carousel-wrapper" style="overflow: hidden; margin-bottom: 40px;">
-                <!-- First Row -->
-                <div class="gallery-carousel-row" style="display: flex; animation: gallery-scroll-left 25s linear infinite; margin-bottom: 20px; gap: 15px;">
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/28.png" alt="Placement Image 1" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/29.png" alt="Placement Image 2" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/30.png" alt="Placement Image 3" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/31.png" alt="Placement Image 4" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/32.png" alt="Placement Image 5" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <!-- Duplicate items for seamless loop -->
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/28.png" alt="Placement Image 1" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/29.png" alt="Placement Image 2" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                </div>
-
-                <!-- Second Row -->
-                <div class="gallery-carousel-row" style="display: flex; animation: gallery-scroll-right 25s linear infinite; margin-bottom: 20px; gap: 15px;">
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/33.png" alt="Placement Image 6" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/34.png" alt="Placement Image 7" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/35.png" alt="Placement Image 8" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/36.png" alt="Placement Image 9" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/37.png" alt="Placement Image 10" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <!-- Duplicate items for seamless loop -->
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/33.png" alt="Placement Image 6" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/34.png" alt="Placement Image 7" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                </div>
-
-                <!-- Third Row -->
-                <div class="gallery-carousel-row" style="display: flex; animation: gallery-scroll-left 25s linear infinite; gap: 15px;">
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/38.png" alt="Placement Image 11" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/39.png" alt="Placement Image 12" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/40.png" alt="Placement Image 13" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/31.png" alt="Placement Image 14" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/32.png" alt="Placement Image 15" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <!-- Duplicate items for seamless loop -->
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/38.png" alt="Placement Image 11" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                    <div class="gallery-item" style="position: relative; overflow: hidden; border-radius: 12px; cursor: pointer; min-width: 300px; height: 200px; transition: all 0.3s ease;">
-                        <img src="assets/placements/39.png" alt="Placement Image 12" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-                    </div>
-                </div>
-            </div>
-
-            <style>
-                @keyframes gallery-scroll-left {
-                    0% {
-                        transform: translateX(0);
-                    }
-                    100% {
-                        transform: translateX(-50%);
-                    }
-                }
-
-                @keyframes gallery-scroll-right {
-                    0% {
-                        transform: translateX(-50%);
-                    }
-                    100% {
-                        transform: translateX(0);
-                    }
-                }
-
-                .gallery-carousel-row:hover {
-                    animation-play-state: paused;
-                }
-
-                .gallery-item:hover {
-                    transform: translateY(-10px) scale(1.1);
-                    z-index: 10;
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-                }
-
-                .gallery-item:hover img {
-                    transform: scale(1.1);
-                }
-
-                @media (max-width: 768px) {
-                    .gallery-item {
-                        min-width: 250px !important;
-                        height: 180px !important;
-                    }
-                }
-            </style>
+            
+            <div id="placementDomeGallery"></div>
         </div>
-        <style>
-            .gallery-item:hover img {
-                transform: scale(1.1);
-            }
-        </style>
     </section>
 
-    
-
+    <!-- Dome Gallery 3D & Circular Gallery Engines -->
+    <script src="assets/js/dome-gallery.js"></script>
+    <script src="assets/js/circular-gallery.js"></script>
 
     <?php include "footer.php"; ?>
     

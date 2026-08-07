@@ -5,56 +5,103 @@ include "./head.php";
 
 <style>
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
     background: #f8fafc;
+    color: #334155;
+    overflow-x: hidden;
 }
 
+/* Animated Hero Section */
 .hero-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(-45deg, #0f172a, #047857, #065f46, #0f172a);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
     color: white;
-    padding: 80px 0;
+    padding: 85px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.7;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes floatLaptop {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(-3deg); }
+}
+
+.hero-icon-container {
+    width: 130px;
+    height: 130px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    animation: floatLaptop 6s ease-in-out infinite;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
 .it-card {
     background: white;
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 28px;
+    padding: 35px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     margin-bottom: 25px;
-    transition: transform 0.3s ease;
+    transition: all 0.35s ease;
+    border: 1px solid #e2e8f0;
 }
 
 .it-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 .semester-tab {
-    background: #f8fafc;
+    background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 10px;
+    border-radius: 16px;
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .semester-tab:hover {
-    background: #e2e8f0;
+    background: #f1f5f9;
+    transform: translateX(5px);
 }
 
 .semester-tab.active {
-    background: #10b981;
+    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
     color: white;
     border-color: #10b981;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
 }
 
 .subject-list {
     display: none;
     background: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin-top: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    border: 1px solid #e2e8f0;
 }
 
 .subject-list.active {
@@ -67,14 +114,19 @@ body {
     
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container">
+        <div class="container position-relative" style="z-index: 2;">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h1 style="font-size: 3rem; font-weight: 700; margin-bottom: 20px;">Computer Science & Information Technology</h1>
-                    <p style="font-size: 1.2rem; opacity: 0.9;">4-Year Undergraduate Program | AICTE Approved | Industry Focused</p>
+                    <span style="color: #34d399; background: rgba(52, 211, 153, 0.15); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.82rem; display: inline-block; padding: 6px 16px; border-radius: 99px; margin-bottom: 16px; border: 1px solid rgba(52, 211, 153, 0.3);">
+                        <i class="fas fa-laptop-code" style="margin-right: 6px;"></i>Undergraduate Degree Program
+                    </span>
+                    <h1 style="font-family: 'Outfit', sans-serif; font-size: 3.4rem; font-weight: 900; margin-bottom: 15px; color: #ffffff; line-height: 1.15;">CS & Information Technology</h1>
+                    <p style="font-size: 1.25rem; opacity: 0.92; color: #a7f3d0; max-width: 650px;">4-Year B.Tech Program | AICTE Approved | Industry Focused | Software Engineering & IT Systems</p>
                 </div>
-                <div class="col-md-4 text-center">
-                    <i class="fas fa-laptop-code" style="font-size: 120px; opacity: 0.2;"></i>
+                <div class="col-md-4 text-center d-none d-md-block">
+                    <div class="hero-icon-container">
+                        <i class="fas fa-laptop-code" style="font-size: 60px; color: #34d399; filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.6));"></i>
+                    </div>
                 </div>
             </div>
         </div>

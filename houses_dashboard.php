@@ -12,7 +12,7 @@ $houses = [
         'light_color' => '#E3F2FD',
         'icon' => 'fas fa-cloud',
         'description' => 'Sky House - Reaching for the stars',
-        'img' => 'img/house1.png'
+        'img' => 'assets/img/aakash_bg.jpg'
     
     ],
     'Jal' => [
@@ -22,7 +22,7 @@ $houses = [
         'light_color' => '#E1F5FE',
         'icon' => 'fas fa-water',
         'description' => 'Water House - Flowing with wisdom',
-        'img' => 'img/house2.png'
+        'img' => 'assets/img/jal_bg.jpg'
     
     ],
     'Vayu' => [
@@ -32,7 +32,7 @@ $houses = [
         'light_color' => '#E8F5E8',
         'icon' => 'fas fa-wind',
         'description' => 'Wind House - Swift and free',
-        'img' => 'img/house3.png'
+        'img' => 'assets/img/vayu_bg.png'
     ],
 
     'PRUDHVI' => [
@@ -42,7 +42,7 @@ $houses = [
         'light_color' => '#EFEBE9',
         'icon' => 'fas fa-mountain',
         'description' => 'Earth House - Strong and steady',
-        'img' => 'img/house4.png'    
+        'img' => 'assets/img/prudhvi_bg.jpg'    
     ],
     'Agni' => [
         'name' => 'Agni', 
@@ -51,18 +51,27 @@ $houses = [
         'light_color' => '#FFEBEE',
         'icon' => 'fas fa-fire',
         'description' => 'Fire House - Burning with passion',
-        'img' => 'img/house5.png'
+        'img' => 'assets/img/agni_bg.jpg'
    
     ]
 ];
 
 
 
-// Get house statistics
+// Get house statistics with detailed breakdowns
 $house_stats = [];
 foreach ($houses as $house_key => $house_info) {
     $house_name = mysqli_real_escape_string($conn, $house_info['name']);
-    $stats = ['student_count' => 0, 'total_points' => 0];
+    $stats = [
+        'student_count' => 0, 
+        'winners_points' => 0,
+        'participants_points' => 0,
+        'organizers_points' => 0,
+        'appreciations_points' => 0,
+        'penalties_points' => 0,
+        'total_points' => 0,
+        'avg_points' => 0
+    ];
 
     // Find house ID (hid)
     $hid = null;
@@ -79,18 +88,15 @@ foreach ($houses as $house_key => $house_info) {
         $student_count_result = mysqli_query($conn, $student_count_sql);
         if ($student_count_result) {
             $count_data = mysqli_fetch_assoc($student_count_result);
-            $stats['student_count'] = $count_data['student_count'];
+            $stats['student_count'] = (int)$count_data['student_count'];
         }
-
-        // Calculate total points from various sources
-        $total_points = 0;
 
         // Points from participants
         $participants_sql = "SELECT SUM(p.points) as points FROM participants p JOIN students s ON p.student_id = s.student_id WHERE s.hid = $hid";
         $participants_result = mysqli_query($conn, $participants_sql);
         if ($participants_result) {
             $points_data = mysqli_fetch_assoc($participants_result);
-            $total_points += (int)$points_data['points'];
+            $stats['participants_points'] = (int)($points_data['points'] ?? 0);
         }
 
         // Points from winners
@@ -98,7 +104,7 @@ foreach ($houses as $house_key => $house_info) {
         $winners_result = mysqli_query($conn, $winners_sql);
         if ($winners_result) {
             $points_data = mysqli_fetch_assoc($winners_result);
-            $total_points += (int)$points_data['points'];
+            $stats['winners_points'] = (int)($points_data['points'] ?? 0);
         }
 
         // Points from organizers
@@ -106,7 +112,7 @@ foreach ($houses as $house_key => $house_info) {
         $organizers_result = mysqli_query($conn, $organizers_sql);
         if ($organizers_result) {
             $points_data = mysqli_fetch_assoc($organizers_result);
-            $total_points += (int)$points_data['points'];
+            $stats['organizers_points'] = (int)($points_data['points'] ?? 0);
         }
 
         // Points from appreciations
@@ -114,7 +120,7 @@ foreach ($houses as $house_key => $house_info) {
         $appreciations_result = mysqli_query($conn, $appreciations_sql);
         if ($appreciations_result) {
             $points_data = mysqli_fetch_assoc($appreciations_result);
-            $total_points += (int)$points_data['points'];
+            $stats['appreciations_points'] = (int)($points_data['points'] ?? 0);
         }
 
         // Subtract penalties
@@ -122,14 +128,20 @@ foreach ($houses as $house_key => $house_info) {
         $penalties_result = mysqli_query($conn, $penalties_sql);
         if ($penalties_result && mysqli_num_rows($penalties_result) > 0) {
             $points_data = mysqli_fetch_assoc($penalties_result);
-            $total_points -= (int)($points_data['points'] ?? 0);
+            $stats['penalties_points'] = (int)($points_data['points'] ?? 0);
         }
 
-        $stats['total_points'] = $total_points;
+        $stats['total_points'] = $stats['winners_points'] + $stats['participants_points'] + $stats['organizers_points'] + $stats['appreciations_points'] - $stats['penalties_points'];
+        $stats['avg_points'] = $stats['student_count'] > 0 ? round($stats['total_points'] / $stats['student_count'], 1) : 0;
     }
 
     $house_stats[$house_key] = $stats;
 }
+
+// Sort houses by total points descending for accurate ranking display
+uasort($houses, function($a, $b) use ($house_stats) {
+    return $house_stats[$b['name']]['total_points'] <=> $house_stats[$a['name']]['total_points'];
+});
 ?>
 
 <style>
@@ -432,9 +444,319 @@ foreach ($houses as $house_key => $house_info) {
     border-color: #667eea !important;
     transform: translateY(-1px) !important;
 }
+
+/* Transparent Glassmorphism Hero Explore Button Style */
+.hero-explore-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 240px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    color: #2D1810 !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    border: 2px solid rgba(139, 69, 19, 0.55) !important;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-explore-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(139, 69, 19, 0.15);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.hero-explore-button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.hero-explore-button:hover {
+    transform: translateY(-3px) scale(1.04);
+    background: rgba(255, 255, 255, 0.6) !important;
+    border-color: #8B4513 !important;
+    box-shadow: 0 12px 35px rgba(139, 69, 19, 0.25) !important;
+    color: #8B4513 !important;
+}
+
+.hero-explore-button i {
+    transition: transform 0.3s ease;
+    color: #8B4513 !important;
+}
+
+.hero-explore-button:hover i {
+    transform: translateX(5px);
+}
+
+/* Placement Section Matching Theme for Houses Dashboard */
+body {
+    background: #fdfbf7 !important;
+    color: #1a0d06 !important;
+    font-family: 'Inter', 'Plus Jakarta Sans', sans-serif !important;
+}
+
+/* Stat Cards - Placement Theme Style */
+.stat-card {
+    background: #ffffff !important;
+    border: 1px solid #f3eae1 !important;
+    border-top: 4px solid #d97706 !important;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
+    border-radius: 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 20px 45px rgba(180, 83, 9, 0.16) !important;
+    border-color: rgba(217, 119, 6, 0.4) !important;
+}
+
+.stat-label {
+    color: #1a0d06 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+}
+
+.stat-value {
+    color: #d97706 !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 2.2rem !important;
+}
+
+.stat-icon-container {
+    background-color: #fdf7ee !important;
+    border: 1px solid #f5e6d3 !important;
+}
+
+.stat-icon-container i {
+    color: #d97706 !important;
+}
+
+/* Contributors & Matrix Container - Clean White Placement Style Card */
+.contributors-card {
+    background: #ffffff !important;
+    border: 1px solid #f3eae1 !important;
+    border-top: 4px solid #d97706 !important;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
+    border-radius: 20px !important;
+    color: #1a0d06 !important;
+    transition: all 0.3s ease !important;
+}
+
+.contributors-header {
+    background: linear-gradient(135deg, #fdfbf7 0%, #faf5ee 100%) !important;
+    border-bottom: 1px solid #f3eae1 !important;
+    padding: 22px 28px !important;
+}
+
+.contributors-content {
+    background: #ffffff !important;
+}
+
+.contributors-title {
+    color: #1a0d06 !important;
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 800 !important;
+}
+
+.contributors-title i, .text-primary {
+    color: #d97706 !important;
+}
+
+.text-muted {
+    color: #6f5f54 !important;
+}
+
+.form-label {
+    color: #1a0d06 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 700 !important;
+}
+
+.form-select {
+    background-color: #ffffff !important;
+    color: #1a0d06 !important;
+    border: 1px solid #f3eae1 !important;
+}
+
+.form-select option {
+    background-color: #ffffff !important;
+    color: #1a0d06 !important;
+}
+
+.form-select:focus {
+    border-color: #d97706 !important;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18) !important;
+}
+
+.table-responsive {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.table {
+    background: transparent !important;
+    color: #1a0d06 !important;
+}
+
+.table th {
+    background: #fdf7ee !important;
+    color: #b45309 !important;
+    border-bottom: 2px solid #f5e6d3 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 800 !important;
+}
+
+.table td {
+    background: transparent !important;
+    border-bottom: 1px solid #f3eae1 !important;
+    color: #1a0d06 !important;
+}
+
+.table tr {
+    background: transparent !important;
+}
+
+.table tr:hover {
+    background: #fdf7ee !important;
+}
+
+.table strong {
+    color: #1a0d06 !important;
+}
+
+.bg-light {
+    background-color: #fdf7ee !important;
+    color: #1a0d06 !important;
+    border-color: #f5e6d3 !important;
+}
+
+#compTabs {
+    background: #fdf7ee !important;
+    border: 1px solid #f5e6d3 !important;
+}
+
+#compTabs .nav-link {
+    color: #6f5f54 !important;
+}
+
+#compTabs .nav-link.active {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(180, 83, 9, 0.25) !important;
+}
+
+.btn-outline-primary {
+    background: #ffffff !important;
+    color: #b45309 !important;
+    border: 1.5px solid #f3eae1 !important;
+    box-shadow: 0 4px 15px rgba(180, 83, 9, 0.08) !important;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+    box-shadow: 0 6px 20px rgba(180, 83, 9, 0.25) !important;
+    color: #ffffff !important;
+}
+
+/* Element House Cards - Placement Section Card Theme */
+.house-card {
+    border-radius: 20px !important;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease !important;
+    position: relative;
+    overflow: hidden;
+    height: 290px !important;
+    cursor: pointer;
+}
+
+/* House Cards - Clean Placement Theme with Visible Photos */
+.house-card-Aakash {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(227, 242, 253, 0.65) 100%), url('assets/img/aakash_bg.jpg') center/cover no-repeat !important;
+    border: 1.5px solid #f3eae1 !important;
+    border-top: 4px solid #4A90E2 !important;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
+}
+
+.house-card-Aakash:hover {
+    transform: translateY(-5px) !important;
+    border-color: #357ABD !important;
+    box-shadow: 0 20px 45px rgba(74, 144, 226, 0.3) !important;
+}
+
+.house-card-Agni {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 235, 238, 0.65) 100%), url('assets/img/agni_bg.jpg') center/cover no-repeat !important;
+    border: 1.5px solid #f3eae1 !important;
+    border-top: 4px solid #F44336 !important;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
+}
+
+.house-card-Agni:hover {
+    transform: translateY(-5px) !important;
+    border-color: #D32F2F !important;
+    box-shadow: 0 20px 45px rgba(244, 67, 54, 0.3) !important;
+}
+
+.house-card-Jal {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(225, 245, 254, 0.65) 100%), url('assets/img/jal_bg.jpg') center/cover no-repeat !important;
+    border: 1.5px solid #f3eae1 !important;
+    border-top: 4px solid #2196F3 !important;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
+}
+
+.house-card-Jal:hover {
+    transform: translateY(-5px) !important;
+    border-color: #1976D2 !important;
+    box-shadow: 0 20px 45px rgba(33, 150, 243, 0.3) !important;
+}
+
+.house-card-PRUDHVI, .house-card-Pruthvi {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(239, 235, 233, 0.65) 100%), url('assets/img/prudhvi_bg.jpg') center/cover no-repeat !important;
+    border: 1.5px solid #f3eae1 !important;
+    border-top: 4px solid #8D6E63 !important;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
+}
+
+.house-card-PRUDHVI:hover, .house-card-Pruthvi:hover {
+    transform: translateY(-5px) !important;
+    border-color: #6D4C41 !important;
+    box-shadow: 0 20px 45px rgba(141, 110, 99, 0.3) !important;
+}
+
+.house-card-Vayu {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(232, 245, 233, 0.65) 100%), url('assets/img/vayu_bg.png') center bottom/cover no-repeat !important;
+    border: 1.5px solid #f3eae1 !important;
+    border-top: 4px solid #4CAF50 !important;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08) !important;
+}
+
+.house-card-Vayu:hover {
+    transform: translateY(-5px) !important;
+    border-color: #388E3C !important;
+    box-shadow: 0 20px 45px rgba(76, 175, 80, 0.3) !important;
+}
 </style>
 
-<body style="background: #f8f9fa; min-height: 100vh; font-family: 'Poppins', sans-serif; color: #333;">
+<body style="background: #fdfbf7; min-height: 100vh; font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; color: #1a0d06;">
     <!-- Main Header -->
     <?php include "nav.php"; ?>
     
@@ -447,21 +769,13 @@ foreach ($houses as $house_key => $house_info) {
                 <?php 
                 $rank_counter = 1;
                 foreach ($houses as $house_key => $house_info): 
+                    $clean_key = ($house_key === 'PRUDHVI' || $house_key === 'Pruthvi') ? 'PRUDHVI' : (($house_key === 'Jal' || $house_key === 'JAL') ? 'Jal' : (($house_key === 'Vayu' || $house_key === 'VAYU') ? 'Vayu' : $house_key));
                 ?>
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" style='width:260px'>
                         <a href="house_detail.php?house=<?php echo urlencode($house_key); ?>" 
                            class="text-decoration-none house-link">
-                            <div class="house-card" 
-                                 data-house="<?php echo $house_key; ?>"
-                                 style="background: white; 
-                                        border: 1px solid #e9ecef; 
-                                        border-radius: 16px; 
-                                        transition: all 0.3s ease;
-                                        position: relative;
-                                        overflow: hidden;
-                                        height: 280px;
-                                        cursor: pointer;
-                                        ">
+                            <div class="house-card house-card-<?php echo $clean_key; ?>" 
+                                 data-house="<?php echo $house_key; ?>">
                                 
                                 <!-- Rank Badge -->
                                 <div style="position: absolute; top: 12px; right: 12px; z-index: 3;">
@@ -480,23 +794,25 @@ foreach ($houses as $house_key => $house_info) {
                                     <!-- House Name -->
                                     <div style="margin-bottom: 8px;">
                                         <h4 style="color: <?php echo $house_info['color']; ?>; 
-                                                   font-weight: 700; 
+                                                   font-weight: 800; 
                                                    font-size: 1.5rem;
                                                    margin: 0;
-                                                   line-height: 1.2;">
+                                                   line-height: 1.2;
+                                                   text-shadow: 0 1px 2px rgba(255,255,255,0.8);">
                                             <?php echo $house_info['name']; ?>
                                         </h4>
-                                        <h6 style="color: <?php echo $house_info['color']; ?>; 
-                                                   font-weight: 500; 
-                                                   font-size: 1rem;
-                                                   margin: 0;
-                                                   opacity: 0.8;">
+                                        <h6 style="color: #1f2937; 
+                                                   font-weight: 700; 
+                                                   font-size: 0.95rem;
+                                                   margin: 2px 0 0 0;
+                                                   opacity: 1;">
                                             House
                                         </h6>
                                     </div>
                                     
                                     <!-- House Description -->
-                                    <p style="color: #6c757d; 
+                                    <p style="color: #111827; 
+                                              font-weight: 600;
                                               font-size: 0.85rem;
                                               margin: 0 0 16px 0;
                                               line-height: 1.4;">
@@ -507,8 +823,8 @@ foreach ($houses as $house_key => $house_info) {
                                 <!-- Points Section -->
                                 <div style="padding: 0 20px; margin-bottom: 16px;">
                                     <div style="display: flex; align-items: center; justify-content: space-between;">
-                                        <span style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Points</span>
-                                        <span style="color: #212529; font-size: 1.25rem; font-weight: 700;">
+                                        <span style="color: #1f2937; font-size: 0.85rem; font-weight: 700;">Points</span>
+                                        <span style="color: #111827; font-size: 1.25rem; font-weight: 800;">
                                             <?php echo number_format($house_stats[$house_key]['total_points']); ?>
                                         </span>
                                     </div>
@@ -543,7 +859,7 @@ foreach ($houses as $house_key => $house_info) {
                                     <div style="display: flex; align-items: center; justify-content: space-between;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
                                             <i class="fas fa-users" style="color: <?php echo $house_info['color']; ?>; font-size: 0.9rem;"></i>
-                                            <span style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">
+                                            <span style="color: #1f2937; font-size: 0.85rem; font-weight: 700;">
                                                 <?php echo $house_stats[$house_key]['student_count']; ?> students
                                             </span>
                                         </div>
@@ -558,7 +874,21 @@ foreach ($houses as $house_key => $house_info) {
                                     left: 0;
                                     right: 0;
                                     bottom: 0;
-                                    background: <?php echo $house_info['gradient']; ?>;
+                                    background: <?php 
+                                        if ($house_key === 'Aakash') {
+                                            echo 'linear-gradient(135deg, rgba(30, 136, 229, 0.70) 0%, rgba(79, 195, 247, 0.70) 100%), url(\'assets/img/aakash_bg.jpg\') center/cover no-repeat';
+                                        } elseif ($house_key === 'Agni') {
+                                            echo 'linear-gradient(135deg, rgba(244, 67, 54, 0.75) 0%, rgba(211, 47, 47, 0.75) 100%), url(\'assets/img/agni_bg.jpg\') center/cover no-repeat';
+                                        } elseif (strtoupper($house_key) === 'PRUDHVI' || $house_key === 'Pruthvi') {
+                                            echo 'linear-gradient(135deg, rgba(141, 110, 99, 0.75) 0%, rgba(109, 76, 65, 0.75) 100%), url(\'assets/img/prudhvi_bg.jpg\') center/cover no-repeat';
+                                        } elseif (strtoupper($house_key) === 'JAL' || $house_key === 'Jal') {
+                                            echo 'linear-gradient(135deg, rgba(33, 150, 243, 0.75) 0%, rgba(25, 118, 210, 0.75) 100%), url(\'assets/img/jal_bg.jpg\') center/cover no-repeat';
+                                        } elseif (strtoupper($house_key) === 'VAYU' || $house_key === 'Vayu') {
+                                            echo 'linear-gradient(135deg, rgba(76, 175, 80, 0.75) 0%, rgba(56, 142, 60, 0.75) 100%), url(\'assets/img/vayu_bg.png\') center bottom/cover no-repeat';
+                                        } else {
+                                            echo $house_info['gradient'];
+                                        }
+                                    ?>;
                                     opacity: 0;
                                     transition: all 0.3s ease;
                                     border-radius: 15px;
@@ -579,10 +909,10 @@ foreach ($houses as $house_key => $house_info) {
                 endforeach; 
                 ?>
             </div>
-<div class="text-center mb-5">
-                <a href='events_overview.php' class="btn btn-outline-primary">
-                    <i class="fas fa-calendar-alt me-2"></i>
+            <div class="text-center my-5">
+                <a href="events_overview.php" class="hero-explore-button">
                     Explore Events
+                    <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
             <!-- Key Statistics Section -->
@@ -626,35 +956,35 @@ foreach ($houses as $house_key => $house_info) {
                     $active_students = $students_data['total'];
                 }
                 
-                // Define stats with clean design
+                // Define stats with clean transparent glass design
                 $stats = [
                     [
                         'title' => 'Total Houses',
                         'value' => $total_houses,
                         'icon' => 'fas fa-home',
-                        'icon_bg' => '#e3f2fd',
-                        'icon_color' => '#1976d2'
+                        'icon_bg' => 'rgba(255, 255, 255, 0.45)',
+                        'icon_color' => '#8B4513'
                     ],
                     [
                         'title' => 'Total Events', 
                         'value' => $total_events,
                         'icon' => 'fas fa-calendar-alt',
-                        'icon_bg' => '#e8f5e9',
-                        'icon_color' => '#388e3c'
+                        'icon_bg' => 'rgba(255, 255, 255, 0.45)',
+                        'icon_color' => '#8B4513'
                     ],
                     [
                         'title' => 'Total Points',
                         'value' => number_format($total_points),
                         'icon' => 'fas fa-star',
-                        'icon_bg' => '#fff3e0',
-                        'icon_color' => '#f57c00'
+                        'icon_bg' => 'rgba(255, 255, 255, 0.45)',
+                        'icon_color' => '#8B4513'
                     ],
                     [
                         'title' => 'Active Students',
                         'value' => number_format($active_students),
                         'icon' => 'fas fa-users',
-                        'icon_bg' => '#fce4ec',
-                        'icon_color' => '#c2185b'
+                        'icon_bg' => 'rgba(255, 255, 255, 0.45)',
+                        'icon_color' => '#8B4513'
                     ]
                 ];
                 ?>
@@ -662,8 +992,8 @@ foreach ($houses as $house_key => $house_info) {
                 <div class="stats-grid">
                     <?php foreach ($stats as $stat): ?>
                         <div class="stat-card">
-                            <div class="stat-icon-container" style="background-color: <?php echo $stat['icon_bg']; ?>;">
-                                <i class="<?php echo $stat['icon']; ?>" style="color: <?php echo $stat['icon_color']; ?>;"></i>
+                            <div class="stat-icon-container">
+                                <i class="<?php echo $stat['icon']; ?>"></i>
                             </div>
                             <div class="stat-content">
                                 <div class="stat-label"><?php echo $stat['title']; ?></div>
@@ -671,6 +1001,173 @@ foreach ($houses as $house_key => $house_info) {
                             </div>
                         </div>
                     <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Interactive House Comparison Module -->
+            <div class="contributors-container mb-5">
+                <div class="contributors-card">
+                    <div class="contributors-header d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <h4 class="contributors-title" style="color: #1a253c; font-size: 1.25rem;">
+                                <i class="fas fa-balance-scale text-primary"></i>
+                                House Performance Comparison Matrix
+                            </h4>
+                            <p class="text-muted mb-0" style="font-size: 0.85rem; margin-top: 4px;">
+                                Comprehensive side-by-side analysis of House points, events, and student performance
+                            </p>
+                        </div>
+                        <ul class="nav nav-pills" id="compTabs" role="tablist" style="background: rgba(255,255,255,0.25); padding: 4px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.5); backdrop-filter: blur(8px);">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active rounded-3 font-semibold py-2 px-3" id="matrix-tab" data-bs-toggle="pill" data-bs-target="#matrix-view" type="button" role="tab" style="font-size: 0.85rem;">
+                                    <i class="fas fa-table me-1"></i> Full Matrix Table
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-3 font-semibold py-2 px-3" id="h2h-tab" data-bs-toggle="pill" data-bs-target="#h2h-view" type="button" role="tab" style="font-size: 0.85rem;">
+                                    <i class="fas fa-bolt me-1"></i> Head-to-Head Compare
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="contributors-content tab-content p-4" id="compTabContent">
+                        
+                        <!-- TAB 1: Full Matrix Table -->
+                        <div class="tab-pane fade show active" id="matrix-view" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0" style="font-size: 0.9rem;">
+                                    <thead style="background: rgba(255,255,255,0.22); border-bottom: 2px solid rgba(139, 69, 19, 0.2);">
+                                        <tr>
+                                            <th class="py-3 px-3">Rank</th>
+                                            <th class="py-3 px-3">House</th>
+                                            <th class="py-3 px-3" style="min-width: 180px;">Total Points</th>
+                                            <th class="py-3 px-3 text-center">Members</th>
+                                            <th class="py-3 px-3 text-center">Avg / Student</th>
+                                            <th class="py-3 px-3 text-center">Wins Points</th>
+                                            <th class="py-3 px-3 text-center">Participation</th>
+                                            <th class="py-3 px-3 text-center">Appreciations</th>
+                                            <th class="py-3 px-3 text-center">Penalties</th>
+                                            <th class="py-3 px-3 text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        $matrix_rank = 1;
+                                        $max_matrix_points = max(array_column($house_stats, 'total_points'));
+                                        if ($max_matrix_points <= 0) $max_matrix_points = 1;
+
+                                        foreach ($houses as $h_key => $h_data):
+                                            $st = $house_stats[$h_key];
+                                            $pct = round(($st['total_points'] / $max_matrix_points) * 100);
+                                            $badge_icon = '';
+                                            if ($matrix_rank == 1) $badge_icon = '🏆 Gold';
+                                            elseif ($matrix_rank == 2) $badge_icon = '🥈 Silver';
+                                            elseif ($matrix_rank == 3) $badge_icon = '🥉 Bronze';
+                                            else $badge_icon = '#' . $matrix_rank;
+                                        ?>
+                                            <tr style="border-bottom: 1px solid #f1f5f9;">
+                                                <td class="px-3">
+                                                    <span class="badge" style="background: <?php echo $h_data['light_color']; ?>; color: <?php echo $h_data['color']; ?>; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 8px;">
+                                                        <?php echo $badge_icon; ?>
+                                                    </span>
+                                                </td>
+                                                <td class="px-3">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <div class="position-relative" style="width: 46px; height: 46px; flex-shrink: 0;">
+                                                            <img src="<?php echo $h_data['img']; ?>" alt="<?php echo $h_data['name']; ?>" style="width: 46px; height: 46px; border-radius: 12px; object-fit: cover; border: 2.5px solid <?php echo $h_data['color']; ?>; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
+                                                        </div>
+                                                        <div>
+                                                            <strong style="color: #1a0d06; font-size: 1.05rem; font-weight: 800; font-family: 'Outfit', sans-serif;"><?php echo $h_data['name']; ?></strong>
+                                                            <div style="font-size: 0.8rem; color: #6f5f54; font-weight: 500;"><?php echo $h_data['description']; ?></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-3">
+                                                    <div class="d-flex align-items-center justify-content-between mb-1">
+                                                        <strong style="color: <?php echo $h_data['color']; ?>; font-size: 1rem;"><?php echo number_format($st['total_points']); ?> pts</strong>
+                                                        <span class="text-muted" style="font-size: 0.75rem;"><?php echo $pct; ?>% of lead</span>
+                                                    </div>
+                                                    <div class="progress" style="height: 6px; border-radius: 3px; background: #e2e8f0;">
+                                                        <div class="progress-bar" role="progressbar" style="width: <?php echo $pct; ?>%; background: <?php echo $h_data['gradient']; ?>; border-radius: 3px;" aria-valuenow="<?php echo $pct; ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-3 text-center font-semibold" style="color: #334155;">
+                                                    <i class="fas fa-user-friends me-1 text-muted"></i><?php echo $st['student_count']; ?>
+                                                </td>
+                                                <td class="px-3 text-center">
+                                                    <span class="badge bg-light text-dark border" style="font-weight: 600;">
+                                                        <?php echo $st['avg_points']; ?>
+                                                    </span>
+                                                </td>
+                                                <td class="px-3 text-center text-success font-semibold">
+                                                    +<?php echo number_format($st['winners_points']); ?>
+                                                </td>
+                                                <td class="px-3 text-center text-info font-semibold">
+                                                    +<?php echo number_format($st['participants_points']); ?>
+                                                </td>
+                                                <td class="px-3 text-center text-warning font-semibold">
+                                                    +<?php echo number_format($st['appreciations_points']); ?>
+                                                </td>
+                                                <td class="px-3 text-center text-danger font-semibold">
+                                                    -<?php echo number_format($st['penalties_points']); ?>
+                                                </td>
+                                                <td class="px-3 text-end">
+                                                    <a href="house_detail.php?house=<?php echo urlencode($h_key); ?>" class="btn btn-sm btn-outline-primary rounded-pill px-3" style="font-size: 0.8rem;">
+                                                        Details <i class="fas fa-chevron-right ms-1"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php 
+                                            $matrix_rank++;
+                                        endforeach; 
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: Head-to-Head Compare Tool -->
+                        <div class="tab-pane fade" id="h2h-view" role="tabpanel">
+                            <div class="row g-4 align-items-center mb-4">
+                                <div class="col-md-5">
+                                    <div class="p-3 rounded-3 border bg-light">
+                                        <label class="form-label font-semibold text-muted mb-2"><i class="fas fa-shield-alt text-primary me-1"></i> Select House A</label>
+                                        <select class="form-select border-0 shadow-sm font-semibold" id="h2hHouseA" onchange="runHeadToHeadCompare()">
+                                            <?php 
+                                            $keys = array_keys($houses);
+                                            foreach ($houses as $hk => $hd):
+                                            ?>
+                                                <option value="<?php echo $hk; ?>"><?php echo $hd['name']; ?> House</option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <div class="mx-auto rounded-circle bg-primary text-white d-flex align-items-center justify-content-center shadow" style="width: 48px; height: 48px; font-weight: 800; font-size: 1.1rem;">
+                                        VS
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="p-3 rounded-3 border bg-light">
+                                        <label class="form-label font-semibold text-muted mb-2"><i class="fas fa-shield-alt text-info me-1"></i> Select House B</label>
+                                        <select class="form-select border-0 shadow-sm font-semibold" id="h2hHouseB" onchange="runHeadToHeadCompare()">
+                                            <?php 
+                                            $reversed = array_reverse($houses, true);
+                                            foreach ($reversed as $hk => $hd):
+                                            ?>
+                                                <option value="<?php echo $hk; ?>"><?php echo $hd['name']; ?> House</option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Head to Head Output Container -->
+                            <div id="h2hOutput"></div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
@@ -1081,6 +1578,133 @@ foreach ($houses as $house_key => $house_info) {
             `;
 
             return content;
+        }
+
+        // Head to Head Comparison Script
+        const houseStatsMap = <?php echo json_encode($house_stats); ?>;
+        const housesMetaMap = <?php echo json_encode($houses); ?>;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            runHeadToHeadCompare();
+        });
+
+        function runHeadToHeadCompare() {
+            const keyA = document.getElementById('h2hHouseA').value;
+            const keyB = document.getElementById('h2hHouseB').value;
+            const out = document.getElementById('h2hOutput');
+            if (!out) return;
+
+            if (keyA === keyB) {
+                out.innerHTML = `
+                    <div class="alert alert-warning text-center rounded-3 p-4">
+                        <i class="fas fa-exclamation-circle fa-2x mb-2 text-warning"></i>
+                        <div class="font-semibold" style="font-size: 1.05rem;">Please select two different houses to compare head-to-head.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const infoA = housesMetaMap[keyA];
+            const infoB = housesMetaMap[keyB];
+            const statA = houseStatsMap[keyA] || {};
+            const statB = houseStatsMap[keyB] || {};
+
+            const diff = (statA.total_points || 0) - (statB.total_points || 0);
+            let leaderText = '';
+            if (diff > 0) {
+                leaderText = `<span style="color: ${infoA.color}; font-weight: 700;">🏆 ${infoA.name} House</span> is leading by <strong>${Math.abs(diff).toLocaleString()} points</strong>!`;
+            } else if (diff < 0) {
+                leaderText = `<span style="color: ${infoB.color}; font-weight: 700;">🏆 ${infoB.name} House</span> is leading by <strong>${Math.abs(diff).toLocaleString()} points</strong>!`;
+            } else {
+                leaderText = `🤝 Both <strong>${infoA.name}</strong> and <strong>${infoB.name}</strong> are currently tied!`;
+            }
+
+            const maxPts = Math.max(statA.total_points || 1, statB.total_points || 1, 1);
+            const pctA = Math.round(((statA.total_points || 0) / maxPts) * 100);
+            const pctB = Math.round(((statB.total_points || 0) / maxPts) * 100);
+
+            out.innerHTML = `
+                <div class="alert text-center p-3 mb-4 rounded-3 shadow-sm" style="background: #f8fafc; border: 1px solid #e2e8f0; font-size: 1rem;">
+                    ${leaderText}
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <!-- House A Card -->
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden" style="border-top: 5px solid ${infoA.color} !important;">
+                            <div class="card-body p-4 text-center">
+                                <div class="mx-auto mb-3 position-relative d-inline-block" style="width: 76px; height: 76px;">
+                                    <img src="${infoA.img}" alt="${infoA.name}" class="rounded-circle shadow-sm" style="width: 76px; height: 76px; object-fit: cover; border: 3.5px solid ${infoA.color};">
+                                    <span class="position-absolute bottom-0 end-0 rounded-circle text-white d-flex align-items-center justify-content-center shadow-sm" style="width: 26px; height: 26px; background: ${infoA.color}; font-size: 0.75rem; transform: translate(3px, 3px);">
+                                        <i class="${infoA.icon}"></i>
+                                    </span>
+                                </div>
+                                <h3 class="font-bold mb-1" style="color: ${infoA.color}; font-weight: 800;">${infoA.name}</h3>
+                                <p class="text-muted small mb-3">${infoA.description}</p>
+                                <div class="p-3 rounded-3 mb-3" style="background: ${infoA.light_color};">
+                                    <div class="text-muted small uppercase font-semibold">Total Points</div>
+                                    <div class="display-6 font-bold" style="color: ${infoA.color}; font-weight: 800;">${(statA.total_points || 0).toLocaleString()}</div>
+                                </div>
+                                <div class="row g-2 text-start">
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Members</small><strong>${statA.student_count || 0}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Avg / Student</small><strong>${statA.avg_points || 0}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Wins Points</small><strong class="text-success">+${(statA.winners_points || 0).toLocaleString()}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Participation</small><strong class="text-info">+${(statA.participants_points || 0).toLocaleString()}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Appreciations</small><strong class="text-warning">+${(statA.appreciations_points || 0).toLocaleString()}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Penalties</small><strong class="text-danger">-${(statA.penalties_points || 0).toLocaleString()}</strong></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- House B Card -->
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden" style="border-top: 5px solid ${infoB.color} !important;">
+                            <div class="card-body p-4 text-center">
+                                <div class="mx-auto mb-3 position-relative d-inline-block" style="width: 76px; height: 76px;">
+                                    <img src="${infoB.img}" alt="${infoB.name}" class="rounded-circle shadow-sm" style="width: 76px; height: 76px; object-fit: cover; border: 3.5px solid ${infoB.color};">
+                                    <span class="position-absolute bottom-0 end-0 rounded-circle text-white d-flex align-items-center justify-content-center shadow-sm" style="width: 26px; height: 26px; background: ${infoB.color}; font-size: 0.75rem; transform: translate(3px, 3px);">
+                                        <i class="${infoB.icon}"></i>
+                                    </span>
+                                </div>
+                                <h3 class="font-bold mb-1" style="color: ${infoB.color}; font-weight: 800;">${infoB.name}</h3>
+                                <p class="text-muted small mb-3">${infoB.description}</p>
+                                <div class="p-3 rounded-3 mb-3" style="background: ${infoB.light_color};">
+                                    <div class="text-muted small uppercase font-semibold">Total Points</div>
+                                    <div class="display-6 font-bold" style="color: ${infoB.color}; font-weight: 800;">${(statB.total_points || 0).toLocaleString()}</div>
+                                </div>
+                                <div class="row g-2 text-start">
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Members</small><strong>${statB.student_count || 0}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Avg / Student</small><strong>${statB.avg_points || 0}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Wins Points</small><strong class="text-success">+${(statB.winners_points || 0).toLocaleString()}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Participation</small><strong class="text-info">+${(statB.participants_points || 0).toLocaleString()}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Appreciations</small><strong class="text-warning">+${(statB.appreciations_points || 0).toLocaleString()}</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Penalties</small><strong class="text-danger">-${(statB.penalties_points || 0).toLocaleString()}</strong></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Bar Comparison -->
+                <div class="card border-0 shadow-sm p-4 rounded-4 bg-white">
+                    <h6 class="font-bold mb-3 text-muted"><i class="fas fa-chart-bar me-2"></i>Visual Points Dominance Bar</h6>
+                    <div class="d-flex align-items-center mb-2 justify-content-between font-semibold" style="font-size: 0.9rem;">
+                        <span style="color: ${infoA.color}; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                            <img src="${infoA.img}" alt="${infoA.name}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1.5px solid ${infoA.color};">
+                            ${infoA.name}: ${(statA.total_points || 0).toLocaleString()}
+                        </span>
+                        <span style="color: ${infoB.color}; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                            ${infoB.name}: ${(statB.total_points || 0).toLocaleString()}
+                            <img src="${infoB.img}" alt="${infoB.name}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; border: 1.5px solid ${infoB.color};">
+                        </span>
+                    </div>
+                    <div class="progress" style="height: 18px; border-radius: 9px; background: #e2e8f0; overflow: hidden;">
+                        <div class="progress-bar" role="progressbar" style="width: ${pctA}%; background: ${infoA.gradient}; font-weight: 700; font-size: 0.75rem;" aria-valuenow="${pctA}" aria-valuemin="0" aria-valuemax="100">${pctA}%</div>
+                        <div class="progress-bar" role="progressbar" style="width: ${pctB}%; background: ${infoB.gradient}; font-weight: 700; font-size: 0.75rem;" aria-valuenow="${pctB}" aria-valuemin="0" aria-valuemax="100">${pctB}%</div>
+                    </div>
+                </div>
+            `;
         }
     </script>
 
