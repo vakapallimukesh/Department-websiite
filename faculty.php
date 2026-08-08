@@ -646,7 +646,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-microchip"></i> AI, ML & Cloud</span>
                                 <a href="mailto:suresh.mudunuri@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> suresh.mudunuri@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('suresh_mudunuri')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('suresh_mudunuri', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -673,7 +673,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-cloud"></i> Cloud Computing</span>
                                 <a href="mailto:aapriyanka@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> aapriyanka@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('aswini_priyanka')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('aswini_priyanka', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -700,7 +700,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-brain"></i> AI & ML</span>
                                 <a href="mailto:mohanakrishna.seerla@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> mohanakrishna.seerla@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('mohan_krishna')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('mohan_krishna', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -727,7 +727,8 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-network-wired"></i> IoT</span>
                                 <a href="mailto:psvsuryakumar@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> psvsuryakumar@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('surya_kumar')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('surya_kumar', this)"><i class="fas fa-file-alt"></i> More Details</button>
+
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -754,7 +755,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-robot"></i> Artificial Intelligence</span>
                                 <a href="mailto:asatyam@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> asatyam@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('angara_satyam')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('angara_satyam', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -781,7 +782,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-graduation-cap"></i> Computer Networks</span>
                                 <a href="mailto:ksrinivasarao@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> ksrinivasarao@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('srinivasa_rao')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('srinivasa_rao', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -808,7 +809,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-cloud"></i> Cloud Computing</span>
                                 <a href="mailto:kbrnaidu@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> kbrnaidu@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('bhanu_rajesh_naidu')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('bhanu_rajesh_naidu', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -835,7 +836,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-cogs"></i> Machine Learning</span>
                                 <a href="mailto:aneela@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> aneela@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('aneela')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('aneela', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -862,7 +863,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-laptop"></i> Machine Learning</span>
                                 <a href="mailto:madhuryamudundi@gmail.com" class="email-btn"><i class="fas fa-envelope"></i> madhuryamudundi@gmail.com</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('sai_madhuri')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('sai_madhuri', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -905,7 +906,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-server"></i> Information Technology</span>
                                 <a href="mailto:gopinukala@gmail.com" class="email-btn"><i class="fas fa-envelope"></i> gopinukala@gmail.com</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('gopala_krishna_murthy')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('gopala_krishna_murthy', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -932,7 +933,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-brain"></i> Machine Learning</span>
                                 <a href="mailto:navyanallaparaju@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> navyanallaparaju@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('navya')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('navya', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -959,7 +960,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-robot"></i> Machine Learning</span>
                                 <a href="mailto:npraveen@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> npraveen@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('neti_praveen')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('neti_praveen', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -986,7 +987,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-cogs"></i> Machine Learning</span>
                                 <a href="mailto:kvsunilvarma@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> kvsunilvarma@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('sunil_varma')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('sunil_varma', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -1013,7 +1014,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-brain"></i> Machine Learning</span>
                                 <a href="mailto:mouna.p@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> mouna.p@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('p_mouna')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('p_mouna', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -1040,7 +1041,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-terminal"></i> Prompt Engineering</span>
                                 <a href="mailto:manoj.p@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> manoj.p@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('p_manoj')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('p_manoj', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -1067,7 +1068,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-microchip"></i> Machine Learning</span>
                                 <a href="mailto:akveni@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> akveni@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('krishna_veni')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('krishna_veni', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -1094,7 +1095,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-shield-alt"></i> Cyber Security & Python</span>
                                 <a href="mailto:kvvstnaidu@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> kvvstnaidu@srkrec.ac.in</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('satya_trinadh_naidu')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('satya_trinadh_naidu', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -1121,7 +1122,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-brain"></i> Machine Learning</span>
                                 <a href="mailto:parvathiram21@gmail.com" class="email-btn"><i class="fas fa-envelope"></i> parvathiram21@gmail.com</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('d_parvathi')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('d_parvathi', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -1148,7 +1149,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-laptop"></i> Machine Learning</span>
                                 <a href="mailto:vignyak@gmail.com" class="email-btn"><i class="fas fa-envelope"></i> vignyak@gmail.com</a>
-                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('sri_vigyna')"><i class="fas fa-file-alt"></i> More Details</button>
+                                <button type="button" class="cv-details-btn" onclick="openFacultyCv('sri_vigyna', this)"><i class="fas fa-file-alt"></i> More Details</button>
                             </div>
                         </div>
                         <div class="faculty-photo-right-container">
@@ -1304,7 +1305,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 title: "Assistant Professor - Computer Science & Design (CSD)",
                 dept: "CSD",
                 badge: "ASSISTANT PROFESSOR",
-                photo: "assets/faculty_official/csd_1471.jpeg",
+                photo: "assets/faculty_official/csd_1339.jpg",
                 email: "aswini.areti@gmail.com",
                 linkedin: "https://www.linkedin.com/in/areti-aswani-priyanka",
                 phone: "+91 8985352449",
@@ -1333,7 +1334,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 title: "Assistant Professor - Computer Science & Design (CSD)",
                 dept: "CSD",
                 badge: "ASSISTANT PROFESSOR",
-                photo: "assets/faculty_official/csd_1473.jpg",
+                photo: "assets/faculty_official/csd_1376.jpeg",
                 email: "mohankrishna.seerla@gmail.com",
                 linkedin: "https://www.linkedin.com/in/seerala-mohan-krishna",
                 phone: "+91 7013487352",
@@ -1360,7 +1361,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 title: "Assistant Professor - Computer Science & Design (CSD)",
                 dept: "CSD",
                 badge: "ASSISTANT PROFESSOR",
-                photo: "assets/faculty_official/csd_1476.jpg",
+                photo: "assets/faculty_official/csd_1382.jpg",
                 email: "suryakumar.poduru@srkrec.edu.in",
                 linkedin: "https://www.linkedin.com/in/surya-kumar-poduru",
                 phone: "+91 9553524976",
@@ -1803,15 +1804,15 @@ if (session_status() === PHP_SESSION_NONE) session_start();
             }
         };
 
-        function openFacultyCv(facultyKey) {
+        function openFacultyCv(facultyKey, btnEl) {
             const data = facultyCvData[facultyKey];
             
-            // Try auto-detecting clicked card element and image
+            // Auto-detect clicked card element and photo
             let cardPhoto = '';
             let cardName = '';
             let cardDesig = '';
-            const btnEl = event && event.currentTarget ? event.currentTarget : null;
-            const cardEl = btnEl ? btnEl.closest('.faculty-line-card') : null;
+            const targetBtn = btnEl || (window.event ? (window.event.currentTarget || window.event.target) : null);
+            const cardEl = targetBtn ? targetBtn.closest('.faculty-line-card') : null;
             if (cardEl) {
                 const imgEl = cardEl.querySelector('.faculty-photo-right img');
                 if (imgEl) cardPhoto = imgEl.getAttribute('src');
@@ -1834,8 +1835,17 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 skills: ["Teaching & Pedagogy", "Academic Research", "Computer Science", "Student Mentorship"]
             };
 
-            // Always display exact photo matching faculty card
-            document.getElementById('cvPhoto').src = cv.photo || cardPhoto || 'assets/faculty_official/csd_780.jpeg';
+            const cvImg = document.getElementById('cvPhoto');
+            const targetPhotoSrc = cv.photo || cardPhoto || 'assets/faculty_official/csd_780.jpeg';
+            cvImg.src = targetPhotoSrc;
+            cvImg.onerror = function() {
+                if (cardPhoto && this.src !== cardPhoto) {
+                    this.src = cardPhoto;
+                } else {
+                    this.src = 'assets/faculty_official/csd_780.jpeg';
+                }
+            };
+
             document.getElementById('cvName').textContent = cv.name;
             document.getElementById('cvDesignation').textContent = cv.title;
             document.getElementById('cvBadge').textContent = cv.badge || 'FACULTY PROFILE';
@@ -1918,7 +1928,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
                         ${cv.publications && cv.publications.length ? `
                         <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius: 18px; background: #ffffff;">
-                            <h5 class="fw-bold text-dark mb-3" style="font-family: 'Outfit', sans-serif;"><i class="fas fa-book-open text-warning me-2"></i> Research Publications</h5>
+                            <h5 class="fw-bold text-dark mb-3" style="font-family: 'Outfit', sans-serif;"><i class="fas fa-book-open text-warning me-2"></i> Reputed SCI Journal Publications</h5>
                             <ol class="ps-3 mb-0 small text-secondary">
                                 ${cv.publications.map(p => `
                                     <li class="mb-2 pb-2 border-bottom border-light">${p}</li>
@@ -1929,7 +1939,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
                         ${cv.software && cv.software.length ? `
                         <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius: 18px; background: #ffffff;">
-                            <h5 class="fw-bold text-dark mb-3" style="font-family: 'Outfit', sans-serif;"><i class="fas fa-code text-warning me-2"></i> Software Products & Systems</h5>
+                            <h5 class="fw-bold text-dark mb-3" style="font-family: 'Outfit', sans-serif;"><i class="fas fa-code text-warning me-2"></i> Software Products & Web Systems</h5>
                             <ul class="ps-3 mb-0 small text-secondary">
                                 ${cv.software.map(s => `
                                     <li class="mb-1">${s}</li>
@@ -1939,7 +1949,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                         ` : ''}
 
                         <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius: 18px; background: #ffffff;">
-                            <h5 class="fw-bold text-dark mb-3" style="font-family: 'Outfit', sans-serif;"><i class="fas fa-cogs text-warning me-2"></i> Technical Skills & Core Subjects</h5>
+                            <h5 class="fw-bold text-dark mb-3" style="font-family: 'Outfit', sans-serif;"><i class="fas fa-cogs text-warning me-2"></i> Technical Skills & Certifications</h5>
                             <div class="small text-secondary">
                                 ${Array.isArray(cv.skills) ? cv.skills.map(sk => `<div class="mb-2"><i class="fas fa-check-circle text-success me-1"></i> ${sk}</div>`).join('') : cv.skills}
                             </div>
