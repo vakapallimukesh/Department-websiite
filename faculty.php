@@ -1074,6 +1074,8 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
     </main>
 
+    <?php include "footer.php"; ?>
+
     <!-- Client-side Search & Filter JavaScript -->
     <script>
         function filterDepartment(filter) {
