@@ -22,17 +22,17 @@ if ($action === 'get_contributor_details') {
 // Get parameters
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 7;
-$branch_filter = isset($_GET['branch']) ? mysqli_real_escape_string($conn, $_GET['branch']) : '';
-$year_filter = isset($_GET['year']) ? mysqli_real_escape_string($conn, $_GET['year']) : '';
-$house_filter = isset($_GET['house']) ? mysqli_real_escape_string($conn, $_GET['house']) : '';
+$branch_filter = (isset($_GET['branch']) && $_GET['branch'] !== 'all') ? mysqli_real_escape_string($conn, $_GET['branch']) : '';
+$year_filter = (isset($_GET['year']) && $_GET['year'] !== 'all') ? mysqli_real_escape_string($conn, $_GET['year']) : '';
+$house_filter = (isset($_GET['house']) && $_GET['house'] !== 'all') ? mysqli_real_escape_string($conn, $_GET['house']) : '';
 
 // House mapping for database lookup
 $house_mapping = [
-    'Aakash' => ['Alpha House', 'Aakash House', 'Sky House', 'Aakash'],
-    'Jal' => ['Beta House', 'Jal House', 'Water House', 'Jal'],
-    'Vayu' => ['Gamma House', 'Vayu House', 'Wind House', 'Vayu'],
-    'Pruthvi' => ['Delta House', 'Pruthvi House', 'Earth House', 'Pruthvi'],
-    'Agni' => ['Epsilon House', 'Agni House', 'Fire House', 'Agni']
+    'Aakash' => ['Alpha House', 'Aakash House', 'Sky House', 'Aakash', 'AAKASH'],
+    'Jal' => ['Beta House', 'Jal House', 'Water House', 'Jal', 'JAL'],
+    'Vayu' => ['Gamma House', 'Vayu House', 'Wind House', 'Vayu', 'VAYU'],
+    'PRUDHVI' => ['Delta House', 'Pruthvi House', 'Earth House', 'Pruthvi', 'PRUDHVI', 'Pruthvi House'],
+    'Agni' => ['Epsilon House', 'Agni House', 'Fire House', 'Agni', 'AGNI']
 ];
 
 try {
@@ -83,6 +83,8 @@ try {
                 return "'" . mysqli_real_escape_string($conn, $name) . "'";
             }, $house_mapping[$house_filter]);
             $where_conditions[] = "h.name IN (" . implode(',', $house_names) . ")";
+        } else {
+            $where_conditions[] = "h.name = '$house_filter'";
         }
     }
     
@@ -90,8 +92,8 @@ try {
         $base_query .= " AND " . implode(' AND ', $where_conditions);
     }
     
-    // Add having clause to only show contributors with points > 0
-    $base_query .= " HAVING total_points > 0";
+    // Add having clause to show house group students with points >= 0
+    $base_query .= " HAVING total_points >= 0";
     
     // Get total count
     $count_query = "SELECT COUNT(*) as total FROM ($base_query) as contributors";
@@ -112,11 +114,15 @@ try {
     if ($result) {
         while ($row = mysqli_fetch_assoc($result)) {
             // Map database house names to display names
-            $display_house_name = $row['house_name'];
-            foreach ($house_mapping as $display_name => $db_names) {
-                if (in_array($row['house_name'], $db_names)) {
-                    $display_house_name = $display_name;
-                    break;
+            $display_house_name = $row['house_name'] ?: 'Unassigned';
+            if ($row['house_name']) {
+                $db_house_lower = strtolower(trim($row['house_name']));
+                foreach ($house_mapping as $display_name => $db_names) {
+                    $lower_db_names = array_map('strtolower', $db_names);
+                    if (in_array($db_house_lower, $lower_db_names)) {
+                        $display_house_name = $display_name;
+                        break;
+                    }
                 }
             }
             

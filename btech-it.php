@@ -4,18 +4,30 @@ include "./head.php";
 ?>
 
 <style>
+:root {
+    --primary: #d97706;
+    --primary-light: #f59e0b;
+    --amber-gold: #d97706;
+    --bright-yellow: #f59e0b;
+    --golden-champagne: #e6c280;
+    --amber-badge: #b45309;
+    --rich-espresso: #1a0d06;
+    --cream-white: #fdfbf7;
+    --text-primary: #1a0d06;
+    --text-secondary: #6f5f54;
+    --border-light: #f3eae1;
+}
+
 body {
-    font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
-    background: #f8fafc;
-    color: #334155;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    background: #fdfbf7;
+    color: #1a0d06;
     overflow-x: hidden;
 }
 
-/* Animated Hero Section */
+/* Placement Theme Hero Section */
 .hero-section {
-    background: linear-gradient(-45deg, #0f172a, #047857, #065f46, #0f172a);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
+    background: linear-gradient(135deg, #1a0d06 0%, #2a150a 50%, #3d1e0e 100%);
     color: white;
     padding: 85px 0;
     position: relative;
@@ -26,15 +38,10 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
-    background-size: 28px 28px;
-    opacity: 0.7;
-}
-
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    background-image: radial-gradient(rgba(230, 194, 128, 0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 @keyframes floatLaptop {
@@ -51,7 +58,7 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(230, 194, 128, 0.3);
     animation: floatLaptop 6s ease-in-out infinite;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
@@ -60,38 +67,40 @@ body {
     background: white;
     border-radius: 28px;
     padding: 35px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.06);
     margin-bottom: 25px;
     transition: all 0.35s ease;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #f3eae1;
 }
 
 .it-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 18px 40px rgba(16, 185, 129, 0.15);
-    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 18px 40px rgba(217, 119, 6, 0.15);
+    border-color: rgba(217, 119, 6, 0.3);
 }
 
 .semester-tab {
     background: #ffffff;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #f3eae1;
     border-radius: 16px;
     padding: 20px;
     margin-bottom: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
+    color: #1a0d06;
 }
 
 .semester-tab:hover {
-    background: #f1f5f9;
+    background: #fdfbf7;
+    border-color: #d97706;
     transform: translateX(5px);
 }
 
 .semester-tab.active {
-    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
     color: white;
-    border-color: #10b981;
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+    border-color: #b45309;
+    box-shadow: 0 8px 20px rgba(180, 83, 9, 0.25);
 }
 
 .subject-list {
@@ -100,8 +109,8 @@ body {
     border-radius: 20px;
     padding: 25px;
     margin-top: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.06);
+    border: 1px solid #f3eae1;
 }
 
 .subject-list.active {
@@ -117,15 +126,15 @@ body {
         <div class="container position-relative" style="z-index: 2;">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <span style="color: #34d399; background: rgba(52, 211, 153, 0.15); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.82rem; display: inline-block; padding: 6px 16px; border-radius: 99px; margin-bottom: 16px; border: 1px solid rgba(52, 211, 153, 0.3);">
+                    <span style="color: #fbbf24; background: rgba(251, 191, 36, 0.15); font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.82rem; display: inline-block; padding: 6px 16px; border-radius: 99px; margin-bottom: 16px; border: 1px solid rgba(251, 191, 36, 0.3);">
                         <i class="fas fa-laptop-code" style="margin-right: 6px;"></i>Undergraduate Degree Program
                     </span>
                     <h1 style="font-family: 'Outfit', sans-serif; font-size: 3.4rem; font-weight: 900; margin-bottom: 15px; color: #ffffff; line-height: 1.15;">CS & Information Technology</h1>
-                    <p style="font-size: 1.25rem; opacity: 0.92; color: #a7f3d0; max-width: 650px;">4-Year B.Tech Program | AICTE Approved | Industry Focused | Software Engineering & IT Systems</p>
+                    <p style="font-size: 1.25rem; opacity: 0.92; color: #e5d5c5; max-width: 650px;">4-Year B.Tech Program | AICTE Approved | Industry Focused | Software Engineering & IT Systems</p>
                 </div>
                 <div class="col-md-4 text-center d-none d-md-block">
                     <div class="hero-icon-container">
-                        <i class="fas fa-laptop-code" style="font-size: 60px; color: #34d399; filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.6));"></i>
+                        <i class="fas fa-laptop-code" style="font-size: 60px; color: #fbbf24; filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.6));"></i>
                     </div>
                 </div>
             </div>
@@ -138,19 +147,19 @@ body {
             <div class="row">
                 <div class="col-md-8">
                     <div class="it-card">
-                        <h2 style="color: #1e293b; margin-bottom: 20px;">Program Overview</h2>
-                        <p style="color: #64748b; line-height: 1.8; margin-bottom: 20px;">
+                        <h2 style="color: #1a0d06; margin-bottom: 20px; font-family: 'Outfit', sans-serif; font-weight: 800;">Program Overview</h2>
+                        <p style="color: #6f5f54; line-height: 1.8; margin-bottom: 20px;">
                             The B.Tech in Information Technology program is designed to prepare students for the rapidly evolving 
                             IT industry. The curriculum focuses on software development, system administration, network management, 
                             database technologies, and emerging fields like cloud computing and cybersecurity.
                         </p>
-                        <p style="color: #64748b; line-height: 1.8; margin-bottom: 20px;">
+                        <p style="color: #6f5f54; line-height: 1.8; margin-bottom: 20px;">
                             Our program emphasizes practical learning through industry projects, internships, and hands-on laboratory 
                             sessions. Students gain expertise in modern technologies and frameworks used in the IT industry.
                         </p>
-                        <div style="background: #f8fafc; padding: 20px; border-radius: 10px; margin-top: 20px;">
-                            <h5 style="color: #1e293b; margin-bottom: 15px;">Program Highlights</h5>
-                            <ul style="color: #64748b; margin: 0;">
+                        <div style="background: #fdfbf7; padding: 20px; border-radius: 16px; margin-top: 20px; border: 1px solid #f3eae1;">
+                            <h5 style="color: #1a0d06; margin-bottom: 15px; font-weight: 700;">Program Highlights</h5>
+                            <ul style="color: #6f5f54; margin: 0;">
                                 <li>Industry-oriented curriculum with latest IT trends</li>
                                 <li>Emphasis on practical and project-based learning</li>
                                 <li>Strong foundation in software and hardware technologies</li>
@@ -161,19 +170,19 @@ body {
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 30px;">
-                        <h4>Program Details</h4>
-                        <div style="margin: 25px 0;">
-                            <h5>Duration</h5>
-                            <p>4 Years (8 Semesters)</p>
+                    <div style="background: linear-gradient(135deg, #1a0d06 0%, #3d1e0e 100%); color: white; padding: 30px; border-radius: 24px; text-align: center; margin-bottom: 30px; border: 1px solid #f3eae1; box-shadow: 0 10px 30px rgba(180, 83, 9, 0.15);">
+                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; color: #f59e0b; margin-bottom: 20px;">Program Details</h4>
+                        <div style="margin: 20px 0; padding-bottom: 15px; border-bottom: 1px solid rgba(245, 158, 11, 0.2);">
+                            <h6 style="color: #e6c280; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 5px;">Duration</h6>
+                            <p style="font-size: 1.1rem; font-weight: 700; margin: 0; color: #ffffff;">4 Years (8 Semesters)</p>
                         </div>
-                        <div style="margin: 25px 0;">
-                            <h5>Total Credits</h5>
-                            <p>160 Credits</p>
+                        <div style="margin: 20px 0; padding-bottom: 15px; border-bottom: 1px solid rgba(245, 158, 11, 0.2);">
+                            <h6 style="color: #e6c280; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 5px;">Total Credits</h6>
+                            <p style="font-size: 1.1rem; font-weight: 700; margin: 0; color: #ffffff;">160 Credits</p>
                         </div>
-                        <div style="margin: 25px 0;">
-                            <h5>Intake</h5>
-                            <p>120 Students</p>
+                        <div style="margin: 20px 0;">
+                            <h6 style="color: #e6c280; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 5px;">Intake</h6>
+                            <p style="font-size: 1.1rem; font-weight: 700; margin: 0; color: #ffffff;">120 Students</p>
                         </div>
                     </div>
                     

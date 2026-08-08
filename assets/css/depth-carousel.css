@@ -2,23 +2,23 @@
 .depth-carousel-wrapper {
   position: relative;
   width: 100%;
-  height: 520px;
+  height: 540px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: visible;
-  margin: 30px 0;
+  margin: 20px 0;
 }
 
 .depth-carousel {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 440px;
+  min-height: 320px;
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 1400px;
+  perspective: var(--dc-perspective, 1400px);
   perspective-origin: 50% 50%;
   touch-action: pan-y;
   outline: none;
@@ -31,6 +31,12 @@
   cursor: grabbing;
 }
 
+.depth-carousel:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
 .depth-carousel__stage {
   position: absolute;
   inset: 0;
@@ -41,18 +47,20 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 370px;
-  height: 440px;
+  width: 390px;
+  height: 480px;
+  border-radius: 36px;
   transform-origin: center center;
   overflow: hidden;
   background: #ffffff;
-  border-radius: 21px;
-  border: 1px solid rgba(124, 58, 237, 0.2);
-  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.15), 0 8px 25px -10px rgba(124, 58, 237, 0.15);
+  border: 1.5px solid rgba(124, 58, 237, 0.2);
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.18),
+    0 8px 20px -10px rgba(124, 58, 237, 0.12);
   will-change: transform, opacity, filter;
   cursor: pointer;
   transform: translate(-50%, -50%);
-  padding: 18px;
+  padding: 22px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,18 +69,18 @@
 
 .depth-carousel__card:hover {
   border-color: #7c3aed;
-  box-shadow: 0 35px 70px -15px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 35px 70px -15px rgba(124, 58, 237, 0.28);
 }
 
 .depth-carousel__logo-box {
   width: 100%;
-  height: 290px;
+  height: 310px;
   background: #f8fafc;
-  border-radius: 18px;
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 20px;
   margin-bottom: 12px;
   border: 1.5px solid #e2e8f0;
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.02);
@@ -82,12 +90,12 @@
   width: 100%;
   height: 100%;
   max-width: 100%;
-  max-height: 275px;
+  max-height: 270px;
   object-fit: contain;
   display: block;
   pointer-events: none;
   -webkit-user-drag: none;
-  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.08));
   transition: transform 0.3s ease;
 }
 
@@ -106,14 +114,14 @@
 
 .depth-carousel__title {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: #0f172a;
   margin: 0;
 }
 
 .depth-carousel__badge {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -130,7 +138,7 @@
   opacity: 0;
   pointer-events: none;
   mix-blend-mode: multiply;
-  background: #05060a;
+  background: #7b5900;
 }
 
 .depth-carousel__arrow {
@@ -138,90 +146,78 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 3000;
-  width: 58px;
-  height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2.5px solid #7c3aed;
-  border-radius: 50%;
-  background: #ffffff;
-  color: #7c3aed;
-  font-size: 1.45rem;
-  font-weight: 900;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(18, 20, 26, 0.65);
+  backdrop-filter: blur(8px);
+  color: #fff;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.35);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.depth-carousel__arrow i {
-  font-size: 1.45rem !important;
-  line-height: 1 !important;
-  display: block;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .depth-carousel__arrow:hover {
-  background: #7c3aed;
-  color: #ffffff;
-  border-color: #7c3aed;
-  transform: translateY(-50%) scale(1.12);
-  box-shadow: 0 15px 35px rgba(124, 58, 237, 0.5);
+  background: rgba(28, 31, 40, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .depth-carousel__arrow:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: translateY(-50%) scale(0.94);
 }
 
 .depth-carousel__arrow--prev {
-  left: 15px;
+  left: 16px;
 }
 
 .depth-carousel__arrow--next {
-  right: 15px;
+  right: 16px;
 }
 
 .depth-carousel__dots {
   position: absolute;
-  bottom: 0px;
+  bottom: 16px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3000;
   display: flex;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
+  background: rgba(14, 16, 22, 0.45);
+  backdrop-filter: blur(6px);
 }
 
 .depth-carousel__dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   padding: 0;
   border: none;
   border-radius: 999px;
-  background: #cbd5e1;
+  background: rgba(255, 255, 255, 0.32);
   cursor: pointer;
-  transition: width 0.25s ease, background 0.25s ease;
+  transition:
+    width 0.25s ease,
+    background 0.25s ease;
 }
 
 .depth-carousel__dot.is-active {
-  width: 22px;
-  background: #7c3aed;
+  width: 20px;
+  background: #fff;
 }
 
-@media (max-width: 768px) {
+@media (prefers-reduced-motion: reduce) {
   .depth-carousel__card {
-    width: 260px;
-    height: 350px;
-    padding: 16px;
+    will-change: auto;
   }
-  .depth-carousel__logo-box {
-    height: 150px;
-  }
-  .depth-carousel__img {
-    max-height: 100px;
+  .depth-carousel__arrow,
+  .depth-carousel__dot {
+    transition: none;
   }
 }
+

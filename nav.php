@@ -1,4 +1,5 @@
 <?php
+$current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -127,6 +128,25 @@
     .navbar .nav-item.active .nav-link {
         color: #ffffff !important;
         background: #d97706 !important;
+        box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4) !important;
+    }
+
+    /* 3-Dot More Details Menu Styling */
+    .navbar .nav-more-dots {
+        padding: 0.45rem 0.8rem !important;
+        border-radius: 9999px !important;
+        cursor: pointer !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.25s ease !important;
+    }
+    .navbar .nav-more-dots::after {
+        display: none !important;
+    }
+    .navbar .nav-more-dots:hover {
+        background: #d97706 !important;
+        color: #ffffff !important;
         box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4) !important;
     }
     
@@ -413,28 +433,21 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-lg-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php">
+                    <a class="nav-link <?= $current_page == 'index.php' ? 'active' : '' ?>" href="index.php">
                         <i class="fas fa-home"></i> Home
                     </a>
                 </li>
                 
-                <!-- Academics Dropdown -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="academicsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <!-- Academics Item (Single Link) -->
+                <li class="nav-item">
+                    <a class="nav-link <?= in_array($current_page, ['academics.php', 'btech-cse.php', 'btech-it.php', 'academic-calendar.php', 'syllabus.php']) ? 'active' : '' ?>" href="academics.php">
                         <i class="fas fa-graduation-cap"></i> Academics
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="academicsDropdown">
-                        <li><a class="dropdown-item" href="btech-cse.php"><i class="fas fa-book me-2"></i> B.Tech CSD</a></li>
-                        <li><a class="dropdown-item" href="btech-it.php"><i class="fas fa-laptop-code me-2"></i> B.Tech CSIT</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="academic-calendar.php"><i class="fas fa-calendar-check me-2"></i> Academic Calendar</a></li>
-                        <li><a class="dropdown-item" href="syllabus.php"><i class="fas fa-clipboard-list me-2"></i> Syllabus</a></li>
-                    </ul>
                 </li>
 
                 <!-- Faculty Dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="faculty.php" id="facultyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle <?= in_array($current_page, ['faculty.php', 'faculty_dashboard.php']) ? 'active' : '' ?>" href="faculty.php" id="facultyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-chalkboard-teacher"></i> Faculty
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="facultyDropdown">
@@ -444,34 +457,38 @@
                     </ul>
                 </li>
 
-                <!-- Placements -->
-                <li class="nav-item">
-                    <a class="nav-link" href="placements.php">
+                <!-- Placements Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle <?= in_array($current_page, ['placements.php', 'internships.php']) ? 'active' : '' ?>" href="placements.php" id="placementsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-briefcase"></i> Placements
                     </a>
+                    <ul class="dropdown-menu" aria-labelledby="placementsDropdown">
+                        <li><a class="dropdown-item <?= $current_page == 'placements.php' ? 'active' : '' ?>" href="placements.php"><i class="fas fa-chart-line me-2"></i> Placements Overview</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'internships.php' ? 'active' : '' ?>" href="internships.php"><i class="fas fa-laptop-code me-2"></i> Internships</a></li>
+                    </ul>
                 </li>
 
                 <!-- Clubs & Activities Dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="clubsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle <?= in_array($current_page, ['startup_club.php', 'sdc_club.php', 'swecha_club.php']) ? 'active' : '' ?>" href="#" id="clubsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-users"></i> Clubs
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="clubsDropdown">
-                        <li><a class="dropdown-item" href="startup_club.php"><i class="fas fa-rocket me-2"></i> Startup Club</a></li>
-                        <li><a class="dropdown-item" href="sdc_club.php"><i class="fas fa-code me-2"></i> SDC</a></li>
-                        <li><a class="dropdown-item" href="swecha_club.php"><i class="fab fa-linux me-2"></i> Swecha</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'startup_club.php' ? 'active' : '' ?>" href="startup_club.php"><i class="fas fa-rocket me-2"></i> Startup Club</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'sdc_club.php' ? 'active' : '' ?>" href="sdc_club.php"><i class="fas fa-code me-2"></i> SDC</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'swecha_club.php' ? 'active' : '' ?>" href="swecha_club.php"><i class="fab fa-linux me-2"></i> Swecha</a></li>
                     </ul>
                 </li>
 
                 <!-- Houses Dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="housesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle <?= in_array($current_page, ['houses_dashboard.php', 'events_overview.php', 'section_house_points_detail.php']) ? 'active' : '' ?>" href="#" id="housesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-trophy"></i> Houses
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="housesDropdown">
-                        <li><a class="dropdown-item" href="houses_dashboard.php"><i class="fas fa-trophy me-2"></i> House Activities</a></li>
-                        <li><a class="dropdown-item" href="events_overview.php"><i class="fas fa-calendar-alt me-2"></i> Events</a></li>
-                        <li><a class="dropdown-item" href="section_house_points_detail.php"><i class="fas fa-layer-group me-2"></i> Section</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'houses_dashboard.php' ? 'active' : '' ?>" href="houses_dashboard.php"><i class="fas fa-trophy me-2"></i> House Activities</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'events_overview.php' ? 'active' : '' ?>" href="events_overview.php"><i class="fas fa-calendar-alt me-2"></i> Events</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'section_house_points_detail.php' ? 'active' : '' ?>" href="section_house_points_detail.php"><i class="fas fa-layer-group me-2"></i> Section</a></li>
                     </ul>
                 </li>
 
@@ -521,6 +538,21 @@
                         </a>
                     </li>
                 <?php endif; ?>
+
+                <!-- More Details (3-Dot Menu) Dropdown - Aligned next to Login/Dashboard -->
+                <li class="nav-item dropdown ms-lg-2">
+                    <a class="nav-link dropdown-toggle nav-more-dots" href="#" id="moreDetailsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="More Details">
+                        <i class="fas fa-ellipsis-v"></i>
+                        <span class="d-lg-none ms-2">More Details</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="moreDetailsDropdown" style="min-width: 230px !important;">
+                        <li><h6 class="dropdown-header text-uppercase text-muted fw-bold px-3 py-1" style="font-size: 0.7rem; letter-spacing: 0.8px;">More Details</h6></li>
+                        <li><a class="dropdown-item <?= $current_page == 'student_achievements.php' ? 'active' : '' ?>" href="student_achievements.php"><i class="fas fa-user-graduate me-2" style="color: #3b82f6;"></i> Student Achievements</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'faculty_achievements.php' ? 'active' : '' ?>" href="faculty_achievements.php"><i class="fas fa-award me-2" style="color: #f59e0b;"></i> Faculty Achievements</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'news_events.php' ? 'active' : '' ?>" href="news_events.php"><i class="fas fa-newspaper me-2" style="color: #10b981;"></i> News & Events</a></li>
+                        <li><a class="dropdown-item <?= $current_page == 'heroes_of_department.php' ? 'active' : '' ?>" href="heroes_of_department.php"><i class="fas fa-medal me-2" style="color: #8b5cf6;"></i> Heroes of Department</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

@@ -87,10 +87,42 @@ include "./head.php";
         height: 500px;
     }
 
+    .houses-orbit-ring {
+        position: absolute;
+        inset: 0;
+        width: 500px;
+        height: 500px;
+        animation: houseOrbitRotate 20s linear infinite;
+        transform-origin: 250px 250px;
+    }
+
+    .houses-container:hover .houses-orbit-ring,
+    .houses-container:hover .house-item {
+        animation-play-state: paused;
+    }
+
+    @keyframes houseOrbitRotate {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes houseItemCounterRotate {
+        0% {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+            transform: translate(-50%, -50%) rotate(-360deg);
+        }
+    }
+
     .houses-circle {
         position: absolute;
         inset: 0;
-        border: 1px solid rgba(255, 0, 0, 0.1);
+        border: 1px dashed rgba(124, 58, 237, 0.3);
         border-radius: 50%;
     }
 
@@ -115,6 +147,8 @@ include "./head.php";
         transform: translate(-50%, -50%);
         z-index: 10;
         transition: all 0.3s ease;
+        animation: houseItemCounterRotate 20s linear infinite;
+        transform-origin: center center;
     }
 
     .house-button {
@@ -2322,88 +2356,92 @@ include "./head.php";
             </div>
 
             <!-- ReactBits Interactive 3D DepthCarousel Component -->
-            <div class="depth-carousel-wrapper">
+            <div class="depth-carousel-wrapper" style="height: 540px; position: relative;">
                 <div class="depth-carousel">
                     <div class="depth-carousel__stage">
                         <!-- Card 1: Lunchbox -->
                         <div class="depth-carousel__card">
                             <div class="depth-carousel__logo-box">
-                                <img class="depth-carousel__img" src="./assets/company_logos/logos/21.png" alt="Lunchbox">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/25.png" alt="Lunchbox">
                             </div>
                             <div class="depth-carousel__content">
                                 <h3 class="depth-carousel__title">Lunchbox</h3>
                                 <span class="depth-carousel__badge">Incubated Venture</span>
                             </div>
-                            <span class="depth-carousel__tint"></span>
+                            <span class="depth-carousel__tint" style="background: #7b5900;"></span>
                         </div>
 
                         <!-- Card 2: Campus Online -->
                         <div class="depth-carousel__card">
                             <div class="depth-carousel__logo-box">
-                                <img class="depth-carousel__img" src="./assets/company_logos/logos/22.png" alt="Campus Online">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/26.png" alt="Campus Online">
                             </div>
                             <div class="depth-carousel__content">
                                 <h3 class="depth-carousel__title">Campus Online</h3>
                                 <span class="depth-carousel__badge">EdTech Startup</span>
                             </div>
-                            <span class="depth-carousel__tint"></span>
+                            <span class="depth-carousel__tint" style="background: #7b5900;"></span>
                         </div>
 
                         <!-- Card 3: Bhimavaram Foods -->
                         <div class="depth-carousel__card">
                             <div class="depth-carousel__logo-box">
-                                <img class="depth-carousel__img" src="./assets/company_logos/logos/23.png" alt="Bhimavaram Foods">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/21.png" alt="Bhimavaram Foods">
                             </div>
                             <div class="depth-carousel__content">
                                 <h3 class="depth-carousel__title">Bhimavaram Foods</h3>
                                 <span class="depth-carousel__badge">Food Tech</span>
                             </div>
-                            <span class="depth-carousel__tint"></span>
+                            <span class="depth-carousel__tint" style="background: #7b5900;"></span>
                         </div>
 
                         <!-- Card 4: Smart Wash -->
                         <div class="depth-carousel__card">
                             <div class="depth-carousel__logo-box">
-                                <img class="depth-carousel__img" src="./assets/company_logos/logos/24.png" alt="Smart Wash">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/23.png" alt="Smart Wash">
                             </div>
                             <div class="depth-carousel__content">
                                 <h3 class="depth-carousel__title">Smart Wash</h3>
                                 <span class="depth-carousel__badge">Services Platform</span>
                             </div>
-                            <span class="depth-carousel__tint"></span>
+                            <span class="depth-carousel__tint" style="background: #7b5900;"></span>
                         </div>
 
                         <!-- Card 5: Bhimavaram Online -->
                         <div class="depth-carousel__card">
                             <div class="depth-carousel__logo-box">
-                                <img class="depth-carousel__img" src="./assets/company_logos/logos/25.png" alt="Bhimavaram Online">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/22.png" alt="Bhimavaram Online">
                             </div>
                             <div class="depth-carousel__content">
                                 <h3 class="depth-carousel__title">Bhimavaram Online</h3>
                                 <span class="depth-carousel__badge">Local Commerce</span>
                             </div>
-                            <span class="depth-carousel__tint"></span>
+                            <span class="depth-carousel__tint" style="background: #7b5900;"></span>
                         </div>
 
                         <!-- Card 6: NutriDelight -->
                         <div class="depth-carousel__card">
                             <div class="depth-carousel__logo-box">
-                                <img class="depth-carousel__img" src="./assets/company_logos/logos/26.png" alt="NutriDelight">
+                                <img class="depth-carousel__img" src="./assets/company_logos/logos/24.png" alt="NutriDelight">
                             </div>
                             <div class="depth-carousel__content">
                                 <h3 class="depth-carousel__title">NutriDelight</h3>
                                 <span class="depth-carousel__badge">Health & Wellness</span>
                             </div>
-                            <span class="depth-carousel__tint"></span>
+                            <span class="depth-carousel__tint" style="background: #7b5900;"></span>
                         </div>
                     </div>
 
                     <!-- Navigation Arrows -->
                     <button type="button" class="depth-carousel__arrow depth-carousel__arrow--prev" aria-label="Previous slide">
-                        <i class="fas fa-chevron-left"></i>
+                        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                            <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                     </button>
                     <button type="button" class="depth-carousel__arrow depth-carousel__arrow--next" aria-label="Next slide">
-                        <i class="fas fa-chevron-right"></i>
+                        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                            <path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                     </button>
 
                     <!-- Indicators -->
@@ -2696,57 +2734,60 @@ include "./head.php";
         <!-- Houses Section -->
         <section class="houses-section" style="flex: 1;">
             <div class="houses-container">
-                <!-- Rotating circle -->
-                <div class="houses-circle"></div>
-
                 <!-- Center logo -->
                 <div class="center-logo">
                     <img src="./assets/logos/allhouses.webp" alt="All Houses">
                 </div>
 
-                <!-- House items -->
-                <div class="house-item house-agni">
-                    <button class="house-button" onclick="window.location.href='#'">
-                        <img src="./assets/logos/3.jpg" alt="Agni">
-                    </button>
-                    <div class="house-name">Agni</div>
-                </div>
+                <!-- Orbiting Ring container -->
+                <div class="houses-orbit-ring">
+                    <!-- Rotating circle border -->
+                    <div class="houses-circle"></div>
 
-                <div class="house-item house-vayu">
-                    <button class="house-button" onclick="window.location.href='#'">
-                        <img src="./assets/logos/2.jpg" alt="Vayu">
-                    </button>
-                    <div class="house-name">Vayu</div>
-                </div>
+                    <!-- House items -->
+                    <div class="house-item house-agni" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Agni'">
+                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Agni'">
+                            <img src="./assets/logos/3.jpg" alt="Agni">
+                        </button>
+                        <div class="house-name">Agni</div>
+                    </div>
 
-                <div class="house-item house-prudhvi">
-                    <button class="house-button" onclick="window.location.href='#'">
-                        <img src="./assets/logos/4.jpg" alt="Prudhvi">
-                    </button>
-                    <div class="house-name">Prudhvi</div>
-                </div>
+                    <div class="house-item house-vayu" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Vayu'">
+                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Vayu'">
+                            <img src="./assets/logos/2.jpg" alt="Vayu">
+                        </button>
+                        <div class="house-name">Vayu</div>
+                    </div>
 
-                <div class="house-item house-jal">
-                    <button class="house-button" onclick="window.location.href='#'">
-                        <img src="./assets/logos/1.jpg" alt="Jal">
-                    </button>
-                    <div class="house-name">Jal</div>
-                </div>
+                    <div class="house-item house-prudhvi" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Prudhvi'">
+                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Prudhvi'">
+                            <img src="./assets/logos/4.jpg" alt="Prudhvi">
+                        </button>
+                        <div class="house-name">Prudhvi</div>
+                    </div>
 
-                <div class="house-item house-aakash">
-                    <button class="house-button" onclick="window.location.href='#'">
-                        <img src="./assets/logos/5.jpg" alt="Aakash">
-                    </button>
-                    <div class="house-name">Aakash</div>
-                </div>
+                    <div class="house-item house-jal" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Jal'">
+                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Jal'">
+                            <img src="./assets/logos/1.jpg" alt="Jal">
+                        </button>
+                        <div class="house-name">Jal</div>
+                    </div>
 
-                <!-- Connecting lines -->
-                <div class="connecting-lines">
-                    <div class="line" style="width: 180px; transform: rotate(-90deg);"></div>
-                    <div class="line" style="width: 180px; transform: rotate(-18deg);"></div>
-                    <div class="line" style="width: 180px; transform: rotate(54deg);"></div>
-                    <div class="line" style="width: 180px; transform: rotate(126deg);"></div>
-                    <div class="line" style="width: 180px; transform: rotate(198deg);"></div>
+                    <div class="house-item house-aakash" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Aakash'">
+                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Aakash'">
+                            <img src="./assets/logos/5.jpg" alt="Aakash">
+                        </button>
+                        <div class="house-name">Aakash</div>
+                    </div>
+
+                    <!-- Connecting lines -->
+                    <div class="connecting-lines">
+                        <div class="line" style="width: 180px; transform: rotate(-90deg);"></div>
+                        <div class="line" style="width: 180px; transform: rotate(-18deg);"></div>
+                        <div class="line" style="width: 180px; transform: rotate(54deg);"></div>
+                        <div class="line" style="width: 180px; transform: rotate(126deg);"></div>
+                        <div class="line" style="width: 180px; transform: rotate(198deg);"></div>
+                    </div>
                 </div>
             </div>
         </section>

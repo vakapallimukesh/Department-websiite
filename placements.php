@@ -421,21 +421,78 @@ body {
 
 
 
+
+
     <!-- 3D Placement Dome Gallery Section -->
     <section class="photo-gallery-section" style="padding: 80px 0; background: #1a0d06; color: white;">
         <div class="container">
-            <div class="section-title text-center" style="margin-bottom: 30px;">
-                <h2 style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; line-height: 1.1; color: white;">Placement <span style="color: var(--amber-gold);">3D Dome Gallery</span></h2>
-                <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto; color: #e5d5c5; font-family: var(--font-heading);">Drag to rotate the interactive 3D sphere dome. Click any placement poster to expand.</p>
+            <div class="section-title text-center" style="margin-bottom: 25px;">
+                <h2 id="galleryDynamicTitle" style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; line-height: 1.1; color: white;">Placement <span style="color: var(--amber-gold);">2021-25 Batch Gallery</span></h2>
+                <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto 25px; color: #e5d5c5; font-family: var(--font-heading);">Drag to rotate the interactive 3D sphere dome. Click any placement poster to expand.</p>
+
+                <!-- Batch Switcher Slide Controls -->
+                <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+                    <button class="batch-tab-btn" id="btnBatch2021" onclick="switchBatchGallery('2021-25')" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #ffffff; border: 1px solid #b45309; padding: 10px 26px; border-radius: 50px; font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 6px 18px rgba(180, 83, 9, 0.3);">
+                        <i class="fas fa-layer-group me-2"></i>2021-25 Batch Gallery
+                    </button>
+                    <button class="batch-tab-btn" id="btnBatch2022" onclick="switchBatchGallery('2022-26')" style="background: #fffbeb; color: #78350f; border: 1px solid #fde68a; padding: 10px 26px; border-radius: 50px; font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-layer-group me-2"></i>2022-26 Batch Gallery
+                    </button>
+                </div>
             </div>
             
-            <div id="placementDomeGallery"></div>
+            <div id="wrapper2021" class="batch-gallery-wrapper">
+                <div id="placementDomeGallery"></div>
+            </div>
+
+            <div id="wrapper2022" class="batch-gallery-wrapper" style="display: none;">
+                <div id="placement2022_26DomeGallery"></div>
+            </div>
         </div>
     </section>
 
     <!-- Dome Gallery 3D & Circular Gallery Engines -->
     <script src="assets/js/dome-gallery.js"></script>
     <script src="assets/js/circular-gallery.js"></script>
+
+    <script>
+    function switchBatchGallery(batch) {
+        const title = document.getElementById('galleryDynamicTitle');
+        const btn2021 = document.getElementById('btnBatch2021');
+        const btn2022 = document.getElementById('btnBatch2022');
+        const wrap2021 = document.getElementById('wrapper2021');
+        const wrap2022 = document.getElementById('wrapper2022');
+
+        if (batch === '2021-25') {
+            title.innerHTML = 'Placement <span style="color: var(--amber-gold);">2021-25 Batch Gallery</span>';
+            btn2021.style.background = 'linear-gradient(135deg, #d97706 0%, #b45309 100%)';
+            btn2021.style.color = '#ffffff';
+            btn2021.style.borderColor = '#b45309';
+
+            btn2022.style.background = '#fffbeb';
+            btn2022.style.color = '#78350f';
+            btn2022.style.borderColor = '#fde68a';
+
+            wrap2021.style.display = 'block';
+            wrap2022.style.display = 'none';
+            if (typeof window.initDome2021 === 'function') window.initDome2021();
+        } else if (batch === '2022-26') {
+            title.innerHTML = 'Placement <span style="color: var(--amber-gold);">2022-26 Batch Gallery</span>';
+            btn2022.style.background = 'linear-gradient(135deg, #d97706 0%, #b45309 100%)';
+            btn2022.style.color = '#ffffff';
+            btn2022.style.borderColor = '#b45309';
+
+            btn2021.style.background = '#fffbeb';
+            btn2021.style.color = '#78350f';
+            btn2021.style.borderColor = '#fde68a';
+
+            wrap2021.style.display = 'none';
+            wrap2022.style.display = 'block';
+            if (typeof window.initDome2022 === 'function') window.initDome2022();
+        }
+        window.dispatchEvent(new Event('resize'));
+    }
+    </script>
 
     <?php include "footer.php"; ?>
     

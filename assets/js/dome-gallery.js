@@ -232,10 +232,13 @@ class DomeGalleryEngine {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+let dome2021Instance = null;
+let dome2022Instance = null;
+
+function initDome2021() {
   const domeContainer = document.getElementById('placementDomeGallery');
-  if (domeContainer) {
-    new DomeGalleryEngine('placementDomeGallery', {
+  if (domeContainer && (!dome2021Instance || domeContainer.children.length === 0)) {
+    dome2021Instance = new DomeGalleryEngine('placementDomeGallery', {
       images: [
         { src: 'assets/placements/28.png', alt: 'Placement Poster 28' },
         { src: 'assets/placements/29.png', alt: 'Placement Poster 29' },
@@ -259,4 +262,35 @@ document.addEventListener('DOMContentLoaded', () => {
       grayscale: false
     });
   }
+}
+
+function initDome2022() {
+  const dome2022_26Container = document.getElementById('placement2022_26DomeGallery');
+  if (dome2022_26Container && (!dome2022Instance || dome2022_26Container.children.length === 0)) {
+    const p2022_26_images = [];
+    for (let i = 1; i <= 53; i++) {
+      p2022_26_images.push({
+        src: `assets/images/placements_2022_26/poster_${i}.png`,
+        alt: `Placement 2022-26 Poster ${i}`
+      });
+    }
+
+    dome2022Instance = new DomeGalleryEngine('placement2022_26DomeGallery', {
+      images: p2022_26_images,
+      fit: 0.8,
+      minRadius: 650,
+      maxVerticalRotationDeg: 0,
+      segments: 34,
+      dragDampening: 2,
+      grayscale: false
+    });
+  }
+}
+
+window.initDome2021 = initDome2021;
+window.initDome2022 = initDome2022;
+
+document.addEventListener('DOMContentLoaded', () => {
+  initDome2021();
+  initDome2022();
 });

@@ -1,0 +1,620 @@
+<?php 
+if (session_status() == PHP_SESSION_NONE) session_start();
+include "./head.php"; 
+?>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --primary: #d97706;
+    --primary-light: #f59e0b;
+    --amber-gold: #d97706;
+    --rich-espresso: #1a0d06;
+    --cream-white: #fdfbf7;
+    --text-primary: #1a0d06;
+    --text-secondary: #6f5f54;
+    --border-light: #f3eae1;
+    --insta-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #fdfbf7;
+    color: #1a0d06;
+    line-height: 1.6;
+}
+
+.hero-banner {
+    background: linear-gradient(135deg, #1a0d06 0%, #2a150a 50%, #3d1e0e 100%);
+    color: white;
+    padding: 85px 20px 65px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(230, 194, 128, 0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.hero-tag {
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.12);
+    padding: 6px 18px;
+    border-radius: 999px;
+    display: inline-block;
+    margin-bottom: 15px;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.hero-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 18px;
+}
+
+.hero-title span {
+    color: #f59e0b;
+}
+
+.insta-badge-banner {
+    background: #ffffff;
+    border: 1.5px solid #f3eae1;
+    border-radius: 24px;
+    padding: 22px 30px;
+    box-shadow: 0 10px 30px rgba(180, 83, 9, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: -35px;
+    position: relative;
+    z-index: 10;
+}
+
+.insta-btn {
+    background: var(--insta-gradient);
+    color: #ffffff !important;
+    font-weight: 700;
+    padding: 10px 24px;
+    border-radius: 999px;
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 6px 20px rgba(220, 39, 67, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.insta-btn:hover {
+    transform: translateY(-3px);
+}
+
+.stat-card {
+    background: #ffffff;
+    border: 1px solid #f3eae1;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(180, 83, 9, 0.06);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: #d97706;
+}
+
+.stat-number {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #d97706;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1a0d06;
+    margin-top: 4px;
+}
+
+/* Event Post Card Box Styling */
+.news-card {
+    background: #ffffff;
+    border: 1.5px solid #f3eae1;
+    border-radius: 24px;
+    padding: 28px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.news-card:hover {
+    transform: translateY(-8px);
+    border-color: #d97706;
+    box-shadow: 0 20px 40px rgba(217, 119, 6, 0.15);
+}
+
+.post-box-header {
+    background: linear-gradient(135deg, #1a0d06 0%, #3d1e0e 100%);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.post-icon-badge {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--insta-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.4rem;
+    box-shadow: 0 4px 15px rgba(220, 39, 67, 0.3);
+}
+
+.date-pill {
+    background: rgba(217, 119, 6, 0.1);
+    color: #b45309;
+    font-weight: 800;
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(217, 119, 6, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.insta-handle-tag {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #e6683c;
+}
+
+.announcement-card {
+    background: #ffffff;
+    border: 1.5px solid #f3eae1;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    box-shadow: 0 6px 20px rgba(180, 83, 9, 0.04);
+    transition: all 0.3s ease;
+}
+
+.announcement-card:hover {
+    transform: translateX(8px);
+    border-color: #d97706;
+    box-shadow: 0 10px 25px rgba(217, 119, 6, 0.12);
+}
+
+.news-icon-container {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    border-radius: 16px;
+    background: rgba(217, 119, 6, 0.1);
+    border: 1px solid rgba(217, 119, 6, 0.2);
+    color: #d97706;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.direct-post-btn {
+    background: rgba(217, 119, 6, 0.1);
+    color: #d97706 !important;
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    font-weight: 800;
+    font-size: 0.82rem;
+    padding: 8px 16px;
+    border-radius: 999px;
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.25s ease;
+}
+
+.direct-post-btn:hover {
+    background: var(--insta-gradient);
+    color: #ffffff !important;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(220, 39, 67, 0.3);
+    transform: translateY(-2px);
+}
+</style>
+
+<?php include "nav.php"; ?>
+
+<!-- Hero Section -->
+<section class="hero-banner">
+    <div class="container position-relative z-1">
+        <span class="hero-tag"><i class="fab fa-instagram me-2"></i> Official @srkrcsdcsit Feed</span>
+        <h1 class="hero-title">News & <span>Events Hub</span></h1>
+        <p class="lead mx-auto" style="max-width: 680px; color: #e5d5c5; font-size: 1.15rem; line-height: 1.6;">
+            Discover events organized by CSD & CSIT departments alongside official press releases, circulars, and academic news.
+        </p>
+    </div>
+</section>
+
+<!-- Official Instagram Profile Header Banner -->
+<div class="container">
+    <div class="insta-badge-banner">
+        <div class="d-flex align-items-center gap-3">
+            <div style="width: 55px; height: 55px; border-radius: 50%; background: var(--insta-gradient); padding: 3px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 100%; height: 100%; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; color: #dc2743; font-size: 1.5rem;">
+                    <i class="fab fa-instagram"></i>
+                </div>
+            </div>
+            <div>
+                <h5 class="fw-bold mb-0" style="font-family: 'Outfit', sans-serif; color: #1a0d06;">CSD CSIT SRKREC (@srkrcsdcsit)</h5>
+                <span class="insta-handle-tag"><i class="fas fa-at"></i>srkrcsdcsit</span>
+                <span class="text-muted small ms-2">• 452 Posts • SRKR Engineering College</span>
+            </div>
+        </div>
+        <div>
+            <a href="https://www.instagram.com/srkrcsdcsit/" target="_blank" rel="noopener noreferrer" class="insta-btn">
+                <i class="fab fa-instagram me-1"></i> Open Instagram Channel
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Highlight -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">452</div>
+                    <div class="stat-label">Instagram Posts</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">784+</div>
+                    <div class="stat-label">Student Followers</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">294</div>
+                    <div class="stat-label">Following</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Official Page</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 1: Events Organised by CSD & CSIT -->
+<section class="py-5" style="background: #ffffff; border-top: 1px solid #f3eae1; border-bottom: 1px solid #f3eae1;">
+    <div class="container py-3">
+        <div class="text-center mb-5">
+            <span class="hero-tag" style="background: rgba(217, 119, 6, 0.08); color: #d97706; border-color: rgba(217, 119, 6, 0.2);">Events & Workshops</span>
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; color: #1a0d06;">Events Organised by <span style="color: #d97706;">CSD & CSIT</span></h2>
+            <p style="color: #6f5f54; font-size: 1.05rem; max-width: 650px; margin: 0 auto;">Official hackathons, workshops, and sports meets. Click on <strong>"Open Direct Post"</strong> to view the post directly on <a href="https://www.instagram.com/srkrcsdcsit/" target="_blank" style="color: #e6683c; font-weight: 700; text-decoration: none;">@srkrcsdcsit</a>.</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Event 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="news-card">
+                    <div class="post-box-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="post-icon-badge">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">CS-FEST 2026</h6>
+                                <span style="color: #e6c280; font-size: 0.78rem;">National Hackathon</span>
+                            </div>
+                        </div>
+                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Hackathon</span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Friday, 20 March 2026</span>
+                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    </div>
+
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">National Tech Fest 'CS-FEST 2026'</h3>
+                    <p class="text-secondary small mb-4">Official launch announcement of 24-Hour Hackathon, Paper Presentation, Coding Battles, UI/UX Design Sprint, and Web3 Demonstrations.</p>
+
+                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 842 Likes</span>
+                        <a href="https://www.instagram.com/srkrcsdcsit/?post=cs-fest-2026" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
+                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="news-card">
+                    <div class="post-box-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="post-icon-badge">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">AI & LLM Workshop</h6>
+                                <span style="color: #e6c280; font-size: 0.78rem;">Hands-On Masterclass</span>
+                            </div>
+                        </div>
+                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Workshop</span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Wednesday, 18 February 2026</span>
+                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    </div>
+
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">AI & LLM Architecture Workshop</h3>
+                    <p class="text-secondary small mb-4">Masterclass by industry experts on fine-tuning Large Language Models, RAG pipelines, and deploying AI models on cloud endpoints.</p>
+
+                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 615 Likes</span>
+                        <a href="https://www.instagram.com/srkrcsdcsit/?post=ai-llm-workshop" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
+                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="news-card">
+                    <div class="post-box-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="post-icon-badge">
+                                <i class="fas fa-running"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">House Championship</h6>
+                                <span style="color: #e6c280; font-size: 0.78rem;">Sports & Cultural Meet</span>
+                            </div>
+                        </div>
+                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Sports Meet</span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Saturday, 10 January 2026</span>
+                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    </div>
+
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Annual House Sports & Cultural Meet</h3>
+                    <p class="text-secondary small mb-4">Inter-house sports championship, cricket, badminton, athletics, chess, and cultural performances by CSD & CSIT house teams.</p>
+
+                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 1,120 Likes</span>
+                        <a href="https://www.instagram.com/srkrcsdcsit/?post=house-sports-meet" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
+                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 4 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="news-card">
+                    <div class="post-box-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="post-icon-badge">
+                                <i class="fas fa-cloud"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">DevOps Masterclass</h6>
+                                <span style="color: #e6c280; font-size: 0.78rem;">Cloud Architecture</span>
+                            </div>
+                        </div>
+                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Bootcamp</span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Tuesday, 25 November 2025</span>
+                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    </div>
+
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Cloud & DevOps Architecture</h3>
+                    <p class="text-secondary small mb-4">Mastering Docker containerization, Kubernetes cluster management, Helm charts, and CI/CD automated cloud deployments.</p>
+
+                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 520 Likes</span>
+                        <a href="https://www.instagram.com/srkrcsdcsit/?post=devops-bootcamp" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
+                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 5 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="news-card">
+                    <div class="post-box-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="post-icon-badge">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">SIH 2025 Victory</h6>
+                                <span style="color: #e6c280; font-size: 0.78rem;">National 1st Rank</span>
+                            </div>
+                        </div>
+                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Victory</span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Thursday, 18 December 2025</span>
+                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    </div>
+
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Smart India Hackathon Victory</h3>
+                    <p class="text-secondary small mb-4">Celebrating Team Agni Innovators securing 1st Prize of ₹1,00,000 in Smart India Hackathon National Grand Finals.</p>
+
+                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 1,430 Likes</span>
+                        <a href="https://www.instagram.com/srkrcsdcsit/?post=sih-victory" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
+                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 6 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="news-card">
+                    <div class="post-box-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="post-icon-badge">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">Startup Demo Day</h6>
+                                <span style="color: #e6c280; font-size: 0.78rem;">Incubation Pitches</span>
+                            </div>
+                        </div>
+                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Incubator</span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Friday, 14 November 2025</span>
+                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    </div>
+
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Startup Incubator Demo Day</h3>
+                    <p class="text-secondary small mb-4">Student startup teams (Lunchbox, Campus Online, Bhimavaram Foods) pitched live business models to angel investors.</p>
+
+                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 780 Likes</span>
+                        <a href="https://www.instagram.com/srkrcsdcsit/?post=startup-demo-day" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
+                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: Latest Department News & Bulletins -->
+<section class="py-5" style="background: #fdfbf7;">
+    <div class="container py-3">
+        <div class="text-center mb-5">
+            <span class="hero-tag" style="background: rgba(217, 119, 6, 0.08); color: #d97706; border-color: rgba(217, 119, 6, 0.2);">Official Announcements</span>
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; color: #1a0d06;">Latest Department <span style="color: #d97706;">News & Circulars</span></h2>
+            <p style="color: #6f5f54; font-size: 1.05rem; max-width: 650px; margin: 0 auto;">Official press releases, accreditation updates, GATE ranks, and JNTUK academic notifications.</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- News Item 1 -->
+            <div class="col-md-6">
+                <div class="announcement-card">
+                    <div class="news-icon-container">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Accreditation</span>
+                            <span class="small text-muted fw-semibold"><i class="far fa-calendar-alt me-1"></i> Monday, 02 February 2026</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.25rem;">NBA Tier-1 Accreditation Status Renewed</h4>
+                        <p class="text-secondary small mb-0">National Board of Accreditation (NBA) has extended Tier-1 accreditation status for both CSD and CSIT B.Tech programs for 3 academic years.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Item 2 -->
+            <div class="col-md-6">
+                <div class="announcement-card">
+                    <div class="news-icon-container">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Research Grant</span>
+                            <span class="small text-muted fw-semibold"><i class="far fa-calendar-alt me-1"></i> Wednesday, 14 January 2026</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.25rem;">AICTE IDEA Lab & Hardware Grant Sanctioned</h4>
+                        <p class="text-secondary small mb-0">Government of India AICTE has sanctioned ₹45 Lakhs grant for establishing state-of-the-art AI, IoT, and Edge Computing research laboratory.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Item 3 -->
+            <div class="col-md-6">
+                <div class="announcement-card">
+                    <div class="news-icon-container">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">GATE 2026</span>
+                            <span class="small text-muted fw-semibold"><i class="far fa-calendar-alt me-1"></i> Saturday, 20 December 2025</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.25rem;">18 Students Qualify GATE CS 2026 Top Ranks</h4>
+                        <p class="text-secondary small mb-0">18 final year students from CSD & CSIT secured top All India Ranks (AIR under 500) in GATE Computer Science examination.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Item 4 -->
+            <div class="col-md-6">
+                <div class="announcement-card">
+                    <div class="news-icon-container">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Placements</span>
+                            <span class="small text-muted fw-semibold"><i class="far fa-calendar-alt me-1"></i> Thursday, 27 November 2025</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.25rem;">94% Campus Placement Rate Achieved</h4>
+                        <p class="text-secondary small mb-0">Department achieved 94% placement rate for 2025 graduating batch with highest CTC of ₹28 LPA at Amazon AWS.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<?php include "footer.php"; ?>
+</body>
+</html>

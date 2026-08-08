@@ -16,17 +16,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const config = {
     depth: 220,
-    spread: 90,
-    tilt: 22,
+    spread: 105,
+    tilt: 12,
     tiltDirection: 'right',
-    visibleCards: 6,
+    visibleCards: 4,
     falloff: 0.2,
-    blur: 6,
-    duration: 300,
+    blur: 8,
+    duration: 200,
     ease: 'power3.out',
     loop: true,
-    cardWidth: 370,
-    autoplayDelay: 1400
+    cardWidth: 390,
+    cardHeight: 480,
+    radius: 36,
+    tint: '#7b5900',
+    autoplayDelay: 800
   };
 
   let pos = 0;
