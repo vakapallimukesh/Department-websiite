@@ -50,3 +50,4 @@ access_log
 
 # Environment files (if any contain sensitive data)
 # .env
+assets/videos/

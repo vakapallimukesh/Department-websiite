@@ -12,11 +12,39 @@ body {
 }
 
 .hero-section {
-    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
-    color: white;
-    padding: 85px 0;
     position: relative;
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #0f172a;
+    color: white;
+    padding: 100px 20px 80px;
     overflow: hidden;
+}
+
+.hero-bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    opacity: 0.92;
+    pointer-events: none;
+}
+
+.hero-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, rgba(15, 23, 42, 0.55) 100%);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .hero-section::after {
@@ -26,9 +54,81 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 24px 24px;
-    opacity: 0.6;
+    opacity: 0.2;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.hero-badge-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(251, 191, 36, 0.2);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    color: #fbbf24;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    font-size: 0.85rem;
+    padding: 8px 22px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.hero-main-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 900;
+    margin-bottom: 20px;
+    color: #ffffff;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+.hero-main-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    color: #f1f5f9;
+    max-width: 720px;
+    margin: 0 auto 36px;
+    font-weight: 500;
+    line-height: 1.6;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+
+.hero-lightbulb-box {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(12px);
+    border: 1.5px solid rgba(251, 191, 36, 0.5);
+    box-shadow: 0 0 35px rgba(251, 191, 36, 0.4);
+    margin-bottom: 24px;
+}
+
+.scroll-down-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.5rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+    40% { transform: translate(-50%, -10px); }
+    60% { transform: translate(-50%, -5px); }
 }
 
 .startup-card {
@@ -94,26 +194,41 @@ body {
 <body>
     <?php include "nav.php"; ?>
     
-    <!-- Hero Section -->
+    <!-- Full-Screen 100vh High-Clarity Background Video Hero Section -->
     <section class="hero-section">
-        <div class="container position-relative" style="z-index: 2;">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <span style="color: #fbbf24; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem; display: inline-block; margin-bottom: 12px;">Student Innovation Hub</span>
-                    <h1 style="font-family: 'Outfit', sans-serif; font-size: 3.2rem; font-weight: 900; margin-bottom: 15px; color: #ffffff; line-height: 1.15;">Startup Club</h1>
-                    <p style="font-size: 1.25rem; opacity: 0.92; color: #e2e8f0; max-width: 620px; font-weight: 500;">Empowering student entrepreneurs to build innovative solutions, access seed mentorship, and launch real-world ventures.</p>
-                </div>
-                <div class="col-md-4 text-center d-none d-md-block">
-                    <div style="width: 140px; height: 140px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); display: inline-flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15);">
-                        <i class="fas fa-lightbulb" style="font-size: 70px; color: #fbbf24; filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.5));"></i>
-                    </div>
-                </div>
+        <video autoplay loop muted playsinline class="hero-bg-video">
+            <source src="assets/videos/web.mp4" type="video/mp4">
+        </video>
+        <div class="hero-video-overlay"></div>
+
+        <div class="container position-relative text-center" style="z-index: 2;">
+            <div class="hero-lightbulb-box">
+                <i class="fas fa-lightbulb" style="font-size: 45px; color: #fbbf24; filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.8));"></i>
+            </div>
+            <br>
+            <div class="hero-badge-container">
+                <i class="fas fa-rocket"></i> Student Innovation Hub
+            </div>
+            <h1 class="hero-main-title">
+                Startup <span style="color: #fbbf24;">Club</span>
+            </h1>
+            <p class="hero-main-subtitle">
+                Empowering student entrepreneurs to build innovative solutions, access seed mentorship, and launch real-world ventures.
+            </p>
+            <div class="d-flex align-items-center justify-content-center">
+                <a href="#about-startup" class="btn px-5 py-3 rounded-pill fw-bold" style="background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: #0f172a; font-size: 1.05rem; border: none; box-shadow: 0 10px 25px rgba(251, 191, 36, 0.4);">
+                    Explore More <i class="fas fa-arrow-down ms-2"></i>
+                </a>
             </div>
         </div>
+
+        <a href="#about-startup" class="scroll-down-hint">
+            <i class="fas fa-chevron-down"></i>
+        </a>
     </section>
 
     <!-- Club Overview -->
-    <section style="padding: 60px 0;">
+    <section id="about-startup" style="padding: 80px 0;">
         <div class="container">
             <div class="row g-4 align-items-stretch">
                 <div class="col-md-8">

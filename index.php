@@ -132,6 +132,13 @@ include "./head.php";
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 20;
+        cursor: pointer;
+        transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .center-logo:hover {
+        transform: translate(-50%, -50%) scale(1.12);
+        filter: drop-shadow(0 0 15px rgba(217, 119, 6, 0.6));
     }
 
     .center-logo img {
@@ -140,6 +147,11 @@ include "./head.php";
         border-radius: 50%;
         border: 3px solid #374151;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s ease;
+    }
+
+    .center-logo:hover img {
+        border-color: #d97706;
     }
 
     .house-item {
@@ -200,7 +212,7 @@ include "./head.php";
         opacity: 0.6;
     }
 
-    /* House positioning - Perfect 72° spacing (Pentagon layout) */
+    /* House positioning - Perfect 72° spacing (Pentagon Circle Orbit) */
     /* Center at 250px, 250px with radius of 180px */
     .house-agni {
         top: 70px;
@@ -209,25 +221,25 @@ include "./head.php";
 
     /* 0° - Top */
     .house-vayu {
-        top: 145px;
+        top: 194px;
         left: 421px;
     }
 
     /* 72° - Top Right */
     .house-prudhvi {
-        top: 355px;
+        top: 396px;
         left: 356px;
     }
 
     /* 144° - Bottom Right */
     .house-jal {
-        top: 355px;
+        top: 396px;
         left: 144px;
     }
 
     /* 216° - Bottom Left */
     .house-aakash {
-        top: 145px;
+        top: 194px;
         left: 79px;
     }
 
@@ -2735,8 +2747,8 @@ include "./head.php";
         <section class="houses-section" style="flex: 1;">
             <div class="houses-container">
                 <!-- Center logo -->
-                <div class="center-logo">
-                    <img src="./assets/logos/allhouses.webp" alt="All Houses">
+                <div class="center-logo" onclick="window.location.href='houses_dashboard.php'" style="cursor: pointer;" title="Open House Activities">
+                    <img src="./assets/logos/allhouses.webp" alt="All Houses - Click for House Activities">
                 </div>
 
                 <!-- Orbiting Ring container -->

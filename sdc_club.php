@@ -13,11 +13,11 @@ body {
 
 /* Animated Hero Section */
 .hero-section {
-    background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #0f172a);
+    background: linear-gradient(-45deg, #1e1b4b, #312e81, #4338ca, #581c87);
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
     color: white;
-    padding: 85px 0;
+    padding: 190px 0 160px;
     margin-bottom: 40px;
     position: relative;
     overflow: hidden;
