@@ -1913,19 +1913,40 @@ include "./head.php";
                             <span style="background: #ffe4e6; color: #be123c; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; font-family: 'Outfit', sans-serif;">UPCOMING</span>
                         </div>
 
-                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: #0f172a; margin-bottom: 12px; line-height: 1.3;">
+                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: #0f172a; margin-bottom: 10px; line-height: 1.3;">
                             "Irumudi" Trailer Launch Event
                         </h4>
 
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
                                 <i class="far fa-calendar-alt" style="color: #e11d48;"></i>
                                 12th August
                             </span>
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
                                 <i class="far fa-clock" style="color: #e11d48;"></i>
                                 From 4:30 PM
                             </span>
+                        </div>
+
+                        <!-- Featured Event Video Spotlight (Potluck) -->
+                        <div style="border-top: 1px dashed #fecdd3; padding-top: 14px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="font-size: 0.78rem; font-weight: 800; color: #be123c; font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    <i class="fas fa-video me-1" style="color: #e11d48;"></i> CSD & CSIT Department Potluck
+                                </span>
+                            </div>
+                            <!-- Video Player -->
+                            <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                                <video controls loop muted playsinline style="width: 100%; max-height: 180px; object-fit: cover; display: block;">
+                                    <source src="assets/videos/pot_luck.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 10px; line-height: 1.4;">
+                                A joyful community celebration bringing together CSD & CSIT students and faculty for homemade delicacies, team activities, and shared memories.
+                            </p>
+                            <a href="https://www.instagram.com/reel/C_VGop-ydyj/?igsh=MWZvdWozeGZ5a2pjag==" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 0.8rem; padding: 7px 16px; border-radius: 20px; box-shadow: 0 4px 12px rgba(220, 39, 67, 0.25);">
+                                <i class="fab fa-instagram"></i> Watch Event Reel on Instagram <i class="fas fa-external-link-alt ms-1" style="font-size: 0.75rem;"></i>
+                            </a>
                         </div>
                     </div>
                 </div>

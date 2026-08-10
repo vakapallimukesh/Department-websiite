@@ -399,34 +399,42 @@ body {
                 </div>
             </div>
 
-            <!-- Event 3 -->
+            <!-- Event 3: Department Potluck Celebration Video Reel -->
             <div class="col-md-6 col-lg-4">
-                <div class="news-card">
-                    <div class="post-box-header">
+                <div class="news-card" style="border: 2px solid #fecdd3; background: linear-gradient(180deg, #ffffff 0%, #fff5f5 100%);">
+                    <div class="post-box-header" style="background: linear-gradient(135deg, #1a0d06 0%, #4c0519 100%);">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="post-icon-badge">
-                                <i class="fas fa-running"></i>
+                            <div class="post-icon-badge" style="background: linear-gradient(45deg, #f43f5e, #e11d48);">
+                                <i class="fas fa-video"></i>
                             </div>
                             <div>
-                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">House Championship</h6>
-                                <span style="color: #e6c280; font-size: 0.78rem;">Sports & Cultural Meet</span>
+                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">Department Potluck</h6>
+                                <span style="color: #fda4af; font-size: 0.78rem;">Food & Bonding Fest</span>
                             </div>
                         </div>
-                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Sports Meet</span>
+                        <span class="badge bg-danger text-white px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;"><i class="fas fa-play text-white me-1" style="font-size: 0.55rem;"></i> Reel Feature</span>
+                    </div>
+
+                    <!-- Embedded Event Video Player -->
+                    <div style="position: relative; border-radius: 16px; overflow: hidden; margin-bottom: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: 1px solid rgba(225,29,72,0.2);">
+                        <video controls loop muted playsinline style="width: 100%; max-height: 230px; object-fit: cover; display: block;" poster="./assets/logos/csd-logo.png">
+                            <source src="assets/videos/pot_luck.mp4" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Saturday, 10 January 2026</span>
-                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                        <span class="date-pill" style="background: rgba(225, 29, 72, 0.1); color: #be123c; border-color: rgba(225, 29, 72, 0.2);"><i class="far fa-calendar-alt"></i> Official Event Reel</span>
+                        <span class="insta-handle-tag" style="color: #e11d48;"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
                     </div>
 
-                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Annual House Sports & Cultural Meet</h3>
-                    <p class="text-secondary small mb-4">Inter-house sports championship, cricket, badminton, athletics, chess, and cultural performances by CSD & CSIT house teams.</p>
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">CSD & CSIT Department Potluck</h3>
+                    <p class="text-secondary small mb-4">A joyful community celebration bringing together CSD & CSIT students and faculty for delicious homemade dishes, team activities, and student-faculty bonding.</p>
 
                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 1,120 Likes</span>
-                        <a href="https://www.instagram.com/srkrcsdcsit/?post=house-sports-meet" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
-                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 1,850 Likes</span>
+                        <a href="https://www.instagram.com/reel/C_VGop-ydyj/?igsh=MWZvdWozeGZ5a2pjag==" target="_blank" rel="noopener noreferrer" class="direct-post-btn" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff !important;">
+                            <i class="fab fa-instagram me-1"></i> Watch Insta Reel <i class="fas fa-external-link-alt ms-1"></i>
                         </a>
                     </div>
                 </div>
