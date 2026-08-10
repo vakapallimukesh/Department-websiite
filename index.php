@@ -1928,21 +1928,24 @@ include "./head.php";
                             </span>
                         </div>
 
-                        <!-- Featured Event Video Spotlight (Potluck) -->
+                        <!-- Featured Event Video Spotlight (Potluck Event) -->
                         <div style="border-top: 1px dashed #fecdd3; padding-top: 14px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="font-size: 0.78rem; font-weight: 800; color: #be123c; font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;">
-                                    <i class="fas fa-video me-1" style="color: #e11d48;"></i> CSD & CSIT Department Potluck
+                                <span style="font-size: 0.85rem; font-weight: 800; color: #0f172a; font-family: 'Outfit', sans-serif;">
+                                    Potluck Event
+                                </span>
+                                <span style="font-size: 0.72rem; font-weight: 700; color: #e11d48; background: #ffe4e6; padding: 2px 8px; border-radius: 10px;">
+                                    <i class="fab fa-instagram me-1"></i> Reel
                                 </span>
                             </div>
-                            <!-- Video Player -->
-                            <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
-                                <video controls loop muted playsinline style="width: 100%; max-height: 180px; object-fit: cover; display: block;">
+                            <!-- Background Video (No Controls, Autoplay, Muted, Loop) -->
+                            <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); height: 160px;">
+                                <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
                                     <source src="assets/videos/pot_luck.mp4" type="video/mp4">
                                 </video>
                             </div>
                             <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 10px; line-height: 1.4;">
-                                A joyful community celebration bringing together CSD & CSIT students and faculty for homemade delicacies, team activities, and shared memories.
+                                A joyful community celebration featuring delicious homemade food, fun activities, and memorable bonding moments.
                             </p>
                             <a href="https://www.instagram.com/reel/C_VGop-ydyj/?igsh=MWZvdWozeGZ5a2pjag==" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 0.8rem; padding: 7px 16px; border-radius: 20px; box-shadow: 0 4px 12px rgba(220, 39, 67, 0.25);">
                                 <i class="fab fa-instagram"></i> Watch Event Reel on Instagram <i class="fas fa-external-link-alt ms-1" style="font-size: 0.75rem;"></i>
