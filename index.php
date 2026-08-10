@@ -1548,6 +1548,46 @@ include "./head.php";
                 <source src="assets/videos/hero-background.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
+            <script>
+            (function() {
+                function initHeroVideo() {
+                    var v = document.getElementById('bgHeroVideo');
+                    if (!v) return;
+                    v.muted = true;
+                    v.defaultMuted = true;
+                    v.playsInline = true;
+                    
+                    function tryPlay() {
+                        if (v.paused) {
+                            var p = v.play();
+                            if (p && p.catch) {
+                                p.catch(function(e) {
+                                    function forcePlay() {
+                                        v.play();
+                                        window.removeEventListener('click', forcePlay);
+                                        window.removeEventListener('touchstart', forcePlay);
+                                        window.removeEventListener('scroll', forcePlay);
+                                    }
+                                    window.addEventListener('click', forcePlay);
+                                    window.addEventListener('touchstart', forcePlay);
+                                    window.addEventListener('scroll', forcePlay);
+                                });
+                            }
+                        }
+                    }
+                    
+                    tryPlay();
+                    v.addEventListener('canplay', tryPlay);
+                    v.addEventListener('loadeddata', tryPlay);
+                    window.addEventListener('load', tryPlay);
+                }
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initHeroVideo);
+                } else {
+                    initHeroVideo();
+                }
+            })();
+            </script>
 
             <!-- Gradient & Dark Overlay Veil for crisp text readability -->
             <div class="hero-overlay-veil"></div>
