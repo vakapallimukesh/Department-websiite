@@ -18,8 +18,6 @@ $startupsData = [
         'fallbackSecondaryImage' => 'assets/company_logos/logos/22.png',
         'founder' => 'Dr. M. Suresh Babu',
         'phone' => '9866600002',
-        'address' => 'SRKR Engineering College, MCR Web Solutions, Chinamiram Rural, Andhra Pradesh 534204',
-        'mapUrl' => 'https://maps.app.goo.gl/RdZWHEZMyc8Rs7cg7',
         'instagram' => 'https://www.instagram.com/bhimavaram_online?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
         'themeColor' => '#2563eb',
         'themeColorDark' => '#1e3a8a',
@@ -39,8 +37,6 @@ $startupsData = [
         'fallbackSecondaryImage' => 'assets/company_logos/logos/22.png',
         'founder' => 'Dr. M. Suresh Babu',
         'phone' => '9866600002',
-        'address' => 'SRKR Engineering College, MCR Web Solutions, Chinamiram Rural, Andhra Pradesh 534204',
-        'mapUrl' => 'https://maps.app.goo.gl/RdZWHEZMyc8Rs7cg7',
         'instagram' => 'https://www.instagram.com/bhimavaram_online?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
         'themeColor' => '#2563eb',
         'themeColorDark' => '#1e3a8a',
@@ -1227,22 +1223,6 @@ body {
                                                 <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.85rem;">• <?= htmlspecialchars($ka); ?></span>
                                             <?php endforeach; ?>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Mobile App & ONDC Badge Card (for Bhimavaram Online) -->
-                        <?php if ($startupId === 'bhimavaram-online' || $startupId === 'bhimavaramonline'): ?>
-                            <div class="col-md-6">
-                                <div class="p-4 rounded-4 bg-white border shadow-sm d-flex align-items-center gap-3 detail-row-item h-100">
-                                    <div class="p-3 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center" style="width: 52px; height: 52px; flex-shrink: 0;">
-                                        <i class="fas fa-mobile-alt fs-4"></i>
-                                    </div>
-                                    <div>
-                                        <span class="text-muted small fw-bold text-uppercase d-block" style="letter-spacing: 0.5px;">Mobile Application</span>
-                                        <span class="fw-bold text-dark fs-6 d-block">Bhimavaram Online Mobile App</span>
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle mt-1 px-2.5 py-1 rounded-pill" style="font-size: 0.78rem;">ONDC-Enabled (1st in AP & Telangana)</span>
                                     </div>
                                 </div>
                             </div>

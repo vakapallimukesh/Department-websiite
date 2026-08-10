@@ -312,24 +312,6 @@ export const StartupDetails: React.FC = () => {
                 </div>
               )}
 
-              {/* Mobile Application / ONDC Badge for Bhimavaram Online */}
-              {isBhimavaramOnline && (
-                <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center gap-5 hover:-translate-y-1 hover:border-emerald-500 hover:shadow-md transition-all">
-                  <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                    <i className="fas fa-mobile-alt text-xl"></i>
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">
-                      Mobile Application
-                    </span>
-                    <span className="font-extrabold text-slate-900 text-base block">Bhimavaram Online Mobile App</span>
-                    <span className="inline-block mt-1 px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full font-bold text-xs border border-emerald-300">
-                      ONDC-Enabled (1st in AP & Telangana)
-                    </span>
-                  </div>
-                </div>
-              )}
-
               {/* Address / Location */}
               {startup.address && (
                 <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-start gap-5 hover:-translate-y-1 hover:border-red-500 hover:shadow-md transition-all">
