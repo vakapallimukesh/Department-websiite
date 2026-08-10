@@ -1548,6 +1548,46 @@ include "./head.php";
                 <source src="assets/videos/hero-background.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
+            <script>
+            (function() {
+                function initHeroVideo() {
+                    var v = document.getElementById('bgHeroVideo');
+                    if (!v) return;
+                    v.muted = true;
+                    v.defaultMuted = true;
+                    v.playsInline = true;
+                    
+                    function tryPlay() {
+                        if (v.paused) {
+                            var p = v.play();
+                            if (p && p.catch) {
+                                p.catch(function(e) {
+                                    function forcePlay() {
+                                        v.play();
+                                        window.removeEventListener('click', forcePlay);
+                                        window.removeEventListener('touchstart', forcePlay);
+                                        window.removeEventListener('scroll', forcePlay);
+                                    }
+                                    window.addEventListener('click', forcePlay);
+                                    window.addEventListener('touchstart', forcePlay);
+                                    window.addEventListener('scroll', forcePlay);
+                                });
+                            }
+                        }
+                    }
+                    
+                    tryPlay();
+                    v.addEventListener('canplay', tryPlay);
+                    v.addEventListener('loadeddata', tryPlay);
+                    window.addEventListener('load', tryPlay);
+                }
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initHeroVideo);
+                } else {
+                    initHeroVideo();
+                }
+            })();
+            </script>
 
             <!-- Gradient & Dark Overlay Veil for crisp text readability -->
             <div class="hero-overlay-veil"></div>
@@ -1658,149 +1698,234 @@ include "./head.php";
     }
     </style>
 
-    <section id="faculty-section" class="combined-overview-section" style="padding: 60px 0;">
+    <style>
+    /* Compact Timeline & Leadership Section */
+    .combined-overview-section {
+        padding: 60px 0;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+
+    .compact-timeline-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 30px 32px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    }
+
+    .compact-timeline {
+        position: relative;
+        padding-left: 26px;
+    }
+
+    .compact-timeline::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        bottom: 8px;
+        left: 7px;
+        width: 2px;
+        background: #6ee7b7;
+    }
+
+    .compact-timeline-item {
+        position: relative;
+        margin-bottom: 18px;
+    }
+
+    .compact-timeline-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .compact-node {
+        position: absolute;
+        left: -26px;
+        top: 6px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 3px solid #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+
+    .compact-timeline-item:hover .compact-node {
+        background: #10b981;
+        transform: scale(1.2);
+    }
+
+    .timeline-box {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 14px 18px;
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s ease;
+    }
+
+    .timeline-box:hover {
+        background: #ffffff;
+        transform: translateX(4px);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+        border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    /* Live Updates Pulse Dot */
+    @keyframes livePulse {
+        0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); }
+        70% { box-shadow: 0 0 0 8px rgba(225, 29, 72, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+    }
+
+    .live-pulse-dot {
+        width: 10px;
+        height: 10px;
+        background-color: #e11d48;
+        border-radius: 50%;
+        display: inline-block;
+        animation: livePulse 1.8s infinite;
+    }
+
+    .live-updates-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(225, 29, 72, 0.12) !important;
+        border-color: #fda4af !important;
+    }
+    </style>
+
+    <section id="faculty-section" class="combined-overview-section">
         <div class="container">
-            <div class="mb-5">
-                <h2 style="color: #1e293b; font-size: 2.5rem; font-weight: 700;" class="scroll-blur-animate">Know CSD & CSIT Department</h2>
-            </div>
-
-            <div class="row align-items-stretch">
-
-
-                <!-- Department Info & Vision/Mission - 60% Width -->
+            <div class="row align-items-stretch g-4">
+                <!-- Timeline - 60% Width (col-md-7) -->
                 <div class="col-md-7">
-                    <!-- About Department Section -->
-                    <div class="dept-about-card" style="border-radius: 20px; margin-bottom: 30px;">
-                        <p class="scroll-blur-animate" style="color: #64748b; font-size: 1.1rem; margin-bottom: 25px; text-align: justify;">
-                            Founded in 2021, the Department of Computer Science Design at SRKREC stands at the intersection of multidisciplinary applied education and translational research. With state-of-the-art facilities across our campus, the department empowers students to discover their ikigai through global perspectives, industry collaborations, and holistic development. Guided by integrity and the pursuit of knowledge and moral values, CSD & CSIT shapes future-ready citizens who drive entrepreneurship, innovation, and create meaningful societal impact.
-                        </p>
-
-                    </div>
-
-                    <!-- Vision Mission Tabs -->
-                    <div class="vision-mission-container">
-                        <!-- Tab Navigation -->
-                        <div class="tab-navigation" style="margin-bottom: 0;">
-                            <button class="tab-btn active" data-tab="vision" style="background: #16a085; color: white; border: none; padding: 12px 30px; border-radius: 8px 8px 0 0; font-weight: 600; cursor: pointer; transition: all 0.3s ease; border-bottom: 3px solid #16a085;">
-                                Vision
-                            </button>
-                            <button class="tab-btn" data-tab="mission" style="background: #e2e8f0; color: #64748b; border: none; padding: 12px 30px; border-radius: 8px 8px 0 0; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-left: 5px;">
-                                Mission
-                            </button>
-                        </div>
-
-                        <!-- Tab Content -->
-                        <div class="tab-content">
-                            <!-- Vision Tab -->
-                            <div id="vision-tab" class="tab-pane active" style="background: white; padding: 40px; border-radius: 0 20px 20px 20px; border-top: 3px solid #16a085;">
-
-                                <p class="scroll-blur-animate" style="color: #64748b; font-size: 1.15rem; margin-bottom: 25px; text-align: justify;">
-                                    CSD & CSIT will be an exceptional knowledge-driven department advancing on a culture of honesty and compassion to make a difference to the world. We aspire to be a premier center that produces globally competent computer science professionals and researchers who contribute significantly to technological advancement and societal development.
-                                </p>
-                                <div style="padding: 20px; background: linear-gradient(135deg, #e8f8f5, #d5f4e6); border-radius: 15px; border-left: 5px solid #16a085;">
-                                    <p style="margin: 0; color: #2d3748; font-size: 1rem; font-weight: 600;">
-                                        <i class="fas fa-lightbulb" style="color: #16a085; margin-right: 10px;"></i>
-                                        Global Excellence | Innovation Leadership | Societal Impact | Knowledge-Driven Culture
-                                    </p>
-                                </div>
+                    <div class="compact-timeline-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="mb-4">
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 2.5px; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 6px;">TIMELINE</span>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 2rem; color: #0f172a; margin: 0;">How the department got here</h3>
                             </div>
 
-                            <!-- Mission Tab -->
-                            <div id="mission-tab" class="tab-pane" style="background: white; padding: 40px; border-radius: 0 20px 20px 20px; border-top: 3px solid #16a085; display: none;">
-                                <div style="display: flex; align-items: center; margin-bottom: 25px;">
+                            <div class="compact-timeline">
+                                <!-- 2022 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2022</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">CSD Program Launched</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">SRKR introduced Computer Science & Design, one of the earliest such programs in the region.</p>
+                                    </div>
                                 </div>
-                                <p class="scroll-blur-animate" style="color: #64748b; font-size: 1.15rem; margin-bottom: 25px; text-align: justify;">
-                                    To provide quality education in computer science and information technology, foster innovation through research, and develop ethical professionals ready to meet industry challenges. We are committed to nurturing entrepreneurship, promoting lifelong learning, and creating meaningful industry partnerships that bridge academia and real-world applications.
-                                </p>
-                                <div style="padding: 20px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 15px; border-left: 5px solid #3b82f6;">
-                                    <p style="margin: 0; color: #2d3748; font-size: 1rem; font-weight: 600;">
-                                        <i class="fas fa-rocket" style="color: #3b82f6; margin-right: 10px;"></i>
-                                        Quality Education | Research Innovation | Industry Ready | Ethical Development
-                                    </p>
+
+                                <!-- 2023 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2023</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">CSIT Intake Doubled</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">Growing industry demand led to a second CSIT section, expanding intake to 120 seats.</p>
+                                    </div>
+                                </div>
+
+                                <!-- 2024 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2024</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Student House System Introduced</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">Prudhvi, Vayu, Agni, Aakash, and Jal launched to drive mentorship, events, and healthy competition.</p>
+                                    </div>
+                                </div>
+
+                                <!-- 2025 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2025</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Department-wide Digital Platform</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">A unified points, events, and appreciation system rolled out across every batch and section.</p>
+                                    </div>
+                                </div>
+
+                                <!-- 2026 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2026</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Jaitra 2k26</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">The department co-anchored SRKR's flagship annual fest, its largest student showcase yet.</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Know More Button -->
-                        <div style="text-align: left; margin-top: 30px;">
-                            <a href="#" class="know-more-btn" style="color: #16a085; font-size: 1.1rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
-                                Know More
-                                <i class="fas fa-arrow-right" style="margin-left: 10px; transition: transform 0.3s ease;"></i>
-                            </a>
                         </div>
                     </div>
                 </div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Scroll-Triggered ReactBits BlurText Animation for Know CSD & CSIT Department
-        const scrollBlurElements = document.querySelectorAll('.scroll-blur-animate');
-        
-        scrollBlurElements.forEach(container => {
-            const text = container.innerText.trim();
-            const words = text.split(/\s+/);
-            
-            container.innerHTML = words.map((w, idx) => 
-                `<span class="scroll-blur-word" style="animation-delay: ${idx * 35}ms">${w}</span>`
-            ).join(' ');
-        });
-
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px -50px 0px',
-            threshold: 0.12
-        };
-
-        const scrollObserver = new IntersectionObserver((entries, obs) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated-in');
-                    obs.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        scrollBlurElements.forEach(el => scrollObserver.observe(el));
-    });
-    </script>
-
-                <!-- HOD Message - 40% width -->
-                <div class="col-md-5">
-                    <div class="hod-card" style="padding: 30px; border-radius: 20px;border:#2d3748 1px solid; height: 95%; display: flex; flex-direction: column;">
-                        <div class="text-center mb-3">
-                            <h4 style="margin-bottom: 20px; font-weight: 700;">Message from Leadership</h4>
-                        </div>
-
-                        <!-- Leadership Members Side by Side -->
-                        <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
-                            <!-- HOD Section -->
-                            <div class="leadership-member" style="text-align: center; flex: 1;">
-                                <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 15px;">
-                                    <img src="./assets/logos/sureshsir.png" alt="Head of Department"
-                                        style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.3); object-fit: cover;">
-                                </div>
-                                <h6 style="color: #1e293b; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem;">Dr. M Suresh Babu</h6>
-                                <p style="color: #64748b; font-size: 0.75rem; margin-bottom: 10px;">Head of Department - CSD
-
-                                </p>
+                <!-- Message from Leadership & Live Updates - 40% Width (col-md-5) -->
+                <div class="col-md-5 d-flex flex-column justify-content-between">
+                    <!-- Leadership Card -->
+                    <div class="hod-card d-flex flex-column" style="padding: 26px 30px; border-radius: 20px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+                        <div>
+                            <div class="text-center mb-3">
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2.5px; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 4px;">LEADERSHIP</span>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.8rem; color: #0f172a; margin: 0;">Message from Leadership</h3>
                             </div>
 
-                            <!-- Second Leadership Member -->
-                            <div class="leadership-member" style="text-align: center; flex: 1;">
-                                <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 15px;">
-                                    <img src="./assets/faculty_imgs/4.jpg" alt="Associate Head"
-                                        style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.3); object-fit: cover;">
+                            <!-- Leadership Members Side by Side -->
+                            <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 16px;">
+                                <!-- HOD Section -->
+                                <div class="leadership-member" style="text-align: center; flex: 1;">
+                                    <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 10px;">
+                                        <img src="./assets/logos/sureshsir.png" alt="Head of Department"
+                                            style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #3b82f6; object-fit: cover; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2);">
+                                    </div>
+                                    <h6 style="color: #0f172a; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. M Suresh Babu</h6>
+                                    <p style="color: #64748b; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSD</p>
                                 </div>
-                                <h6 style="color: #1e293b; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem;">Dr. N. Gopala Krishna Murthy</h6>
-                                <p style="color: #64748b; font-size: 0.75rem; margin-bottom: 10px;">Head of Department - CSIT</p>
+
+                                <!-- Second Leadership Member -->
+                                <div class="leadership-member" style="text-align: center; flex: 1;">
+                                    <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 10px;">
+                                        <img src="./assets/faculty_imgs/4.jpg" alt="Associate Head"
+                                            style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #10b981; object-fit: cover; box-shadow: 0 6px 16px rgba(16, 185, 129, 0.2);">
+                                    </div>
+                                    <h6 style="color: #0f172a; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. N. Gopala Krishna Murthy</h6>
+                                    <p style="color: #64748b; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSIT</p>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Combined Quote -->
-                        <div style="text-align: center;">
-                            <blockquote style="font-size: 0.85rem; line-height: 1.5; font-style: italic; margin-bottom: 0; color: #4b5563;">
+                        <div style="padding: 16px 20px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; border-left: 4px solid #3b82f6;">
+                            <blockquote style="font-size: 0.88rem; line-height: 1.55; font-style: italic; margin: 0; color: #334155; font-weight: 500;">
                                 "We nurture innovative minds and create technology leaders who will shape the future through excellence in education and innovation in research."
                             </blockquote>
+                        </div>
+                    </div>
+
+                    <!-- Live Updates Box -->
+                    <div class="live-updates-card" style="margin-top: 16px; padding: 22px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%); border: 1.5px solid #fecdd3; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.07); position: relative; overflow: hidden; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="live-pulse-dot"></span>
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #e11d48; text-transform: uppercase;">LIVE UPDATES</span>
+                            </div>
+                            <span style="background: #ffe4e6; color: #be123c; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; font-family: 'Outfit', sans-serif;">UPCOMING</span>
+                        </div>
+
+                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: #0f172a; margin-bottom: 12px; line-height: 1.3;">
+                            "Irumudi" Trailer Launch Event
+                        </h4>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                <i class="far fa-calendar-alt" style="color: #e11d48;"></i>
+                                12th August
+                            </span>
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                <i class="far fa-clock" style="color: #e11d48;"></i>
+                                From 4:30 PM
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -2917,6 +3042,9 @@ include "./head.php";
             <div class="hero-buttons">
                 <a href="houses_dashboard.php" class="btn btn-primary">
                     <i class="fas fa-trophy"></i> House Activites </a>
+                <a href="heroes_of_department.php" class="btn" style="background: #7c3aed; color: white;">
+                    <i class="fas fa-user-shield me-1"></i> Class Representatives
+                </a>
                 <a href="students_overview.php" class="btn" style="background: #f1f5f9; color: #475569;">
                     Students Overview
                 </a>

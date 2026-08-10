@@ -18,8 +18,7 @@ $startupsData = [
         'fallbackSecondaryImage' => 'assets/company_logos/logos/22.png',
         'founder' => 'Dr. M. Suresh Babu',
         'phone' => '9866600002',
-        'address' => 'SRKR Engineering College, MCR Web Solutions, Chinamiram Rural, Andhra Pradesh 534204',
-        'mapUrl' => 'https://maps.app.goo.gl/RdZWHEZMyc8Rs7cg7',
+        'appUrl' => 'https://play.google.com/store/apps/details?id=com.bhimavaramonline.androidapp',
         'instagram' => 'https://www.instagram.com/bhimavaram_online?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
         'themeColor' => '#2563eb',
         'themeColorDark' => '#1e3a8a',
@@ -39,8 +38,7 @@ $startupsData = [
         'fallbackSecondaryImage' => 'assets/company_logos/logos/22.png',
         'founder' => 'Dr. M. Suresh Babu',
         'phone' => '9866600002',
-        'address' => 'SRKR Engineering College, MCR Web Solutions, Chinamiram Rural, Andhra Pradesh 534204',
-        'mapUrl' => 'https://maps.app.goo.gl/RdZWHEZMyc8Rs7cg7',
+        'appUrl' => 'https://play.google.com/store/apps/details?id=com.bhimavaramonline.androidapp',
         'instagram' => 'https://www.instagram.com/bhimavaram_online?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
         'themeColor' => '#2563eb',
         'themeColorDark' => '#1e3a8a',
@@ -154,7 +152,6 @@ $startupsData = [
         'fallbackSecondaryImage' => 'assets/company_logos/logos/25.png',
         'founder' => 'Sanjay K',
         'phone' => '9848823311',
-        'address' => 'I-HUB 2nd Floor, Tech Center, SRKR Engineering College, JP Road, Bhimavaram',
         'pricing' => 'Starting from ₹499/- per month',
         'instagram' => 'https://www.instagram.com/bo_lunch_box?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
         'themeColor' => '#0284c7',
@@ -175,7 +172,6 @@ $startupsData = [
         'fallbackSecondaryImage' => 'assets/company_logos/logos/25.png',
         'founder' => 'Sanjay K',
         'phone' => '9848823311',
-        'address' => 'I-HUB 2nd Floor, Tech Center, SRKR Engineering College, JP Road, Bhimavaram',
         'pricing' => 'Starting from ₹499/- per month',
         'instagram' => 'https://www.instagram.com/bo_lunch_box?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
         'themeColor' => '#0284c7',
@@ -1232,17 +1228,19 @@ body {
                             </div>
                         <?php endif; ?>
 
-                        <!-- Mobile App & ONDC Badge Card (for Bhimavaram Online) -->
-                        <?php if ($startupId === 'bhimavaram-online' || $startupId === 'bhimavaramonline'): ?>
+                        <!-- Android App / Google Play Store Card -->
+                        <?php if (!empty($startup['appUrl'])): ?>
                             <div class="col-md-6">
                                 <div class="p-4 rounded-4 bg-white border shadow-sm d-flex align-items-center gap-3 detail-row-item h-100">
                                     <div class="p-3 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center" style="width: 52px; height: 52px; flex-shrink: 0;">
-                                        <i class="fas fa-mobile-alt fs-4"></i>
+                                        <i class="fab fa-google-play fs-4"></i>
                                     </div>
                                     <div>
-                                        <span class="text-muted small fw-bold text-uppercase d-block" style="letter-spacing: 0.5px;">Mobile Application</span>
-                                        <span class="fw-bold text-dark fs-6 d-block">Bhimavaram Online Mobile App</span>
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle mt-1 px-2.5 py-1 rounded-pill" style="font-size: 0.78rem;">ONDC-Enabled (1st in AP & Telangana)</span>
+                                        <span class="text-muted small fw-bold text-uppercase d-block" style="letter-spacing: 0.5px;">Android Mobile App</span>
+                                        <a href="<?= htmlspecialchars($startup['appUrl']); ?>" target="_blank" rel="noopener noreferrer" class="fw-bold text-success text-decoration-none fs-6 d-block mb-1">
+                                            Get Bhimavaram Online App on Play Store <i class="fas fa-external-link-alt ms-1 small" style="font-size: 0.75rem;"></i>
+                                        </a>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill" style="font-size: 0.78rem;">ONDC-Enabled Hyperlocal App</span>
                                     </div>
                                 </div>
                             </div>
@@ -1377,6 +1375,376 @@ body {
                         <?php endif; ?>
                     </div>
                 </div>
+            <?php endif; ?>
+
+            <?php if ($startupId === 'bhimavaram-online' || $startupId === 'bhimavaramonline'): ?>
+            <!-- ==================================================
+                 BHIMAVARAM ONLINE - APP SHOWCASE SECTION
+                 ================================================== -->
+            <section class="bo-app-showcase-section py-5 my-4 position-relative overflow-hidden" id="app-showcase">
+                <style>
+                    .bo-app-showcase-section {
+                        background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 50%, #f1f5f9 100%);
+                        border-radius: 30px;
+                        border: 1px solid #e2e8f0;
+                    }
+                    .bo-app-card {
+                        background: #ffffff;
+                        border-radius: 28px;
+                        border: 1px solid #e2e8f0;
+                        padding: 12px;
+                        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+                        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                        position: relative;
+                    }
+                    .bo-app-card:hover {
+                        transform: translateY(-12px) scale(1.02);
+                        box-shadow: 0 25px 50px rgba(37, 99, 235, 0.2);
+                        border-color: #2563eb;
+                    }
+                    .bo-phone-frame {
+                        border-radius: 22px;
+                        overflow: hidden;
+                        border: 4px solid #1e293b;
+                        background: #000;
+                        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+                    }
+                    .bo-phone-frame img {
+                        width: 100%;
+                        height: 380px;
+                        object-fit: cover;
+                        object-position: top;
+                        display: block;
+                        transition: transform 0.5s ease;
+                        image-rendering: -webkit-optimize-contrast;
+                        filter: contrast(1.06) brightness(1.02);
+                    }
+                    .bo-app-card:hover .bo-phone-frame img {
+                        transform: scale(1.04);
+                    }
+                    .bo-marquee-track {
+                        display: flex;
+                        gap: 24px;
+                        animation: boMarquee 35s linear infinite;
+                    }
+                    .bo-marquee-track:hover {
+                        animation-play-state: paused;
+                    }
+                    @keyframes boMarquee {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(calc(-100% / 2)); }
+                    }
+                </style>
+
+                <!-- SECTION HEADER -->
+                <div class="text-center max-w-3xl mx-auto mb-5 px-3">
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-4 py-2 rounded-pill fw-bold text-uppercase tracking-wider shadow-sm mb-3" style="letter-spacing: 1.5px; font-size: 0.85rem;">
+                        <i class="fas fa-mobile-alt me-2"></i> MOBILE EXPERIENCE
+                    </span>
+                    <h2 class="display-5 fw-extrabold text-dark mb-2 font-outfit" style="font-weight: 800;">
+                        App Showcase
+                    </h2>
+                    <p class="lead text-muted mx-auto mb-4" style="max-width: 680px; font-size: 1.1rem; line-height: 1.7;">
+                        Explore the sleek interface and real-world features of the Bhimavaram Online Android App — connecting local stores, food, groceries & taxi bookings in one place.
+                    </p>
+                    <a href="https://play.google.com/store/apps/details?id=com.bhimavaramonline.androidapp" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg rounded-pill px-4 py-2.5 shadow-md fw-bold" style="font-size: 0.95rem;">
+                        <i class="fab fa-google-play me-2"></i> Download on Play Store
+                    </a>
+                </div>
+
+                <!-- SIDE BY SIDE ANIMATED APP SHOWCASE MARQUEE -->
+                <div class="overflow-hidden py-3">
+                    <div class="bo-marquee-track">
+                        <?php 
+                        $showcaseScreens = [
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase5.jpg',
+                                'title' => 'BO Specials & Services',
+                                'desc' => 'Home repairs, news & specials'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase4.jpg',
+                                'title' => 'BO Premium Stores',
+                                'desc' => 'Top local brands & super discounts'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase3.jpg',
+                                'title' => 'All Categories',
+                                'desc' => 'Groceries, vegetables, meat & fruits'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase2.jpg',
+                                'title' => 'Store & Electronics',
+                                'desc' => 'Mobiles, scooters & top products'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase1.jpg',
+                                'title' => 'Book Taxi / Auto Online',
+                                'desc' => 'Instant local ride & auto bookings'
+                            ]
+                        ];
+                        // Duplicate screens array for seamless infinite marquee loop
+                        $allShowcase = array_merge($showcaseScreens, $showcaseScreens);
+                        foreach ($allShowcase as $index => $screen):
+                        ?>
+                            <div class="bo-app-card" style="width: 270px; flex-shrink: 0;">
+                                <div class="bo-phone-frame position-relative">
+                                    <img src="<?= htmlspecialchars($screen['img']) ?>" alt="<?= htmlspecialchars($screen['title']) ?>" loading="lazy">
+                                    <div class="position-absolute top-0 start-0 w-100 p-2 d-flex justify-content-between align-items-center bg-dark bg-opacity-50 text-white" style="font-size: 0.72rem; backdrop-filter: blur(4px);">
+                                        <span><i class="fas fa-signal me-1"></i> 5G</span>
+                                        <span class="badge bg-danger rounded-pill px-2" style="font-size: 0.65rem;">LIVE</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 text-center">
+                                    <h6 class="fw-extrabold text-dark mb-1 font-outfit" style="font-size: 1rem;"><?= htmlspecialchars($screen['title']) ?></h6>
+                                    <p class="text-muted small mb-0" style="font-size: 0.82rem; line-height: 1.4;"><?= htmlspecialchars($screen['desc']) ?></p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </section>
+            <?php endif; ?>
+
+            <?php if ($startupId === 'bhimavaram-digitals' || $startupId === 'bhimavaram-digital'): ?>
+            <!-- ==================================================
+                 BHIMAVARAM DIGITALS - PROMOTIONAL MEDIA SECTION
+                 ================================================== -->
+            <section class="bd-promo-media-section py-5 my-4 position-relative overflow-hidden" id="promotional-media">
+                <style>
+                    .bd-promo-media-section {
+                        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+                        border-radius: 30px;
+                        color: #ffffff;
+                        padding: 40px 24px;
+                    }
+                    .bd-video-card {
+                        background: rgba(255, 255, 255, 0.05);
+                        backdrop-filter: blur(12px);
+                        border: 1px solid rgba(255, 255, 255, 0.12);
+                        border-radius: 24px;
+                        overflow: hidden;
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                        transition: all 0.4s ease;
+                    }
+                    .bd-video-card:hover {
+                        border-color: rgba(59, 130, 246, 0.5);
+                        box-shadow: 0 30px 60px rgba(59, 130, 246, 0.25);
+                    }
+                    .bd-video-player {
+                        width: 100%;
+                        max-height: 480px;
+                        border-radius: 18px;
+                        background: #000;
+                        display: block;
+                    }
+                    .bd-photo-card {
+                        background: rgba(255, 255, 255, 0.06);
+                        border-radius: 20px;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        overflow: hidden;
+                        transition: all 0.4s ease;
+                        height: 100%;
+                    }
+                    .bd-photo-card:hover {
+                        transform: translateY(-8px);
+                        border-color: #3b82f6;
+                        box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
+                    }
+                    .bd-photo-img {
+                        width: 100%;
+                        height: 250px;
+                        object-fit: cover;
+                        display: block;
+                        transition: transform 0.5s ease, filter 0.3s ease;
+                        image-rendering: -webkit-optimize-contrast;
+                        filter: contrast(1.08) brightness(1.02) saturate(1.05);
+                    }
+                    .bd-photo-card:hover .bd-photo-img {
+                        transform: scale(1.05);
+                    }
+                </style>
+
+                <!-- SECTION HEADER -->
+                <div class="text-center max-w-3xl mx-auto mb-5 px-3">
+                    <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25 px-4 py-2 rounded-pill fw-bold text-uppercase tracking-wider shadow-sm mb-3" style="letter-spacing: 1.5px; font-size: 0.85rem;">
+                        <i class="fas fa-video me-2"></i> DIGITAL OUTDOOR MEDIA
+                    </span>
+                    <h2 class="display-5 fw-extrabold text-white mb-2 font-outfit" style="font-weight: 800;">
+                        Promotional Media
+                    </h2>
+                    <p class="lead text-slate-300 mx-auto mb-0" style="max-width: 680px; font-size: 1.1rem; line-height: 1.7; color: #cbd5e1;">
+                        Watch our high-resolution outdoor LED billboard displays in action across prime junctions in Bhimavaram, providing maximum visibility for businesses and advertisers.
+                    </p>
+                </div>
+
+                <!-- MAIN PROMOTIONAL VIDEO -->
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-10">
+                        <div class="bd-video-card p-3 p-md-4 text-center">
+                            <video class="bd-video-player" controls autoplay muted loop playsinline poster="public/startups/bhimavaram-digitals/promo1.jpg">
+                                <source src="public/startups/bhimavaram-digitals/promo.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="mt-3 text-start px-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <h5 class="fw-bold text-white mb-1 font-outfit">Bhimavaram Digitals Outdoor Advertising Reel</h5>
+                                    <p class="text-slate-400 small mb-0" style="color: #94a3b8;"><i class="fas fa-map-marker-alt text-primary me-1"></i> Live Outdoor LED Display Network — Bhimavaram</p>
+                                </div>
+                                <span class="badge bg-danger rounded-pill px-3 py-2 fw-bold" style="font-size: 0.8rem;"><i class="fas fa-play-circle me-1"></i> HD PROMO VIDEO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BILLBOARD PHOTO GALLERY GRID -->
+                <div class="row g-4">
+                    <?php 
+                    $bdPromos = [
+                        [
+                            'img' => 'public/startups/bhimavaram-digitals/promo1.jpg',
+                            'title' => 'Prime Junction Billboard',
+                            'desc' => 'High-visibility LED screen at major traffic intersection'
+                        ],
+                        [
+                            'img' => 'public/startups/bhimavaram-digitals/promo2.jpg',
+                            'title' => 'Standalone High-Brightness Display',
+                            'desc' => 'Custom digital billboard located near key commercial hubs'
+                        ],
+                        [
+                            'img' => 'public/startups/bhimavaram-digitals/promo3.jpg',
+                            'title' => 'Commercial Complex Screen',
+                            'desc' => 'Frontage digital display for brand campaigns & ads'
+                        ],
+                        [
+                            'img' => 'public/startups/bhimavaram-digitals/promo4.jpg',
+                            'title' => 'Retail Storefront Outdoor LED',
+                            'desc' => 'Storefront digital display for 24/7 promo broadcasting'
+                        ]
+                    ];
+                    foreach ($bdPromos as $item):
+                    ?>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="bd-photo-card">
+                                <div class="position-relative overflow-hidden">
+                                    <img src="<?= htmlspecialchars($item['img']) ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="bd-photo-img" loading="lazy">
+                                    <div class="position-absolute top-0 end-0 m-2">
+                                        <span class="badge bg-dark bg-opacity-75 rounded-pill px-2.5 py-1 text-white border border-white border-opacity-25" style="font-size: 0.7rem; backdrop-filter: blur(4px);">LED DISPLAY</span>
+                                    </div>
+                                </div>
+                                <div class="p-3">
+                                    <h6 class="fw-bold text-white mb-1 font-outfit" style="font-size: 0.95rem;"><?= htmlspecialchars($item['title']) ?></h6>
+                                    <p class="text-slate-400 small mb-0" style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4;"><?= htmlspecialchars($item['desc']) ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+            <?php endif; ?>
+
+            <?php if ($startupId === 'lunch-box' || $startupId === 'lunchbox'): ?>
+            <!-- ==================================================
+                 LUNCH BOX - MEDIA & HIGHLIGHTS SECTION
+                 ================================================== -->
+            <section class="lb-media-section py-5 my-4 position-relative overflow-hidden" id="lunchbox-media">
+                <style>
+                    .lb-media-section {
+                        background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+                        border-radius: 30px;
+                        border: 1px solid #bae6fd;
+                        padding: 40px 24px;
+                    }
+                    .lb-media-card {
+                        background: #ffffff;
+                        border-radius: 24px;
+                        border: 1px solid #e0f2fe;
+                        overflow: hidden;
+                        box-shadow: 0 10px 25px rgba(2, 132, 199, 0.08);
+                        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                        height: 100%;
+                    }
+                    .lb-media-card:hover {
+                        transform: translateY(-8px);
+                        box-shadow: 0 20px 45px rgba(2, 132, 199, 0.2);
+                        border-color: #0284c7;
+                    }
+                    .lb-media-img {
+                        width: 100%;
+                        height: 280px;
+                        object-fit: cover;
+                        display: block;
+                        transition: transform 0.5s ease;
+                        image-rendering: -webkit-optimize-contrast;
+                        filter: contrast(1.08) brightness(1.02);
+                    }
+                    .lb-media-card:hover .lb-media-img {
+                        transform: scale(1.05);
+                    }
+                </style>
+
+                <!-- SECTION HEADER -->
+                <div class="text-center max-w-3xl mx-auto mb-5 px-3">
+                    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-4 py-2 rounded-pill fw-bold text-uppercase tracking-wider shadow-sm mb-3" style="letter-spacing: 1.5px; font-size: 0.85rem;">
+                        <i class="fas fa-camera me-2"></i> CAMPUS & EVENT HIGHLIGHTS
+                    </span>
+                    <h2 class="display-5 fw-extrabold text-dark mb-2 font-outfit" style="font-weight: 800;">
+                        Media & Highlights
+                    </h2>
+                    <p class="lead text-muted mx-auto mb-0" style="max-width: 680px; font-size: 1.1rem; line-height: 1.7;">
+                        Explore moments from student registrations, stall exhibitions, stage presentations, and exclusive subscription menu offerings of Lunch Box.
+                    </p>
+                </div>
+
+                <!-- PHOTO GALLERY GRID -->
+                <div class="row g-4 justify-content-center">
+                    <?php 
+                    $lbMediaItems = [
+                        [
+                            'img' => 'public/startups/lunch-box/media1.jpg',
+                            'title' => 'Desk Registrations & Team Interaction',
+                            'desc' => 'Lunch Box founding team explaining monthly home-to-school meal delivery subscriptions to students.'
+                        ],
+                        [
+                            'img' => 'public/startups/lunch-box/media2.jpg',
+                            'title' => 'Stage Presentation & Startup Pitch',
+                            'desc' => 'Student co-founder pitching the Lunch Box logistics model on campus stage.'
+                        ],
+                        [
+                            'img' => 'public/startups/lunch-box/media3.jpg',
+                            'title' => 'Start-Up Club Stall Exhibition',
+                            'desc' => 'Group photo of SRKREC student entrepreneurs at the Start-Up Club stall.'
+                        ],
+                        [
+                            'img' => 'public/startups/lunch-box/media4.jpg',
+                            'title' => 'Christmas Special Subscription Menu',
+                            'desc' => 'Special holiday meal menu featuring Veg Fried Rice, Chicken Biryani & Sambar Rice.'
+                        ],
+                        [
+                            'img' => 'public/startups/lunch-box/media5.jpg',
+                            'title' => 'Campus Awareness & Order Guidance',
+                            'desc' => 'Demonstrating daily lunch box tracking and parent updates to campus visitors.'
+                        ]
+                    ];
+                    foreach ($lbMediaItems as $item):
+                    ?>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="lb-media-card">
+                                <div class="position-relative overflow-hidden">
+                                    <img src="<?= htmlspecialchars($item['img']) ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="lb-media-img" loading="lazy">
+                                    <div class="position-absolute top-0 end-0 m-3">
+                                        <span class="badge bg-sky-600 bg-opacity-90 rounded-pill px-3 py-1 text-white shadow-sm" style="font-size: 0.75rem; background: #0284c7;">EVENT PHOTO</span>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h5 class="fw-bold text-dark mb-2 font-outfit" style="font-size: 1.1rem;"><?= htmlspecialchars($item['title']) ?></h5>
+                                    <p class="text-muted small mb-0" style="font-size: 0.88rem; line-height: 1.6;"><?= htmlspecialchars($item['desc']) ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
             <?php endif; ?>
 
             <?php if ($startupId === 'nutridelight'): ?>

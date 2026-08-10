@@ -97,8 +97,7 @@ export const STARTUPS_DATA: Record<string, Startup> = {
     secondaryImage: '/startups/bhimavaram-online/detail3.png',
     founder: 'Dr. M. Suresh Babu',
     phone: '9866600002',
-    address: 'SRKR Engineering College, MCR Web Solutions, Chinamiram Rural, Andhra Pradesh 534204',
-    mapUrl: 'https://maps.app.goo.gl/RdZWHEZMyc8Rs7cg7',
+    appUrl: 'https://play.google.com/store/apps/details?id=com.bhimavaramonline.androidapp',
     instagram: 'https://www.instagram.com/bhimavaram_online?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     themeColor: '#2563eb',
     gradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%)'
@@ -115,8 +114,7 @@ export const STARTUPS_DATA: Record<string, Startup> = {
     secondaryImage: '/startups/bhimavaram-online/detail3.png',
     founder: 'Dr. M. Suresh Babu',
     phone: '9866600002',
-    address: 'SRKR Engineering College, MCR Web Solutions, Chinamiram Rural, Andhra Pradesh 534204',
-    mapUrl: 'https://maps.app.goo.gl/RdZWHEZMyc8Rs7cg7',
+    appUrl: 'https://play.google.com/store/apps/details?id=com.bhimavaramonline.androidapp',
     instagram: 'https://www.instagram.com/bhimavaram_online?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     themeColor: '#2563eb',
     gradient: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%)'
@@ -133,7 +131,6 @@ export const STARTUPS_DATA: Record<string, Startup> = {
     secondaryImage: '/startups/lunch-box/detail3.png',
     founder: 'Sanjay K',
     phone: '9848823311',
-    address: 'I-HUB 2nd Floor, Tech Center, SRKR Engineering College, JP Road, Bhimavaram',
     instagram: 'https://www.instagram.com/bo_lunch_box?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     themeColor: '#0284c7',
     gradient: 'linear-gradient(135deg, #0f172a 0%, #0369a1 50%, #0284c7 100%)'
@@ -150,7 +147,6 @@ export const STARTUPS_DATA: Record<string, Startup> = {
     secondaryImage: '/startups/lunch-box/detail3.png',
     founder: 'Sanjay K',
     phone: '9848823311',
-    address: 'I-HUB 2nd Floor, Tech Center, SRKR Engineering College, JP Road, Bhimavaram',
     instagram: 'https://www.instagram.com/bo_lunch_box?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     themeColor: '#0284c7',
     gradient: 'linear-gradient(135deg, #0f172a 0%, #0369a1 50%, #0284c7 100%)'
