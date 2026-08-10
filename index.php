@@ -10,9 +10,9 @@ include "./head.php";
 <style>
     /* Ensure consistent font family and body styling with nav.php */
     body {
-        font-family: 'Poppins', sans-serif;
-        color: #333;
-        background: #fefefe;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: #1a0d06;
+        background: #fdfbf7;
         padding-top: 80px;
         margin-top: 0px;
     }
@@ -1714,15 +1714,15 @@ include "./head.php";
     /* Compact Timeline & Leadership Section */
     .combined-overview-section {
         padding: 60px 0;
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        background: #fdfbf7;
     }
 
     .compact-timeline-card {
         background: #ffffff;
         border-radius: 20px;
         padding: 30px 32px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        border: 1px solid #f3eae1;
+        box-shadow: 0 10px 30px rgba(180, 83, 9, 0.04);
     }
 
     .compact-timeline {
@@ -1737,7 +1737,7 @@ include "./head.php";
         bottom: 8px;
         left: 7px;
         width: 2px;
-        background: #6ee7b7;
+        background: #e6c280;
     }
 
     .compact-timeline-item {
@@ -1757,43 +1757,43 @@ include "./head.php";
         height: 16px;
         border-radius: 50%;
         background: #ffffff;
-        border: 3px solid #10b981;
-        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        border: 3px solid #d97706;
+        box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
         transition: all 0.3s ease;
         z-index: 2;
     }
 
     .compact-timeline-item:hover .compact-node {
-        background: #10b981;
+        background: #d97706;
         transform: scale(1.2);
     }
 
     .timeline-box {
-        background: #f8fafc;
+        background: #ffffff;
         border-radius: 12px;
         padding: 14px 18px;
-        border: 1px solid #f1f5f9;
+        border: 1px solid #f3eae1;
         transition: all 0.3s ease;
     }
 
     .timeline-box:hover {
         background: #ffffff;
         transform: translateX(4px);
-        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
-        border-color: rgba(16, 185, 129, 0.3);
+        box-shadow: 0 8px 20px rgba(180, 83, 9, 0.06);
+        border-color: rgba(217, 119, 6, 0.3);
     }
 
     /* Live Updates Pulse Dot */
     @keyframes livePulse {
-        0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); }
-        70% { box-shadow: 0 0 0 8px rgba(225, 29, 72, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.7); }
+        70% { box-shadow: 0 0 0 8px rgba(217, 119, 6, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
     }
 
     .live-pulse-dot {
         width: 10px;
         height: 10px;
-        background-color: #e11d48;
+        background-color: #d97706;
         border-radius: 50%;
         display: inline-block;
         animation: livePulse 1.8s infinite;
@@ -1801,8 +1801,8 @@ include "./head.php";
 
     .live-updates-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 14px 30px rgba(225, 29, 72, 0.12) !important;
-        border-color: #fda4af !important;
+        box-shadow: 0 14px 30px rgba(217, 119, 6, 0.12) !important;
+        border-color: #fde68a !important;
     }
     </style>
 
@@ -1814,8 +1814,8 @@ include "./head.php";
                     <div class="compact-timeline-card h-100 d-flex flex-column justify-content-between">
                         <div>
                             <div class="mb-4">
-                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 2.5px; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 6px;">TIMELINE</span>
-                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 2rem; color: #0f172a; margin: 0;">How the department got here</h3>
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 2.5px; color: #b45309; text-transform: uppercase; display: block; margin-bottom: 6px;">TIMELINE</span>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 2rem; color: #1a0d06; margin: 0;">How the department got here</h3>
                             </div>
 
                             <div class="compact-timeline">
@@ -1823,9 +1823,9 @@ include "./head.php";
                                 <div class="compact-timeline-item">
                                     <div class="compact-node"></div>
                                     <div class="timeline-box">
-                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2022</span>
-                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">CSD Program Launched</h5>
-                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">SRKR introduced Computer Science & Design, one of the earliest such programs in the region.</p>
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #d97706; display: block; margin-bottom: 2px;">2022</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a0d06; margin-bottom: 4px;">CSD Program Launched</h5>
+                                        <p style="font-size: 0.9rem; color: #6f5f54; margin: 0; line-height: 1.5;">SRKR introduced Computer Science & Design, one of the earliest such programs in the region.</p>
                                     </div>
                                 </div>
 
@@ -1833,9 +1833,9 @@ include "./head.php";
                                 <div class="compact-timeline-item">
                                     <div class="compact-node"></div>
                                     <div class="timeline-box">
-                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2023</span>
-                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">CSIT Intake Doubled</h5>
-                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">Growing industry demand led to a second CSIT section, expanding intake to 120 seats.</p>
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #d97706; display: block; margin-bottom: 2px;">2023</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a0d06; margin-bottom: 4px;">CSIT Intake Doubled</h5>
+                                        <p style="font-size: 0.9rem; color: #6f5f54; margin: 0; line-height: 1.5;">Growing industry demand led to a second CSIT section, expanding intake to 120 seats.</p>
                                     </div>
                                 </div>
 
@@ -1843,9 +1843,9 @@ include "./head.php";
                                 <div class="compact-timeline-item">
                                     <div class="compact-node"></div>
                                     <div class="timeline-box">
-                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2024</span>
-                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Student House System Introduced</h5>
-                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">Prudhvi, Vayu, Agni, Aakash, and Jal launched to drive mentorship, events, and healthy competition.</p>
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #d97706; display: block; margin-bottom: 2px;">2024</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a0d06; margin-bottom: 4px;">Student House System Introduced</h5>
+                                        <p style="font-size: 0.9rem; color: #6f5f54; margin: 0; line-height: 1.5;">Prudhvi, Vayu, Agni, Aakash, and Jal launched to drive mentorship, events, and healthy competition.</p>
                                     </div>
                                 </div>
 
@@ -1853,9 +1853,9 @@ include "./head.php";
                                 <div class="compact-timeline-item">
                                     <div class="compact-node"></div>
                                     <div class="timeline-box">
-                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2025</span>
-                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Department-wide Digital Platform</h5>
-                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">A unified points, events, and appreciation system rolled out across every batch and section.</p>
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #d97706; display: block; margin-bottom: 2px;">2025</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a0d06; margin-bottom: 4px;">Department-wide Digital Platform</h5>
+                                        <p style="font-size: 0.9rem; color: #6f5f54; margin: 0; line-height: 1.5;">A unified points, events, and appreciation system rolled out across every batch and section.</p>
                                     </div>
                                 </div>
 
@@ -1863,9 +1863,9 @@ include "./head.php";
                                 <div class="compact-timeline-item">
                                     <div class="compact-node"></div>
                                     <div class="timeline-box">
-                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2026</span>
-                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Jaitra 2k26</h5>
-                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">The department co-anchored SRKR's flagship annual fest, its largest student showcase yet.</p>
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #d97706; display: block; margin-bottom: 2px;">2026</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a0d06; margin-bottom: 4px;">Jaitra 2k26</h5>
+                                        <p style="font-size: 0.9rem; color: #6f5f54; margin: 0; line-height: 1.5;">The department co-anchored SRKR's flagship annual fest, its largest student showcase yet.</p>
                                     </div>
                                 </div>
                             </div>
@@ -1876,11 +1876,11 @@ include "./head.php";
                 <!-- Message from Leadership & Live Updates - 40% Width (col-md-5) -->
                 <div class="col-md-5 d-flex flex-column justify-content-between">
                     <!-- Leadership Card -->
-                    <div class="hod-card d-flex flex-column" style="padding: 26px 30px; border-radius: 20px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+                    <div class="hod-card d-flex flex-column" style="padding: 26px 30px; border-radius: 20px; border: 1px solid #f3eae1; background: #ffffff; box-shadow: 0 10px 30px rgba(180, 83, 9, 0.04);">
                         <div>
                             <div class="text-center mb-3">
-                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2.5px; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 4px;">LEADERSHIP</span>
-                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.8rem; color: #0f172a; margin: 0;">Message from Leadership</h3>
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2.5px; color: #b45309; text-transform: uppercase; display: block; margin-bottom: 4px;">LEADERSHIP</span>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.8rem; color: #1a0d06; margin: 0;">Message from Leadership</h3>
                             </div>
 
                             <!-- Leadership Members Side by Side -->
@@ -1889,74 +1889,74 @@ include "./head.php";
                                 <div class="leadership-member" style="text-align: center; flex: 1;">
                                     <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 10px;">
                                         <img src="./assets/logos/sureshsir.png" alt="Head of Department"
-                                            style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #3b82f6; object-fit: cover; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2);">
+                                            style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #d97706; object-fit: cover; box-shadow: 0 6px 16px rgba(217, 119, 6, 0.2);">
                                     </div>
-                                    <h6 style="color: #0f172a; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. M Suresh Babu</h6>
-                                    <p style="color: #64748b; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSD</p>
+                                    <h6 style="color: #1a0d06; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. M Suresh Babu</h6>
+                                    <p style="color: #6f5f54; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSD</p>
                                 </div>
 
                                 <!-- Second Leadership Member -->
                                 <div class="leadership-member" style="text-align: center; flex: 1;">
                                     <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 10px;">
                                         <img src="./assets/faculty_imgs/4.jpg" alt="Associate Head"
-                                            style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #10b981; object-fit: cover; box-shadow: 0 6px 16px rgba(16, 185, 129, 0.2);">
+                                            style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #b45309; object-fit: cover; box-shadow: 0 6px 16px rgba(180, 83, 9, 0.2);">
                                     </div>
-                                    <h6 style="color: #0f172a; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. N. Gopala Krishna Murthy</h6>
-                                    <p style="color: #64748b; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSIT</p>
+                                    <h6 style="color: #1a0d06; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. N. Gopala Krishna Murthy</h6>
+                                    <p style="color: #6f5f54; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSIT</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Combined Quote -->
-                        <div style="padding: 16px 20px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; border-left: 4px solid #3b82f6;">
-                            <blockquote style="font-size: 0.88rem; line-height: 1.55; font-style: italic; margin: 0; color: #334155; font-weight: 500;">
+                        <div style="padding: 16px 20px; background: linear-gradient(135deg, #fdfbf7 0%, #f3eae1 100%); border-radius: 16px; border-left: 4px solid #d97706;">
+                            <blockquote style="font-size: 0.88rem; line-height: 1.55; font-style: italic; margin: 0; color: #1a0d06; font-weight: 500;">
                                 "We nurture innovative minds and create technology leaders who will shape the future through excellence in education and innovation in research."
                             </blockquote>
                         </div>
                     </div>
 
                     <!-- Live Updates Box -->
-                    <div class="live-updates-card" style="margin-top: 16px; padding: 22px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%); border: 1.5px solid #fecdd3; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.07); position: relative; overflow: hidden; transition: all 0.3s ease;">
+                    <div class="live-updates-card" style="margin-top: 16px; padding: 22px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%); border: 1.5px solid #fde68a; box-shadow: 0 10px 25px rgba(217, 119, 6, 0.07); position: relative; overflow: hidden; transition: all 0.3s ease;">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                             <div style="display: flex; align-items: center; gap: 8px;">
                                 <span class="live-pulse-dot"></span>
-                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #e11d48; text-transform: uppercase;">LIVE UPDATES</span>
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #b45309; text-transform: uppercase;">LIVE UPDATES</span>
                             </div>
-                            <span style="background: #ffe4e6; color: #be123c; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; font-family: 'Outfit', sans-serif;">UPCOMING</span>
+                            <span style="background: #fef3c7; color: #92400e; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; font-family: 'Outfit', sans-serif;">UPCOMING</span>
                         </div>
 
-                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: #0f172a; margin-bottom: 10px; line-height: 1.3;">
+                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: #1a0d06; margin-bottom: 10px; line-height: 1.3;">
                             "Irumudi" Trailer Launch Event
                         </h4>
 
                         <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px;">
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
-                                <i class="far fa-calendar-alt" style="color: #e11d48;"></i>
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fde68a; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #78350f; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                <i class="far fa-calendar-alt" style="color: #d97706;"></i>
                                 12th August
                             </span>
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
-                                <i class="far fa-clock" style="color: #e11d48;"></i>
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fde68a; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #78350f; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                <i class="far fa-clock" style="color: #d97706;"></i>
                                 From 4:30 PM
                             </span>
                         </div>
 
                         <!-- Featured Event Video Spotlight (Potluck Event) -->
-                        <div style="border-top: 1px dashed #fecdd3; padding-top: 14px;">
+                        <div style="border-top: 1px dashed #fde68a; padding-top: 14px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="font-size: 0.85rem; font-weight: 800; color: #0f172a; font-family: 'Outfit', sans-serif;">
+                                <span style="font-size: 0.85rem; font-weight: 800; color: #1a0d06; font-family: 'Outfit', sans-serif;">
                                     Potluck Event
                                 </span>
-                                <span style="font-size: 0.72rem; font-weight: 700; color: #e11d48; background: #ffe4e6; padding: 2px 8px; border-radius: 10px;">
+                                <span style="font-size: 0.72rem; font-weight: 700; color: #b45309; background: #fef3c7; padding: 2px 8px; border-radius: 10px;">
                                     <i class="fab fa-instagram me-1"></i> Reel
                                 </span>
                             </div>
                             <!-- Background Video (No Controls, Autoplay, Muted, Loop) -->
-                            <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); height: 160px;">
+                            <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(180, 83, 9, 0.08); height: 160px;">
                                 <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
                                     <source src="assets/videos/pot_luck.mp4" type="video/mp4">
                                 </video>
                             </div>
-                            <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 10px; line-height: 1.4;">
+                            <p style="font-size: 0.82rem; color: #6f5f54; margin-bottom: 10px; line-height: 1.4;">
                                 A joyful community celebration featuring delicious homemade food, fun activities, and memorable bonding moments.
                             </p>
                             <a href="https://www.instagram.com/reel/C_VGop-ydyj/?igsh=MWZvdWozeGZ5a2pjag==" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 0.8rem; padding: 7px 16px; border-radius: 20px; box-shadow: 0 4px 12px rgba(220, 39, 67, 0.25);">
@@ -2167,107 +2167,165 @@ include "./head.php";
 
             <div class="companies-carousel-wrapper" style="overflow: hidden; ">
                 <!-- First Row -->
-                <div class="carousel-row" style="display: flex; animation: scroll-left 30s linear infinite; margin-bottom: -100px; ">
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/1.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                <div class="carousel-row" style="display: flex; animation: scroll-left 30s linear infinite; margin-bottom: -40px; ">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/1.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/2.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/2.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/3.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/3.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/4.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/4.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/5.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/5.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/6.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/6.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/7.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/7.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/8.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/8.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/9.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/9.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/10.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/10.png" alt="Company Partner">
                     </div>
                     <!-- Duplicate items for seamless loop -->
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/1.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/1.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/2.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/2.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/3.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/3.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/4.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/4.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/5.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/5.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/6.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/7.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/8.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/9.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/10.png" alt="Company Partner">
                     </div>
                 </div>
 
                 <!-- Second Row -->
                 <div class="carousel-row" style="display: flex; animation: scroll-right 30s linear infinite; ">
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/11.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/11.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/12.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/12.png?v=2" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/13.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/13.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/14.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/14.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/15.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/15.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/16.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/16.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/17.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/17.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/18.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/18.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/19.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/19.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/20.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/20.png" alt="Company Partner">
                     </div>
                     <!-- Duplicate items for seamless loop -->
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/11.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/11.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/12.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/12.png?v=2" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/13.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/13.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/14.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/14.png" alt="Company Partner">
                     </div>
-                    <div class="company-item" style="width:100%;">
-                        <img src="./assets/company_logos/logos/15.png" alt="Company Partner" style="max-height: 200px; max-width: 360px; object-fit: contain;">
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/15.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/16.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/17.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/18.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/19.png" alt="Company Partner">
+                    </div>
+                    <div class="company-item">
+                        <img src="./assets/company_logos/logos/20.png" alt="Company Partner">
                     </div>
                 </div>
             </div>
 
             <style>
+                .carousel-row {
+                    display: flex;
+                    width: max-content;
+                    gap: 30px;
+                }
+
+                .company-item {
+                    flex: 0 0 270px;
+                    height: 140px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: transparent !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                    outline: none !important;
+                    padding: 10px;
+                }
+
+                .company-item img {
+                    max-width: 100%;
+                    max-height: 100%;
+                    object-fit: contain;
+                    border: none !important;
+                    box-shadow: none !important;
+                    outline: none !important;
+                }
+
                 @keyframes scroll-left {
                     0% {
                         transform: translateX(0);

@@ -259,28 +259,28 @@ include "connect.php";
         // Centralized Reusable Data Structure for 2nd Year & 3rd Year CR Profiles
         $secondYearCRs = [
             [
-                'id' => 'cr-1',
-                'name' => 'PAMU AMRUTHA',
-                'registrationNumber' => '25B91A0782',
-                'phone' => '7842878358',
-                'className' => 'CSIT - II Year - Section B',
-                'branch' => 'CSIT',
+                'id' => 'cr-5',
+                'name' => 'JAVVADI MOHANA DURGA',
+                'registrationNumber' => '25B91A6223',
+                'phone' => '8919965254',
+                'className' => 'CSD - II Year',
+                'branch' => 'CSD',
                 'year' => 'II Year',
-                'section' => 'Section B',
-                'image' => 'public/images/cr/pamu-amrutha.jpg',
-                'badgeColor' => 'bg-primary'
+                'section' => '',
+                'image' => 'public/images/cr/javvadi-mohana-durga.jpg',
+                'badgeColor' => 'bg-success'
             ],
             [
-                'id' => 'cr-2',
-                'name' => 'B PRASANNA VARUN',
-                'registrationNumber' => '25B91A0717',
-                'phone' => '9014443289',
-                'className' => 'CSIT - II Year - Section B',
-                'branch' => 'CSIT',
+                'id' => 'cr-6',
+                'name' => 'VASA HARI NAGENDRA PRATAP',
+                'registrationNumber' => '25B91A6263',
+                'phone' => '9491091836',
+                'className' => 'CSD - II Year',
+                'branch' => 'CSD',
                 'year' => 'II Year',
-                'section' => 'Section B',
-                'image' => 'public/images/cr/b-prasanna-varun.jpg',
-                'badgeColor' => 'bg-primary'
+                'section' => '',
+                'image' => 'public/images/cr/vasa-hari-nagendra-pratap.jpg',
+                'badgeColor' => 'bg-success'
             ],
             [
                 'id' => 'cr-3',
@@ -307,28 +307,28 @@ include "connect.php";
                 'badgeColor' => 'bg-info text-dark'
             ],
             [
-                'id' => 'cr-5',
-                'name' => 'JAVVADI MOHANA DURGA',
-                'registrationNumber' => '25B91A6223',
-                'phone' => '8919965254',
-                'className' => 'CSD - II Year',
-                'branch' => 'CSD',
+                'id' => 'cr-1',
+                'name' => 'PAMU AMRUTHA',
+                'registrationNumber' => '25B91A0782',
+                'phone' => '7842878358',
+                'className' => 'CSIT - II Year - Section B',
+                'branch' => 'CSIT',
                 'year' => 'II Year',
-                'section' => '',
-                'image' => 'public/images/cr/javvadi-mohana-durga.jpg',
-                'badgeColor' => 'bg-success'
+                'section' => 'Section B',
+                'image' => 'public/images/cr/pamu-amrutha.jpg',
+                'badgeColor' => 'bg-primary'
             ],
             [
-                'id' => 'cr-6',
-                'name' => 'VASA HARI NAGENDRA PRATAP',
-                'registrationNumber' => '25B91A6263',
-                'phone' => '9491091836',
-                'className' => 'CSD - II Year',
-                'branch' => 'CSD',
+                'id' => 'cr-2',
+                'name' => 'B PRASANNA VARUN',
+                'registrationNumber' => '25B91A0717',
+                'phone' => '9014443289',
+                'className' => 'CSIT - II Year - Section B',
+                'branch' => 'CSIT',
                 'year' => 'II Year',
-                'section' => '',
-                'image' => 'public/images/cr/vasa-hari-nagendra-pratap.jpg',
-                'badgeColor' => 'bg-success'
+                'section' => 'Section B',
+                'image' => 'public/images/cr/b-prasanna-varun.jpg',
+                'badgeColor' => 'bg-primary'
             ]
         ];
 

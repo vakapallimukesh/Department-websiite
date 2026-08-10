@@ -31,26 +31,8 @@ $houses = [
         'description' => 'Wind House - Swift and free like the breeze that carries change across the world. Vayu House students are dynamic, innovative, and bring fresh perspectives to every challenge.',
         'img' => 'img/house3.png'
     ],
-    'Pruthvi' => [
-        'name' => 'Pruthvi', 
-        'color' => '#8D6E63', 
-        'gradient' => 'linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%)',
-        'light_color' => '#EFEBE9',
-        'icon' => 'fas fa-mountain',
-        'description' => 'Earth House - Strong and steady like the mountains that stand the test of time. Pruthvi House members are grounded, reliable, and provide the solid foundation upon which great achievements are built.',
-        'img' => 'img/house4.png'    
-    ],
     'PRUDHVI' => [
         'name' => 'PRUDHVI', 
-        'color' => '#8D6E63', 
-        'gradient' => 'linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%)',
-        'light_color' => '#EFEBE9',
-        'icon' => 'fas fa-mountain',
-        'description' => 'Earth House - Strong and steady like the mountains that stand the test of time. Pruthvi House members are grounded, reliable, and provide the solid foundation upon which great achievements are built.',
-        'img' => 'img/house4.png'    
-    ],
-    'Prudhvi' => [
-        'name' => 'Prudhvi', 
         'color' => '#8D6E63', 
         'gradient' => 'linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%)',
         'light_color' => '#EFEBE9',
@@ -290,9 +272,9 @@ $leader_house_points = $all_house_totals[$leader_house_key];
 // Calculate house statistics
 $house_stats = [
     'student_count' => count($students),
-    'total_points' => array_sum(array_column($students, 'total_points')),
-    'avg_points' => count($students) > 0 ? array_sum(array_column($students, 'total_points')) / count($students) : 0,
-    'max_points' => count($students) > 0 ? max(array_column($students, 'total_points')) : 0
+    'total_points' => 0,
+    'avg_points' => 0.0,
+    'max_points' => 0
 ];
 ?>
 
@@ -2103,7 +2085,7 @@ $house_stats = [
                                     </div>
                                     <div class="text-end">
                                         <span class="font-bold d-block" style="color: <?php echo $house_info['color']; ?>; font-weight: 800; font-size: 1.1rem;">
-                                            <?php echo number_format($ts['total_points']); ?>
+                                            <?php echo 0; ?>
                                         </span>
                                         <small class="text-muted">pts</small>
                                     </div>
@@ -2204,7 +2186,7 @@ $house_stats = [
                                         <?php if (!$using_new_schema): ?>
                                             <td style="padding: 16px 20px; border: none; text-align: right;">
                                                 <span style="font-weight: 700; font-size: 1.1rem; color: <?php echo $house_info['color']; ?>;">
-                                                    <?php echo number_format($student['total_points']); ?>
+                                                    <?php echo 0; ?>
                                                 </span>
                                             </td>
                                         <?php endif; ?>

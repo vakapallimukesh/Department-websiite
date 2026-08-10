@@ -1871,7 +1871,14 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                                             <span class="badge bg-light text-dark fw-bold">${e.year}</span>
                                         </div>
                                         <div class="text-primary small fw-semibold">${e.univ}</div>
-                                        <div class="text-muted small">${e.note || ''}</div>
+                                        ${(function(note) {
+                                            if (!note) return '';
+                                            let cleaned = note.replace(/Percentage:\s*\d+(?:\.\d+)?%/gi, '');
+                                            cleaned = cleaned.replace(/^\s*\|\s*/, '');
+                                            cleaned = cleaned.replace(/\s*\|\s*$/, '');
+                                            cleaned = cleaned.replace(/\s*\|\s*\|\s*/g, ' | ').trim();
+                                            return cleaned ? `<div class="text-muted small">${cleaned}</div>` : '';
+                                        })(e.note)}
                                     </div>
                                 `).join('')}
                             </div>
