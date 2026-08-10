@@ -493,7 +493,7 @@ body {
                 <div class="news-card" style="border: 1.5px solid #fecdd3; background: #ffffff; padding: 22px; border-radius: 24px;">
                     <!-- Background Video Container -->
                     <div style="position: relative; border-radius: 18px; overflow: hidden; height: 210px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
-                        <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
+                        <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; transform: rotate(90deg) scale(1.78); display: block; pointer-events: none;">
                             <source src="assets/videos/freshers_csd_csit.mp4" type="video/mp4">
                             Your browser does not support HTML5 video.
                         </video>
