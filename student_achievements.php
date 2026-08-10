@@ -443,8 +443,8 @@ body {
         <div class="modal-content border-0 overflow-hidden rounded-4 shadow-lg">
             <div class="modal-header border-0 bg-dark text-white p-3 d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-bold" id="lightboxCategoryBadge">SMART INDIA HACKATHON 2025</span>
-                    <span class="small text-muted" id="lightboxCounter">Image 1 of 2</span>
+                    <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-bold" id="lightboxCategoryBadge">HACKATHON ACHIEVEMENT</span>
+                    <span class="small text-muted" id="lightboxCounter">Image 1 of 1</span>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -458,7 +458,7 @@ body {
                 </button>
             </div>
             <div class="modal-footer border-0 bg-dark text-white p-3 justify-content-between">
-                <div class="small fw-semibold text-warning" id="lightboxCaption">Team Ujjval — Distinguished Performer Award (Smart India Hackathon 2025)</div>
+                <div class="small fw-semibold text-warning" id="lightboxCaption">Achievement Preview</div>
                 <button type="button" class="btn btn-outline-light rounded-pill btn-sm px-4" data-bs-dismiss="modal">Close Preview</button>
             </div>
         </div>
@@ -469,10 +469,36 @@ body {
 // Data Structure for Student Achievements
 const studentAchievements = [
     {
+        id: "quantum-valley-2025",
+        title: "1st Place",
+        subtitle: "Amaravati Quantum Valley Hackathon 2025 — Grand Finale",
+        event: "Amaravati Quantum Valley Hackathon 2025",
+        category: "hackathons",
+        categoryName: "Hackathon Achievement",
+        categoryIcon: "fa-trophy",
+        team: "Team Entangled Coders",
+        award: "🥇 1st Place",
+        cashAward: "₹50,000",
+        stage: "Grand Finale",
+        department: "Department of CSD & CSIT, SRKR Engineering College",
+        description: "Proud moment for Team Entangled Coders from the Department of CSD & CSIT, SRKR Engineering College, for securing 1st Place at the Amaravati Quantum Valley Hackathon 2025 – Grand Finale. Their innovation, teamwork, and dedication earned them the top honor along with a ₹50,000 Cash Award.",
+        images: [
+            "assets/achievements/quantum-valley-2025-team-entangled-coders-1.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-medal", text: "🥇 1st Place", colorClass: "bg-warning text-dark" },
+            { icon: "fas fa-laptop-code", text: "Hackathon", colorClass: "bg-primary text-white" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹50,000 Cash Award", colorClass: "bg-success text-white" },
+            { icon: "fas fa-flag-checkered", text: "Grand Finale", colorClass: "bg-danger text-white" },
+            { icon: "fas fa-rocket", text: "Innovation Honor", colorClass: "bg-info text-dark" }
+        ]
+    },
+    {
         id: "sih-2025-team-ujjval",
         title: "Distinguished Performer Award",
         subtitle: "Smart India Hackathon 2025 — Grand Finale",
-        event: "Smart India Hackathon 2025 — Grand Finale",
+        event: "Smart India Hackathon 2025",
         category: "hackathons",
         categoryName: "Hackathon Achievement",
         categoryIcon: "fa-trophy",
@@ -584,34 +610,40 @@ function renderAchievements(selectedCategory = 'all') {
                                     </span>
                                 </div>
                                 <div class="position-absolute top-0 start-0 p-3 d-flex gap-2" style="z-index: 6;">
-                                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.78rem;">
-                                        🏆 ${item.award}
+                                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.82rem;">
+                                        ${item.award}
                                     </span>
                                 </div>
                                 <div class="position-absolute bottom-0 end-0 p-3" style="z-index: 6;">
                                     <span class="badge bg-dark bg-opacity-75 text-white px-3 py-1.5 rounded-pill small" style="backdrop-filter: blur(4px);">
-                                        <i class="fas fa-images me-1"></i> ${item.images.length} Photos
+                                        <i class="fas fa-images me-1"></i> ${item.images.length} Photo${item.images.length > 1 ? 's' : ''}
                                     </span>
                                 </div>
                             </div>
 
-                            <!-- Image Thumbnail Strip -->
-                            <div class="d-flex align-items-center justify-content-start gap-3">
-                                ${item.images.map((imgSrc, idx) => `
-                                    <div class="gallery-thumbnail ${idx === 0 ? 'active' : ''}" id="thumb-${item.id}-${idx}" onclick="switchGalleryImg('${item.id}', ${idx})">
-                                        <img src="${imgSrc}" alt="Thumbnail ${idx + 1}">
-                                    </div>
-                                `).join('')}
-                                <span class="small text-muted ms-2"><i class="fas fa-magic me-1 text-warning"></i> Auto Slideshow & 3D Tilt</span>
-                            </div>
+                            ${item.images.length > 1 ? `
+                                <!-- Image Thumbnail Strip -->
+                                <div class="d-flex align-items-center justify-content-start gap-3">
+                                    ${item.images.map((imgSrc, idx) => `
+                                        <div class="gallery-thumbnail ${idx === 0 ? 'active' : ''}" id="thumb-${item.id}-${idx}" onclick="switchGalleryImg('${item.id}', ${idx})">
+                                            <img src="${imgSrc}" alt="Thumbnail ${idx + 1}">
+                                        </div>
+                                    `).join('')}
+                                    <span class="small text-muted ms-2"><i class="fas fa-magic me-1 text-warning"></i> Auto Slideshow & 3D Tilt</span>
+                                </div>
+                            ` : `
+                                <div class="text-start">
+                                    <span class="small text-muted"><i class="fas fa-hand-pointer me-1 text-warning"></i> Click image to open Fullscreen Lightbox</span>
+                                </div>
+                            `}
                         </div>
 
                         <!-- Right Column: Achievement Information -->
                         <div class="col-lg-6">
                             <!-- Top Header Badges -->
                             <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
-                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold badge-pulse" style="font-size: 0.8rem; letter-spacing: 0.5px;">
-                                    <i class="fas fa-trophy me-1"></i> DISTINGUISHED PERFORMER
+                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold badge-pulse" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                                    ${item.award}
                                 </span>
                                 <span class="badge bg-danger text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.8rem;">
                                     🎯 GRAND FINALE
@@ -623,7 +655,7 @@ function renderAchievements(selectedCategory = 'all') {
 
                             <!-- Title & Subtitle -->
                             <h2 class="font-outfit fw-bold text-dark mb-2" style="font-size: 2.1rem; line-height: 1.25;">
-                                ${item.title}
+                                ${item.award === '🥇 1st Place' ? '1st Place Winner — ' + item.event : item.title}
                             </h2>
                             
                             <div class="d-flex align-items-center gap-2 mb-3">
@@ -641,12 +673,12 @@ function renderAchievements(selectedCategory = 'all') {
                                         </div>
                                         <div>
                                             <span class="text-uppercase small fw-bold text-secondary d-block" style="letter-spacing: 1px; font-size: 0.75rem;">Cash Award Received</span>
-                                            <h4 class="fw-extrabold text-dark mb-0 font-outfit" style="color: #b45309 !important; font-size: 1.6rem;">${item.cashAward}</h4>
+                                            <h4 class="fw-extrabold text-dark mb-0 font-outfit" style="color: #b45309 !important; font-size: 1.65rem;">${item.cashAward}</h4>
                                         </div>
                                     </div>
                                     <div class="text-end">
                                         <span class="badge bg-dark text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.8rem;">
-                                            ⏱️ ${item.duration} Hackathon
+                                            🏆 ${item.stage || item.duration}
                                         </span>
                                     </div>
                                 </div>
@@ -687,7 +719,7 @@ function setupInteractiveGallery(itemId, images) {
     let currentIdx = 0;
     currentIdxMap[itemId] = 0;
 
-    // Auto slideshow every 4.5 seconds
+    // Auto slideshow if multiple images exist
     if (images.length > 1) {
         autoSlideshowInterval = setInterval(() => {
             currentIdx = (currentIdx + 1) % images.length;
