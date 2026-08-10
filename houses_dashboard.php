@@ -158,7 +158,7 @@ $overall_stats = [
 ];
 
 // Get total events
-$events_sql = "SELECT COUNT(*) as total FROM events WHERE status = 'Completed'";
+$events_sql = "SELECT COUNT(*) as total FROM events WHERE event_date <= CURDATE()";
 $events_result = mysqli_query($conn, $events_sql);
 if ($events_result) {
     $events_data = mysqli_fetch_assoc($events_result);
