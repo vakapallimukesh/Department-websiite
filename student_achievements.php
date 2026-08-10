@@ -122,22 +122,25 @@ body {
     box-shadow: 0 6px 18px rgba(217, 119, 6, 0.25);
 }
 
-/* Featured Achievement Card Styling */
-.featured-achievement-card {
+/* Featured Side-by-Side Achievement Card Styling */
+.featured-achievement-card-side {
     background: #ffffff;
     border: 1.5px solid #f3eae1;
     border-top: 6px solid #d97706;
     border-radius: 28px;
-    padding: 36px;
+    padding: 28px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     box-shadow: 0 16px 45px rgba(180, 83, 9, 0.08);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
 }
 
-.featured-achievement-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 24px 60px rgba(217, 119, 6, 0.16);
+.featured-achievement-card-side:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 60px rgba(217, 119, 6, 0.18);
     border-color: #f59e0b;
 }
 
@@ -149,7 +152,7 @@ body {
     background: #1a0d06;
     box-shadow: 0 16px 35px rgba(0, 0, 0, 0.16);
     cursor: pointer;
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/10;
     perspective: 1000px;
     transform-style: preserve-3d;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
@@ -218,9 +221,9 @@ body {
 }
 
 .gallery-thumbnail {
-    width: 85px;
-    height: 62px;
-    border-radius: 14px;
+    width: 75px;
+    height: 54px;
+    border-radius: 12px;
     overflow: hidden;
     border: 2.5px solid transparent;
     cursor: pointer;
@@ -239,14 +242,14 @@ body {
 .gallery-thumbnail.active::after {
     content: '✓';
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 3px;
+    right: 3px;
     background: #d97706;
     color: white;
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     font-weight: 900;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -263,8 +266,8 @@ body {
 .cash-award-spotlight {
     background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
     border: 1.5px solid #fde68a;
-    border-radius: 20px;
-    padding: 18px 24px;
+    border-radius: 18px;
+    padding: 16px 20px;
     position: relative;
     overflow: hidden;
 }
@@ -290,14 +293,14 @@ body {
 .info-badge-item {
     background: #fdfbf7;
     border: 1px solid #f3eae1;
-    border-radius: 14px;
-    padding: 10px 16px;
-    font-size: 0.88rem;
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-size: 0.82rem;
     font-weight: 600;
     color: #1a0d06;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     transition: all 0.2s ease;
 }
 
@@ -430,9 +433,9 @@ body {
             <button class="category-filter-btn" data-category="conferences">🎤 Conferences</button>
         </div>
 
-        <!-- Achievements Container (Rendered by JS / PHP Data) -->
+        <!-- Side-by-Side Achievements Container -->
         <div id="achievementsContainer">
-            <!-- Dynamic achievements rendered here -->
+            <!-- Dynamic side-by-side achievement cards rendered here -->
         </div>
     </div>
 </section>
@@ -470,8 +473,7 @@ body {
 const studentAchievements = [
     {
         id: "quantum-valley-2025",
-        title: "1st Place",
-        subtitle: "Amaravati Quantum Valley Hackathon 2025 — Grand Finale",
+        title: "1st Place — Amaravati Quantum Valley Hackathon 2025",
         event: "Amaravati Quantum Valley Hackathon 2025",
         category: "hackathons",
         categoryName: "Hackathon Achievement",
@@ -496,14 +498,13 @@ const studentAchievements = [
     },
     {
         id: "sih-2025-team-ujjval",
-        title: "Distinguished Performer Award",
-        subtitle: "Smart India Hackathon 2025 — Grand Finale",
+        title: "Distinguished Performer Award — Smart India Hackathon 2025",
         event: "Smart India Hackathon 2025",
         category: "hackathons",
         categoryName: "Hackathon Achievement",
         categoryIcon: "fa-trophy",
         team: "Team Ujjval",
-        award: "Distinguished Performer Award",
+        award: "Distinguished Performer",
         cashAward: "₹25,000",
         date: "8th & 9th December 2025",
         duration: "36 Hours",
@@ -589,122 +590,122 @@ function renderAchievements(selectedCategory = 'all') {
         return;
     }
 
+    // Render Side-by-Side Row Grid Layout
+    const rowGrid = document.createElement('div');
+    rowGrid.className = 'row g-4 align-items-stretch';
+
     filtered.forEach(item => {
-        const cardCol = document.createElement('div');
-        cardCol.className = 'mb-5';
+        const colCard = document.createElement('div');
+        colCard.className = 'col-lg-6 d-flex';
 
-        if (item.featured) {
-            cardCol.innerHTML = `
-                <div class="featured-achievement-card">
-                    <div class="row g-4 align-items-center">
-                        <!-- Left Column: Interactive Animated Image Gallery -->
-                        <div class="col-lg-6">
-                            <div class="achievement-gallery-main mb-3" id="mainGalleryBox-${item.id}" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
-                                <span class="sparkle-dot"></span>
-                                <span class="sparkle-dot"></span>
-                                <span class="sparkle-dot"></span>
-                                <img id="activeMainImg-${item.id}" src="${item.images[0]}" alt="${item.title}" loading="lazy">
-                                <div class="gallery-hover-overlay">
-                                    <span class="btn btn-light rounded-pill px-4 py-2 fw-bold shadow-sm">
-                                        <i class="fas fa-search-plus me-2 text-warning"></i> View Full Image
-                                    </span>
-                                </div>
-                                <div class="position-absolute top-0 start-0 p-3 d-flex gap-2" style="z-index: 6;">
-                                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.82rem;">
-                                        ${item.award}
-                                    </span>
-                                </div>
-                                <div class="position-absolute bottom-0 end-0 p-3" style="z-index: 6;">
-                                    <span class="badge bg-dark bg-opacity-75 text-white px-3 py-1.5 rounded-pill small" style="backdrop-filter: blur(4px);">
-                                        <i class="fas fa-images me-1"></i> ${item.images.length} Photo${item.images.length > 1 ? 's' : ''}
-                                    </span>
-                                </div>
+        colCard.innerHTML = `
+            <div class="featured-achievement-card-side w-100">
+                <!-- Top Main Animated Gallery -->
+                <div class="achievement-gallery-main mb-3" id="mainGalleryBox-${item.id}" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
+                    <span class="sparkle-dot"></span>
+                    <span class="sparkle-dot"></span>
+                    <span class="sparkle-dot"></span>
+                    <img id="activeMainImg-${item.id}" src="${item.images[0]}" alt="${item.title}" loading="lazy">
+                    <div class="gallery-hover-overlay">
+                        <span class="btn btn-light rounded-pill px-4 py-2 fw-bold shadow-sm">
+                            <i class="fas fa-search-plus me-2 text-warning"></i> View Full Image
+                        </span>
+                    </div>
+                    <div class="position-absolute top-0 start-0 p-3 d-flex gap-2" style="z-index: 6;">
+                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.82rem;">
+                            ${item.award}
+                        </span>
+                    </div>
+                    <div class="position-absolute bottom-0 end-0 p-3" style="z-index: 6;">
+                        <span class="badge bg-dark bg-opacity-75 text-white px-3 py-1.5 rounded-pill small" style="backdrop-filter: blur(4px);">
+                            <i class="fas fa-images me-1"></i> ${item.images.length} Photo${item.images.length > 1 ? 's' : ''}
+                        </span>
+                    </div>
+                </div>
+
+                ${item.images.length > 1 ? `
+                    <!-- Thumbnail Strip -->
+                    <div class="d-flex align-items-center justify-content-start gap-2 mb-3">
+                        ${item.images.map((imgSrc, idx) => `
+                            <div class="gallery-thumbnail ${idx === 0 ? 'active' : ''}" id="thumb-${item.id}-${idx}" onclick="switchGalleryImg('${item.id}', ${idx})">
+                                <img src="${imgSrc}" alt="Thumbnail ${idx + 1}">
                             </div>
+                        `).join('')}
+                        <span class="small text-muted ms-2"><i class="fas fa-magic me-1 text-warning"></i> Auto Slideshow & 3D Tilt</span>
+                    </div>
+                ` : `
+                    <div class="text-start mb-3">
+                        <span class="small text-muted"><i class="fas fa-hand-pointer me-1 text-warning"></i> Click image to open Fullscreen Lightbox</span>
+                    </div>
+                `}
 
-                            ${item.images.length > 1 ? `
-                                <!-- Image Thumbnail Strip -->
-                                <div class="d-flex align-items-center justify-content-start gap-3">
-                                    ${item.images.map((imgSrc, idx) => `
-                                        <div class="gallery-thumbnail ${idx === 0 ? 'active' : ''}" id="thumb-${item.id}-${idx}" onclick="switchGalleryImg('${item.id}', ${idx})">
-                                            <img src="${imgSrc}" alt="Thumbnail ${idx + 1}">
-                                        </div>
-                                    `).join('')}
-                                    <span class="small text-muted ms-2"><i class="fas fa-magic me-1 text-warning"></i> Auto Slideshow & 3D Tilt</span>
-                                </div>
-                            ` : `
-                                <div class="text-start">
-                                    <span class="small text-muted"><i class="fas fa-hand-pointer me-1 text-warning"></i> Click image to open Fullscreen Lightbox</span>
-                                </div>
-                            `}
+                <!-- Achievement Header Badges -->
+                <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
+                    <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-bold badge-pulse" style="font-size: 0.78rem; letter-spacing: 0.5px;">
+                        ${item.award}
+                    </span>
+                    <span class="badge bg-danger text-white px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.78rem;">
+                        🎯 GRAND FINALE
+                    </span>
+                    <span class="badge bg-primary text-white px-3 py-1.5 rounded-pill fw-semibold" style="font-size: 0.78rem;">
+                        <i class="fas fa-laptop-code me-1"></i> Hackathon
+                    </span>
+                </div>
+
+                <!-- Title & Team -->
+                <h3 class="font-outfit fw-bold text-dark mb-2" style="font-size: 1.65rem; line-height: 1.3;">
+                    ${item.title}
+                </h3>
+                
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <span class="fw-bold text-warning fs-6"><i class="fas fa-users me-1"></i> ${item.team}</span>
+                    <span class="text-muted">•</span>
+                    <span class="fw-semibold text-secondary small"><i class="fas fa-university me-1"></i> CSD & CSIT</span>
+                </div>
+
+                <!-- Cash Award Spotlight -->
+                <div class="cash-award-spotlight mb-3">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 position-relative z-1">
+                        <div class="d-flex align-items-center gap-2.5">
+                            <div class="bg-warning text-dark p-2.5 rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 42px; height: 42px;">
+                                <i class="fas fa-gift fs-5"></i>
+                            </div>
+                            <div>
+                                <span class="text-uppercase small fw-bold text-secondary d-block" style="letter-spacing: 0.8px; font-size: 0.7rem;">Cash Award Received</span>
+                                <h4 class="fw-extrabold text-dark mb-0 font-outfit" style="color: #b45309 !important; font-size: 1.45rem;">${item.cashAward}</h4>
+                            </div>
                         </div>
-
-                        <!-- Right Column: Achievement Information -->
-                        <div class="col-lg-6">
-                            <!-- Top Header Badges -->
-                            <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
-                                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold badge-pulse" style="font-size: 0.85rem; letter-spacing: 0.5px;">
-                                    ${item.award}
-                                </span>
-                                <span class="badge bg-danger text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.8rem;">
-                                    🎯 GRAND FINALE
-                                </span>
-                                <span class="badge bg-primary text-white px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.8rem;">
-                                    <i class="fas fa-laptop-code me-1"></i> ${item.event}
-                                </span>
-                            </div>
-
-                            <!-- Title & Subtitle -->
-                            <h2 class="font-outfit fw-bold text-dark mb-2" style="font-size: 2.1rem; line-height: 1.25;">
-                                ${item.award === '🥇 1st Place' ? '1st Place Winner — ' + item.event : item.title}
-                            </h2>
-                            
-                            <div class="d-flex align-items-center gap-2 mb-3">
-                                <span class="fw-bold fs-5 text-warning"><i class="fas fa-users me-1"></i> ${item.team}</span>
-                                <span class="text-muted">•</span>
-                                <span class="fw-semibold text-secondary small"><i class="fas fa-university me-1"></i> ${item.department}</span>
-                            </div>
-
-                            <!-- Cash Award Spotlight -->
-                            <div class="cash-award-spotlight mb-4">
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 position-relative z-1">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="bg-warning text-dark p-3 rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px;">
-                                            <i class="fas fa-gift fs-4"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-uppercase small fw-bold text-secondary d-block" style="letter-spacing: 1px; font-size: 0.75rem;">Cash Award Received</span>
-                                            <h4 class="fw-extrabold text-dark mb-0 font-outfit" style="color: #b45309 !important; font-size: 1.65rem;">${item.cashAward}</h4>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge bg-dark text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.8rem;">
-                                            🏆 ${item.stage || item.duration}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Description -->
-                            <p class="text-secondary mb-4" style="font-size: 1.02rem; line-height: 1.75;">
-                                ${item.description}
-                            </p>
-
-                            <!-- Information Badges Grid -->
-                            <div class="d-flex flex-wrap gap-2 pt-2 border-top">
-                                ${item.badges.map(b => `
-                                    <div class="info-badge-item">
-                                        <i class="${b.icon} text-warning"></i> ${b.text}
-                                    </div>
-                                `).join('')}
-                            </div>
+                        <div>
+                            <span class="badge bg-dark text-white px-2.5 py-1.5 rounded-pill fw-bold" style="font-size: 0.75rem;">
+                                🏆 ${item.stage || item.duration || 'Grand Finale'}
+                            </span>
                         </div>
                     </div>
                 </div>
-            `;
-        }
-        container.appendChild(cardCol);
 
-        // Attach Interactive 3D Tilt Effect and Auto Slideshow for Item
+                <!-- Description -->
+                <p class="text-secondary mb-4 flex-grow-1" style="font-size: 0.96rem; line-height: 1.65;">
+                    ${item.description}
+                </p>
+
+                <!-- Information Badges Grid -->
+                <div class="d-flex flex-wrap gap-2 pt-3 border-top mt-auto">
+                    ${item.badges.map(b => `
+                        <div class="info-badge-item">
+                            <i class="${b.icon} text-warning"></i> ${b.text}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        rowGrid.appendChild(colCard);
+    });
+
+    container.appendChild(rowGrid);
+
+    // Setup Interactive 3D Tilt Effect and Auto Slideshow for each item
+    filtered.forEach(item => {
         setupInteractiveGallery(item.id, item.images);
     });
 }
@@ -734,8 +735,8 @@ function setupInteractiveGallery(itemId, images) {
             const rect = this.getBoundingClientRect();
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
-            const rotateX = (-y / rect.height) * 12;
-            const rotateY = (x / rect.width) * 12;
+            const rotateX = (-y / rect.height) * 10;
+            const rotateY = (x / rect.width) * 10;
             this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
         });
 
