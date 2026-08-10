@@ -18,6 +18,7 @@ $startupsData = [
         'fallbackSecondaryImage' => 'assets/company_logos/logos/22.png',
         'founder' => 'Dr. M. Suresh Babu',
         'phone' => '9866600002',
+        'appUrl' => 'https://play.google.com/store/apps/details?id=com.bhimavaramonline.androidapp',
         'instagram' => 'https://www.instagram.com/bhimavaram_online?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
         'themeColor' => '#2563eb',
         'themeColorDark' => '#1e3a8a',
@@ -37,6 +38,7 @@ $startupsData = [
         'fallbackSecondaryImage' => 'assets/company_logos/logos/22.png',
         'founder' => 'Dr. M. Suresh Babu',
         'phone' => '9866600002',
+        'appUrl' => 'https://play.google.com/store/apps/details?id=com.bhimavaramonline.androidapp',
         'instagram' => 'https://www.instagram.com/bhimavaram_online?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
         'themeColor' => '#2563eb',
         'themeColorDark' => '#1e3a8a',
@@ -1223,6 +1225,24 @@ body {
                                                 <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 rounded-pill fw-semibold" style="font-size: 0.85rem;">• <?= htmlspecialchars($ka); ?></span>
                                             <?php endforeach; ?>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Android App / Google Play Store Card -->
+                        <?php if (!empty($startup['appUrl'])): ?>
+                            <div class="col-md-6">
+                                <div class="p-4 rounded-4 bg-white border shadow-sm d-flex align-items-center gap-3 detail-row-item h-100">
+                                    <div class="p-3 rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center" style="width: 52px; height: 52px; flex-shrink: 0;">
+                                        <i class="fab fa-google-play fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <span class="text-muted small fw-bold text-uppercase d-block" style="letter-spacing: 0.5px;">Android Mobile App</span>
+                                        <a href="<?= htmlspecialchars($startup['appUrl']); ?>" target="_blank" rel="noopener noreferrer" class="fw-bold text-success text-decoration-none fs-6 d-block mb-1">
+                                            Get Bhimavaram Online App on Play Store <i class="fas fa-external-link-alt ms-1 small" style="font-size: 0.75rem;"></i>
+                                        </a>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill" style="font-size: 0.78rem;">ONDC-Enabled Hyperlocal App</span>
                                     </div>
                                 </div>
                             </div>
