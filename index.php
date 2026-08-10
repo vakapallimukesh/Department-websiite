@@ -2955,6 +2955,9 @@ include "./head.php";
             <div class="hero-buttons">
                 <a href="houses_dashboard.php" class="btn btn-primary">
                     <i class="fas fa-trophy"></i> House Activites </a>
+                <a href="heroes_of_department.php" class="btn" style="background: #7c3aed; color: white;">
+                    <i class="fas fa-user-shield me-1"></i> Class Representatives
+                </a>
                 <a href="students_overview.php" class="btn" style="background: #f1f5f9; color: #475569;">
                     Students Overview
                 </a>
