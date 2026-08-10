@@ -1456,19 +1456,9 @@ body {
                         <?php 
                         $showcaseScreens = [
                             [
-                                'img' => 'public/startups/bhimavaram-online/showcase1.jpg',
-                                'title' => 'Book Taxi / Auto Online',
-                                'desc' => 'Instant local ride & auto bookings'
-                            ],
-                            [
-                                'img' => 'public/startups/bhimavaram-online/showcase2.jpg',
-                                'title' => 'Store & Electronics',
-                                'desc' => 'Mobiles, scooters & top products'
-                            ],
-                            [
-                                'img' => 'public/startups/bhimavaram-online/showcase3.jpg',
-                                'title' => 'All Categories',
-                                'desc' => 'Groceries, vegetables, meat & fruits'
+                                'img' => 'public/startups/bhimavaram-online/showcase5.jpg',
+                                'title' => 'BO Specials & Services',
+                                'desc' => 'Home repairs, news & specials'
                             ],
                             [
                                 'img' => 'public/startups/bhimavaram-online/showcase4.jpg',
@@ -1476,9 +1466,19 @@ body {
                                 'desc' => 'Top local brands & super discounts'
                             ],
                             [
-                                'img' => 'public/startups/bhimavaram-online/showcase5.jpg',
-                                'title' => 'BO Specials & Services',
-                                'desc' => 'Home repairs, news & specials'
+                                'img' => 'public/startups/bhimavaram-online/showcase3.jpg',
+                                'title' => 'All Categories',
+                                'desc' => 'Groceries, vegetables, meat & fruits'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase2.jpg',
+                                'title' => 'Store & Electronics',
+                                'desc' => 'Mobiles, scooters & top products'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase1.jpg',
+                                'title' => 'Book Taxi / Auto Online',
+                                'desc' => 'Instant local ride & auto bookings'
                             ]
                         ];
                         // Duplicate screens array for seamless infinite marquee loop
