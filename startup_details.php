@@ -1377,6 +1377,8 @@ body {
                         <?php endif; ?>
                     </div>
                 </div>
+            <?php endif; ?>
+
             <?php if ($startupId === 'bhimavaram-online' || $startupId === 'bhimavaramonline'): ?>
             <!-- ==================================================
                  BHIMAVARAM ONLINE - APP SHOWCASE SECTION
