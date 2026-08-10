@@ -2886,7 +2886,7 @@ include "./head.php";
                     </div>
                 </div>
                 <div style="position: relative;">
-                    <div style="background: white; border-radius: 15px; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); transform: rotate(2deg);">
+                    <div style="background: white; border-radius: 15px; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <div style="width: 40px; height: 40px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
                                 <i class="fas fa-users" style="color: white; font-size: 16px;"></i>
