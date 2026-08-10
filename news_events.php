@@ -399,34 +399,32 @@ body {
                 </div>
             </div>
 
-            <!-- Event 3 -->
+            <!-- Event 3: Potluck Event Background Video Card -->
             <div class="col-md-6 col-lg-4">
-                <div class="news-card">
-                    <div class="post-box-header">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="post-icon-badge">
-                                <i class="fas fa-running"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">House Championship</h6>
-                                <span style="color: #e6c280; font-size: 0.78rem;">Sports & Cultural Meet</span>
-                            </div>
+                <div class="news-card" style="border: 1.5px solid #fecdd3; background: #ffffff; padding: 22px; border-radius: 24px;">
+                    <!-- Background Video Container (No Controls, Autoplay, Muted, Loop, No Pause Option) -->
+                    <div style="position: relative; border-radius: 18px; overflow: hidden; height: 210px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+                        <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
+                            <source src="assets/videos/pot_luck.mp4" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                            <i class="fab fa-instagram me-1" style="color: #e11d48;"></i> Reel Video
                         </div>
-                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Sports Meet</span>
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Saturday, 10 January 2026</span>
-                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="date-pill" style="background: rgba(225, 29, 72, 0.1); color: #be123c; border-color: rgba(225, 29, 72, 0.2);"><i class="far fa-calendar-alt"></i> Food & Bonding</span>
+                        <span class="insta-handle-tag" style="color: #e11d48;"><i class="fab fa-instagram me-1"></i> Instagram Reel</span>
                     </div>
 
-                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Annual House Sports & Cultural Meet</h3>
-                    <p class="text-secondary small mb-4">Inter-house sports championship, cricket, badminton, athletics, chess, and cultural performances by CSD & CSIT house teams.</p>
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Potluck Event</h3>
+                    <p class="text-secondary small mb-4">A joyful community celebration featuring delicious homemade food, fun activities, and memorable bonding moments.</p>
 
                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 1,120 Likes</span>
-                        <a href="https://www.instagram.com/srkrcsdcsit/?post=house-sports-meet" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
-                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 1,850 Likes</span>
+                        <a href="https://www.instagram.com/reel/C_VGop-ydyj/?igsh=MWZvdWozeGZ5a2pjag==" target="_blank" rel="noopener noreferrer" class="direct-post-btn" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff !important;">
+                            <i class="fab fa-instagram me-1"></i> Watch Insta Reel <i class="fas fa-external-link-alt ms-1"></i>
                         </a>
                     </div>
                 </div>

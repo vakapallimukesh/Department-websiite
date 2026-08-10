@@ -48,6 +48,8 @@ access_log
 # Vendor/Dependencies (if using Composer)
 # vendor/
 
-# Environment files (if any contain sensitive data)
-# .env
+# Environment files (sensitive API keys)
+.env
+.env.local
+.env.*
 assets/videos/
