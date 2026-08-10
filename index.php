@@ -1699,304 +1699,182 @@ include "./head.php";
     </style>
 
     <style>
-    /* Department Journey Timeline Section */
-    .dept-timeline-section {
-        padding: 80px 0;
+    /* Compact Timeline & Leadership Section */
+    .combined-overview-section {
+        padding: 60px 0;
         background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+
+    .compact-timeline-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 30px 32px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    }
+
+    .compact-timeline {
         position: relative;
-        overflow: hidden;
+        padding-left: 26px;
     }
 
-    .timeline-header {
-        margin-bottom: 50px;
-        text-align: left;
-    }
-
-    .timeline-eyebrow {
-        font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
-        font-size: 0.85rem;
-        font-weight: 800;
-        letter-spacing: 2.5px;
-        color: #3b82f6;
-        text-transform: uppercase;
-        display: block;
-        margin-bottom: 8px;
-    }
-
-    .timeline-title {
-        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-        font-size: 3rem;
-        font-weight: 800;
-        color: #0f172a;
-        line-height: 1.15;
-        margin: 0;
-    }
-
-    .timeline-container {
-        position: relative;
-        max-width: 1050px;
-        margin: 0 auto;
-        padding: 20px 0;
-    }
-
-    /* Central Vertical Spine Line */
-    .timeline-container::before {
+    .compact-timeline::before {
         content: '';
         position: absolute;
-        top: 15px;
-        bottom: 15px;
-        left: 50%;
+        top: 8px;
+        bottom: 8px;
+        left: 7px;
         width: 2px;
         background: #6ee7b7;
-        transform: translateX(-50%);
-        z-index: 1;
     }
 
-    .timeline-item {
+    .compact-timeline-item {
         position: relative;
-        margin-bottom: 50px;
-        width: 100%;
-        display: flex;
+        margin-bottom: 18px;
     }
 
-    .timeline-item:last-child {
+    .compact-timeline-item:last-child {
         margin-bottom: 0;
     }
 
-    .timeline-item-left {
-        justify-content: flex-start;
-    }
-
-    .timeline-item-right {
-        justify-content: flex-end;
-    }
-
-    /* Node Circle Marker */
-    .timeline-node {
+    .compact-node {
         position: absolute;
-        top: 24px;
-        left: 50%;
-        width: 20px;
-        height: 20px;
+        left: -26px;
+        top: 6px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         background: #ffffff;
-        border: 3.5px solid #10b981;
-        transform: translateX(-50%);
-        z-index: 3;
-        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+        border: 3px solid #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+
+    .compact-timeline-item:hover .compact-node {
+        background: #10b981;
+        transform: scale(1.2);
+    }
+
+    .timeline-box {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 14px 18px;
+        border: 1px solid #f1f5f9;
         transition: all 0.3s ease;
     }
 
-    .timeline-item:hover .timeline-node {
-        background: #10b981;
-        transform: translateX(-50%) scale(1.25);
-        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.25);
-    }
-
-    /* Timeline Card */
-    .timeline-card {
-        width: 44%;
+    .timeline-box:hover {
         background: #ffffff;
-        border-radius: 20px;
-        padding: 30px 34px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 2px 6px rgba(0, 0, 0, 0.02);
-        border: 1px solid #f1f5f9;
-        position: relative;
-        z-index: 2;
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .timeline-item:hover .timeline-card {
-        transform: translateY(-6px);
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        transform: translateX(4px);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
         border-color: rgba(16, 185, 129, 0.3);
-    }
-
-    .timeline-year {
-        font-family: 'Outfit', sans-serif;
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: #e06d53;
-        letter-spacing: 0.5px;
-        margin-bottom: 8px;
-        display: block;
-    }
-
-    .timeline-event-title {
-        font-family: 'Outfit', sans-serif;
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 10px;
-        line-height: 1.3;
-    }
-
-    .timeline-desc {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 1.02rem;
-        color: #64748b;
-        line-height: 1.65;
-        margin: 0;
-    }
-
-    /* Responsive Queries */
-    @media (max-width: 991px) {
-        .timeline-title {
-            font-size: 2.3rem;
-        }
-        .timeline-card {
-            width: 45%;
-            padding: 24px 26px;
-        }
-    }
-
-    @media (max-width: 767px) {
-        .timeline-container::before {
-            left: 20px;
-        }
-        .timeline-node {
-            left: 20px;
-        }
-        .timeline-item-left, .timeline-item-right {
-            justify-content: flex-end;
-        }
-        .timeline-card {
-            width: calc(100% - 48px);
-            padding: 22px 24px;
-        }
     }
     </style>
 
-    <!-- Department Journey Timeline Section -->
-    <section id="faculty-section" class="dept-timeline-section">
+    <section id="faculty-section" class="combined-overview-section">
         <div class="container">
-            <div class="timeline-header">
-                <span class="timeline-eyebrow">TIMELINE</span>
-                <h2 class="timeline-title">How the department got here</h2>
-            </div>
-
-            <div class="timeline-container">
-                <!-- Item 1: 2022 (Left) -->
-                <div class="timeline-item timeline-item-left">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card">
-                        <span class="timeline-year">2022</span>
-                        <h3 class="timeline-event-title">CSD Program Launched</h3>
-                        <p class="timeline-desc">SRKR introduced Computer Science & Design, one of the earliest such programs in the region.</p>
-                    </div>
-                </div>
-
-                <!-- Item 2: 2023 (Right) -->
-                <div class="timeline-item timeline-item-right">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card">
-                        <span class="timeline-year">2023</span>
-                        <h3 class="timeline-event-title">CSIT Intake Doubled</h3>
-                        <p class="timeline-desc">Growing industry demand led to a second CSIT section, expanding intake to 120 seats.</p>
-                    </div>
-                </div>
-
-                <!-- Item 3: 2024 (Left) -->
-                <div class="timeline-item timeline-item-left">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card">
-                        <span class="timeline-year">2024</span>
-                        <h3 class="timeline-event-title">Student House System Introduced</h3>
-                        <p class="timeline-desc">Prudhvi, Vayu, Agni, Aakash, and Jal launched to drive mentorship, events, and healthy competition.</p>
-                    </div>
-                </div>
-
-                <!-- Item 4: 2025 (Right) -->
-                <div class="timeline-item timeline-item-right">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card">
-                        <span class="timeline-year">2025</span>
-                        <h3 class="timeline-event-title">Department-wide Digital Platform</h3>
-                        <p class="timeline-desc">A unified points, events, and appreciation system rolled out across every batch and section.</p>
-                    </div>
-                </div>
-
-                <!-- Item 5: 2026 (Left) -->
-                <div class="timeline-item timeline-item-left">
-                    <div class="timeline-node"></div>
-                    <div class="timeline-card">
-                        <span class="timeline-year">2026</span>
-                        <h3 class="timeline-event-title">Jaitra 2k26</h3>
-                        <p class="timeline-desc">The department co-anchored SRKR's flagship annual fest, its largest student showcase yet.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Scroll-Triggered ReactBits BlurText Animation for Know CSD & CSIT Department
-        const scrollBlurElements = document.querySelectorAll('.scroll-blur-animate');
-        
-        scrollBlurElements.forEach(container => {
-            const text = container.innerText.trim();
-            const words = text.split(/\s+/);
-            
-            container.innerHTML = words.map((w, idx) => 
-                `<span class="scroll-blur-word" style="animation-delay: ${idx * 35}ms">${w}</span>`
-            ).join(' ');
-        });
-
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px -50px 0px',
-            threshold: 0.12
-        };
-
-        const scrollObserver = new IntersectionObserver((entries, obs) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated-in');
-                    obs.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        scrollBlurElements.forEach(el => scrollObserver.observe(el));
-    });
-    </script>
-
-                <!-- HOD Message - 40% width -->
-                <div class="col-md-5">
-                    <div class="hod-card" style="padding: 30px; border-radius: 20px;border:#2d3748 1px solid; height: 95%; display: flex; flex-direction: column;">
-                        <div class="text-center mb-3">
-                            <h4 style="margin-bottom: 20px; font-weight: 700;">Message from Leadership</h4>
-                        </div>
-
-                        <!-- Leadership Members Side by Side -->
-                        <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
-                            <!-- HOD Section -->
-                            <div class="leadership-member" style="text-align: center; flex: 1;">
-                                <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 15px;">
-                                    <img src="./assets/logos/sureshsir.png" alt="Head of Department"
-                                        style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.3); object-fit: cover;">
-                                </div>
-                                <h6 style="color: #1e293b; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem;">Dr. M Suresh Babu</h6>
-                                <p style="color: #64748b; font-size: 0.75rem; margin-bottom: 10px;">Head of Department - CSD
-
-                                </p>
+            <div class="row align-items-stretch g-4">
+                <!-- Timeline - 60% Width (col-md-7) -->
+                <div class="col-md-7">
+                    <div class="compact-timeline-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="mb-4">
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 2.5px; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 6px;">TIMELINE</span>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 2rem; color: #0f172a; margin: 0;">How the department got here</h3>
                             </div>
 
-                            <!-- Second Leadership Member -->
-                            <div class="leadership-member" style="text-align: center; flex: 1;">
-                                <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 15px;">
-                                    <img src="./assets/faculty_imgs/4.jpg" alt="Associate Head"
-                                        style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.3); object-fit: cover;">
+                            <div class="compact-timeline">
+                                <!-- 2022 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2022</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">CSD Program Launched</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">SRKR introduced Computer Science & Design, one of the earliest such programs in the region.</p>
+                                    </div>
                                 </div>
-                                <h6 style="color: #1e293b; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem;">Dr. N. Gopala Krishna Murthy</h6>
-                                <p style="color: #64748b; font-size: 0.75rem; margin-bottom: 10px;">Head of Department - CSIT</p>
+
+                                <!-- 2023 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2023</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">CSIT Intake Doubled</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">Growing industry demand led to a second CSIT section, expanding intake to 120 seats.</p>
+                                    </div>
+                                </div>
+
+                                <!-- 2024 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2024</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Student House System Introduced</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">Prudhvi, Vayu, Agni, Aakash, and Jal launched to drive mentorship, events, and healthy competition.</p>
+                                    </div>
+                                </div>
+
+                                <!-- 2025 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2025</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Department-wide Digital Platform</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">A unified points, events, and appreciation system rolled out across every batch and section.</p>
+                                    </div>
+                                </div>
+
+                                <!-- 2026 -->
+                                <div class="compact-timeline-item">
+                                    <div class="compact-node"></div>
+                                    <div class="timeline-box">
+                                        <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #e06d53; display: block; margin-bottom: 2px;">2026</span>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Jaitra 2k26</h5>
+                                        <p style="font-size: 0.9rem; color: #64748b; margin: 0; line-height: 1.5;">The department co-anchored SRKR's flagship annual fest, its largest student showcase yet.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Message from Leadership - 40% Width (col-md-5) -->
+                <div class="col-md-5">
+                    <div class="hod-card h-100 d-flex flex-column justify-content-between" style="padding: 30px; border-radius: 20px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+                        <div>
+                            <div class="text-center mb-4">
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 2.5px; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 6px;">LEADERSHIP</span>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 2rem; color: #0f172a; margin: 0;">Message from Leadership</h3>
+                            </div>
+
+                            <!-- Leadership Members Side by Side -->
+                            <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 25px;">
+                                <!-- HOD Section -->
+                                <div class="leadership-member" style="text-align: center; flex: 1;">
+                                    <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 12px;">
+                                        <img src="./assets/logos/sureshsir.png" alt="Head of Department"
+                                            style="width: 105px; height: 105px; border-radius: 50%; border: 4px solid #3b82f6; object-fit: cover; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);">
+                                    </div>
+                                    <h6 style="color: #0f172a; margin-bottom: 4px; font-weight: 700; font-size: 0.95rem;">Dr. M Suresh Babu</h6>
+                                    <p style="color: #64748b; font-size: 0.8rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSD</p>
+                                </div>
+
+                                <!-- Second Leadership Member -->
+                                <div class="leadership-member" style="text-align: center; flex: 1;">
+                                    <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 12px;">
+                                        <img src="./assets/faculty_imgs/4.jpg" alt="Associate Head"
+                                            style="width: 105px; height: 105px; border-radius: 50%; border: 4px solid #10b981; object-fit: cover; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);">
+                                    </div>
+                                    <h6 style="color: #0f172a; margin-bottom: 4px; font-weight: 700; font-size: 0.95rem;">Dr. N. Gopala Krishna Murthy</h6>
+                                    <p style="color: #64748b; font-size: 0.8rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSIT</p>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Combined Quote -->
-                        <div style="text-align: center;">
-                            <blockquote style="font-size: 0.85rem; line-height: 1.5; font-style: italic; margin-bottom: 0; color: #4b5563;">
+                        <div style="padding: 20px 22px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; border-left: 4px solid #3b82f6; margin-top: auto;">
+                            <blockquote style="font-size: 0.92rem; line-height: 1.6; font-style: italic; margin: 0; color: #334155; font-weight: 500;">
                                 "We nurture innovative minds and create technology leaders who will shape the future through excellence in education and innovation in research."
                             </blockquote>
                         </div>
