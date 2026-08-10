@@ -141,59 +141,116 @@ body {
     border-color: #f59e0b;
 }
 
-/* Gallery Styling */
+/* Dynamic Interactive Gallery Styling */
 .achievement-gallery-main {
     position: relative;
     border-radius: 20px;
     overflow: hidden;
     background: #1a0d06;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.16);
     cursor: pointer;
     aspect-ratio: 4/3;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
 .achievement-gallery-main img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+    animation: kenBurnsZoom 10s ease-in-out infinite alternate;
 }
 
-.achievement-gallery-main:hover img {
-    transform: scale(1.04);
+.achievement-gallery-main.animating img {
+    animation: imgFadeInZoom 0.55s ease-out forwards;
+}
+
+@keyframes kenBurnsZoom {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06) translate(-1%, -1%); }
+    100% { transform: scale(1.02); }
+}
+
+@keyframes imgFadeInZoom {
+    0% { opacity: 0.3; transform: scale(1.08); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
 .gallery-hover-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(26, 13, 6, 0.4);
+    background: radial-gradient(circle at center, rgba(217, 119, 6, 0.2), rgba(26, 13, 6, 0.6));
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
-    backdrop-filter: blur(2px);
+    transition: opacity 0.35s ease;
+    backdrop-filter: blur(3px);
+    z-index: 5;
 }
 
 .achievement-gallery-main:hover .gallery-hover-overlay {
     opacity: 1;
 }
 
+/* Floating Sparkle Particles */
+.sparkle-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #f59e0b;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #f59e0b;
+    pointer-events: none;
+    animation: floatSparkle 3s infinite ease-in-out;
+    z-index: 6;
+}
+
+.sparkle-dot:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+.sparkle-dot:nth-child(2) { top: 70%; right: 15%; animation-delay: 1s; }
+.sparkle-dot:nth-child(3) { bottom: 20%; left: 25%; animation-delay: 2s; }
+
+@keyframes floatSparkle {
+    0%, 100% { transform: translateY(0) scale(0.8); opacity: 0.3; }
+    50% { transform: translateY(-12px) scale(1.4); opacity: 1; }
+}
+
 .gallery-thumbnail {
-    width: 80px;
-    height: 60px;
-    border-radius: 12px;
+    width: 85px;
+    height: 62px;
+    border-radius: 14px;
     overflow: hidden;
-    border: 2px solid transparent;
+    border: 2.5px solid transparent;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     opacity: 0.7;
+    position: relative;
 }
 
 .gallery-thumbnail.active, .gallery-thumbnail:hover {
     border-color: #d97706;
     opacity: 1;
-    transform: scale(1.05);
+    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(217, 119, 6, 0.3);
+}
+
+.gallery-thumbnail.active::after {
+    content: '✓';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: #d97706;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 900;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .gallery-thumbnail img {
@@ -276,6 +333,7 @@ body {
     max-height: 80vh;
     max-width: 100%;
     object-fit: contain;
+    transition: transform 0.4s ease, opacity 0.3s ease;
 }
 
 .lightbox-nav-btn {
@@ -408,7 +466,7 @@ body {
 </div>
 
 <script>
-// Data Structure for Student Achievements (Easy to extend for future additions)
+// Data Structure for Student Achievements
 const studentAchievements = [
     {
         id: "sih-2025-team-ujjval",
@@ -444,6 +502,7 @@ const studentAchievements = [
 let activeLightboxImages = [];
 let activeImageIndex = 0;
 let currentLightboxModal = null;
+let autoSlideshowInterval = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     renderAchievements('hackathons');
@@ -477,6 +536,11 @@ document.addEventListener('DOMContentLoaded', function() {
 function renderAchievements(selectedCategory = 'all') {
     const container = document.getElementById('achievementsContainer');
     container.innerHTML = '';
+    
+    if (autoSlideshowInterval) {
+        clearInterval(autoSlideshowInterval);
+        autoSlideshowInterval = null;
+    }
 
     const filtered = selectedCategory === 'all' 
         ? studentAchievements 
@@ -507,21 +571,24 @@ function renderAchievements(selectedCategory = 'all') {
             cardCol.innerHTML = `
                 <div class="featured-achievement-card">
                     <div class="row g-4 align-items-center">
-                        <!-- Left Column: Interactive Image Gallery -->
+                        <!-- Left Column: Interactive Animated Image Gallery -->
                         <div class="col-lg-6">
-                            <div class="achievement-gallery-main mb-3" id="mainGalleryBox-${item.id}" onclick="openLightbox('${item.id}', 0)">
+                            <div class="achievement-gallery-main mb-3" id="mainGalleryBox-${item.id}" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
+                                <span class="sparkle-dot"></span>
+                                <span class="sparkle-dot"></span>
+                                <span class="sparkle-dot"></span>
                                 <img id="activeMainImg-${item.id}" src="${item.images[0]}" alt="${item.title}" loading="lazy">
                                 <div class="gallery-hover-overlay">
                                     <span class="btn btn-light rounded-pill px-4 py-2 fw-bold shadow-sm">
                                         <i class="fas fa-search-plus me-2 text-warning"></i> View Full Image
                                     </span>
                                 </div>
-                                <div class="position-absolute top-0 start-0 p-3 d-flex gap-2">
+                                <div class="position-absolute top-0 start-0 p-3 d-flex gap-2" style="z-index: 6;">
                                     <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.78rem;">
                                         🏆 ${item.award}
                                     </span>
                                 </div>
-                                <div class="position-absolute bottom-0 end-0 p-3">
+                                <div class="position-absolute bottom-0 end-0 p-3" style="z-index: 6;">
                                     <span class="badge bg-dark bg-opacity-75 text-white px-3 py-1.5 rounded-pill small" style="backdrop-filter: blur(4px);">
                                         <i class="fas fa-images me-1"></i> ${item.images.length} Photos
                                     </span>
@@ -535,7 +602,7 @@ function renderAchievements(selectedCategory = 'all') {
                                         <img src="${imgSrc}" alt="Thumbnail ${idx + 1}">
                                     </div>
                                 `).join('')}
-                                <span class="small text-muted ms-2"><i class="fas fa-hand-pointer me-1"></i> Click photo to preview</span>
+                                <span class="small text-muted ms-2"><i class="fas fa-magic me-1 text-warning"></i> Auto Slideshow & 3D Tilt</span>
                             </div>
                         </div>
 
@@ -604,14 +671,62 @@ function renderAchievements(selectedCategory = 'all') {
             `;
         }
         container.appendChild(cardCol);
+
+        // Attach Interactive 3D Tilt Effect and Auto Slideshow for Item
+        setupInteractiveGallery(item.id, item.images);
     });
 }
 
-function switchGalleryImg(itemId, index) {
+const currentIdxMap = {};
+
+function getCurrentIdx(itemId) {
+    return currentIdxMap[itemId] || 0;
+}
+
+function setupInteractiveGallery(itemId, images) {
+    let currentIdx = 0;
+    currentIdxMap[itemId] = 0;
+
+    // Auto slideshow every 4.5 seconds
+    if (images.length > 1) {
+        autoSlideshowInterval = setInterval(() => {
+            currentIdx = (currentIdx + 1) % images.length;
+            switchGalleryImg(itemId, currentIdx, true);
+        }, 4500);
+    }
+
+    // 3D Parallax Tilt Effect on Mousemove
+    const galleryEl = document.getElementById(`mainGalleryBox-${itemId}`);
+    if (galleryEl) {
+        galleryEl.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            const rotateX = (-y / rect.height) * 12;
+            const rotateY = (x / rect.width) * 12;
+            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        });
+
+        galleryEl.addEventListener('mouseleave', function() {
+            this.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+        });
+    }
+}
+
+function switchGalleryImg(itemId, index, isAuto = false) {
     const item = studentAchievements.find(a => a.id === itemId);
     if (!item) return;
 
-    document.getElementById(`activeMainImg-${itemId}`).src = item.images[index];
+    currentIdxMap[itemId] = index;
+    const galleryEl = document.getElementById(`mainGalleryBox-${itemId}`);
+    const mainImg = document.getElementById(`activeMainImg-${itemId}`);
+
+    if (mainImg) {
+        galleryEl.classList.remove('animating');
+        void galleryEl.offsetWidth; // Trigger reflow for animation reset
+        mainImg.src = item.images[index];
+        galleryEl.classList.add('animating');
+    }
     
     item.images.forEach((_, idx) => {
         const thumb = document.getElementById(`thumb-${itemId}-${idx}`);
