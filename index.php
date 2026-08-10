@@ -1841,7 +1841,7 @@ include "./head.php";
 
                 <!-- Message from Leadership - 40% Width (col-md-5) -->
                 <div class="col-md-5">
-                    <div class="hod-card h-100 d-flex flex-column justify-content-between" style="padding: 30px; border-radius: 20px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+                    <div class="hod-card h-100 d-flex flex-column" style="padding: 30px; border-radius: 20px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
                         <div>
                             <div class="text-center mb-4">
                                 <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 2.5px; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 6px;">LEADERSHIP</span>
@@ -1849,7 +1849,7 @@ include "./head.php";
                             </div>
 
                             <!-- Leadership Members Side by Side -->
-                            <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 25px;">
+                            <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
                                 <!-- HOD Section -->
                                 <div class="leadership-member" style="text-align: center; flex: 1;">
                                     <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 12px;">
@@ -1873,7 +1873,7 @@ include "./head.php";
                         </div>
 
                         <!-- Combined Quote -->
-                        <div style="padding: 20px 22px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; border-left: 4px solid #3b82f6; margin-top: auto;">
+                        <div style="padding: 20px 22px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; border-left: 4px solid #3b82f6; margin-top: 15px;">
                             <blockquote style="font-size: 0.92rem; line-height: 1.6; font-style: italic; margin: 0; color: #334155; font-weight: 500;">
                                 "We nurture innovative minds and create technology leaders who will shape the future through excellence in education and innovation in research."
                             </blockquote>
