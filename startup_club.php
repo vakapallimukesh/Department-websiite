@@ -89,8 +89,111 @@ body {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
+
+<<<<<<< Updated upstream
+=======
+.startups-section {
+    background: linear-gradient(to bottom, #f8fafc, #ffffff);
+    padding: 80px 0;
+}
+
+.section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.section-title:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, #4f46e5, #3b82f6);
+    margin: 12px auto 0;
+    border-radius: 2px;
+}
+
+.startup-logo-container {
+    width: 100%;
+    height: 140px;
+    margin: 0 0 18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 16px;
+    overflow: hidden;
+}
+
+.startup-logo {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.06));
+    transition: transform 0.3s ease;
+}
+
+.startup-logo-container:hover .startup-logo {
+    transform: scale(1.08);
+}
+
+.startup-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.startup-title {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.startup-subtitle {
+    margin-top: 5px;
+    color: #64748b;
+    font-size: 1rem;
+}
+
+.startup-description {
+    color: #64748b;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    line-height: 1.6;
+}
+
+.startup-tags {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.startup-tag {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.bo-card { border-color: #3b82f6; }
+.lb-card { border-color: #ef4444; }
+.bd-card { border-color: #0ea5e9; }
+.sw-card { border-color: #14b8a6; }
+.nd-card { border-color: #22c55e; }
+.co-card { border-color: #2563eb; }
+.bf-card { border-color: #f59e0b; }
 </style>
 
+>>>>>>> Stashed changes
 <body>
     <?php include "nav.php"; ?>
     
@@ -152,6 +255,7 @@ body {
         </div>
     </section>
 
+<<<<<<< Updated upstream
     <!-- Programs & Activities -->
     
 
@@ -279,6 +383,8 @@ body {
     }
     </style>
 
+=======
+>>>>>>> Stashed changes
     <!-- Featured Startups (ReactBits OrbitImages Component) -->
     <section class="orbit-section">
         <div class="container text-center mb-4">
