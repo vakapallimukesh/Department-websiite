@@ -1458,6 +1458,21 @@ body {
                         <?php 
                         $showcaseScreens = [
                             [
+                                'img' => 'public/startups/bhimavaram-online/showcase8.jpg',
+                                'title' => 'Grocery Store & Cart',
+                                'desc' => 'Instant grocery deals & add to cart'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase7.jpg',
+                                'title' => 'Vespa & Vehicle Store',
+                                'desc' => 'Direct WhatsApp & Call seller order'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase6.jpg',
+                                'title' => 'BO Updates & Housie Game',
+                                'desc' => 'Campus news alerts & BO Play games'
+                            ],
+                            [
                                 'img' => 'public/startups/bhimavaram-online/showcase5.jpg',
                                 'title' => 'BO Specials & Services',
                                 'desc' => 'Home repairs, news & specials'
