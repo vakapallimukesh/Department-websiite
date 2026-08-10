@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="50%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#db2777" />
+    </linearGradient>
+    <linearGradient id="ringGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="50%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <linearGradient id="ringGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#db2777" />
+      <stop offset="50%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#2563eb" flood-opacity="0.18" />
+    </filter>
+    <filter id="glowBlue" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glowPink" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Base Circle -->
+  <circle cx="100" cy="100" r="98" fill="#ffffff" />
+
+  <!-- Outer Orbit Ring 1 (Blue/Purple Gradient) -->
+  <circle cx="100" cy="100" r="92" fill="none" stroke="url(#ringGrad1)" stroke-width="3" stroke-dasharray="170 60" />
+  
+  <!-- Middle Orbit Ring 2 (Pink/Red Gradient) -->
+  <circle cx="100" cy="100" r="78" fill="none" stroke="url(#ringGrad2)" stroke-width="2.5" stroke-dasharray="130 90" transform="rotate(45 100 100)" />
+  
+  <!-- Inner Orbit Ring 3 (Soft Purple Dashed) -->
+  <circle cx="100" cy="100" r="64" fill="none" stroke="#7c3aed" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="6 6" />
+
+  <!-- Orbiting Dots -->
+  <circle cx="178" cy="100" r="5.5" fill="#2563eb" filter="url(#glowBlue)" />
+  <circle cx="44" cy="138" r="5" fill="#db2777" filter="url(#glowPink)" />
+  <circle cx="122" cy="24" r="4.5" fill="#7c3aed" />
+
+  <!-- Central White Glassmorphic Disc -->
+  <circle cx="100" cy="100" r="50" fill="#ffffff" filter="url(#shadow)" stroke="rgba(255,255,255,0.9)" stroke-width="2" />
+
+  <!-- Central Text -->
+  <text x="100" y="96" font-family="'Poppins', 'Montserrat', 'Segoe UI', sans-serif" font-weight="800" font-size="16" fill="url(#textGrad)" text-anchor="middle" letter-spacing="-0.5">CSD &amp; CSIT</text>
+  <text x="100" y="112" font-family="'Inter', 'Roboto', sans-serif" font-weight="700" font-size="7.5" fill="#64748b" text-anchor="middle" letter-spacing="1.5">DEPARTMENT</text>
+</svg>

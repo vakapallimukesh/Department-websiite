@@ -383,7 +383,12 @@ if (session_status() === PHP_SESSION_NONE) session_start();
             <section id="houses" class="content-section">
                 <div class="section-header" data-aos="fade-down">
                     <h2 class="section-title">Houses</h2>
-                    <p class="section-description">Competitive house system</p>
+                    <p class="section-description">Competitive house system fostering teamwork and excellence</p>
+                    <div style="margin-top: 15px;">
+                        <a href="houses_dashboard.php" class="category-link" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--primary-blue); color: white; border-radius: 10px; text-decoration: none; font-weight: 600;">
+                            <i class="fas fa-trophy"></i> Open Houses Dashboard <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="houses-grid">
@@ -391,44 +396,56 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                         <div class="house-shield">
                             <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h3>Red House</h3>
+                        <h3>Red House (Agni)</h3>
                         <p>Courage & Determination</p>
                         <div class="house-stats">
                             <span class="stat-badge">320 Points</span>
                         </div>
+                        <a href="houses_dashboard.php" class="category-link" style="margin-top: 15px; display: inline-block;">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
 
                     <div class="house-card blue-house" data-aos="zoom-in">
                         <div class="house-shield">
                             <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h3>Blue House</h3>
+                        <h3>Blue House (Jal)</h3>
                         <p>Wisdom & Excellence</p>
                         <div class="house-stats">
                             <span class="stat-badge">285 Points</span>
                         </div>
+                        <a href="houses_dashboard.php" class="category-link" style="margin-top: 15px; display: inline-block;">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
 
                     <div class="house-card green-house" data-aos="zoom-in">
                         <div class="house-shield">
                             <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h3>Green House</h3>
+                        <h3>Green House (Vayu)</h3>
                         <p>Growth & Harmony</p>
                         <div class="house-stats">
                             <span class="stat-badge">295 Points</span>
                         </div>
+                        <a href="houses_dashboard.php" class="category-link" style="margin-top: 15px; display: inline-block;">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
 
                     <div class="house-card yellow-house" data-aos="zoom-in">
                         <div class="house-shield">
                             <i class="fas fa-shield-alt"></i>
                         </div>
-                        <h3>Yellow House</h3>
+                        <h3>Yellow House (Aakash)</h3>
                         <p>Energy & Innovation</p>
                         <div class="house-stats">
                             <span class="stat-badge">310 Points</span>
                         </div>
+                        <a href="houses_dashboard.php" class="category-link" style="margin-top: 15px; display: inline-block;">
+                            View Details <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -480,10 +497,8 @@ if (session_status() === PHP_SESSION_NONE) session_start();
     <!-- AOS Animation -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="explore-premium.js"></script>
-
     <!-- AI Department Assistant Chatbot Component -->
     <?php include_once __DIR__ . '/includes/chatbot.php'; ?>
-
 
 </body>
 </html>

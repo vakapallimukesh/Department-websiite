@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="assets/css/ai-bot.css">
 <footer class="modern-footer">
     <div class="container">
         <!-- Main Footer Content -->

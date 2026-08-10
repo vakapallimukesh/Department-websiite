@@ -2783,6 +2783,187 @@ body {
             </script>
             <?php endif; ?>
 
+            <?php 
+            // Extract Instagram Handle for API Sync
+            $instaHandle = 'nutri__delight';
+            if (!empty($startup['instagram'])) {
+                $urlParts = parse_url($startup['instagram']);
+                if (isset($urlParts['path'])) {
+                    $pathParts = explode('/', trim($urlParts['path'], '/'));
+                    if (!empty($pathParts[0])) {
+                        $instaHandle = $pathParts[0];
+                    }
+                }
+            }
+            ?>
+
+            <!-- ==================================================
+                 INSTAGRAM LIVE FEED ARCHITECTURE SECTION
+                 ================================================== -->
+            <section class="insta-architecture-section my-5 pt-4">
+                <style>
+                    .insta-feed-card {
+                        background: #ffffff;
+                        border-radius: 24px;
+                        border: 1px solid #e2e8f0;
+                        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+                        padding: 30px;
+                    }
+                    .insta-pipeline-badge {
+                        background: linear-gradient(135deg, #fdf2f8 0%, #fae8ff 100%);
+                        border: 1px solid #f0abfc;
+                        color: #c026d3;
+                        font-weight: 700;
+                        font-size: 0.78rem;
+                        padding: 6px 16px;
+                        border-radius: 999px;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    .insta-post-card {
+                        background: #f8fafc;
+                        border-radius: 18px;
+                        border: 1px solid #e2e8f0;
+                        overflow: hidden;
+                        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+                        position: relative;
+                    }
+                    .insta-post-card:hover {
+                        transform: translateY(-6px);
+                        box-shadow: 0 15px 35px rgba(225, 29, 72, 0.15);
+                        border-color: #f43f5e;
+                    }
+                    .insta-img-wrap {
+                        position: relative;
+                        width: 100%;
+                        padding-top: 100%;
+                        background: #0f172a;
+                        overflow: hidden;
+                    }
+                    .insta-img-wrap img {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        transition: transform 0.4s ease;
+                    }
+                    .insta-post-card:hover .insta-img-wrap img {
+                        transform: scale(1.08);
+                    }
+                    .insta-overlay {
+                        position: absolute;
+                        inset: 0;
+                        background: linear-gradient(180deg, rgba(15, 23, 42, 0) 20%, rgba(15, 23, 42, 0.9) 100%);
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-end;
+                        padding: 16px;
+                        color: #ffffff;
+                    }
+                    .insta-post-card:hover .insta-overlay {
+                        opacity: 1;
+                    }
+                    .insta-caption {
+                        font-size: 0.82rem;
+                        line-height: 1.35;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        margin-bottom: 8px;
+                    }
+                </style>
+
+                <div class="insta-feed-card">
+                    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 border-bottom pb-3">
+                        <div>
+                            <span class="insta-pipeline-badge mb-2">
+                                <i class="fab fa-instagram"></i> Live API & MySQL DB Cache Architecture
+                            </span>
+                            <h3 class="fw-bold font-outfit text-dark mb-1" style="font-size: 1.8rem;">
+                                Live <span class="text-danger">Instagram Feed</span> (@<?= htmlspecialchars($instaHandle); ?>)
+                            </h3>
+                            <p class="text-secondary small mb-0">
+                                Scraped via PHP Backend API, cached in MySQL DB, and rendered dynamically.
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold small" id="instaDbStatus">
+                                <i class="fas fa-database me-1"></i> MySQL DB Cached
+                            </span>
+                            <a href="<?= htmlspecialchars($startup['instagram'] ?? 'https://instagram.com/' . $instaHandle); ?>" target="_blank" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold">
+                                <i class="fab fa-instagram me-1"></i> Follow Page
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Instagram Grid Container -->
+                    <div class="row g-3" id="instaFeedGrid">
+                        <!-- Skeleton Loading States -->
+                        <div class="col-6 col-md-3">
+                            <div class="insta-post-card p-2 text-center text-muted py-5">
+                                <div class="spinner-border text-danger spinner-border-sm mb-2" role="status"></div>
+                                <div class="small fw-semibold">Syncing Posts...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <script>
+            function loadInstagramFeed() {
+                var handle = "<?= urlencode($instaHandle); ?>";
+                var grid = document.getElementById('instaFeedGrid');
+                var statusBadge = document.getElementById('instaDbStatus');
+
+                fetch('api/instagram_feed.php?account=' + handle)
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (!data.success || !data.posts || data.posts.length === 0) {
+                            grid.innerHTML = '<div class="col-12 text-center py-4 text-muted">No Instagram posts found.</div>';
+                            return;
+                        }
+
+                        if (statusBadge) {
+                            statusBadge.innerHTML = '<i class="fas fa-database me-1"></i> ' + (data.from_cache ? 'MySQL DB Cache Hit' : 'Fresh API Sync');
+                        }
+
+                        var html = '';
+                        data.posts.forEach(function(post) {
+                            html += '<div class="col-6 col-md-3">';
+                            html += '  <div class="insta-post-card">';
+                            html += '    <a href="' + (post.permalink || '#') + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none">';
+                            html += '      <div class="insta-img-wrap">';
+                            html += '        <img src="' + post.media_url + '" alt="Instagram Post" loading="lazy">';
+                            html += '        <div class="insta-overlay">';
+                            html += '          <div class="insta-caption">' + (post.caption || 'Instagram Post') + '</div>';
+                            html += '          <div class="d-flex align-items-center justify-content-between text-white-50 small fw-bold">';
+                            html += '            <span><i class="fas fa-heart text-danger me-1"></i> ' + (post.likes || 0) + '</span>';
+                            html += '            <span><i class="fas fa-comment me-1"></i> ' + (post.comments || 0) + '</span>';
+                            html += '          </div>';
+                            html += '        </div>';
+                            html += '      </div>';
+                            html += '    </a>';
+                            html += '  </div>';
+                            html += '</div>';
+                        });
+
+                        grid.innerHTML = html;
+                    })
+                    .catch(function(err) {
+                        console.error("Instagram feed error:", err);
+                        grid.innerHTML = '<div class="col-12 text-center py-4 text-muted">Failed to load feed.</div>';
+                    });
+            }
+
+            document.addEventListener('DOMContentLoaded', loadInstagramFeed);
+            </script>
+
             <!-- BACK BUTTON BOTTOM -->
             <div class="mt-5 text-center text-md-start">
                 <a href="startup_club.php" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold">
