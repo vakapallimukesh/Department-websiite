@@ -100,5 +100,27 @@ export const classRepresentatives: ClassRepresentative[] = [
     year: "III Year",
     section: "Section B",
     image: "public/images/cr/s-d-rani.jpg"
+  },
+
+  // 4th Year Class Representatives
+  {
+    id: "cr-10",
+    name: "P SAI HARSHA",
+    registrationNumber: "23B81A6252",
+    phone: "8919892669",
+    className: "CSD - IV Year",
+    branch: "CSD",
+    year: "IV Year",
+    image: "public/images/cr/p-sai-harsha.jpg"
+  },
+  {
+    id: "cr-11",
+    name: "P SWAPNA",
+    registrationNumber: "23B91A6255",
+    phone: "9390827275",
+    className: "CSD - IV Year",
+    branch: "CSD",
+    year: "IV Year",
+    image: "public/images/cr/p-swapna.jpg"
   }
 ];

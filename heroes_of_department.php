@@ -370,18 +370,49 @@ include "connect.php";
                 'badgeColor' => 'bg-danger'
             ]
         ];
+
+        $fourthYearCRs = [
+            [
+                'id' => 'cr-10',
+                'name' => 'P SAI HARSHA',
+                'registrationNumber' => '23B81A6252',
+                'phone' => '8919892669',
+                'className' => 'CSD - IV Year',
+                'branch' => 'CSD',
+                'year' => 'IV Year',
+                'section' => '',
+                'image' => 'public/images/cr/p-sai-harsha.jpg',
+                'badgeColor' => 'bg-purple text-white',
+                'customBadgeStyle' => 'background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);'
+            ],
+            [
+                'id' => 'cr-11',
+                'name' => 'P SWAPNA',
+                'registrationNumber' => '23B91A6255',
+                'phone' => '9390827275',
+                'className' => 'CSD - IV Year',
+                'branch' => 'CSD',
+                'year' => 'IV Year',
+                'section' => '',
+                'image' => 'public/images/cr/p-swapna.jpg',
+                'badgeColor' => 'bg-purple text-white',
+                'customBadgeStyle' => 'background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);'
+            ]
+        ];
         ?>
 
         <!-- Filter / Class Group Tabs -->
         <div class="d-flex justify-content-center flex-wrap gap-2 mb-5 pb-2">
-            <button class="btn btn-primary cr-group-btn active" onclick="filterCRs('all', this)">All CRs (9)</button>
+            <button class="btn btn-primary cr-group-btn active" onclick="filterCRs('all', this)">All CRs (11)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('2ndYear', this)">2nd Years (6)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('3rdYear', this)">3rd Years (3)</button>
+            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('4thYear', this)">4th Years (2)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-SectionB', this)">CSIT II-B (2)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-SectionA', this)">CSIT II-A (2)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSD-IIYear', this)">CSD II (2)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-III-A', this)">CSIT III-A (1)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-III-B', this)">CSIT III-B (2)</button>
+            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSD-IVYear', this)">CSD IV (2)</button>
         </div>
 
         <!-- 2nd Year CR Section -->
@@ -453,7 +484,7 @@ include "connect.php";
         </div>
 
         <!-- 3rd Year CR Section (Below 2nd Years) -->
-        <div class="cr-year-group mt-5" data-year-group="3rdYear">
+        <div class="cr-year-group mt-5 mb-5" data-year-group="3rdYear">
             <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
                 <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 44px; height: 44px; font-size: 1.1rem;">3rd</div>
                 <div>
@@ -483,6 +514,74 @@ include "connect.php";
                                      alt="<?= htmlspecialchars($cr['name']) ?>" 
                                      class="cr-avatar shadow"
                                      onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($cr['name']) ?>&background=d97706&color=fff&size=150'">
+                                <span class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle p-2" title="Verified Class Representative">
+                                    <span class="visually-hidden">Verified</span>
+                                </span>
+                            </div>
+
+                            <!-- CR Name -->
+                            <h4 class="fw-extrabold text-dark mb-1 font-outfit" style="font-size: 1.25rem; letter-spacing: -0.3px;">
+                                <?= htmlspecialchars($cr['name']) ?>
+                            </h4>
+
+                            <!-- Registration Number -->
+                            <div class="mb-3">
+                                <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                    <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong><?= htmlspecialchars($cr['registrationNumber']) ?></strong>
+                                </span>
+                            </div>
+
+                            <!-- Phone Number Privacy Button -->
+                            <div class="mt-auto pt-3 border-top w-100">
+                                <div class="cr-phone-box">
+                                    <button type="button" 
+                                            class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold shadow-xs cr-reveal-btn" 
+                                            onclick="toggleCrPhone(this)">
+                                        <i class="fas fa-phone-alt me-1"></i> Show Phone
+                                    </button>
+                                    <div class="cr-phone-display d-none text-center">
+                                        <a href="tel:<?= htmlspecialchars($cr['phone']) ?>" class="btn btn-success btn-sm rounded-pill px-3 fw-bold text-white shadow-xs">
+                                            <i class="fas fa-phone-volume me-1"></i> +91 <?= htmlspecialchars(substr($cr['phone'], 0, 5) . ' ' . substr($cr['phone'], 5)) ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- 4th Year CR Section (Below 3rd Years) -->
+        <div class="cr-year-group mt-5" data-year-group="4thYear">
+            <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+                <div class="text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 44px; height: 44px; font-size: 1.1rem; background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);">4th</div>
+                <div>
+                    <h3 class="fw-extrabold text-dark font-outfit mb-0" style="font-size: 1.6rem;">4th Year Class Representatives</h3>
+                    <p class="text-muted small mb-0">CSD IV Year Class Representatives</p>
+                </div>
+            </div>
+
+            <!-- CR Cards Grid (4th Year) -->
+            <div class="row g-4 justify-content-start">
+                <?php foreach ($fourthYearCRs as $cr): 
+                    $groupClass = str_replace(' ', '', $cr['branch'] . '-' . str_replace(' ', '', $cr['section'] ? $cr['section'] : $cr['year']));
+                ?>
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 d-flex cr-item-card" data-group="<?= htmlspecialchars($groupClass) ?>" data-year="4thYear">
+                        <div class="cr-card w-100 p-4 rounded-4 shadow-sm border bg-white text-center position-relative transition-all d-flex flex-column align-items-center">
+                            
+                            <!-- Class Badge -->
+                            <span class="badge <?= htmlspecialchars($cr['badgeColor']) ?> px-3 py-2 rounded-pill fw-bold mb-3 shadow-xs" style="font-size: 0.8rem; letter-spacing: 0.5px; <?= isset($cr['customBadgeStyle']) ? $cr['customBadgeStyle'] : '' ?>">
+                                <i class="fas fa-crown me-1"></i> <?= htmlspecialchars($cr['className']) ?>
+                            </span>
+
+                            <!-- CR Avatar -->
+                            <div class="cr-avatar-container mb-3 position-relative">
+                                <img src="<?= htmlspecialchars($cr['image']) ?>" 
+                                     alt="<?= htmlspecialchars($cr['name']) ?>" 
+                                     class="cr-avatar shadow"
+                                     onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($cr['name']) ?>&background=7c3aed&color=fff&size=150'">
                                 <span class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle p-2" title="Verified Class Representative">
                                     <span class="visually-hidden">Verified</span>
                                 </span>
