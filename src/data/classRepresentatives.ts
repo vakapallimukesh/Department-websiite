@@ -54,5 +54,15 @@ export const classRepresentatives: ClassRepresentative[] = [
     branch: "CSD",
     year: "II Year",
     image: "public/images/cr/javvadi-mohana-durga.jpg"
+  },
+  {
+    id: "cr-6",
+    name: "VASA HARI NAGENDRA PRATAP",
+    registrationNumber: "25B91A6263",
+    phone: "9491091836",
+    className: "CSD - II Year",
+    branch: "CSD",
+    year: "II Year",
+    image: "public/images/cr/vasa-hari-nagendra-pratap.jpg"
   }
 ];

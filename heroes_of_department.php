@@ -317,16 +317,28 @@ include "connect.php";
                 'section' => '',
                 'image' => 'public/images/cr/javvadi-mohana-durga.jpg',
                 'badgeColor' => 'bg-success'
+            ],
+            [
+                'id' => 'cr-6',
+                'name' => 'VASA HARI NAGENDRA PRATAP',
+                'registrationNumber' => '25B91A6263',
+                'phone' => '9491091836',
+                'className' => 'CSD - II Year',
+                'branch' => 'CSD',
+                'year' => 'II Year',
+                'section' => '',
+                'image' => 'public/images/cr/vasa-hari-nagendra-pratap.jpg',
+                'badgeColor' => 'bg-success'
             ]
         ];
         ?>
 
         <!-- Filter / Class Group Tabs -->
         <div class="d-flex justify-content-center flex-wrap gap-2 mb-4 pb-2">
-            <button class="btn btn-primary cr-group-btn active" onclick="filterCRs('all', this)">All CRs (5)</button>
+            <button class="btn btn-primary cr-group-btn active" onclick="filterCRs('all', this)">All CRs (6)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-SectionB', this)">CSIT II-B (2)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-SectionA', this)">CSIT II-A (2)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSD-IIYear', this)">CSD II Year (1)</button>
+            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSD-IIYear', this)">CSD II Year (2)</button>
         </div>
 
         <!-- CR Cards Grid (Desktop 3-4, Tablet 2, Mobile 1) -->
