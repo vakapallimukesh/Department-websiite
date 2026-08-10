@@ -401,20 +401,6 @@ include "connect.php";
         ];
         ?>
 
-        <!-- Filter / Class Group Tabs -->
-        <div class="d-flex justify-content-center flex-wrap gap-2 mb-5 pb-2">
-            <button class="btn btn-primary cr-group-btn active" onclick="filterCRs('all', this)">All CRs (11)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('2ndYear', this)">2nd Years (6)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('3rdYear', this)">3rd Years (3)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('4thYear', this)">4th Years (2)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-SectionB', this)">CSIT II-B (2)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-SectionA', this)">CSIT II-A (2)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSD-IIYear', this)">CSD II (2)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-III-A', this)">CSIT III-A (1)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-III-B', this)">CSIT III-B (2)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSD-IVYear', this)">CSD IV (2)</button>
-        </div>
-
         <!-- 2nd Year CR Section -->
         <div class="cr-year-group mb-5" data-year-group="2ndYear">
             <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
