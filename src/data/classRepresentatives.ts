@@ -1,6 +1,7 @@
 import { ClassRepresentative } from '../types/classRepresentative';
 
 export const classRepresentatives: ClassRepresentative[] = [
+  // 2nd Year Class Representatives
   {
     id: "cr-1",
     name: "PAMU AMRUTHA",
@@ -64,5 +65,40 @@ export const classRepresentatives: ClassRepresentative[] = [
     branch: "CSD",
     year: "II Year",
     image: "public/images/cr/vasa-hari-nagendra-pratap.jpg"
+  },
+
+  // 3rd Year Class Representatives
+  {
+    id: "cr-7",
+    name: "CHANDANI VIVEKANANDA",
+    registrationNumber: "24B91A0720",
+    phone: "9063449226",
+    className: "CSIT - III Year - Section A",
+    branch: "CSIT",
+    year: "III Year",
+    section: "Section A",
+    image: "public/images/cr/chandani-vivekananda.jpg"
+  },
+  {
+    id: "cr-8",
+    name: "THOTA JOHAN BENEDICT",
+    registrationNumber: "24B91A07B7",
+    phone: "9121901011",
+    className: "CSIT - III Year - Section B",
+    branch: "CSIT",
+    year: "III Year",
+    section: "Section B",
+    image: "public/images/cr/thota-johan-benedict.jpg"
+  },
+  {
+    id: "cr-9",
+    name: "S D RANI",
+    registrationNumber: "24B91A07B3",
+    phone: "7095183812",
+    className: "CSIT - III Year - Section B",
+    branch: "CSIT",
+    year: "III Year",
+    section: "Section B",
+    image: "public/images/cr/s-d-rani.jpg"
   }
 ];

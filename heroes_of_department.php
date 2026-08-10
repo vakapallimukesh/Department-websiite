@@ -256,8 +256,8 @@ include "connect.php";
         </div>
 
         <?php
-        // Centralized Reusable Data Structure for CR Profiles
-        $classRepresentatives = [
+        // Centralized Reusable Data Structure for 2nd Year & 3rd Year CR Profiles
+        $secondYearCRs = [
             [
                 'id' => 'cr-1',
                 'name' => 'PAMU AMRUTHA',
@@ -331,71 +331,195 @@ include "connect.php";
                 'badgeColor' => 'bg-success'
             ]
         ];
+
+        $thirdYearCRs = [
+            [
+                'id' => 'cr-7',
+                'name' => 'CHANDANI VIVEKANANDA',
+                'registrationNumber' => '24B91A0720',
+                'phone' => '9063449226',
+                'className' => 'CSIT - III Year - Section A',
+                'branch' => 'CSIT',
+                'year' => 'III Year',
+                'section' => 'Section A',
+                'image' => 'public/images/cr/chandani-vivekananda.jpg',
+                'badgeColor' => 'bg-warning text-dark'
+            ],
+            [
+                'id' => 'cr-8',
+                'name' => 'THOTA JOHAN BENEDICT',
+                'registrationNumber' => '24B91A07B7',
+                'phone' => '9121901011',
+                'className' => 'CSIT - III Year - Section B',
+                'branch' => 'CSIT',
+                'year' => 'III Year',
+                'section' => 'Section B',
+                'image' => 'public/images/cr/thota-johan-benedict.jpg',
+                'badgeColor' => 'bg-danger'
+            ],
+            [
+                'id' => 'cr-9',
+                'name' => 'S D RANI',
+                'registrationNumber' => '24B91A07B3',
+                'phone' => '7095183812',
+                'className' => 'CSIT - III Year - Section B',
+                'branch' => 'CSIT',
+                'year' => 'III Year',
+                'section' => 'Section B',
+                'image' => 'public/images/cr/s-d-rani.jpg',
+                'badgeColor' => 'bg-danger'
+            ]
+        ];
         ?>
 
         <!-- Filter / Class Group Tabs -->
-        <div class="d-flex justify-content-center flex-wrap gap-2 mb-4 pb-2">
-            <button class="btn btn-primary cr-group-btn active" onclick="filterCRs('all', this)">All CRs (6)</button>
+        <div class="d-flex justify-content-center flex-wrap gap-2 mb-5 pb-2">
+            <button class="btn btn-primary cr-group-btn active" onclick="filterCRs('all', this)">All CRs (9)</button>
+            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('2ndYear', this)">2nd Years (6)</button>
+            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('3rdYear', this)">3rd Years (3)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-SectionB', this)">CSIT II-B (2)</button>
             <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-SectionA', this)">CSIT II-A (2)</button>
-            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSD-IIYear', this)">CSD II Year (2)</button>
+            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSD-IIYear', this)">CSD II (2)</button>
+            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-III-A', this)">CSIT III-A (1)</button>
+            <button class="btn btn-outline-secondary cr-group-btn" onclick="filterCRs('CSIT-III-B', this)">CSIT III-B (2)</button>
         </div>
 
-        <!-- CR Cards Grid (Desktop 3-4, Tablet 2, Mobile 1) -->
-        <div class="row g-4 justify-content-center" id="crCardsGrid">
-            <?php foreach ($classRepresentatives as $cr): 
-                $groupClass = str_replace(' ', '', $cr['branch'] . '-' . str_replace(' ', '', $cr['section'] ? $cr['section'] : $cr['year']));
-            ?>
-                <div class="col-12 col-md-6 col-lg-4 col-xl-4 d-flex cr-item-card" data-group="<?= htmlspecialchars($groupClass) ?>">
-                    <div class="cr-card w-100 p-4 rounded-4 shadow-sm border bg-white text-center position-relative transition-all d-flex flex-column align-items-center">
-                        
-                        <!-- Class Badge -->
-                        <span class="badge <?= htmlspecialchars($cr['badgeColor']) ?> px-3 py-2 rounded-pill fw-bold mb-3 shadow-xs" style="font-size: 0.8rem; letter-spacing: 0.5px;">
-                            <i class="fas fa-users-cog me-1"></i> <?= htmlspecialchars($cr['className']) ?>
-                        </span>
+        <!-- 2nd Year CR Section -->
+        <div class="cr-year-group mb-5" data-year-group="2ndYear">
+            <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 44px; height: 44px; font-size: 1.1rem;">2nd</div>
+                <div>
+                    <h3 class="fw-extrabold text-dark font-outfit mb-0" style="font-size: 1.6rem;">2nd Year Class Representatives</h3>
+                    <p class="text-muted small mb-0">CSIT Section A, CSIT Section B & CSD II Year Representatives</p>
+                </div>
+            </div>
 
-                        <!-- CR Avatar -->
-                        <div class="cr-avatar-container mb-3 position-relative">
-                            <img src="<?= htmlspecialchars($cr['image']) ?>" 
-                                 alt="<?= htmlspecialchars($cr['name']) ?>" 
-                                 class="cr-avatar shadow"
-                                 onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($cr['name']) ?>&background=7c3aed&color=fff&size=150'">
-                            <span class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle p-2" title="Verified Class Representative">
-                                <span class="visually-hidden">Verified</span>
+            <!-- CR Cards Grid (2nd Year) -->
+            <div class="row g-4 justify-content-start">
+                <?php foreach ($secondYearCRs as $cr): 
+                    $groupClass = str_replace(' ', '', $cr['branch'] . '-' . str_replace(' ', '', $cr['section'] ? $cr['section'] : $cr['year']));
+                ?>
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 d-flex cr-item-card" data-group="<?= htmlspecialchars($groupClass) ?>" data-year="2ndYear">
+                        <div class="cr-card w-100 p-4 rounded-4 shadow-sm border bg-white text-center position-relative transition-all d-flex flex-column align-items-center">
+                            
+                            <!-- Class Badge -->
+                            <span class="badge <?= htmlspecialchars($cr['badgeColor']) ?> px-3 py-2 rounded-pill fw-bold mb-3 shadow-xs" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                                <i class="fas fa-users-cog me-1"></i> <?= htmlspecialchars($cr['className']) ?>
                             </span>
-                        </div>
 
-                        <!-- CR Name -->
-                        <h4 class="fw-extrabold text-dark mb-1 font-outfit" style="font-size: 1.25rem; letter-spacing: -0.3px;">
-                            <?= htmlspecialchars($cr['name']) ?>
-                        </h4>
+                            <!-- CR Avatar -->
+                            <div class="cr-avatar-container mb-3 position-relative">
+                                <img src="<?= htmlspecialchars($cr['image']) ?>" 
+                                     alt="<?= htmlspecialchars($cr['name']) ?>" 
+                                     class="cr-avatar shadow"
+                                     onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($cr['name']) ?>&background=7c3aed&color=fff&size=150'">
+                                <span class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle p-2" title="Verified Class Representative">
+                                    <span class="visually-hidden">Verified</span>
+                                </span>
+                            </div>
 
-                        <!-- Registration Number -->
-                        <div class="mb-3">
-                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
-                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong><?= htmlspecialchars($cr['registrationNumber']) ?></strong>
-                            </span>
-                        </div>
+                            <!-- CR Name -->
+                            <h4 class="fw-extrabold text-dark mb-1 font-outfit" style="font-size: 1.25rem; letter-spacing: -0.3px;">
+                                <?= htmlspecialchars($cr['name']) ?>
+                            </h4>
 
-                        <!-- Phone Number Privacy Button -->
-                        <div class="mt-auto pt-3 border-top w-100">
-                            <div class="cr-phone-box">
-                                <button type="button" 
-                                        class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold shadow-xs cr-reveal-btn" 
-                                        onclick="toggleCrPhone(this)">
-                                    <i class="fas fa-phone-alt me-1"></i> Show Phone
-                                </button>
-                                <div class="cr-phone-display d-none text-center">
-                                    <a href="tel:<?= htmlspecialchars($cr['phone']) ?>" class="btn btn-success btn-sm rounded-pill px-3 fw-bold text-white shadow-xs">
-                                        <i class="fas fa-phone-volume me-1"></i> +91 <?= htmlspecialchars(substr($cr['phone'], 0, 5) . ' ' . substr($cr['phone'], 5)) ?>
-                                    </a>
+                            <!-- Registration Number -->
+                            <div class="mb-3">
+                                <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                    <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong><?= htmlspecialchars($cr['registrationNumber']) ?></strong>
+                                </span>
+                            </div>
+
+                            <!-- Phone Number Privacy Button -->
+                            <div class="mt-auto pt-3 border-top w-100">
+                                <div class="cr-phone-box">
+                                    <button type="button" 
+                                            class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold shadow-xs cr-reveal-btn" 
+                                            onclick="toggleCrPhone(this)">
+                                        <i class="fas fa-phone-alt me-1"></i> Show Phone
+                                    </button>
+                                    <div class="cr-phone-display d-none text-center">
+                                        <a href="tel:<?= htmlspecialchars($cr['phone']) ?>" class="btn btn-success btn-sm rounded-pill px-3 fw-bold text-white shadow-xs">
+                                            <i class="fas fa-phone-volume me-1"></i> +91 <?= htmlspecialchars(substr($cr['phone'], 0, 5) . ' ' . substr($cr['phone'], 5)) ?>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+        <!-- 3rd Year CR Section (Below 2nd Years) -->
+        <div class="cr-year-group mt-5" data-year-group="3rdYear">
+            <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+                <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 44px; height: 44px; font-size: 1.1rem;">3rd</div>
+                <div>
+                    <h3 class="fw-extrabold text-dark font-outfit mb-0" style="font-size: 1.6rem;">3rd Year Class Representatives</h3>
+                    <p class="text-muted small mb-0">CSIT Section A & CSIT Section B Representatives</p>
                 </div>
-            <?php endforeach; ?>
+            </div>
+
+            <!-- CR Cards Grid (3rd Year) -->
+            <div class="row g-4 justify-content-start">
+                <?php foreach ($thirdYearCRs as $cr): 
+                    $groupClass = str_replace(' ', '', $cr['branch'] . '-' . str_replace(' ', '', $cr['section'] ? $cr['section'] : $cr['year']));
+                    if ($cr['branch'] === 'CSIT' && $cr['year'] === 'III Year' && $cr['section'] === 'Section A') $groupClass = 'CSIT-III-A';
+                    if ($cr['branch'] === 'CSIT' && $cr['year'] === 'III Year' && $cr['section'] === 'Section B') $groupClass = 'CSIT-III-B';
+                ?>
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-4 d-flex cr-item-card" data-group="<?= htmlspecialchars($groupClass) ?>" data-year="3rdYear">
+                        <div class="cr-card w-100 p-4 rounded-4 shadow-sm border bg-white text-center position-relative transition-all d-flex flex-column align-items-center">
+                            
+                            <!-- Class Badge -->
+                            <span class="badge <?= htmlspecialchars($cr['badgeColor']) ?> px-3 py-2 rounded-pill fw-bold mb-3 shadow-xs" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                                <i class="fas fa-user-shield me-1"></i> <?= htmlspecialchars($cr['className']) ?>
+                            </span>
+
+                            <!-- CR Avatar -->
+                            <div class="cr-avatar-container mb-3 position-relative">
+                                <img src="<?= htmlspecialchars($cr['image']) ?>" 
+                                     alt="<?= htmlspecialchars($cr['name']) ?>" 
+                                     class="cr-avatar shadow"
+                                     onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($cr['name']) ?>&background=d97706&color=fff&size=150'">
+                                <span class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle p-2" title="Verified Class Representative">
+                                    <span class="visually-hidden">Verified</span>
+                                </span>
+                            </div>
+
+                            <!-- CR Name -->
+                            <h4 class="fw-extrabold text-dark mb-1 font-outfit" style="font-size: 1.25rem; letter-spacing: -0.3px;">
+                                <?= htmlspecialchars($cr['name']) ?>
+                            </h4>
+
+                            <!-- Registration Number -->
+                            <div class="mb-3">
+                                <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                    <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong><?= htmlspecialchars($cr['registrationNumber']) ?></strong>
+                                </span>
+                            </div>
+
+                            <!-- Phone Number Privacy Button -->
+                            <div class="mt-auto pt-3 border-top w-100">
+                                <div class="cr-phone-box">
+                                    <button type="button" 
+                                            class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold shadow-xs cr-reveal-btn" 
+                                            onclick="toggleCrPhone(this)">
+                                        <i class="fas fa-phone-alt me-1"></i> Show Phone
+                                    </button>
+                                    <div class="cr-phone-display d-none text-center">
+                                        <a href="tel:<?= htmlspecialchars($cr['phone']) ?>" class="btn btn-success btn-sm rounded-pill px-3 fw-bold text-white shadow-xs">
+                                            <i class="fas fa-phone-volume me-1"></i> +91 <?= htmlspecialchars(substr($cr['phone'], 0, 5) . ' ' . substr($cr['phone'], 5)) ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
 </section>
@@ -510,10 +634,22 @@ function filterCRs(group, btnEl) {
     btnEl.classList.add('active', 'btn-primary');
 
     document.querySelectorAll('.cr-item-card').forEach(card => {
-        if (group === 'all' || card.getAttribute('data-group') === group) {
+        const itemGroup = card.getAttribute('data-group');
+        const itemYear = card.getAttribute('data-year');
+        if (group === 'all' || itemGroup === group || itemYear === group) {
             card.style.display = 'flex';
         } else {
             card.style.display = 'none';
+        }
+    });
+
+    // Toggle year group titles visibility based on active filter
+    document.querySelectorAll('.cr-year-group').forEach(yearSec => {
+        const visibleCards = yearSec.querySelectorAll('.cr-item-card[style*="display: flex"], .cr-item-card:not([style*="display: none"])');
+        if (visibleCards.length > 0) {
+            yearSec.style.display = 'block';
+        } else {
+            yearSec.style.display = 'none';
         }
     });
 }
