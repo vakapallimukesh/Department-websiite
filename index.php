@@ -1770,6 +1770,28 @@ include "./head.php";
         box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
         border-color: rgba(16, 185, 129, 0.3);
     }
+
+    /* Live Updates Pulse Dot */
+    @keyframes livePulse {
+        0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); }
+        70% { box-shadow: 0 0 0 8px rgba(225, 29, 72, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+    }
+
+    .live-pulse-dot {
+        width: 10px;
+        height: 10px;
+        background-color: #e11d48;
+        border-radius: 50%;
+        display: inline-block;
+        animation: livePulse 1.8s infinite;
+    }
+
+    .live-updates-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(225, 29, 72, 0.12) !important;
+        border-color: #fda4af !important;
+    }
     </style>
 
     <section id="faculty-section" class="combined-overview-section">
@@ -1839,44 +1861,71 @@ include "./head.php";
                     </div>
                 </div>
 
-                <!-- Message from Leadership - 40% Width (col-md-5) -->
-                <div class="col-md-5">
-                    <div class="hod-card h-100 d-flex flex-column" style="padding: 30px; border-radius: 20px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+                <!-- Message from Leadership & Live Updates - 40% Width (col-md-5) -->
+                <div class="col-md-5 d-flex flex-column justify-content-between">
+                    <!-- Leadership Card -->
+                    <div class="hod-card d-flex flex-column" style="padding: 26px 30px; border-radius: 20px; border: 1px solid #e2e8f0; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
                         <div>
-                            <div class="text-center mb-4">
-                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 2.5px; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 6px;">LEADERSHIP</span>
-                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 2rem; color: #0f172a; margin: 0;">Message from Leadership</h3>
+                            <div class="text-center mb-3">
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2.5px; color: #3b82f6; text-transform: uppercase; display: block; margin-bottom: 4px;">LEADERSHIP</span>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.8rem; color: #0f172a; margin: 0;">Message from Leadership</h3>
                             </div>
 
                             <!-- Leadership Members Side by Side -->
-                            <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
+                            <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 16px;">
                                 <!-- HOD Section -->
                                 <div class="leadership-member" style="text-align: center; flex: 1;">
-                                    <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 12px;">
+                                    <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 10px;">
                                         <img src="./assets/logos/sureshsir.png" alt="Head of Department"
-                                            style="width: 105px; height: 105px; border-radius: 50%; border: 4px solid #3b82f6; object-fit: cover; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);">
+                                            style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #3b82f6; object-fit: cover; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2);">
                                     </div>
-                                    <h6 style="color: #0f172a; margin-bottom: 4px; font-weight: 700; font-size: 0.95rem;">Dr. M Suresh Babu</h6>
-                                    <p style="color: #64748b; font-size: 0.8rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSD</p>
+                                    <h6 style="color: #0f172a; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. M Suresh Babu</h6>
+                                    <p style="color: #64748b; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSD</p>
                                 </div>
 
                                 <!-- Second Leadership Member -->
                                 <div class="leadership-member" style="text-align: center; flex: 1;">
-                                    <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 12px;">
+                                    <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 10px;">
                                         <img src="./assets/faculty_imgs/4.jpg" alt="Associate Head"
-                                            style="width: 105px; height: 105px; border-radius: 50%; border: 4px solid #10b981; object-fit: cover; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);">
+                                            style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #10b981; object-fit: cover; box-shadow: 0 6px 16px rgba(16, 185, 129, 0.2);">
                                     </div>
-                                    <h6 style="color: #0f172a; margin-bottom: 4px; font-weight: 700; font-size: 0.95rem;">Dr. N. Gopala Krishna Murthy</h6>
-                                    <p style="color: #64748b; font-size: 0.8rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSIT</p>
+                                    <h6 style="color: #0f172a; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. N. Gopala Krishna Murthy</h6>
+                                    <p style="color: #64748b; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSIT</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Combined Quote -->
-                        <div style="padding: 20px 22px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; border-left: 4px solid #3b82f6; margin-top: 15px;">
-                            <blockquote style="font-size: 0.92rem; line-height: 1.6; font-style: italic; margin: 0; color: #334155; font-weight: 500;">
+                        <div style="padding: 16px 20px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 16px; border-left: 4px solid #3b82f6;">
+                            <blockquote style="font-size: 0.88rem; line-height: 1.55; font-style: italic; margin: 0; color: #334155; font-weight: 500;">
                                 "We nurture innovative minds and create technology leaders who will shape the future through excellence in education and innovation in research."
                             </blockquote>
+                        </div>
+                    </div>
+
+                    <!-- Live Updates Box -->
+                    <div class="live-updates-card" style="margin-top: 16px; padding: 22px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%); border: 1.5px solid #fecdd3; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.07); position: relative; overflow: hidden; transition: all 0.3s ease;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="live-pulse-dot"></span>
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #e11d48; text-transform: uppercase;">LIVE UPDATES</span>
+                            </div>
+                            <span style="background: #ffe4e6; color: #be123c; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; font-family: 'Outfit', sans-serif;">UPCOMING</span>
+                        </div>
+
+                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: #0f172a; margin-bottom: 12px; line-height: 1.3;">
+                            "Irumudi" Trailer Launch Event
+                        </h4>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                <i class="far fa-calendar-alt" style="color: #e11d48;"></i>
+                                12th August
+                            </span>
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                <i class="far fa-clock" style="color: #e11d48;"></i>
+                                From 4:30 PM
+                            </span>
                         </div>
                     </div>
                 </div>
