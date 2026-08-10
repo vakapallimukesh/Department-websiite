@@ -2384,7 +2384,7 @@ include "./head.php";
                         </div>
 
                         <!-- Card 3: Bhimavaram Foods -->
-                        <div class="depth-carousel__card" data-startup="bhimavaram-digitals" style="cursor: pointer;">
+                        <div class="depth-carousel__card" data-startup="bhimavaram-foods" style="cursor: pointer;">
                             <div class="depth-carousel__logo-box">
                                 <img class="depth-carousel__img" src="./assets/company_logos/logos/21.png" alt="Bhimavaram Foods">
                             </div>
@@ -2618,7 +2618,7 @@ include "./head.php";
                 'campus-online': {
                     title: 'Campus Online',
                     category: 'EDTECH PLATFORM',
-                    logo: 'assets/company_logos/logos/21.png',
+                    logo: 'assets/company_logos/logos/26.png',
                     tagline: '"Empowering Next-Gen Campus Learning!"',
                     description: 'Comprehensive learning management portal connecting faculty and students with interactive course materials and academic tracking.',
                     headerGradient: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
@@ -2628,10 +2628,23 @@ include "./head.php";
                         { icon: 'fas fa-laptop-code', color: 'success', title: 'Interactive Learning', desc: 'Digital quizzes, notes & faculty connectivity' }
                     ]
                 },
+                'bhimavaram-foods': {
+                    title: 'Bhimavaram Online Foods',
+                    category: 'ONDC E-COMMERCE PLATFORM',
+                    logo: 'assets/company_logos/logos/21.png',
+                    tagline: '"ONDC Enabled E-Commerce Platform for Authentic Bhimavaram Sweets & Pickles!"',
+                    description: 'An ONDC-enabled e-commerce platform offering authentic Bhimavaram sweets, hots, pickles, and spice powders delivered directly across India.',
+                    headerGradient: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
+                    accentColor: '#d97706',
+                    features: [
+                        { icon: 'fas fa-store', color: 'warning', title: 'ONDC Network', desc: 'Direct access on national open digital commerce network' },
+                        { icon: 'fas fa-utensils', color: 'danger', title: 'Authentic Bhimavaram Delicacies', desc: 'Traditional sweets, spicy pickles & authentic snacks' }
+                    ]
+                },
                 'nutridelight': {
                     title: 'NutriDelight',
                     category: 'HEALTH & WELLNESS',
-                    logo: 'assets/company_logos/logos/26.png',
+                    logo: 'assets/company_logos/logos/24.png',
                     tagline: '"Nutritious & Delicious Meals for Healthy Living!"',
                     description: 'Health-focused cloud kitchen startup delivering nutritious meals crafted with fresh, locally-sourced ingredients.',
                     headerGradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
