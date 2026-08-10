@@ -1416,6 +1416,8 @@ body {
                         object-position: top;
                         display: block;
                         transition: transform 0.5s ease;
+                        image-rendering: -webkit-optimize-contrast;
+                        filter: contrast(1.06) brightness(1.02);
                     }
                     .bo-app-card:hover .bo-phone-frame img {
                         transform: scale(1.04);
@@ -1551,10 +1553,12 @@ body {
                     }
                     .bd-photo-img {
                         width: 100%;
-                        height: 240px;
+                        height: 250px;
                         object-fit: cover;
                         display: block;
-                        transition: transform 0.5s ease;
+                        transition: transform 0.5s ease, filter 0.3s ease;
+                        image-rendering: -webkit-optimize-contrast;
+                        filter: contrast(1.08) brightness(1.02) saturate(1.05);
                     }
                     .bd-photo-card:hover .bd-photo-img {
                         transform: scale(1.05);
