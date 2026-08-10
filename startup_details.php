@@ -1377,6 +1377,131 @@ body {
                         <?php endif; ?>
                     </div>
                 </div>
+            <?php if ($startupId === 'bhimavaram-online' || $startupId === 'bhimavaramonline'): ?>
+            <!-- ==================================================
+                 BHIMAVARAM ONLINE - APP SHOWCASE SECTION
+                 ================================================== -->
+            <section class="bo-app-showcase-section py-5 my-4 position-relative overflow-hidden" id="app-showcase">
+                <style>
+                    .bo-app-showcase-section {
+                        background: linear-gradient(180deg, #f8fafc 0%, #edf2f7 50%, #f1f5f9 100%);
+                        border-radius: 30px;
+                        border: 1px solid #e2e8f0;
+                    }
+                    .bo-app-card {
+                        background: #ffffff;
+                        border-radius: 28px;
+                        border: 1px solid #e2e8f0;
+                        padding: 12px;
+                        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+                        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                        position: relative;
+                    }
+                    .bo-app-card:hover {
+                        transform: translateY(-12px) scale(1.02);
+                        box-shadow: 0 25px 50px rgba(37, 99, 235, 0.2);
+                        border-color: #2563eb;
+                    }
+                    .bo-phone-frame {
+                        border-radius: 22px;
+                        overflow: hidden;
+                        border: 4px solid #1e293b;
+                        background: #000;
+                        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+                    }
+                    .bo-phone-frame img {
+                        width: 100%;
+                        height: 380px;
+                        object-fit: cover;
+                        object-position: top;
+                        display: block;
+                        transition: transform 0.5s ease;
+                    }
+                    .bo-app-card:hover .bo-phone-frame img {
+                        transform: scale(1.04);
+                    }
+                    .bo-marquee-track {
+                        display: flex;
+                        gap: 24px;
+                        animation: boMarquee 35s linear infinite;
+                    }
+                    .bo-marquee-track:hover {
+                        animation-play-state: paused;
+                    }
+                    @keyframes boMarquee {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(calc(-100% / 2)); }
+                    }
+                </style>
+
+                <!-- SECTION HEADER -->
+                <div class="text-center max-w-3xl mx-auto mb-5 px-3">
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-4 py-2 rounded-pill fw-bold text-uppercase tracking-wider shadow-sm mb-3" style="letter-spacing: 1.5px; font-size: 0.85rem;">
+                        <i class="fas fa-mobile-alt me-2"></i> MOBILE EXPERIENCE
+                    </span>
+                    <h2 class="display-5 fw-extrabold text-dark mb-2 font-outfit" style="font-weight: 800;">
+                        App Showcase
+                    </h2>
+                    <p class="lead text-muted mx-auto mb-4" style="max-width: 680px; font-size: 1.1rem; line-height: 1.7;">
+                        Explore the sleek interface and real-world features of the Bhimavaram Online Android App — connecting local stores, food, groceries & taxi bookings in one place.
+                    </p>
+                    <a href="https://play.google.com/store/apps/details?id=com.bhimavaramonline.androidapp" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg rounded-pill px-4 py-2.5 shadow-md fw-bold" style="font-size: 0.95rem;">
+                        <i class="fab fa-google-play me-2"></i> Download on Play Store
+                    </a>
+                </div>
+
+                <!-- SIDE BY SIDE ANIMATED APP SHOWCASE MARQUEE -->
+                <div class="overflow-hidden py-3">
+                    <div class="bo-marquee-track">
+                        <?php 
+                        $showcaseScreens = [
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase1.jpg',
+                                'title' => 'Book Taxi / Auto Online',
+                                'desc' => 'Instant local ride & auto bookings'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase2.jpg',
+                                'title' => 'Store & Electronics',
+                                'desc' => 'Mobiles, scooters & top products'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase3.jpg',
+                                'title' => 'All Categories',
+                                'desc' => 'Groceries, vegetables, meat & fruits'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase4.jpg',
+                                'title' => 'BO Premium Stores',
+                                'desc' => 'Top local brands & super discounts'
+                            ],
+                            [
+                                'img' => 'public/startups/bhimavaram-online/showcase5.jpg',
+                                'title' => 'BO Specials & Services',
+                                'desc' => 'Home repairs, news & specials'
+                            ]
+                        ];
+                        // Duplicate screens array for seamless infinite marquee loop
+                        $allShowcase = array_merge($showcaseScreens, $showcaseScreens);
+                        foreach ($allShowcase as $index => $screen):
+                        ?>
+                            <div class="bo-app-card" style="width: 270px; flex-shrink: 0;">
+                                <div class="bo-phone-frame position-relative">
+                                    <img src="<?= htmlspecialchars($screen['img']) ?>" alt="<?= htmlspecialchars($screen['title']) ?>" loading="lazy">
+                                    <div class="position-absolute top-0 start-0 w-100 p-2 d-flex justify-content-between align-items-center bg-dark bg-opacity-50 text-white" style="font-size: 0.72rem; backdrop-filter: blur(4px);">
+                                        <span><i class="fas fa-signal me-1"></i> 5G</span>
+                                        <span class="badge bg-danger rounded-pill px-2" style="font-size: 0.65rem;">LIVE</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 text-center">
+                                    <h6 class="fw-extrabold text-dark mb-1 font-outfit" style="font-size: 1rem;"><?= htmlspecialchars($screen['title']) ?></h6>
+                                    <p class="text-muted small mb-0" style="font-size: 0.82rem; line-height: 1.4;"><?= htmlspecialchars($screen['desc']) ?></p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </section>
             <?php endif; ?>
 
             <?php if ($startupId === 'nutridelight'): ?>
