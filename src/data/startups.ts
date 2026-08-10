@@ -131,7 +131,6 @@ export const STARTUPS_DATA: Record<string, Startup> = {
     secondaryImage: '/startups/lunch-box/detail3.png',
     founder: 'Sanjay K',
     phone: '9848823311',
-    address: 'I-HUB 2nd Floor, Tech Center, SRKR Engineering College, JP Road, Bhimavaram',
     instagram: 'https://www.instagram.com/bo_lunch_box?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     themeColor: '#0284c7',
     gradient: 'linear-gradient(135deg, #0f172a 0%, #0369a1 50%, #0284c7 100%)'
@@ -148,7 +147,6 @@ export const STARTUPS_DATA: Record<string, Startup> = {
     secondaryImage: '/startups/lunch-box/detail3.png',
     founder: 'Sanjay K',
     phone: '9848823311',
-    address: 'I-HUB 2nd Floor, Tech Center, SRKR Engineering College, JP Road, Bhimavaram',
     instagram: 'https://www.instagram.com/bo_lunch_box?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     themeColor: '#0284c7',
     gradient: 'linear-gradient(135deg, #0f172a 0%, #0369a1 50%, #0284c7 100%)'
