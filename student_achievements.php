@@ -187,118 +187,14 @@ body {
             <p style="color: #6f5f54; font-size: 1.05rem; max-width: 600px; margin: 0 auto;">Proud accomplishments by CSD & CSIT students across national & international platforms.</p>
         </div>
 
-        <div class="row g-4">
-            <!-- Card 1 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="achievement-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-award"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">National 1st Rank</span>
+        <div class="row g-4 justify-content-center">
+            <div class="col-12 text-center py-4">
+                <div class="p-5 rounded-4 shadow-sm bg-white border border-light d-inline-block mx-auto" style="max-width: 550px;">
+                    <div class="mx-auto mb-3" style="width: 70px; height: 70px; font-size: 1.8rem; background: rgba(217, 119, 6, 0.1); color: #d97706; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                        <i class="fas fa-trophy"></i>
                     </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Smart India Hackathon Winner</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">Team Agni Innovators (CSD)</p>
-                    <p class="text-secondary small mb-4">Secured 1st Prize of ₹1,00,000 for AI-driven smart agriculture disease prediction system developed for Ministry of Agriculture.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-calendar-alt me-1"></i> 2025</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Verified Honor</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="achievement-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-book-open"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">IEEE Publication</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">IEEE Xplore Research Author</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">K. Suresh & Team (CSIT)</p>
-                    <p class="text-secondary small mb-4">Published research paper titled "Optimized Federated Learning for Edge IoT Networks" in IEEE International Conference.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-globe me-1"></i> Scopus Indexed</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Published</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="achievement-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">Global Rank 152</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">LeetCode Knight Title</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">V. Mukesh (CSD 3rd Year)</p>
-                    <p class="text-secondary small mb-4">Achieved 2050+ Rating on LeetCode with 900+ algorithmic problems solved and top rank in Weekly Coding Contests.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-fire me-1"></i> 900+ Solved</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Knight Level</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="achievement-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fab fa-aws"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">AWS Certified</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">AWS Solutions Architect</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">P. Anitha (CSIT 4th Year)</p>
-                    <p class="text-secondary small mb-4">Cleared AWS Certified Solutions Architect Professional examination with high distinction score.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-certificate me-1"></i> Global Credential</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Pro Certified</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="achievement-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">Patent Published</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">IoT Patent Grant</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">S. Rajesh & Team (CSD)</p>
-                    <p class="text-secondary small mb-4">Filed and published Indian Patent for "Automated Aquaponics Sensor Network with Machine Learning Diagnostics".</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-file-signature me-1"></i> Govt. Published</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Patent Grant</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 6 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="achievement-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-running"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">Inter-University</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Sports Gold Medalist</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">House Prudhvi Captain</p>
-                    <p class="text-secondary small mb-4">Won Gold Medal in Inter-University Badminton Tournament and represented JNTUK at National Level sports meet.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-medal me-1"></i> Gold Winner</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> State Player</span>
-                    </div>
+                    <h4 class="fw-bold text-dark font-outfit mb-2">No Student Achievements Listed</h4>
+                    <p class="text-secondary small mb-0">Student awards, research publications, and hackathon honors will be updated here soon.</p>
                 </div>
             </div>
         </div>
