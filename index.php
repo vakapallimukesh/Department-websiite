@@ -1698,78 +1698,236 @@ include "./head.php";
     }
     </style>
 
-    <section id="faculty-section" class="combined-overview-section" style="padding: 60px 0;">
+    <style>
+    /* Department Journey Timeline Section */
+    .dept-timeline-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .timeline-header {
+        margin-bottom: 50px;
+        text-align: left;
+    }
+
+    .timeline-eyebrow {
+        font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 800;
+        letter-spacing: 2.5px;
+        color: #3b82f6;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .timeline-title {
+        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+        font-size: 3rem;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1.15;
+        margin: 0;
+    }
+
+    .timeline-container {
+        position: relative;
+        max-width: 1050px;
+        margin: 0 auto;
+        padding: 20px 0;
+    }
+
+    /* Central Vertical Spine Line */
+    .timeline-container::before {
+        content: '';
+        position: absolute;
+        top: 15px;
+        bottom: 15px;
+        left: 50%;
+        width: 2px;
+        background: #6ee7b7;
+        transform: translateX(-50%);
+        z-index: 1;
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 50px;
+        width: 100%;
+        display: flex;
+    }
+
+    .timeline-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .timeline-item-left {
+        justify-content: flex-start;
+    }
+
+    .timeline-item-right {
+        justify-content: flex-end;
+    }
+
+    /* Node Circle Marker */
+    .timeline-node {
+        position: absolute;
+        top: 24px;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 3.5px solid #10b981;
+        transform: translateX(-50%);
+        z-index: 3;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+        transition: all 0.3s ease;
+    }
+
+    .timeline-item:hover .timeline-node {
+        background: #10b981;
+        transform: translateX(-50%) scale(1.25);
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.25);
+    }
+
+    /* Timeline Card */
+    .timeline-card {
+        width: 44%;
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 30px 34px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 2px 6px rgba(0, 0, 0, 0.02);
+        border: 1px solid #f1f5f9;
+        position: relative;
+        z-index: 2;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .timeline-item:hover .timeline-card {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .timeline-year {
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #e06d53;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .timeline-event-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 10px;
+        line-height: 1.3;
+    }
+
+    .timeline-desc {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.02rem;
+        color: #64748b;
+        line-height: 1.65;
+        margin: 0;
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 991px) {
+        .timeline-title {
+            font-size: 2.3rem;
+        }
+        .timeline-card {
+            width: 45%;
+            padding: 24px 26px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .timeline-container::before {
+            left: 20px;
+        }
+        .timeline-node {
+            left: 20px;
+        }
+        .timeline-item-left, .timeline-item-right {
+            justify-content: flex-end;
+        }
+        .timeline-card {
+            width: calc(100% - 48px);
+            padding: 22px 24px;
+        }
+    }
+    </style>
+
+    <!-- Department Journey Timeline Section -->
+    <section id="faculty-section" class="dept-timeline-section">
         <div class="container">
-            <div class="mb-5">
-                <h2 style="color: #1e293b; font-size: 2.5rem; font-weight: 700;" class="scroll-blur-animate">Know CSD & CSIT Department</h2>
+            <div class="timeline-header">
+                <span class="timeline-eyebrow">TIMELINE</span>
+                <h2 class="timeline-title">How the department got here</h2>
             </div>
 
-            <div class="row align-items-stretch">
-
-
-                <!-- Department Info & Vision/Mission - 60% Width -->
-                <div class="col-md-7">
-                    <!-- About Department Section -->
-                    <div class="dept-about-card" style="border-radius: 20px; margin-bottom: 30px;">
-                        <p class="scroll-blur-animate" style="color: #64748b; font-size: 1.1rem; margin-bottom: 25px; text-align: justify;">
-                            Founded in 2021, the Department of Computer Science Design at SRKREC stands at the intersection of multidisciplinary applied education and translational research. With state-of-the-art facilities across our campus, the department empowers students to discover their ikigai through global perspectives, industry collaborations, and holistic development. Guided by integrity and the pursuit of knowledge and moral values, CSD & CSIT shapes future-ready citizens who drive entrepreneurship, innovation, and create meaningful societal impact.
-                        </p>
-
-                    </div>
-
-                    <!-- Vision Mission Tabs -->
-                    <div class="vision-mission-container">
-                        <!-- Tab Navigation -->
-                        <div class="tab-navigation" style="margin-bottom: 0;">
-                            <button class="tab-btn active" data-tab="vision" style="background: #16a085; color: white; border: none; padding: 12px 30px; border-radius: 8px 8px 0 0; font-weight: 600; cursor: pointer; transition: all 0.3s ease; border-bottom: 3px solid #16a085;">
-                                Vision
-                            </button>
-                            <button class="tab-btn" data-tab="mission" style="background: #e2e8f0; color: #64748b; border: none; padding: 12px 30px; border-radius: 8px 8px 0 0; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin-left: 5px;">
-                                Mission
-                            </button>
-                        </div>
-
-                        <!-- Tab Content -->
-                        <div class="tab-content">
-                            <!-- Vision Tab -->
-                            <div id="vision-tab" class="tab-pane active" style="background: white; padding: 40px; border-radius: 0 20px 20px 20px; border-top: 3px solid #16a085;">
-
-                                <p class="scroll-blur-animate" style="color: #64748b; font-size: 1.15rem; margin-bottom: 25px; text-align: justify;">
-                                    CSD & CSIT will be an exceptional knowledge-driven department advancing on a culture of honesty and compassion to make a difference to the world. We aspire to be a premier center that produces globally competent computer science professionals and researchers who contribute significantly to technological advancement and societal development.
-                                </p>
-                                <div style="padding: 20px; background: linear-gradient(135deg, #e8f8f5, #d5f4e6); border-radius: 15px; border-left: 5px solid #16a085;">
-                                    <p style="margin: 0; color: #2d3748; font-size: 1rem; font-weight: 600;">
-                                        <i class="fas fa-lightbulb" style="color: #16a085; margin-right: 10px;"></i>
-                                        Global Excellence | Innovation Leadership | Societal Impact | Knowledge-Driven Culture
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Mission Tab -->
-                            <div id="mission-tab" class="tab-pane" style="background: white; padding: 40px; border-radius: 0 20px 20px 20px; border-top: 3px solid #16a085; display: none;">
-                                <div style="display: flex; align-items: center; margin-bottom: 25px;">
-                                </div>
-                                <p class="scroll-blur-animate" style="color: #64748b; font-size: 1.15rem; margin-bottom: 25px; text-align: justify;">
-                                    To provide quality education in computer science and information technology, foster innovation through research, and develop ethical professionals ready to meet industry challenges. We are committed to nurturing entrepreneurship, promoting lifelong learning, and creating meaningful industry partnerships that bridge academia and real-world applications.
-                                </p>
-                                <div style="padding: 20px; background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 15px; border-left: 5px solid #3b82f6;">
-                                    <p style="margin: 0; color: #2d3748; font-size: 1rem; font-weight: 600;">
-                                        <i class="fas fa-rocket" style="color: #3b82f6; margin-right: 10px;"></i>
-                                        Quality Education | Research Innovation | Industry Ready | Ethical Development
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Know More Button -->
-                        <div style="text-align: left; margin-top: 30px;">
-                            <a href="#" class="know-more-btn" style="color: #16a085; font-size: 1.1rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; transition: all 0.3s ease;">
-                                Know More
-                                <i class="fas fa-arrow-right" style="margin-left: 10px; transition: transform 0.3s ease;"></i>
-                            </a>
-                        </div>
+            <div class="timeline-container">
+                <!-- Item 1: 2022 (Left) -->
+                <div class="timeline-item timeline-item-left">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-card">
+                        <span class="timeline-year">2022</span>
+                        <h3 class="timeline-event-title">CSD Program Launched</h3>
+                        <p class="timeline-desc">SRKR introduced Computer Science & Design, one of the earliest such programs in the region.</p>
                     </div>
                 </div>
+
+                <!-- Item 2: 2023 (Right) -->
+                <div class="timeline-item timeline-item-right">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-card">
+                        <span class="timeline-year">2023</span>
+                        <h3 class="timeline-event-title">CSIT Intake Doubled</h3>
+                        <p class="timeline-desc">Growing industry demand led to a second CSIT section, expanding intake to 120 seats.</p>
+                    </div>
+                </div>
+
+                <!-- Item 3: 2024 (Left) -->
+                <div class="timeline-item timeline-item-left">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-card">
+                        <span class="timeline-year">2024</span>
+                        <h3 class="timeline-event-title">Student House System Introduced</h3>
+                        <p class="timeline-desc">Prudhvi, Vayu, Agni, Aakash, and Jal launched to drive mentorship, events, and healthy competition.</p>
+                    </div>
+                </div>
+
+                <!-- Item 4: 2025 (Right) -->
+                <div class="timeline-item timeline-item-right">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-card">
+                        <span class="timeline-year">2025</span>
+                        <h3 class="timeline-event-title">Department-wide Digital Platform</h3>
+                        <p class="timeline-desc">A unified points, events, and appreciation system rolled out across every batch and section.</p>
+                    </div>
+                </div>
+
+                <!-- Item 5: 2026 (Left) -->
+                <div class="timeline-item timeline-item-left">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-card">
+                        <span class="timeline-year">2026</span>
+                        <h3 class="timeline-event-title">Jaitra 2k26</h3>
+                        <p class="timeline-desc">The department co-anchored SRKR's flagship annual fest, its largest student showcase yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
