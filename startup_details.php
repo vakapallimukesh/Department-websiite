@@ -1504,6 +1504,141 @@ body {
             </section>
             <?php endif; ?>
 
+            <?php if ($startupId === 'bhimavaram-digitals' || $startupId === 'bhimavaram-digital'): ?>
+            <!-- ==================================================
+                 BHIMAVARAM DIGITALS - PROMOTIONAL MEDIA SECTION
+                 ================================================== -->
+            <section class="bd-promo-media-section py-5 my-4 position-relative overflow-hidden" id="promotional-media">
+                <style>
+                    .bd-promo-media-section {
+                        background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+                        border-radius: 30px;
+                        color: #ffffff;
+                        padding: 40px 24px;
+                    }
+                    .bd-video-card {
+                        background: rgba(255, 255, 255, 0.05);
+                        backdrop-filter: blur(12px);
+                        border: 1px solid rgba(255, 255, 255, 0.12);
+                        border-radius: 24px;
+                        overflow: hidden;
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+                        transition: all 0.4s ease;
+                    }
+                    .bd-video-card:hover {
+                        border-color: rgba(59, 130, 246, 0.5);
+                        box-shadow: 0 30px 60px rgba(59, 130, 246, 0.25);
+                    }
+                    .bd-video-player {
+                        width: 100%;
+                        max-height: 480px;
+                        border-radius: 18px;
+                        background: #000;
+                        display: block;
+                    }
+                    .bd-photo-card {
+                        background: rgba(255, 255, 255, 0.06);
+                        border-radius: 20px;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        overflow: hidden;
+                        transition: all 0.4s ease;
+                        height: 100%;
+                    }
+                    .bd-photo-card:hover {
+                        transform: translateY(-8px);
+                        border-color: #3b82f6;
+                        box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
+                    }
+                    .bd-photo-img {
+                        width: 100%;
+                        height: 240px;
+                        object-fit: cover;
+                        display: block;
+                        transition: transform 0.5s ease;
+                    }
+                    .bd-photo-card:hover .bd-photo-img {
+                        transform: scale(1.05);
+                    }
+                </style>
+
+                <!-- SECTION HEADER -->
+                <div class="text-center max-w-3xl mx-auto mb-5 px-3">
+                    <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25 px-4 py-2 rounded-pill fw-bold text-uppercase tracking-wider shadow-sm mb-3" style="letter-spacing: 1.5px; font-size: 0.85rem;">
+                        <i class="fas fa-video me-2"></i> DIGITAL OUTDOOR MEDIA
+                    </span>
+                    <h2 class="display-5 fw-extrabold text-white mb-2 font-outfit" style="font-weight: 800;">
+                        Promotional Media
+                    </h2>
+                    <p class="lead text-slate-300 mx-auto mb-0" style="max-width: 680px; font-size: 1.1rem; line-height: 1.7; color: #cbd5e1;">
+                        Watch our high-resolution outdoor LED billboard displays in action across prime junctions in Bhimavaram, providing maximum visibility for businesses and advertisers.
+                    </p>
+                </div>
+
+                <!-- MAIN PROMOTIONAL VIDEO -->
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-10">
+                        <div class="bd-video-card p-3 p-md-4 text-center">
+                            <video class="bd-video-player" controls autoplay muted loop playsinline poster="public/startups/bhimavaram-digitals/promo1.jpg">
+                                <source src="public/startups/bhimavaram-digitals/promo.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="mt-3 text-start px-2 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div>
+                                    <h5 class="fw-bold text-white mb-1 font-outfit">Bhimavaram Digitals Outdoor Advertising Reel</h5>
+                                    <p class="text-slate-400 small mb-0" style="color: #94a3b8;"><i class="fas fa-map-marker-alt text-primary me-1"></i> Live Outdoor LED Display Network — Bhimavaram</p>
+                                </div>
+                                <span class="badge bg-danger rounded-pill px-3 py-2 fw-bold" style="font-size: 0.8rem;"><i class="fas fa-play-circle me-1"></i> HD PROMO VIDEO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BILLBOARD PHOTO GALLERY GRID -->
+                <div class="row g-4">
+                    <?php 
+                    $bdPromos = [
+                        [
+                            'img' => 'public/startups/bhimavaram-digitals/promo1.jpg',
+                            'title' => 'Prime Junction Billboard',
+                            'desc' => 'High-visibility LED screen at major traffic intersection'
+                        ],
+                        [
+                            'img' => 'public/startups/bhimavaram-digitals/promo2.jpg',
+                            'title' => 'Standalone High-Brightness Display',
+                            'desc' => 'Custom digital billboard located near key commercial hubs'
+                        ],
+                        [
+                            'img' => 'public/startups/bhimavaram-digitals/promo3.jpg',
+                            'title' => 'Commercial Complex Screen',
+                            'desc' => 'Frontage digital display for brand campaigns & ads'
+                        ],
+                        [
+                            'img' => 'public/startups/bhimavaram-digitals/promo4.jpg',
+                            'title' => 'Retail Storefront Outdoor LED',
+                            'desc' => 'Storefront digital display for 24/7 promo broadcasting'
+                        ]
+                    ];
+                    foreach ($bdPromos as $item):
+                    ?>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="bd-photo-card">
+                                <div class="position-relative overflow-hidden">
+                                    <img src="<?= htmlspecialchars($item['img']) ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="bd-photo-img" loading="lazy">
+                                    <div class="position-absolute top-0 end-0 m-2">
+                                        <span class="badge bg-dark bg-opacity-75 rounded-pill px-2.5 py-1 text-white border border-white border-opacity-25" style="font-size: 0.7rem; backdrop-filter: blur(4px);">LED DISPLAY</span>
+                                    </div>
+                                </div>
+                                <div class="p-3">
+                                    <h6 class="fw-bold text-white mb-1 font-outfit" style="font-size: 0.95rem;"><?= htmlspecialchars($item['title']) ?></h6>
+                                    <p class="text-slate-400 small mb-0" style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4;"><?= htmlspecialchars($item['desc']) ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+            <?php endif; ?>
+
             <?php if ($startupId === 'nutridelight'): ?>
             <!-- ==================================================
                  NUTRIDELIGHT 3-ROW CONTINUOUS SCROLLING GALLERY
