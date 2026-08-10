@@ -2643,195 +2643,44 @@ include "./head.php";
             }
         </style>
 
-        <!-- Startup Details Modal -->
-        <div class="modal fade" id="indexStartupModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden; background: #ffffff;">
-                    <div class="modal-header border-0 position-relative p-4" id="indexStartupModalHeader" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white;">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="p-2 bg-white rounded-4 shadow-sm" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <img id="indexStartupModalLogo" src="assets/company_logos/logos/23.png" alt="Startup Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                            </div>
-                            <div>
-                                <span id="indexStartupModalCategory" class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">LAUNDRY SERVICES</span>
-                                <h3 id="indexStartupModalTitle" class="modal-title font-outfit fw-bold mt-1 mb-0" style="color: #ffffff; font-size: 1.8rem;">Smart Wash</h3>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-4" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-4" style="background: #f8fafc;">
-                        <div class="card border-0 rounded-4 p-4 shadow-sm mb-4" style="background: #ffffff; border-left: 5px solid #0284c7 !important;">
-                            <h5 class="fw-bold text-primary mb-2" style="font-size: 1.15rem; color: #0284c7 !important;" id="indexStartupModalTagline">
-                                "Serving Bhimavaram with Top-Quality Laundry Solutions!"
-                            </h5>
-                            <p class="text-secondary mb-0" style="font-size: 1.05rem; line-height: 1.7;" id="indexStartupModalDescription">
-                                Get the best laundry services in Bhimavaram! We pick up your clothes, clean them with care, and deliver them back to you, all at affordable rates. Trust us to take care of your clothes like they're our own!
-                            </p>
-                        </div>
-                        
-                        <h6 class="fw-bold text-dark mb-3"><i class="fas fa-star text-warning me-2"></i>Key Highlights & Features</h6>
-                        <div class="row g-3" id="indexStartupModalFeatures">
-                            <!-- Populated by JS -->
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 p-3 d-flex justify-content-between" style="background: #ffffff;">
-                        <a id="indexStartupModalPageLink" href="smart_wash.php" class="btn btn-primary px-4 rounded-pill fw-bold">
-                            <i class="fas fa-external-link-alt me-2"></i> Visit Smart Wash Dedicated Page
-                        </a>
-                        <button type="button" class="btn btn-secondary px-4 rounded-pill fw-semibold" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const startupData = {
-                'smart-wash': {
-                    title: 'Smart Wash',
-                    category: 'LAUNDRY SERVICES',
-                    logo: 'assets/company_logos/logos/23.png',
-                    tagline: '"Serving Bhimavaram with Top-Quality Laundry Solutions!"',
-                    description: 'Get the best laundry services in Bhimavaram! We pick up your clothes, clean them with care, and deliver them back to you, all at affordable rates. Trust us to take care of your clothes like they\'re our own!',
-                    headerGradient: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
-                    accentColor: '#0284c7',
-                    features: [
-                        { icon: 'fas fa-truck-pickup', color: 'primary', title: 'Doorstep Pickup & Delivery', desc: 'Hassle-free collection & return across Bhimavaram' },
-                        { icon: 'fas fa-tshirt', color: 'success', title: 'Gentle & Quality Washing', desc: 'Careful cleaning techniques tailored to garment types' },
-                        { icon: 'fas fa-tag', color: 'warning', title: 'Affordable Student Rates', desc: 'Budget-friendly laundry packages for campus students' },
-                        { icon: 'fas fa-sparkles', color: 'info', title: 'Specialized Care', desc: 'Dry cleaning, shoe cleaning & saree rolling services' }
-                    ]
-                },
-                'bhimavaram-online': {
-                    title: 'Bhimavaram Online',
-                    category: 'E-COMMERCE & ONDC',
-                    logo: 'assets/company_logos/logos/22.png',
-                    tagline: '"First ONDC-Enabled Hyperlocal Marketplace in AP & Telangana!"',
-                    description: 'A one-stop portal for shopping, food ordering, and local services in Bhimavaram, empowering local vendors and offering seamless delivery.',
-                    headerGradient: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                    accentColor: '#2563eb',
-                    features: [
-                        { icon: 'fas fa-shopping-bag', color: 'primary', title: 'ONDC Network Integration', desc: 'Connected with national open digital commerce network' },
-                        { icon: 'fas fa-utensils', color: 'success', title: 'Food & Local Groceries', desc: 'Instant doorstep delivery from top local vendors' }
-                    ]
-                },
-                'lunch-box': {
-                    title: 'Lunch Box',
-                    category: 'FOOD TECH & LOGISTICS',
-                    logo: 'assets/company_logos/logos/25.png',
-                    tagline: '"Delivering Fresh Home-Cooked Meals Daily!"',
-                    description: 'Monthly subscription-based school and college lunch delivery bringing nutritious meals directly from home kitchens to campus.',
-                    headerGradient: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
-                    accentColor: '#dc2626',
-                    features: [
-                        { icon: 'fas fa-box', color: 'danger', title: 'Daily Deliveries', desc: '200+ lunchboxes delivered daily on exact schedule' },
-                        { icon: 'fas fa-heart', color: 'warning', title: 'Home Cooked Goodness', desc: 'Healthy, hygienic, and home-prepared meals' }
-                    ]
-                },
-                'bhimavaram-digitals': {
-                    title: 'Bhimavaram Digitals',
-                    category: 'DIGITAL MARKETING',
-                    logo: 'assets/company_logos/logos/20.png',
-                    tagline: '"Transforming Local Businesses with Digital Presence!"',
-                    description: 'Digital marketing startup specializing in digital billboards, SEO, social media management, and content creation.',
-                    headerGradient: 'linear-gradient(135deg, #0d9488 0%, #0f766e 100%)',
-                    accentColor: '#0d9488',
-                    features: [
-                        { icon: 'fas fa-bullhorn', color: 'info', title: 'Digital Billboards', desc: 'High-visibility LED billboard advertising across city' },
-                        { icon: 'fas fa-chart-line', color: 'primary', title: 'Social Media & SEO', desc: 'Targeted marketing campaigns and brand growth' }
-                    ]
-                },
-                'campus-online': {
-                    title: 'Campus Online',
-                    category: 'EDTECH PLATFORM',
-                    logo: 'assets/company_logos/logos/26.png',
-                    tagline: '"Empowering Next-Gen Campus Learning!"',
-                    description: 'Comprehensive learning management portal connecting faculty and students with interactive course materials and academic tracking.',
-                    headerGradient: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
-                    accentColor: '#7c3aed',
-                    features: [
-                        { icon: 'fas fa-graduation-cap', color: 'primary', title: 'Course Management', desc: 'Seamless assignment & material distribution' },
-                        { icon: 'fas fa-laptop-code', color: 'success', title: 'Interactive Learning', desc: 'Digital quizzes, notes & faculty connectivity' }
-                    ]
-                },
-                'bhimavaram-foods': {
-                    title: 'Bhimavaram Online Foods',
-                    category: 'ONDC E-COMMERCE PLATFORM',
-                    logo: 'assets/company_logos/logos/21.png',
-                    tagline: '"ONDC Enabled E-Commerce Platform for Authentic Bhimavaram Sweets & Pickles!"',
-                    description: 'An ONDC-enabled e-commerce platform offering authentic Bhimavaram sweets, hots, pickles, and spice powders delivered directly across India.',
-                    headerGradient: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)',
-                    accentColor: '#d97706',
-                    features: [
-                        { icon: 'fas fa-store', color: 'warning', title: 'ONDC Network', desc: 'Direct access on national open digital commerce network' },
-                        { icon: 'fas fa-utensils', color: 'danger', title: 'Authentic Bhimavaram Delicacies', desc: 'Traditional sweets, spicy pickles & authentic snacks' }
-                    ]
-                },
-                'nutridelight': {
-                    title: 'NutriDelight',
-                    category: 'HEALTH & WELLNESS',
-                    logo: 'assets/company_logos/logos/24.png',
-                    tagline: '"Nutritious & Delicious Meals for Healthy Living!"',
-                    description: 'Health-focused cloud kitchen startup delivering nutritious meals crafted with fresh, locally-sourced ingredients.',
-                    headerGradient: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
-                    accentColor: '#16a34a',
-                    features: [
-                        { icon: 'fas fa-leaf', color: 'success', title: 'Fresh & Healthy', desc: 'Locally-sourced ingredients prepared daily' },
-                        { icon: 'fas fa-apple-alt', color: 'warning', title: 'Calorie Balanced', desc: 'Custom diet plans tailored for fitness & wellness' }
-                    ]
-                }
-            };
-
-            const modalElement = document.getElementById('indexStartupModal');
-            if (modalElement && typeof bootstrap !== 'undefined') {
-                const modal = new bootstrap.Modal(modalElement);
-
-                document.querySelectorAll('[data-startup]').forEach(item => {
-                    item.addEventListener('click', function(e) {
-                        const startupKey = this.getAttribute('data-startup');
-                        // Removed early return for smart-wash so modal opens
-                        
-                        const data = startupData[startupKey] || startupData['smart-wash'];
-
-                        document.getElementById('indexStartupModalHeader').style.background = data.headerGradient;
-                        document.getElementById('indexStartupModalLogo').src = data.logo;
-                        document.getElementById('indexStartupModalTitle').textContent = data.title;
-                        document.getElementById('indexStartupModalCategory').textContent = data.category;
-
-                        const taglineEl = document.getElementById('indexStartupModalTagline');
-                        taglineEl.textContent = data.tagline;
-                        taglineEl.style.color = data.accentColor;
-                        taglineEl.closest('.card').style.borderLeftColor = data.accentColor;
-
-                        document.getElementById('indexStartupModalDescription').textContent = data.description;
-                        
-                        // Fix for Visit Dedicated Page button redirection
-                        const pageLink = document.getElementById('indexStartupModalPageLink');
-                        pageLink.href = data.pageUrl || ('startup_details.php?id=' + startupKey);
-                        pageLink.innerHTML = `<i class="fas fa-external-link-alt me-2"></i> Visit ${data.title} Dedicated Page`;
-
-                        const featuresContainer = document.getElementById('indexStartupModalFeatures');
-                        featuresContainer.innerHTML = '';
-                        data.features.forEach(feat => {
-                            const col = document.createElement('div');
-                            col.className = 'col-md-6';
-                            col.innerHTML = `
-                                <div class="d-flex align-items-center gap-3 p-3 rounded-3 bg-white border h-100 shadow-sm">
-                                    <div class="bg-${feat.color}-subtle text-${feat.color} p-3 rounded-circle" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                        <i class="${feat.icon}"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="fw-bold mb-1" style="font-size: 0.95rem; color: #1e293b;">${feat.title}</h6>
-                                        <p class="text-muted small mb-0" style="font-size: 0.85rem;">${feat.desc}</p>
-                                    </div>
-                                </div>
-                            `;
-                            featuresContainer.appendChild(col);
-                        });
-
-                        modal.show();
-                    });
+            document.querySelectorAll('[data-startup]').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    const startupKey = this.getAttribute('data-startup');
+                    if (startupKey === 'smart-wash') {
+                        window.location.href = 'smart_wash.php';
+                        return;
+                    }
+                    if (startupKey === 'nutridelight') {
+                        window.location.href = 'startup_details.php?id=nutridelight';
+                        return;
+                    }
+                    if (startupKey === 'bhimavaram-digitals' || startupKey === 'bhimavaram-digital') {
+                        window.location.href = 'startup_details.php?id=bhimavaram-digitals';
+                        return;
+                    }
+                    if (startupKey === 'bhimavaram-online' || startupKey === 'bhimavaramonline') {
+                        window.location.href = 'startup_details.php?id=bhimavaram-online';
+                        return;
+                    }
+                    if (startupKey === 'lunch-box' || startupKey === 'lunchbox') {
+                        window.location.href = 'startup_details.php?id=lunch-box';
+                        return;
+                    }
+                    if (startupKey === 'campus-online' || startupKey === 'campusonline') {
+                        window.location.href = 'startup_details.php?id=campus-online';
+                        return;
+                    }
+                    if (startupKey === 'bhimavaram-foods' || startupKey === 'bhimavaramfoods' || startupKey === 'bhimavaram-online-foods') {
+                        window.location.href = 'startup_details.php?id=bhimavaram-foods';
+                        return;
+                    }
+                    
+                    window.location.href = 'startup_details.php?id=' + startupKey;
                 });
-            }
+            });
         });
         </script>
     </section>
