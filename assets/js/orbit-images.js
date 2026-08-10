@@ -73,11 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const depthFactor = (unrotY + ry) / (2 * ry);
           const zi = Math.round(10 + depthFactor * 50);
-          const scale = 0.8 + depthFactor * 0.35;
-          const opacity = 0.65 + depthFactor * 0.35;
+          const scale = 0.92 + depthFactor * 0.22;
+          const opacity = 0.80 + depthFactor * 0.20;
+
+          const itemHalf = (item.offsetWidth / 2) || 55;
 
           // Hardware-accelerated GPU transform
-          item.style.transform = `translate3d(${(px - 37.5).toFixed(1)}px, ${(py - 37.5).toFixed(1)}px, 0) scale(${scale.toFixed(2)})`;
+          item.style.transform = `translate3d(${(px - itemHalf).toFixed(1)}px, ${(py - itemHalf).toFixed(1)}px, 0) scale(${scale.toFixed(2)})`;
           item.style.zIndex = String(zi);
           item.style.opacity = opacity.toFixed(2);
         });

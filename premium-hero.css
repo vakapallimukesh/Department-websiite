@@ -275,7 +275,18 @@
     border: 1px solid rgba(255, 245, 235, 0.35);
     border-radius: 50px;
     cursor: pointer;
-    text-decoration: none;
+    text-decoration: none !important;
+}
+
+.hero-explore-button,
+.hero-explore-button *,
+.hero-explore-button:hover,
+.hero-explore-button:focus,
+.hero-explore-button:active,
+.hero-explore-button:visited {
+    text-decoration: none !important;
+}
+.hero-explore-button {
     box-shadow: 0 10px 30px rgba(139, 69, 19, 0.45);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     animation: fadeInUp 1s ease-out 0.6s both;

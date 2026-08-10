@@ -179,9 +179,13 @@ class DatabaseMigrationHelper {
         
         $classes = [];
         while (mysqli_stmt_fetch($stmt)) {
-            $display_name = $year . '/4 ' . $branch;
-            if (!empty($section)) {
-                $display_name .= '-' . $section;
+            if ($year >= 5) {
+                $display_name = 'Graduated Batch';
+            } else {
+                $display_name = $year . '/4 ' . $branch;
+                if (!empty($section)) {
+                    $display_name .= '-' . $section;
+                }
             }
             
             $classes[$class_id] = $display_name;
@@ -205,9 +209,13 @@ class DatabaseMigrationHelper {
         $faculty = [];
         
         while ($row = mysqli_fetch_assoc($result)) {
-            $display_section = $row['year'] . '/4 ' . $row['branch'];
-            if (!empty($row['section'])) {
-                $display_section .= '-' . $row['section'];
+            if (!empty($row['year']) && $row['year'] >= 5) {
+                $display_section = 'Graduated Batch';
+            } else {
+                $display_section = (!empty($row['year']) ? $row['year'] . '/4 ' : '') . ($row['branch'] ?? '');
+                if (!empty($row['section'])) {
+                    $display_section .= '-' . $row['section'];
+                }
             }
             
             $faculty[] = [

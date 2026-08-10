@@ -27,7 +27,11 @@ if (!$class_data) {
     exit();
 }
 
-$section_name = $class_data['year'] . '/4 ' . strtoupper($class_data['branch']) . '-' . strtoupper($class_data['section']);
+if ($class_data['year'] >= 5) {
+    $section_name = 'Graduated Batch';
+} else {
+    $section_name = $class_data['year'] . '/4 ' . strtoupper($class_data['branch']) . '-' . strtoupper($class_data['section']);
+}
 
 // Get students in this class with house points
 $students_query = "
@@ -251,9 +255,12 @@ $student_count = count($students);
         }
 
         .avatar-img {
-            width: 84px;
-            height: 84px;
+            width: 88px;
+            height: 88px;
             object-fit: cover;
+            object-position: center 20%;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
             border-radius: 50%;
             border: 3px solid #6366f1;
             box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
@@ -387,9 +394,17 @@ $student_count = count($students);
                         <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-12 student-item-col" style="animation-delay: <?php echo ($index * 0.04); ?>s;">
                             <div class="student-card-fancy p-4 text-center" onclick="window.location.href='student_profile.php?student_id=<?php echo urlencode($student['student_id']); ?>'">
                                 <!-- Profile Picture -->
-                                <div class="avatar-wrap">
-                                    <?php if (!empty($student['profile_picture']) && file_exists($student['profile_picture'])): ?>
-                                        <img src="<?php echo htmlspecialchars($student['profile_picture']); ?>" alt="Profile" class="avatar-img">
+                                <?php 
+                                $srkr_photo_url = !empty($student['profile_picture']) && file_exists($student['profile_picture'])
+                                    ? htmlspecialchars($student['profile_picture'])
+                                    : (!empty($student['student_id']) ? 'https://srkrexams.in/SRKR/photo/' . strtoupper($student['student_id']) . '.jpg' : '');
+                                ?>
+                                <div class="avatar-wrap" onclick="event.stopPropagation(); openPhotoLightbox('<?php echo $srkr_photo_url; ?>', '<?php echo addslashes($student['name']); ?>', '<?php echo addslashes($student['student_id']); ?>');" title="Click to view full photo" style="cursor: pointer;">
+                                    <?php if (!empty($srkr_photo_url)): ?>
+                                        <img src="<?php echo $srkr_photo_url; ?>" alt="Profile" class="avatar-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+                                        <div class="avatar-placeholder" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
+                                            <i class="fas fa-user"></i>
+                                        </div>
                                     <?php else: ?>
                                         <div class="avatar-placeholder">
                                             <i class="fas fa-user"></i>
@@ -441,6 +456,158 @@ $student_count = count($students);
         </div>
     </div>
     
+    <style>
+        #photoLightboxModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+        }
+        .photo-lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+        .photo-lightbox-card {
+            position: relative;
+            background: #ffffff;
+            border-radius: 24px;
+            max-width: 520px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: zoomIn 0.25s ease;
+        }
+        .photo-lightbox-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .photo-lightbox-close:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+        .photo-lightbox-img-wrap {
+            width: 100%;
+            max-height: 480px;
+            background: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .photo-lightbox-img-wrap img {
+            max-width: 100%;
+            max-height: 480px;
+            object-fit: contain;
+        }
+        .photo-lightbox-info {
+            padding: 24px 20px;
+        }
+        .photo-lightbox-info h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+            font-size: 1.4rem;
+        }
+        .photo-lightbox-info p {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        .photo-download-btn {
+            border-radius: 50px !important;
+            padding: 12px 28px !important;
+            font-weight: 700 !important;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            color: #ffffff !important;
+            border: none !important;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+            transition: all 0.25s ease !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .photo-download-btn:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.45) !important;
+            color: #ffffff !important;
+        }
+    </style>
+    <script>
+        function openPhotoLightbox(photoUrl, name, studentId) {
+            if (!photoUrl) return;
+
+            let lightbox = document.getElementById('photoLightboxModal');
+            if (!lightbox) {
+                lightbox = document.createElement('div');
+                lightbox.id = 'photoLightboxModal';
+                lightbox.innerHTML = `
+                    <div class="photo-lightbox-overlay" onclick="closePhotoLightbox(event)">
+                        <div class="photo-lightbox-card" onclick="event.stopPropagation()">
+                            <button class="photo-lightbox-close" onclick="closePhotoLightbox()">&times;</button>
+                            <div class="photo-lightbox-img-wrap">
+                                <img id="lightboxImg" src="" alt="Student Photo">
+                            </div>
+                            <div class="photo-lightbox-info">
+                                <h4 id="lightboxName">Student Name</h4>
+                                <p id="lightboxId" class="mb-0">Registration Number</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(lightbox);
+            }
+
+            const img = document.getElementById('lightboxImg');
+            const nameEl = document.getElementById('lightboxName');
+            const idEl = document.getElementById('lightboxId');
+
+            img.src = photoUrl;
+            nameEl.textContent = name || 'Student Photo';
+            idEl.textContent = studentId ? `Regd No: ${studentId}` : '';
+
+            lightbox.style.display = 'block';
+        }
+
+        function closePhotoLightbox(e) {
+            if (!e || e.target.classList.contains('photo-lightbox-overlay') || e.target.classList.contains('photo-lightbox-close')) {
+                const lightbox = document.getElementById('photoLightboxModal');
+                if (lightbox) {
+                    lightbox.style.display = 'none';
+                }
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePhotoLightbox();
+            }
+        });
+    </script>
+
     <?php include "footer.php"; ?>
 </body>
 </html>

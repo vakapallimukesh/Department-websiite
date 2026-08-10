@@ -1600,7 +1600,7 @@ include "./head.php";
             </p>
 
             <!-- Explore Button -->
-            <a href="#pillars-section" id="exploreBtn" class="hero-explore-button">
+            <a href="#pillars-section" id="exploreBtn" class="hero-explore-button" style="text-decoration: none !important;">
                 Explore Department
                 <i class="fas fa-arrow-right"></i>
             </a>

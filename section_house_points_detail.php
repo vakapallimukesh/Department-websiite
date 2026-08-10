@@ -1,10 +1,12 @@
 <?php
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Disable error display in browser to prevent session warnings from cluttering page UI
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    @session_start();
+}
 include './connect.php';
 include './db_migration_helper.php';
 
@@ -44,7 +46,11 @@ $class_data = [
     'academic_year' => $academic_year
 ];
 
-$section_name = $class_data['year'] . '/4 ' . strtoupper($class_data['branch']) . '-' . strtoupper($class_data['section']);
+if ($class_data['year'] >= 5) {
+    $section_name = 'Graduated Batch';
+} else {
+    $section_name = $class_data['year'] . '/4 ' . strtoupper($class_data['branch']) . '-' . strtoupper($class_data['section']);
+}
 
 // Get all students
 $students_query = "
@@ -550,7 +556,7 @@ $student_count = count($students);
                                 <div class="graphic-icon-wrap">
                                     <i class="fas fa-graduation-cap"></i>
                                 </div>
-                                <h4><?php echo $class_data['year']; ?>/4</h4>
+                                <h4><?php echo ($class_data['year'] >= 5) ? 'Graduated' : $class_data['year'] . '/4'; ?></h4>
                                 <p>Year</p>
                             </div>
                         </div>
@@ -591,9 +597,6 @@ $student_count = count($students);
                     <div class="table-card-header">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <h5 class="mb-0"><i class="fas fa-list"></i> Student House Points</h5>
-                            <button onclick="downloadPDF()" class="btn-download-pdf">
-                                <i class="fas fa-download"></i> Download PDF
-                            </button>
                         </div>
                     </div>
                     <div class="p-4">

@@ -460,6 +460,15 @@ $houses = [
     overflow: hidden;
 }
 
+.hero-explore-button,
+.hero-explore-button *,
+.hero-explore-button:hover,
+.hero-explore-button:focus,
+.hero-explore-button:active,
+.hero-explore-button:visited {
+    text-decoration: none !important;
+}
+
 .hero-explore-button::before {
     content: '';
     position: absolute;

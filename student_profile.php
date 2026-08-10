@@ -134,13 +134,20 @@ if (!empty($student_data['projects'])) {
                             <!-- Profile Picture -->
                             <div class="profile-picture-container mb-4">
                                 <?php 
-                                $profile_picture_path = !empty($student_data['profile_picture']) ? htmlspecialchars($student_data['profile_picture']) : '';
-                                if (!empty($profile_picture_path) && file_exists($student_data['profile_picture'])): // Use original path for file_exists check
+                                $profile_picture_path = (!empty($student_data['profile_picture']) && file_exists($student_data['profile_picture']))
+                                    ? htmlspecialchars($student_data['profile_picture'])
+                                    : (!empty($student_data['student_id']) ? 'https://srkrexams.in/SRKR/photo/' . strtoupper($student_data['student_id']) . '.jpg' : '');
                                 ?>
+                                <?php if (!empty($profile_picture_path)): ?>
                                     <img src="<?php echo $profile_picture_path; ?>" 
                                          alt="Profile Picture" 
                                          class="rounded-circle" 
+                                         onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';"
                                          style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--primary-blue);">
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto" 
+                                         style="display: none; width: 150px; height: 150px; border: 4px solid var(--primary-blue);">
+                                        <i class="fas fa-user" style="font-size: 4rem; color: var(--gray-medium);"></i>
+                                    </div>
                                 <?php else: ?>
                                     <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto" 
                                          style="width: 150px; height: 150px; border: 4px solid var(--primary-blue);">

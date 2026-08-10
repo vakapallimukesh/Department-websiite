@@ -1055,16 +1055,138 @@ if ($class_result) {
         }
 
         .student-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #4c533e 0%, #606252 100%) !important;
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            background: #4c533e;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 700;
-        }    font-size: 0.9rem;
+            font-size: 1.05rem;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+        }
+
+        .student-avatar:hover {
+            transform: scale(1.12);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+        }
+
+        .student-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
+        /* Full Screen Photo Lightbox CSS */
+        #photoLightboxModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+        }
+        .photo-lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+        .photo-lightbox-card {
+            position: relative;
+            background: #ffffff;
+            border-radius: 24px;
+            max-width: 520px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: zoomIn 0.25s ease;
+        }
+        .photo-lightbox-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        .photo-lightbox-close:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+        .photo-lightbox-img-wrap {
+            width: 100%;
+            max-height: 480px;
+            background: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .photo-lightbox-img-wrap img {
+            max-width: 100%;
+            max-height: 480px;
+            object-fit: contain;
+        }
+        .photo-lightbox-info {
+            padding: 24px 20px;
+        }
+        .photo-lightbox-info h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+            font-size: 1.4rem;
+        }
+        .photo-lightbox-info p {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+        .photo-download-btn {
+            border-radius: 50px !important;
+            padding: 12px 28px !important;
+            font-weight: 700 !important;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            color: #ffffff !important;
+            border: none !important;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35) !important;
+            transition: all 0.25s ease !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .photo-download-btn:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.45) !important;
+            color: #ffffff !important;
         }
 
         .student-info h6 {
@@ -1282,7 +1404,7 @@ if ($class_result) {
                                 ?>
                                 <div class="progress-item">
                                     <div class="progress-header">
-                                        <span class="progress-label"><?php echo $year['year']; ?><?php echo ($year['year'] == 1) ? 'st' : (($year['year'] == 2) ? 'nd' : (($year['year'] == 3) ? 'rd' : 'th')); ?> Year</span>
+                                        <span class="progress-label"><?php echo ($year['year'] >= 5) ? 'Graduated Batch' : $year['year'] . (($year['year'] == 1) ? 'st' : (($year['year'] == 2) ? 'nd' : (($year['year'] == 3) ? 'rd' : 'th'))) . ' Year'; ?></span>
                                         <span class="progress-value">
                                             <?php echo $year['count']; ?> (<?php echo round($percentage, 1); ?>%)
                                         </span>
@@ -1503,7 +1625,7 @@ if ($class_result) {
                                             </div>
                                             <div class="class-info">
                                                 <h6><?php echo $class['branch']; ?> - Section <?php echo $class['section']; ?></h6>
-                                                <small>Year <?php echo $class['year']; ?> | <?php echo $class['academic_year']; ?></small>
+                                                <small><?php echo ($class['year'] >= 5) ? 'Graduated Batch' : 'Year ' . $class['year']; ?> | <?php echo $class['academic_year']; ?></small>
                                             </div>
                                         </div>
                                         
@@ -1829,7 +1951,7 @@ if ($class_result) {
             
             // Set modal title and subtitle
             modalTitle.textContent = `${branch} - Section ${section}`;
-            modalSubtitle.textContent = `Year ${year} | ${academicYear} | ${studentCount} Students`;
+            modalSubtitle.textContent = `${year >= 5 ? 'Graduated Batch' : 'Year ' + year} | ${academicYear} | ${studentCount} Students`;
             
             // Show modal
             modal.classList.add('show');
@@ -1973,31 +2095,43 @@ if ($class_result) {
                     </div>
                     ${students.length > 0 ? `
                         <div class="students-grid">
-                            ${students.map((student, index) => `
-                                <div class="student-card" data-student-card data-student-index="${index}">
-                                    <div class="student-header">
-                                        <div class="student-avatar">
-                                            ${student.profile_picture ? '<img src="' + student.profile_picture + '" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">' : student.name.split(' ').map(n => n.charAt(0)).join('').substring(0, 2).toUpperCase()}
-                                        </div>
-                                        <div class="student-info">
-                                            <h6>${student.name}</h6>
-                                            <small>${student.email || 'No email provided'}</small>
-                                        </div>
-                                    </div>
-                                    <div class="student-stats">
-                                        ${student.cgpa ? `
-                                            <div class="student-stat">
-                                                <i class="fas fa-star"></i>
-                                                <span>CGPA: ${student.cgpa}</span>
+                            ${students.map((student, index) => {
+                                const isGraduated = (year >= 5) || (student.is_alumni == 1);
+                                const photoUrl = student.profile_picture || (!isGraduated && student.student_id ? 'https://srkrexams.in/SRKR/photo/' + student.student_id.toUpperCase() + '.jpg' : '');
+                                const initials = student.name ? student.name.split(' ').map(n => n.charAt(0)).join('').substring(0, 2).toUpperCase() : 'ST';
+                                return `
+                                    <div class="student-card" data-student-card data-student-index="${index}">
+                                        <div class="student-header">
+                                            <div class="student-avatar" onclick="openPhotoLightbox('${photoUrl}', '${(student.name || '').replace(/'/g, "\\'")}', '${student.student_id || ''}')" title="Click to view full photo">
+                                                ${photoUrl ? `
+                                                    <img src="${photoUrl}" alt="${student.name}" 
+                                                         onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" 
+                                                         style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+                                                    <span style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; border-radius: 10px;">${initials}</span>
+                                                ` : `
+                                                    <span>${initials}</span>
+                                                `}
                                             </div>
-                                        ` : ''}
-                                        <div class="student-stat">
-                                            <i class="fas fa-${student.is_alumni == 1 ? 'graduation-cap' : 'user-graduate'}"></i>
-                                            <span>${student.is_alumni == 1 ? 'Alumni' : 'Active'}</span>
+                                            <div class="student-info">
+                                                <h6>${student.name}</h6>
+                                                <small>${student.email || 'No email provided'}</small>
+                                            </div>
+                                        </div>
+                                        <div class="student-stats">
+                                            ${student.cgpa ? `
+                                                <div class="student-stat">
+                                                    <i class="fas fa-star"></i>
+                                                    <span>CGPA: ${student.cgpa}</span>
+                                                </div>
+                                            ` : ''}
+                                            <div class="student-stat">
+                                                <i class="fas fa-${student.is_alumni == 1 ? 'graduation-cap' : 'user-graduate'}"></i>
+                                                <span>${student.is_alumni == 1 ? 'Alumni' : 'Active'}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            `).join('')}
+                                `;
+                            }).join('')}
                         </div>
                     ` : `
                         <div class="text-center py-4">
@@ -2050,9 +2184,55 @@ if ($class_result) {
             }
         }
 
+        // Full Screen Photo Lightbox Functions
+        function openPhotoLightbox(photoUrl, name, studentId) {
+            if (!photoUrl) return;
+
+            let lightbox = document.getElementById('photoLightboxModal');
+            if (!lightbox) {
+                lightbox = document.createElement('div');
+                lightbox.id = 'photoLightboxModal';
+                lightbox.innerHTML = `
+                    <div class="photo-lightbox-overlay" onclick="closePhotoLightbox(event)">
+                        <div class="photo-lightbox-card" onclick="event.stopPropagation()">
+                            <button class="photo-lightbox-close" onclick="closePhotoLightbox()">&times;</button>
+                            <div class="photo-lightbox-img-wrap">
+                                <img id="lightboxImg" src="" alt="Student Photo">
+                            </div>
+                            <div class="photo-lightbox-info">
+                                <h4 id="lightboxName">Student Name</h4>
+                                <p id="lightboxId" class="mb-0">Registration Number</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(lightbox);
+            }
+
+            const img = document.getElementById('lightboxImg');
+            const nameEl = document.getElementById('lightboxName');
+            const idEl = document.getElementById('lightboxId');
+
+            img.src = photoUrl;
+            nameEl.textContent = name || 'Student Photo';
+            idEl.textContent = studentId ? `Regd No: ${studentId}` : '';
+
+            lightbox.style.display = 'block';
+        }
+
+        function closePhotoLightbox(e) {
+            if (!e || e.target.classList.contains('photo-lightbox-overlay') || e.target.classList.contains('photo-lightbox-close')) {
+                const lightbox = document.getElementById('photoLightboxModal');
+                if (lightbox) {
+                    lightbox.style.display = 'none';
+                }
+            }
+        }
+
         // Close modal with Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
+                closePhotoLightbox();
                 closeClassModal();
             }
         });
