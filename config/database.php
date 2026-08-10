@@ -25,7 +25,8 @@ class Database {
     }
     
     private function loadConfig() {
-        if ($_SERVER['HTTP_HOST'] === 'csd-csit.page.gd' || strpos($_SERVER['HTTP_HOST'], 'page.gd') !== false) {
+        $httpHost = $_SERVER['HTTP_HOST'] ?? '';
+        if ($httpHost === 'csd-csit.page.gd' || strpos($httpHost, 'page.gd') !== false) {
             // Production configuration
             $this->host = 'sql302.infinityfree.com';
             $this->username = 'if0_39923791';
@@ -33,10 +34,10 @@ class Database {
             $this->database = 'if0_39923791_test';
         } else {
             // Development configuration
-            $this->host = '127.0.0.1:4306';
+            $this->host = '127.0.0.1';
             $this->username = 'root';
-            $this->password = 'password';
-            $this->database = '1234';
+            $this->password = '';
+            $this->database = 'new_sem';
         }
     }
     
