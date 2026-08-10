@@ -816,36 +816,45 @@ body {
         document.querySelectorAll('[data-startup]').forEach(item => {
             item.addEventListener('click', function(e) {
                 const startupKey = this.getAttribute('data-startup');
-                if (startupKey === 'smart-wash') {
-                    window.location.href = 'smart_wash.php';
-                    return;
-                }
-                if (startupKey === 'nutridelight') {
-                    window.location.href = 'startup_details.php?id=nutridelight';
-                    return;
-                }
-                if (startupKey === 'bhimavaram-digitals' || startupKey === 'bhimavaram-digital') {
-                    window.location.href = 'startup_details.php?id=bhimavaram-digitals';
-                    return;
-                }
-                if (startupKey === 'bhimavaram-online' || startupKey === 'bhimavaramonline') {
-                    window.location.href = 'startup_details.php?id=bhimavaram-online';
-                    return;
-                }
-                if (startupKey === 'lunch-box' || startupKey === 'lunchbox') {
-                    window.location.href = 'startup_details.php?id=lunch-box';
-                    return;
-                }
-                if (startupKey === 'campus-online' || startupKey === 'campusonline') {
-                    window.location.href = 'startup_details.php?id=campus-online';
-                    return;
-                }
-                if (startupKey === 'bhimavaram-foods' || startupKey === 'bhimavaramfoods' || startupKey === 'bhimavaram-online-foods') {
-                    window.location.href = 'startup_details.php?id=bhimavaram-foods';
-                    return;
-                }
+                const data = startupData[startupKey] || startupData['smart-wash'];
+
+                document.getElementById('startupModalHeader').style.background = data.headerGradient;
+                document.getElementById('startupModalLogo').src = data.logo;
+                document.getElementById('startupModalTitle').textContent = data.title;
+                document.getElementById('startupModalCategory').textContent = data.category;
+
+                const taglineEl = document.getElementById('startupModalTagline');
+                taglineEl.textContent = data.tagline;
+                taglineEl.style.color = data.accentColor;
+                taglineEl.closest('.card').style.borderLeftColor = data.accentColor;
+
+                document.getElementById('startupModalDescription').textContent = data.description;
                 
-                window.location.href = 'startup_details.php?id=' + startupKey;
+                // Fix for Visit Dedicated Page button redirection
+                const pageLink = document.getElementById('startupModalPageLink');
+                pageLink.href = data.pageUrl || ('startup_details.php?id=' + startupKey);
+                pageLink.innerHTML = `<i class="fas fa-external-link-alt me-2"></i> Visit ${data.title} Dedicated Page`;
+
+                const featuresContainer = document.getElementById('startupModalFeatures');
+                featuresContainer.innerHTML = '';
+                data.features.forEach(feat => {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-6';
+                    col.innerHTML = `
+                        <div class="d-flex align-items-center gap-3 p-3 rounded-3 bg-white border h-100 shadow-sm">
+                            <div class="bg-${feat.color}-subtle text-${feat.color} p-3 rounded-circle" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <i class="${feat.icon}"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1" style="font-size: 0.95rem; color: #1e293b;">${feat.title}</h6>
+                                <p class="text-muted small mb-0" style="font-size: 0.85rem;">${feat.desc}</p>
+                            </div>
+                        </div>
+                    `;
+                    featuresContainer.appendChild(col);
+                });
+
+                modal.show();
             });
         });
     });

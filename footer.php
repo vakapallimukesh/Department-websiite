@@ -354,3 +354,7 @@
         });
     });
 </script>
+
+<!-- AI Department Assistant Chatbot Component -->
+<?php include_once __DIR__ . '/includes/chatbot.php'; ?>
+

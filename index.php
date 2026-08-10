@@ -2663,10 +2663,7 @@ include "./head.php";
                 document.querySelectorAll('[data-startup]').forEach(item => {
                     item.addEventListener('click', function(e) {
                         const startupKey = this.getAttribute('data-startup');
-                        if (startupKey === 'smart-wash') {
-                            window.location.href = 'smart_wash.php';
-                            return;
-                        }
+                        // Removed early return for smart-wash so modal opens
                         
                         const data = startupData[startupKey] || startupData['smart-wash'];
 
@@ -2681,6 +2678,11 @@ include "./head.php";
                         taglineEl.closest('.card').style.borderLeftColor = data.accentColor;
 
                         document.getElementById('indexStartupModalDescription').textContent = data.description;
+                        
+                        // Fix for Visit Dedicated Page button redirection
+                        const pageLink = document.getElementById('indexStartupModalPageLink');
+                        pageLink.href = data.pageUrl || ('startup_details.php?id=' + startupKey);
+                        pageLink.innerHTML = `<i class="fas fa-external-link-alt me-2"></i> Visit ${data.title} Dedicated Page`;
 
                         const featuresContainer = document.getElementById('indexStartupModalFeatures');
                         featuresContainer.innerHTML = '';
