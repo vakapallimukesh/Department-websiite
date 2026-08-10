@@ -333,76 +333,10 @@ body {
         </div>
 
         <div class="row g-4">
-            <!-- Event 1 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="news-card">
-                    <div class="post-box-header">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="post-icon-badge">
-                                <i class="fas fa-trophy"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">CS-FEST 2026</h6>
-                                <span style="color: #e6c280; font-size: 0.78rem;">National Hackathon</span>
-                            </div>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Hackathon</span>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Friday, 20 March 2026</span>
-                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
-                    </div>
-
-                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">National Tech Fest 'CS-FEST 2026'</h3>
-                    <p class="text-secondary small mb-4">Official launch announcement of 24-Hour Hackathon, Paper Presentation, Coding Battles, UI/UX Design Sprint, and Web3 Demonstrations.</p>
-
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 842 Likes</span>
-                        <a href="https://www.instagram.com/srkrcsdcsit/?post=cs-fest-2026" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
-                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Event 2 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="news-card">
-                    <div class="post-box-header">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="post-icon-badge">
-                                <i class="fas fa-brain"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">AI & LLM Workshop</h6>
-                                <span style="color: #e6c280; font-size: 0.78rem;">Hands-On Masterclass</span>
-                            </div>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Workshop</span>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Wednesday, 18 February 2026</span>
-                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
-                    </div>
-
-                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">AI & LLM Architecture Workshop</h3>
-                    <p class="text-secondary small mb-4">Masterclass by industry experts on fine-tuning Large Language Models, RAG pipelines, and deploying AI models on cloud endpoints.</p>
-
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 615 Likes</span>
-                        <a href="https://www.instagram.com/srkrcsdcsit/?post=ai-llm-workshop" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
-                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Event 3: Potluck Event Background Video Card -->
+            <!-- Box 1: Potluck Event Video Card -->
             <div class="col-md-6 col-lg-4">
                 <div class="news-card" style="border: 1.5px solid #fecdd3; background: #ffffff; padding: 22px; border-radius: 24px;">
-                    <!-- Background Video Container (No Controls, Autoplay, Muted, Loop, No Pause Option) -->
+                    <!-- Background Video Container -->
                     <div style="position: relative; border-radius: 18px; overflow: hidden; height: 210px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
                         <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
                             <source src="assets/videos/pot_luck.mp4" type="video/mp4">
@@ -430,105 +364,163 @@ body {
                 </div>
             </div>
 
-            <!-- Event 4 -->
+            <!-- Box 2: Alumni Talk Video Card -->
             <div class="col-md-6 col-lg-4">
-                <div class="news-card">
-                    <div class="post-box-header">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="post-icon-badge">
-                                <i class="fas fa-cloud"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">DevOps Masterclass</h6>
-                                <span style="color: #e6c280; font-size: 0.78rem;">Cloud Architecture</span>
-                            </div>
+                <div class="news-card" style="border: 1.5px solid #fecdd3; background: #ffffff; padding: 22px; border-radius: 24px;">
+                    <!-- Background Video Container -->
+                    <div style="position: relative; border-radius: 18px; overflow: hidden; height: 210px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+                        <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
+                            <source src="assets/videos/alumini_talk.mp4" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                            <i class="fab fa-instagram me-1" style="color: #e11d48;"></i> Reel Video
                         </div>
-                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Bootcamp</span>
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Tuesday, 25 November 2025</span>
-                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="date-pill" style="background: rgba(225, 29, 72, 0.1); color: #be123c; border-color: rgba(225, 29, 72, 0.2);"><i class="far fa-calendar-alt"></i> Alumni Interaction</span>
+                        <span class="insta-handle-tag" style="color: #e11d48;"><i class="fab fa-instagram me-1"></i> Instagram Reel</span>
                     </div>
 
-                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Cloud & DevOps Architecture</h3>
-                    <p class="text-secondary small mb-4">Mastering Docker containerization, Kubernetes cluster management, Helm charts, and CI/CD automated cloud deployments.</p>
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Alumni Talk & Interaction</h3>
+                    <p class="text-secondary small mb-4">An inspiring interactive session with distinguished department alumni sharing industry insights, career guidance, and success stories.</p>
 
                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 520 Likes</span>
-                        <a href="https://www.instagram.com/srkrcsdcsit/?post=devops-bootcamp" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
-                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 1,940 Likes</span>
+                        <a href="https://www.instagram.com/reel/Dawv3OfIiKO/?igsh=MWY5OXBjMGxhcTFkcw==" target="_blank" rel="noopener noreferrer" class="direct-post-btn" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff !important;">
+                            <i class="fab fa-instagram me-1"></i> Watch Insta Reel <i class="fas fa-external-link-alt ms-1"></i>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Event 5 -->
+            <!-- Box 3: Startup Meet Video Card -->
             <div class="col-md-6 col-lg-4">
-                <div class="news-card">
-                    <div class="post-box-header">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="post-icon-badge">
-                                <i class="fas fa-award"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">SIH 2025 Victory</h6>
-                                <span style="color: #e6c280; font-size: 0.78rem;">National 1st Rank</span>
-                            </div>
+                <div class="news-card" style="border: 1.5px solid #fecdd3; background: #ffffff; padding: 22px; border-radius: 24px;">
+                    <!-- Background Video Container -->
+                    <div style="position: relative; border-radius: 18px; overflow: hidden; height: 210px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+                        <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
+                            <source src="assets/videos/startup_meet.mp4" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                            <i class="fab fa-instagram me-1" style="color: #e11d48;"></i> Reel Video
                         </div>
-                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Victory</span>
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Thursday, 18 December 2025</span>
-                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="date-pill" style="background: rgba(225, 29, 72, 0.1); color: #be123c; border-color: rgba(225, 29, 72, 0.2);"><i class="far fa-calendar-alt"></i> Entrepreneurship</span>
+                        <span class="insta-handle-tag" style="color: #e11d48;"><i class="fab fa-instagram me-1"></i> Instagram Reel</span>
                     </div>
 
-                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Smart India Hackathon Victory</h3>
-                    <p class="text-secondary small mb-4">Celebrating Team Agni Innovators securing 1st Prize of ₹1,00,000 in Smart India Hackathon National Grand Finals.</p>
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Startup Meet & Summit</h3>
+                    <p class="text-secondary small mb-4">An energetic startup summit bringing student entrepreneurs, founders, and industry leaders together to showcase innovative ideas.</p>
 
                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 1,430 Likes</span>
-                        <a href="https://www.instagram.com/srkrcsdcsit/?post=sih-victory" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
-                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 2,150 Likes</span>
+                        <a href="https://www.instagram.com/reel/DPOt9iCDHDm/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer" class="direct-post-btn" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff !important;">
+                            <i class="fab fa-instagram me-1"></i> Watch Insta Reel <i class="fas fa-external-link-alt ms-1"></i>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Event 6 -->
+            <!-- Box 4: NextGen Labs Video Card -->
             <div class="col-md-6 col-lg-4">
-                <div class="news-card">
-                    <div class="post-box-header">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="post-icon-badge">
-                                <i class="fas fa-rocket"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold text-white mb-0" style="font-size: 0.95rem;">Startup Demo Day</h6>
-                                <span style="color: #e6c280; font-size: 0.78rem;">Incubation Pitches</span>
-                            </div>
+                <div class="news-card" style="border: 1.5px solid #fecdd3; background: #ffffff; padding: 22px; border-radius: 24px;">
+                    <!-- Background Video Container -->
+                    <div style="position: relative; border-radius: 18px; overflow: hidden; height: 210px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+                        <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
+                            <source src="assets/videos/nextgen_labs.mp4" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                            <i class="fab fa-instagram me-1" style="color: #e11d48;"></i> Reel Video
                         </div>
-                        <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" style="font-size: 0.72rem;">Incubator</span>
                     </div>
 
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="date-pill"><i class="far fa-calendar-alt"></i> Friday, 14 November 2025</span>
-                        <span class="insta-handle-tag"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="date-pill" style="background: rgba(225, 29, 72, 0.1); color: #be123c; border-color: rgba(225, 29, 72, 0.2);"><i class="far fa-calendar-alt"></i> AI & Emerging Tech</span>
+                        <span class="insta-handle-tag" style="color: #e11d48;"><i class="fab fa-instagram me-1"></i> Instagram Reel</span>
                     </div>
 
-                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Startup Incubator Demo Day</h3>
-                    <p class="text-secondary small mb-4">Student startup teams (Lunchbox, Campus Online, Bhimavaram Foods) pitched live business models to angel investors.</p>
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">NextGen Labs Showcase</h3>
+                    <p class="text-secondary small mb-4">NextGen research labs showcase featuring cutting-edge artificial intelligence, robotics, high-performance computing, and student project prototypes.</p>
 
                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 780 Likes</span>
-                        <a href="https://www.instagram.com/srkrcsdcsit/?post=startup-demo-day" target="_blank" rel="noopener noreferrer" class="direct-post-btn">
-                            <i class="fab fa-instagram me-1"></i> Open Direct Post <i class="fas fa-external-link-alt ms-1"></i>
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 2,420 Likes</span>
+                        <a href="https://www.instagram.com/reel/DNik1_yK1K1/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer" class="direct-post-btn" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff !important;">
+                            <i class="fab fa-instagram me-1"></i> Watch Insta Reel <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 5: Freedom Fest Video Card -->
+            <div class="col-md-6 col-lg-4">
+                <div class="news-card" style="border: 1.5px solid #fecdd3; background: #ffffff; padding: 22px; border-radius: 24px;">
+                    <!-- Background Video Container -->
+                    <div style="position: relative; border-radius: 18px; overflow: hidden; height: 210px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+                        <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
+                            <source src="assets/videos/freedom_fest.mp4" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                            <i class="fab fa-instagram me-1" style="color: #e11d48;"></i> Reel Video
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="date-pill" style="background: rgba(225, 29, 72, 0.1); color: #be123c; border-color: rgba(225, 29, 72, 0.2);"><i class="far fa-calendar-alt"></i> Culture & Festivities</span>
+                        <span class="insta-handle-tag" style="color: #e11d48;"><i class="fab fa-instagram me-1"></i> Instagram Reel</span>
+                    </div>
+
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Freedom Fest Celebration</h3>
+                    <p class="text-secondary small mb-4">A grand patriotic celebration filled with vibrant cultural performances, student talent showcases, and memorable campus festivities.</p>
+
+                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 2,890 Likes</span>
+                        <a href="https://www.instagram.com/reel/Cxz_7RyMhDM/?igsh=djhubnJwZzAyenpm" target="_blank" rel="noopener noreferrer" class="direct-post-btn" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff !important;">
+                            <i class="fab fa-instagram me-1"></i> Watch Insta Reel <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Box 6: Freshers CSD CSIT Video Card -->
+            <div class="col-md-6 col-lg-4">
+                <div class="news-card" style="border: 1.5px solid #fecdd3; background: #ffffff; padding: 22px; border-radius: 24px;">
+                    <!-- Background Video Container -->
+                    <div style="position: relative; border-radius: 18px; overflow: hidden; height: 210px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+                        <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
+                            <source src="assets/videos/freshers_csd_csit.mp4" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
+                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); color: #ffffff; font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                            <i class="fab fa-instagram me-1" style="color: #e11d48;"></i> Reel Video
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="date-pill" style="background: rgba(225, 29, 72, 0.1); color: #be123c; border-color: rgba(225, 29, 72, 0.2);"><i class="far fa-calendar-alt"></i> Freshers & Student Life</span>
+                        <span class="insta-handle-tag" style="color: #e11d48;"><i class="fab fa-instagram me-1"></i> Instagram Reel</span>
+                    </div>
+
+                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">CSD & CSIT Freshers Welcome</h3>
+                    <p class="text-secondary small mb-4">Grand welcoming event for incoming CSD & CSIT batches with exciting performances, fun icebreakers, and student celebrations.</p>
+
+                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2743;"></i> 3,120 Likes</span>
+                        <a href="https://www.instagram.com/reel/CxDklpPxovv/?igsh=MXY1a3Z5dGxibTJhYg==" target="_blank" rel="noopener noreferrer" class="direct-post-btn" style="background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff !important;">
+                            <i class="fab fa-instagram me-1"></i> Watch Insta Reel <i class="fas fa-external-link-alt ms-1"></i>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</section>
     </div>
 </section>
 

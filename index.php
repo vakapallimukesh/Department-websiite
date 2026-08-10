@@ -1904,51 +1904,46 @@ include "./head.php";
                     </div>
 
                     <!-- Live Updates Box -->
-                    <div class="live-updates-card" style="margin-top: 16px; padding: 22px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%); border: 1.5px solid #fecdd3; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.07); position: relative; overflow: hidden; transition: all 0.3s ease;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span class="live-pulse-dot"></span>
-                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #e11d48; text-transform: uppercase;">LIVE UPDATES</span>
+                    <div class="live-updates-card" style="margin-top: 16px; padding: 24px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%); border: 1.5px solid #fecdd3; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.07); position: relative; overflow: hidden; transition: all 0.3s ease; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="live-pulse-dot"></span>
+                                    <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #e11d48; text-transform: uppercase;">LIVE UPDATES</span>
+                                </div>
+                                <span style="background: #ffe4e6; color: #be123c; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 12px; font-family: 'Outfit', sans-serif;">UPCOMING</span>
                             </div>
-                            <span style="background: #ffe4e6; color: #be123c; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; font-family: 'Outfit', sans-serif;">UPCOMING</span>
-                        </div>
 
-                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: #0f172a; margin-bottom: 10px; line-height: 1.3;">
-                            "Irumudi" Trailer Launch Event
-                        </h4>
+                            <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.25rem; color: #0f172a; margin-bottom: 10px; line-height: 1.35;">
+                                "Irumudi" Trailer Launch Event
+                            </h4>
 
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px;">
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
-                                <i class="far fa-calendar-alt" style="color: #e11d48;"></i>
-                                12th August
-                            </span>
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
-                                <i class="far fa-clock" style="color: #e11d48;"></i>
-                                From 4:30 PM
-                            </span>
-                        </div>
-
-                        <!-- Featured Event Video Spotlight (Potluck Event) -->
-                        <div style="border-top: 1px dashed #fecdd3; padding-top: 14px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="font-size: 0.85rem; font-weight: 800; color: #0f172a; font-family: 'Outfit', sans-serif;">
-                                    Potluck Event
-                                </span>
-                                <span style="font-size: 0.72rem; font-weight: 700; color: #e11d48; background: #ffe4e6; padding: 2px 8px; border-radius: 10px;">
-                                    <i class="fab fa-instagram me-1"></i> Reel
-                                </span>
-                            </div>
-                            <!-- Background Video (No Controls, Autoplay, Muted, Loop) -->
-                            <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); height: 160px;">
-                                <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
-                                    <source src="assets/videos/pot_luck.mp4" type="video/mp4">
-                                </video>
-                            </div>
-                            <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 10px; line-height: 1.4;">
-                                A joyful community celebration featuring delicious homemade food, fun activities, and memorable bonding moments.
+                            <p style="font-size: 0.88rem; color: #64748b; margin-bottom: 16px; line-height: 1.55;">
+                                Join the CSD & CSIT department for the official grand trailer launch event featuring special guest appearances, live student performances, and cultural spotlights.
                             </p>
-                            <a href="https://www.instagram.com/reel/C_VGop-ydyj/?igsh=MWZvdWozeGZ5a2pjag==" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 0.8rem; padding: 7px 16px; border-radius: 20px; box-shadow: 0 4px 12px rgba(220, 39, 67, 0.25);">
-                                <i class="fab fa-instagram"></i> Watch Event Reel on Instagram <i class="fas fa-external-link-alt ms-1" style="font-size: 0.75rem;"></i>
+
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px;">
+                                <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                    <i class="far fa-calendar-alt" style="color: #e11d48;"></i>
+                                    12th August
+                                </span>
+                                <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                    <i class="far fa-clock" style="color: #e11d48;"></i>
+                                    From 4:30 PM
+                                </span>
+                                <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fecdd3; padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #9f1239; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                    <i class="fas fa-map-marker-alt" style="color: #e11d48;"></i>
+                                    Main Auditorium
+                                </span>
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px dashed #fecdd3; padding-top: 14px; display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #be123c; font-family: 'Outfit', sans-serif;">
+                                <i class="fas fa-bullhorn me-1" style="color: #e11d48;"></i> Don't Miss Out!
+                            </span>
+                            <a href="news_events.php" style="font-family: 'Outfit', sans-serif; font-size: 0.84rem; font-weight: 800; color: #e11d48; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                                View All Events & Feed <i class="fas fa-arrow-right" style="font-size: 0.78rem;"></i>
                             </a>
                         </div>
                     </div>
