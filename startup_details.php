@@ -1643,6 +1643,110 @@ body {
             </section>
             <?php endif; ?>
 
+            <?php if ($startupId === 'lunch-box' || $startupId === 'lunchbox'): ?>
+            <!-- ==================================================
+                 LUNCH BOX - MEDIA & HIGHLIGHTS SECTION
+                 ================================================== -->
+            <section class="lb-media-section py-5 my-4 position-relative overflow-hidden" id="lunchbox-media">
+                <style>
+                    .lb-media-section {
+                        background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+                        border-radius: 30px;
+                        border: 1px solid #bae6fd;
+                        padding: 40px 24px;
+                    }
+                    .lb-media-card {
+                        background: #ffffff;
+                        border-radius: 24px;
+                        border: 1px solid #e0f2fe;
+                        overflow: hidden;
+                        box-shadow: 0 10px 25px rgba(2, 132, 199, 0.08);
+                        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                        height: 100%;
+                    }
+                    .lb-media-card:hover {
+                        transform: translateY(-8px);
+                        box-shadow: 0 20px 45px rgba(2, 132, 199, 0.2);
+                        border-color: #0284c7;
+                    }
+                    .lb-media-img {
+                        width: 100%;
+                        height: 280px;
+                        object-fit: cover;
+                        display: block;
+                        transition: transform 0.5s ease;
+                        image-rendering: -webkit-optimize-contrast;
+                        filter: contrast(1.08) brightness(1.02);
+                    }
+                    .lb-media-card:hover .lb-media-img {
+                        transform: scale(1.05);
+                    }
+                </style>
+
+                <!-- SECTION HEADER -->
+                <div class="text-center max-w-3xl mx-auto mb-5 px-3">
+                    <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-4 py-2 rounded-pill fw-bold text-uppercase tracking-wider shadow-sm mb-3" style="letter-spacing: 1.5px; font-size: 0.85rem;">
+                        <i class="fas fa-camera me-2"></i> CAMPUS & EVENT HIGHLIGHTS
+                    </span>
+                    <h2 class="display-5 fw-extrabold text-dark mb-2 font-outfit" style="font-weight: 800;">
+                        Media & Highlights
+                    </h2>
+                    <p class="lead text-muted mx-auto mb-0" style="max-width: 680px; font-size: 1.1rem; line-height: 1.7;">
+                        Explore moments from student registrations, stall exhibitions, stage presentations, and exclusive subscription menu offerings of Lunch Box.
+                    </p>
+                </div>
+
+                <!-- PHOTO GALLERY GRID -->
+                <div class="row g-4 justify-content-center">
+                    <?php 
+                    $lbMediaItems = [
+                        [
+                            'img' => 'public/startups/lunch-box/media1.jpg',
+                            'title' => 'Desk Registrations & Team Interaction',
+                            'desc' => 'Lunch Box founding team explaining monthly home-to-school meal delivery subscriptions to students.'
+                        ],
+                        [
+                            'img' => 'public/startups/lunch-box/media2.jpg',
+                            'title' => 'Stage Presentation & Startup Pitch',
+                            'desc' => 'Student co-founder pitching the Lunch Box logistics model on campus stage.'
+                        ],
+                        [
+                            'img' => 'public/startups/lunch-box/media3.jpg',
+                            'title' => 'Start-Up Club Stall Exhibition',
+                            'desc' => 'Group photo of SRKREC student entrepreneurs at the Start-Up Club stall.'
+                        ],
+                        [
+                            'img' => 'public/startups/lunch-box/media4.jpg',
+                            'title' => 'Christmas Special Subscription Menu',
+                            'desc' => 'Special holiday meal menu featuring Veg Fried Rice, Chicken Biryani & Sambar Rice.'
+                        ],
+                        [
+                            'img' => 'public/startups/lunch-box/media5.jpg',
+                            'title' => 'Campus Awareness & Order Guidance',
+                            'desc' => 'Demonstrating daily lunch box tracking and parent updates to campus visitors.'
+                        ]
+                    ];
+                    foreach ($lbMediaItems as $item):
+                    ?>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="lb-media-card">
+                                <div class="position-relative overflow-hidden">
+                                    <img src="<?= htmlspecialchars($item['img']) ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="lb-media-img" loading="lazy">
+                                    <div class="position-absolute top-0 end-0 m-3">
+                                        <span class="badge bg-sky-600 bg-opacity-90 rounded-pill px-3 py-1 text-white shadow-sm" style="font-size: 0.75rem; background: #0284c7;">EVENT PHOTO</span>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h5 class="fw-bold text-dark mb-2 font-outfit" style="font-size: 1.1rem;"><?= htmlspecialchars($item['title']) ?></h5>
+                                    <p class="text-muted small mb-0" style="font-size: 0.88rem; line-height: 1.6;"><?= htmlspecialchars($item['desc']) ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+            <?php endif; ?>
+
             <?php if ($startupId === 'nutridelight'): ?>
             <!-- ==================================================
                  NUTRIDELIGHT 3-ROW CONTINUOUS SCROLLING GALLERY
