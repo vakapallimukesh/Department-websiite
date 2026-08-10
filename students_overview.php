@@ -16,7 +16,7 @@ $stats_query = "SELECT
 FROM students s 
 LEFT JOIN student_profile sp ON s.student_id = sp.student_id";
 
-$stats_result = $conn ? mysqli_query($conn, $stats_query) : false;
+$stats_result = mysqli_query($conn, $stats_query);
 if ($stats_result) {
     $stats = mysqli_fetch_assoc($stats_result);
     $total_students = $stats['total'];
@@ -34,7 +34,7 @@ FROM students
 GROUP BY branch 
 ORDER BY count DESC";
 
-$branch_result = $conn ? mysqli_query($conn, $branch_query) : false;
+$branch_result = mysqli_query($conn, $branch_query);
 if ($branch_result) {
     while ($row = mysqli_fetch_assoc($branch_result)) {
         $branch_stats[] = $row;
@@ -51,7 +51,7 @@ JOIN classes c ON s.class_id = c.class_id
 GROUP BY c.year 
 ORDER BY c.year";
 
-$year_result = $conn ? mysqli_query($conn, $year_query) : false;
+$year_result = mysqli_query($conn, $year_query);
 if ($year_result) {
     while ($row = mysqli_fetch_assoc($year_result)) {
         $year_stats[] = $row;
@@ -69,7 +69,7 @@ $cgpa_ranges = [
 ];
 
 $cgpa_query = "SELECT cgpa FROM student_profile WHERE cgpa IS NOT NULL";
-$cgpa_result = $conn ? mysqli_query($conn, $cgpa_query) : false;
+$cgpa_result = mysqli_query($conn, $cgpa_query);
 $total_cgpa_records = 0;
 
 if ($cgpa_result) {
@@ -89,7 +89,7 @@ if ($cgpa_result) {
 $no_cgpa_query = "SELECT COUNT(*) as count FROM students s 
     LEFT JOIN student_profile sp ON s.student_id = sp.student_id 
     WHERE sp.cgpa IS NULL";
-$no_cgpa_result = $conn ? mysqli_query($conn, $no_cgpa_query) : false;
+$no_cgpa_result = mysqli_query($conn, $no_cgpa_query);
 if ($no_cgpa_result) {
     $no_cgpa_data = mysqli_fetch_assoc($no_cgpa_result);
     $cgpa_ranges['Not Available']['count'] = $no_cgpa_data['count'];
@@ -98,7 +98,7 @@ if ($no_cgpa_result) {
 // Get top skills
 $skills_data = [];
 $skills_query = "SELECT skills FROM student_profile WHERE skills IS NOT NULL AND skills != '[]'";
-$skills_result = $conn ? mysqli_query($conn, $skills_query) : false;
+$skills_result = mysqli_query($conn, $skills_query);
 
 if ($skills_result) {
     while ($row = mysqli_fetch_assoc($skills_result)) {
@@ -139,60 +139,11 @@ LEFT JOIN faculties f ON (FIND_IN_SET(c.class_id, f.class_id) > 0 OR f.class_id 
 GROUP BY c.class_id, f.faculty_id
 ORDER BY c.year, c.branch, c.section";
 
-$class_result = $conn ? mysqli_query($conn, $class_query) : false;
+$class_result = mysqli_query($conn, $class_query);
 if ($class_result) {
     while ($row = mysqli_fetch_assoc($class_result)) {
         $class_assignments[] = $row;
     }
-}
-
-// Fallback sample data if DB is offline or table is empty
-if ($total_students == 0) {
-    $total_students = 558;
-    $active_students = 520;
-    $alumni_count = 38;
-    $avg_cgpa = 8.42;
-
-    $branch_stats = [
-        ['branch' => 'CSD', 'count' => 280, 'active_count' => 260],
-        ['branch' => 'CSIT', 'count' => 278, 'active_count' => 260]
-    ];
-
-    $year_stats = [
-        ['year' => 1, 'count' => 140, 'active_count' => 140],
-        ['year' => 2, 'count' => 142, 'active_count' => 142],
-        ['year' => 3, 'count' => 138, 'active_count' => 138],
-        ['year' => 4, 'count' => 138, 'active_count' => 100]
-    ];
-
-    $cgpa_ranges = [
-        '9.0-10.0' => ['min' => 9.0, 'max' => 10.0, 'count' => 125],
-        '8.0-8.9' => ['min' => 8.0, 'max' => 8.9, 'count' => 210],
-        '7.0-7.9' => ['min' => 7.0, 'max' => 7.9, 'count' => 145],
-        '6.0-6.9' => ['min' => 6.0, 'max' => 6.9, 'count' => 50],
-        'Below 6.0' => ['min' => 0, 'max' => 5.9, 'count' => 18],
-        'Not Available' => ['min' => null, 'max' => null, 'count' => 10]
-    ];
-
-    $top_skills = [
-        'Python' => 340,
-        'Java' => 310,
-        'React.js' => 260,
-        'Data Structures' => 290,
-        'Machine Learning' => 195,
-        'C++' => 220,
-        'SQL' => 280,
-        'UI/UX Design' => 175,
-        'Node.js' => 160,
-        'Cloud Computing' => 140
-    ];
-
-    $class_assignments = [
-        ['class_id' => 1, 'academic_year' => '2023-2024', 'year' => 2, 'semester' => 1, 'branch' => 'CSD', 'section' => 'A', 'student_count' => 70, 'faculty_name' => 'Dr. K. V. Sharma', 'faculty_email' => 'kvsharma@srkrec.ac.in'],
-        ['class_id' => 2, 'academic_year' => '2023-2024', 'year' => 2, 'semester' => 1, 'branch' => 'CSD', 'section' => 'B', 'student_count' => 72, 'faculty_name' => 'Prof. P. S. R. Murthy', 'faculty_email' => 'psrmurthy@srkrec.ac.in'],
-        ['class_id' => 3, 'academic_year' => '2023-2024', 'year' => 3, 'semester' => 1, 'branch' => 'CSIT', 'section' => 'A', 'student_count' => 68, 'faculty_name' => 'Dr. M. S. R. Prasad', 'faculty_email' => 'msrprasad@srkrec.ac.in'],
-        ['class_id' => 4, 'academic_year' => '2023-2024', 'year' => 3, 'semester' => 1, 'branch' => 'CSIT', 'section' => 'B', 'student_count' => 68, 'faculty_name' => 'Mrs. N. V. Lakshmi', 'faculty_email' => 'nvlakshmi@srkrec.ac.in']
-    ];
 }
 ?>
 

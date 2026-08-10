@@ -64,10 +64,12 @@ $houses = [
 
 
 
-// Single Dataset (Explicitly matching csd-csit.page.gd/houses_dashboard.php)
-$house_stats = [
-    'Aakash' => [
-        'student_count' => 124,
+// Get house statistics with detailed breakdowns
+$house_stats = [];
+foreach ($houses as $house_key => $house_info) {
+    $house_name = mysqli_real_escape_string($conn, $house_info['name']);
+    $stats = [
+        'student_count' => 0, 
         'winners_points' => 0,
         'participants_points' => 0,
         'organizers_points' => 0,
@@ -75,55 +77,93 @@ $house_stats = [
         'penalties_points' => 0,
         'total_points' => 0,
         'avg_points' => 0
-    ],
-    'Jal' => [
-        'student_count' => 107,
-        'winners_points' => 0,
-        'participants_points' => 0,
-        'organizers_points' => 0,
-        'appreciations_points' => 0,
-        'penalties_points' => 0,
-        'total_points' => 0,
-        'avg_points' => 0
-    ],
-    'Vayu' => [
-        'student_count' => 116,
-        'winners_points' => 0,
-        'participants_points' => 0,
-        'organizers_points' => 0,
-        'appreciations_points' => 0,
-        'penalties_points' => 0,
-        'total_points' => 0,
-        'avg_points' => 0
-    ],
-    'PRUDHVI' => [
-        'student_count' => 111,
-        'winners_points' => 0,
-        'participants_points' => 0,
-        'organizers_points' => 0,
-        'appreciations_points' => 0,
-        'penalties_points' => 0,
-        'total_points' => 0,
-        'avg_points' => 0
-    ],
-    'Agni' => [
-        'student_count' => 113,
-        'winners_points' => 0,
-        'participants_points' => 0,
-        'organizers_points' => 0,
-        'appreciations_points' => 0,
-        'penalties_points' => 0,
-        'total_points' => 0,
-        'avg_points' => 0
-    ]
-];
+    ];
 
+    // Find house ID (hid)
+    $hid = null;
+    $house_sql = "SELECT hid FROM houses WHERE name = '$house_name'";
+    $house_result = mysqli_query($conn, $house_sql);
+    if ($house_result && mysqli_num_rows($house_result) > 0) {
+        $house_row = mysqli_fetch_assoc($house_result);
+        $hid = $house_row['hid'];
+    }
+
+    if ($hid) {
+        // Get student count
+        $student_count_sql = "SELECT COUNT(*) as student_count FROM students WHERE hid = $hid AND is_alumni = 0";
+        $student_count_result = mysqli_query($conn, $student_count_sql);
+        if ($student_count_result) {
+            $count_data = mysqli_fetch_assoc($student_count_result);
+            $stats['student_count'] = (int)$count_data['student_count'];
+        }
+
+        // Points from participants
+        $participants_sql = "SELECT SUM(p.points) as points FROM participants p JOIN students s ON p.student_id = s.student_id WHERE s.hid = $hid";
+        $participants_result = mysqli_query($conn, $participants_sql);
+        if ($participants_result) {
+            $points_data = mysqli_fetch_assoc($participants_result);
+            $stats['participants_points'] = (int)($points_data['points'] ?? 0);
+        }
+
+        // Points from winners
+        $winners_sql = "SELECT SUM(w.points) as points FROM winners w JOIN students s ON w.student_id = s.student_id WHERE s.hid = $hid";
+        $winners_result = mysqli_query($conn, $winners_sql);
+        if ($winners_result) {
+            $points_data = mysqli_fetch_assoc($winners_result);
+            $stats['winners_points'] = (int)($points_data['points'] ?? 0);
+        }
+
+        // Points from organizers
+        $organizers_sql = "SELECT SUM(o.points) as points FROM organizers o JOIN students s ON o.student_id = s.student_id WHERE s.hid = $hid";
+        $organizers_result = mysqli_query($conn, $organizers_sql);
+        if ($organizers_result) {
+            $points_data = mysqli_fetch_assoc($organizers_result);
+            $stats['organizers_points'] = (int)($points_data['points'] ?? 0);
+        }
+
+        // Points from appreciations
+        $appreciations_sql = "SELECT SUM(a.points) as points FROM appreciations a JOIN students s ON a.student_id = s.student_id WHERE s.hid = $hid";
+        $appreciations_result = mysqli_query($conn, $appreciations_sql);
+        if ($appreciations_result) {
+            $points_data = mysqli_fetch_assoc($appreciations_result);
+            $stats['appreciations_points'] = (int)($points_data['points'] ?? 0);
+        }
+
+        // Subtract penalties
+        $penalties_sql = "SELECT SUM(p.points) as points FROM penalties p JOIN students s ON p.student_id = s.student_id WHERE s.hid = $hid";
+        $penalties_result = mysqli_query($conn, $penalties_sql);
+        if ($penalties_result && mysqli_num_rows($penalties_result) > 0) {
+            $points_data = mysqli_fetch_assoc($penalties_result);
+            $stats['penalties_points'] = (int)($points_data['points'] ?? 0);
+        }
+
+        $stats['total_points'] = $stats['winners_points'] + $stats['participants_points'] + $stats['organizers_points'] + $stats['appreciations_points'] - $stats['penalties_points'];
+        $stats['avg_points'] = $stats['student_count'] > 0 ? round($stats['total_points'] / $stats['student_count'], 1) : 0;
+    }
+
+    $house_stats[$house_key] = $stats;
+}
+
+// Sort houses by total points descending for accurate ranking display
+uasort($houses, function($a, $b) use ($house_stats) {
+    return $house_stats[$b['name']]['total_points'] <=> $house_stats[$a['name']]['total_points'];
+});
+
+// Calculate overall statistics
 $overall_stats = [
     'total_houses' => 5,
-    'total_events' => 3,
-    'total_points' => 0,
-    'active_students' => 558
+    'total_events' => 0,
+    'total_points' => array_sum(array_column($house_stats, 'total_points')),
+    'active_students' => array_sum(array_column($house_stats, 'student_count'))
 ];
+
+// Get total events
+$events_sql = "SELECT COUNT(*) as total FROM events WHERE status = 'Completed'";
+$events_result = mysqli_query($conn, $events_sql);
+if ($events_result) {
+    $events_data = mysqli_fetch_assoc($events_result);
+    $overall_stats['total_events'] = (int)$events_data['total'];
+}
 
 $houses = [
     'Aakash' => $houses['Aakash'],

@@ -281,9 +281,9 @@ $leader_house_points = $all_house_totals[$leader_house_key];
 // Calculate house statistics
 $house_stats = [
     'student_count' => count($students),
-    'total_points' => 0,
-    'avg_points' => 0.0,
-    'max_points' => 0
+    'total_points' => array_sum(array_column($students, 'total_points')),
+    'avg_points' => count($students) > 0 ? array_sum(array_column($students, 'total_points')) / count($students) : 0,
+    'max_points' => count($students) > 0 ? max(array_column($students, 'total_points')) : 0
 ];
 ?>
 
@@ -2094,7 +2094,7 @@ $house_stats = [
                                     </div>
                                     <div class="text-end">
                                         <span class="font-bold d-block" style="color: <?php echo $house_info['color']; ?>; font-weight: 800; font-size: 1.1rem;">
-                                            <?php echo 0; ?>
+                                            <?php echo number_format($ts['total_points']); ?>
                                         </span>
                                         <small class="text-muted">pts</small>
                                     </div>
@@ -2195,7 +2195,7 @@ $house_stats = [
                                         <?php if (!$using_new_schema): ?>
                                             <td style="padding: 16px 20px; border: none; text-align: right;">
                                                 <span style="font-weight: 700; font-size: 1.1rem; color: <?php echo $house_info['color']; ?>;">
-                                                    <?php echo 0; ?>
+                                                    <?php echo number_format($student['total_points']); ?>
                                                 </span>
                                             </td>
                                         <?php endif; ?>
