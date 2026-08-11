@@ -462,10 +462,10 @@ body {
                     <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
                         Project Expos & <span style="color: #d97706;">Technical Contests</span>
                     </h2>
-                    <p class="text-secondary small mb-0">Software solutions and innovations showcased at college project expos and technical competitions.</p>
+                    <p class="text-secondary small mb-0">Software solutions, public speaking achievements, and innovations showcased at expos & competitions.</p>
                 </div>
                 <span class="badge bg-dark text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
-                    🥇 Project Expos
+                    🥇 Project Expos & Competitions
                 </span>
             </div>
             <div id="competitionsGridContainer">
@@ -668,6 +668,31 @@ const studentAchievements = [
         ]
     },
     {
+        id: "master-orator-championship-2023",
+        title: "Semifinalists — Master Orator Championship 2023",
+        event: "Master Orator Championship 2023 (MOC)",
+        category: "competitions",
+        categoryName: "Public Speaking",
+        team: "5 CSD Girl Students",
+        award: "🎤 Semifinalists",
+        cashAward: "MOC 2023 Honor",
+        date: "2023",
+        stage: "Semifinals",
+        department: "Department of CSD & CSIT",
+        description: "Happy to share that 5 girl students of CSD (Subhashini 3/4, Rishita 2/4, Ananya 3/4, Srujana 3/4, Saranya 3/4) reached the semifinals of the Master Orator Championship 2023 in their first attempt. Though they could not make it to the final 10, their performance inspired all and earned immense appreciation.",
+        images: [
+            "assets/achievements/master-orator-championship-2023-1.jpg",
+            "assets/achievements/master-orator-championship-2023-2.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-microphone-alt", text: "MOC 2023 Semifinalists" },
+            { icon: "fas fa-female", text: "5 Girl Orators" },
+            { icon: "fas fa-award", text: "Public Speaking" },
+            { icon: "fas fa-user-graduate", text: "CSD Students" }
+        ]
+    },
+    {
         id: "prakalp-project-expo-2024",
         title: "2nd Prize Winners @ Prakalp Project Expo!",
         event: "Prakalp Project Expo — Ramachandra College of Engg",
@@ -795,7 +820,7 @@ function renderCardHtml(item) {
                 <!-- Category Tag -->
                 <div class="mb-2">
                     <span class="badge bg-warning-subtle text-warning-emphasis fw-bold rounded-pill px-2.5 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">
-                        ${item.categoryName.toUpperCase()} • ${item.stage || 'HACKATHON'}
+                        ${item.categoryName.toUpperCase()} • ${item.stage || 'COMPETITION'}
                     </span>
                 </div>
 
