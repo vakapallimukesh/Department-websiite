@@ -642,14 +642,10 @@ include "connect.php";
                             <i class="fas fa-music me-1"></i> Particular Talent: <strong>Classical Dance Maestro</strong>
                         </div>
                         
-                        <!-- 5 Line Content -->
-                        <ul class="list-unstyled text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.85rem;">
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Talented 1st year CSIT student renowned for her grace, expression, and mastery in Classical Dance.</li>
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Secured 1st Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC.</li>
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Captivates audiences with her mesmerizing rhythmic movements, traditional mudras, and devotion to arts.</li>
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Balances high academic performance in CSIT with artistic excellence and cultural leadership.</li>
-                            <li class="mb-0"><i class="fas fa-check-circle me-1.5 text-success"></i> An inspiring cultural icon of the department embodying creativity, discipline, and Indian heritage.</li>
-                        </ul>
+                        <!-- 5 Line Paragraph Content -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.65; font-size: 0.86rem; text-align: justify;">
+                            P.B.S Kruti is a talented 1st year CSIT student renowned for her exceptional grace, expression, and mastery in Indian Classical Dance. She proudly secured 1st Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Her mesmerizing rhythmic movements, traditional mudras, and profound devotion to classical arts captivate audiences everywhere. She seamlessly balances high academic performance in Computer Science & Information Technology with artistic excellence and cultural leadership. Kruti stands as an inspiring cultural hero of our department, embodying creativity, discipline, and rich Indian heritage.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -675,14 +671,10 @@ include "connect.php";
                             <i class="fas fa-theater-masks me-1"></i> Particular Talent: <strong>Classical Performing Arts Star</strong>
                         </div>
                         
-                        <!-- 5 Line Content -->
-                        <ul class="list-unstyled text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.85rem;">
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Passionate 2nd year Computer Science & Design student dedicated to Indian classical dance forms.</li>
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Won 2nd Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC.</li>
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Renowned for her expressive facial expressions, technical precision, and stage presence.</li>
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Consistently represents the CSD branch with pride, elegance, and cultural enthusiasm.</li>
-                            <li class="mb-0"><i class="fas fa-check-circle me-1.5 text-success"></i> Demonstrates that technology, design, and classical artistic expression go hand in hand.</li>
-                        </ul>
+                        <!-- 5 Line Paragraph Content -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.65; font-size: 0.86rem; text-align: justify;">
+                            R. Lakshmi Prasanna is a passionate 2nd year Computer Science & Design student dedicated to Indian classical dance forms and performing arts. She won 2nd Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Renowned for her expressive facial gestures, technical precision, and graceful stage presence, she illuminates every cultural stage. She consistently represents the CSD branch with immense pride, elegance, and artistic enthusiasm. Lakshmi Prasanna demonstrates that cutting-edge technology, design, and classical Indian art forms go hand in hand to achieve true excellence.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -708,14 +700,10 @@ include "connect.php";
                             <i class="fas fa-fist-raised me-1"></i> Particular Talent: <strong>Karate Champion & Martial Artist</strong>
                         </div>
                         
-                        <!-- 5 Line Content -->
-                        <ul class="list-unstyled text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.85rem;">
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Formidable 2nd year CSD student and martial artist who exemplifies power, discipline, and athletics.</li>
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Secured Gold Medal 🥇 in JNTUK Inter-Collegiate Karate Tournament with dominant performances.</li>
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Represented JNTUK at the South-West Inter-University Karate Championship 2024–25 in Chennai.</li>
-                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Inspires fellow students through relentless dedication, physical fitness, and courage in sports.</li>
-                            <li class="mb-0"><i class="fas fa-check-circle me-1.5 text-success"></i> A true hero of the department who proves that hard work, grit, and focus produce national champions.</li>
-                        </ul>
+                        <!-- 5 Line Paragraph Content -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.65; font-size: 0.86rem; text-align: justify;">
+                            D Pooja Sai Praveena is a formidable 2nd year CSD student and martial artist who exemplifies power, discipline, and athletic brilliance. She secured the Gold Medal 🥇 in the JNTUK Inter-Collegiate Karate (M & W) Tournament with dominant performances. Representing JNTUK University at the South-West Inter-University Karate Championship 2024–25 in Chennai, she brought immense pride to our institution. She continues to inspire fellow students through relentless dedication, physical fitness, and courage in competitive sports. Praveena is a true department hero who proves that hard work, grit, and unwavering focus produce national champions.
+                        </p>
                     </div>
                 </div>
             </div>
