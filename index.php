@@ -1793,16 +1793,23 @@ include "./head.php";
     .live-pulse-dot {
         width: 10px;
         height: 10px;
-        background-color: #d97706;
+        background-color: #e11d48;
         border-radius: 50%;
         display: inline-block;
         animation: livePulse 1.8s infinite;
+        box-shadow: 0 0 10px rgba(225, 29, 72, 0.8);
+    }
+
+    .live-updates-card {
+        border: 1.5px solid rgba(244, 63, 94, 0.38) !important;
+        box-shadow: 0 10px 25px rgba(225, 29, 72, 0.08) !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
     .live-updates-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 14px 30px rgba(217, 119, 6, 0.12) !important;
-        border-color: #fde68a !important;
+        transform: translateY(-4px) !important;
+        box-shadow: 0 16px 36px rgba(225, 29, 72, 0.22) !important;
+        border-color: rgba(225, 29, 72, 0.70) !important;
     }
     </style>
 
@@ -1916,52 +1923,34 @@ include "./head.php";
                     </div>
 
                     <!-- Live Updates Box -->
-                    <div class="live-updates-card" style="margin-top: 16px; padding: 22px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%); border: 1.5px solid #fde68a; box-shadow: 0 10px 25px rgba(217, 119, 6, 0.07); position: relative; overflow: hidden; transition: all 0.3s ease;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span class="live-pulse-dot"></span>
-                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #b45309; text-transform: uppercase;">LIVE UPDATES</span>
+                    <div class="live-updates-card" style="flex: 1; margin-top: 16px; padding: 24px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%); border: 1.5px solid #fde68a; box-shadow: 0 10px 25px rgba(217, 119, 6, 0.07); position: relative; overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="live-pulse-dot" style="background: #e11d48; box-shadow: 0 0 10px rgba(225, 29, 72, 0.8);"></span>
+                                    <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #be123c; text-transform: uppercase;">LIVE UPDATES</span>
+                                </div>
+                                <span style="background: rgba(225, 29, 72, 0.10); color: #be123c; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 12px; font-family: 'Outfit', sans-serif; border: 1px solid rgba(225, 29, 72, 0.25);">UPCOMING</span>
                             </div>
-                            <span style="background: #fef3c7; color: #92400e; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; font-family: 'Outfit', sans-serif;">UPCOMING</span>
+
+                            <!-- Glassy Reddish Title Box -->
+                            <div style="background: linear-gradient(135deg, rgba(255, 241, 242, 0.85) 0%, rgba(254, 226, 226, 0.6) 100%); border: 1px solid rgba(244, 63, 94, 0.25); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px 20px; box-shadow: 0 4px 14px rgba(225, 29, 72, 0.06);">
+                                <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.3rem; color: #9f1239; margin: 0; line-height: 1.3;">
+                                    "Irumudi" Trailer Launch Event
+                                </h4>
+                            </div>
                         </div>
 
-                        <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.2rem; color: #1a0d06; margin-bottom: 10px; line-height: 1.3;">
-                            "Irumudi" Trailer Launch Event
-                        </h4>
-
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px;">
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fde68a; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #78350f; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
-                                <i class="far fa-calendar-alt" style="color: #d97706;"></i>
+                        <!-- Glassy Reddish Date & Time Pills -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: auto;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 241, 242, 0.95); border: 1px solid rgba(244, 63, 94, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #be123c; box-shadow: 0 2px 6px rgba(225, 29, 72, 0.08);">
+                                <i class="far fa-calendar-alt" style="color: #e11d48;"></i>
                                 12th August
                             </span>
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #fde68a; padding: 5px 12px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; color: #78350f; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
-                                <i class="far fa-clock" style="color: #d97706;"></i>
+                            <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 241, 242, 0.95); border: 1px solid rgba(244, 63, 94, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #be123c; box-shadow: 0 2px 6px rgba(225, 29, 72, 0.08);">
+                                <i class="far fa-clock" style="color: #e11d48;"></i>
                                 From 4:30 PM
                             </span>
-                        </div>
-
-                        <!-- Featured Event Video Spotlight (Potluck Event) -->
-                        <div style="border-top: 1px dashed #fde68a; padding-top: 14px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="font-size: 0.85rem; font-weight: 800; color: #1a0d06; font-family: 'Outfit', sans-serif;">
-                                    Potluck Event
-                                </span>
-                                <span style="font-size: 0.72rem; font-weight: 700; color: #b45309; background: #fef3c7; padding: 2px 8px; border-radius: 10px;">
-                                    <i class="fab fa-instagram me-1"></i> Reel
-                                </span>
-                            </div>
-                            <!-- Background Video (No Controls, Autoplay, Muted, Loop) -->
-                            <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(180, 83, 9, 0.08); height: 160px;">
-                                <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;">
-                                    <source src="assets/videos/pot_luck.mp4" type="video/mp4">
-                                </video>
-                            </div>
-                            <p style="font-size: 0.82rem; color: #6f5f54; margin-bottom: 10px; line-height: 1.4;">
-                                A joyful community celebration featuring delicious homemade food, fun activities, and memorable bonding moments.
-                            </p>
-                            <a href="https://www.instagram.com/reel/C_VGop-ydyj/?igsh=MWZvdWozeGZ5a2pjag==" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: #ffffff; text-decoration: none; font-weight: 700; font-size: 0.8rem; padding: 7px 16px; border-radius: 20px; box-shadow: 0 4px 12px rgba(220, 39, 67, 0.25);">
-                                <i class="fab fa-instagram"></i> Watch Event Reel on Instagram <i class="fas fa-external-link-alt ms-1" style="font-size: 0.75rem;"></i>
-                            </a>
                         </div>
                     </div>
                 </div>
