@@ -156,7 +156,7 @@ body {
     margin-bottom: 16px;
 }
 
-.editorial-img-container img {
+.editorial-img-container img, .editorial-img-container video {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -327,7 +327,7 @@ body {
     min-height: 480px;
 }
 
-.lightbox-img {
+.lightbox-img, .lightbox-video {
     max-height: 82vh;
     max-width: 100%;
     object-fit: contain;
@@ -441,11 +441,11 @@ body {
             <div class="modal-header border-0 bg-dark text-white p-3 d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" id="lightboxCategoryBadge">STUDENT ACHIEVEMENT</span>
-                    <span class="small text-muted" id="lightboxCounter">Image 1 of 1</span>
+                    <span class="small text-muted" id="lightboxCounter">Media Preview</span>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="lightbox-modal-body">
+            <div class="lightbox-modal-body" id="lightboxMediaContainer">
                 <button class="lightbox-nav-btn lightbox-nav-prev" id="lightboxPrevBtn" aria-label="Previous Image">
                     <i class="fas fa-chevron-left"></i>
                 </button>
@@ -465,6 +465,32 @@ body {
 <script>
 // Student Achievements Data Store
 const studentAchievements = [
+    {
+        id: "sih-2022-winners",
+        title: "National Level 1st Prize Winners — Smart India Hackathon 2022",
+        event: "Smart India Hackathon 2022 — Grand Finale",
+        category: "hackathons",
+        categoryName: "Hackathon",
+        team: "SRKREC Student Team",
+        award: "🥇 National 1st Prize",
+        cashAward: "₹1,00,000",
+        stage: "Grand Finale",
+        department: "Department of CSD & CSIT",
+        description: "Winners of Smart India Hackathon 2022! SRKREC Students won the National Level First Prize worth ₹1 Lakh Rupees in the world's largest innovation contest, Smart India Hackathon 2022. Watch the promo video of their inspiring success journey.",
+        video: "assets/achievements/sih-2022-promo.mp4",
+        isVideo: true,
+        images: [
+            "assets/achievements/sih-2022-promo.mp4"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-trophy", text: "🥇 National 1st Prize" },
+            { icon: "fas fa-laptop-code", text: "SIH 2022" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹1,00,000 Cash Award" },
+            { icon: "fas fa-play-circle", text: "Promo Video" },
+            { icon: "fas fa-flag-checkered", text: "Grand Finale" }
+        ]
+    },
     {
         id: "quantum-valley-2025",
         title: "1st Place — Amaravati Quantum Valley Hackathon 2025",
@@ -594,6 +620,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'ArrowRight') showNextImage();
     });
 
+    // Pause video when modal hides
+    modalEl.addEventListener('hidden.bs.modal', function() {
+        const vid = document.getElementById('lightboxVideoPlayer');
+        if (vid) vid.pause();
+    });
+
     // Category Filter Event
     document.querySelectorAll('.category-filter-btn').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -646,26 +678,36 @@ function renderAchievements(selectedCategory = 'all') {
 
         colCard.innerHTML = `
             <div class="editorial-card w-100" id="card-${item.id}">
-                <!-- HD Image Container with Automatic Slideshow & Arrows -->
+                <!-- HD Media Container (Image or Video) -->
                 <div class="editorial-img-container" id="imgBox-${item.id}">
                     <span class="top-photo-badge">${item.award}</span>
-                    <img id="activeMainImg-${item.id}" src="${item.images[0]}" alt="${item.title}" loading="lazy" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
                     
-                    ${item.images.length > 1 ? `
-                        <!-- Left/Right Slide Arrows -->
-                        <button class="slide-arrow-btn slide-arrow-prev" onclick="event.stopPropagation(); stepSlideshow('${item.id}', -1)" aria-label="Previous Slide">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="slide-arrow-btn slide-arrow-next" onclick="event.stopPropagation(); stepSlideshow('${item.id}', 1)" aria-label="Next Slide">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                        <span class="bottom-photo-count" id="photoCount-${item.id}">
-                            <i class="fas fa-images me-1 text-warning"></i> Photo 1 of ${item.images.length}
-                        </span>
-                    ` : ''}
+                    ${item.isVideo ? `
+                        <video src="${item.video}" controls preload="metadata" style="width:100%; height:100%; object-fit:cover; border-radius:14px;" onclick="openLightbox('${item.id}', 0)"></video>
+                        <span class="bottom-photo-count"><i class="fas fa-video me-1 text-warning"></i> Promo Video</span>
+                    ` : `
+                        <img id="activeMainImg-${item.id}" src="${item.images[0]}" alt="${item.title}" loading="lazy" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
+                        <div class="editorial-img-overlay">
+                            <span class="btn btn-light rounded-pill px-3 py-1.5 fw-bold text-dark small shadow-sm">
+                                <i class="fas fa-search-plus me-1 text-warning"></i> View Photo
+                            </span>
+                        </div>
+                        ${item.images.length > 1 ? `
+                            <!-- Left/Right Slide Arrows -->
+                            <button class="slide-arrow-btn slide-arrow-prev" onclick="event.stopPropagation(); stepSlideshow('${item.id}', -1)" aria-label="Previous Slide">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="slide-arrow-btn slide-arrow-next" onclick="event.stopPropagation(); stepSlideshow('${item.id}', 1)" aria-label="Next Slide">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <span class="bottom-photo-count" id="photoCount-${item.id}">
+                                <i class="fas fa-images me-1 text-warning"></i> Photo 1 of ${item.images.length}
+                            </span>
+                        ` : ''}
+                    `}
                 </div>
 
-                ${item.images.length > 1 ? `
+                ${(!item.isVideo && item.images.length > 1) ? `
                     <!-- Thumbnail Strip with Auto Slideshow Indicator -->
                     <div class="d-flex align-items-center justify-content-between mb-2">
                         <span class="small text-muted fw-semibold" style="font-size: 0.72rem;">
@@ -685,7 +727,7 @@ function renderAchievements(selectedCategory = 'all') {
                 <!-- Category Tag -->
                 <div class="mb-2">
                     <span class="badge bg-warning-subtle text-warning-emphasis fw-bold rounded-pill px-2.5 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">
-                        ${item.categoryName.toUpperCase()} • ${item.stage || 'GRAND FINALE'}
+                        ${item.categoryName.toUpperCase()} • ${item.stage || 'NATIONAL LEVEL'}
                     </span>
                 </div>
 
@@ -731,9 +773,9 @@ function renderAchievements(selectedCategory = 'all') {
 
     container.appendChild(rowGrid);
 
-    // Initialize Automatic Slideshow for items with multiple images
+    // Initialize Automatic Slideshow for image items with multiple images
     filtered.forEach(item => {
-        if (item.images.length > 1) {
+        if (!item.isVideo && item.images.length > 1) {
             initAutoSlideshow(item.id, item.images.length);
         }
     });
@@ -800,32 +842,46 @@ function openLightbox(itemId, index) {
     activeLightboxImages = item.images;
     activeImageIndex = index;
 
-    updateLightboxContent(item);
-    currentLightboxModal.show();
-}
-
-function updateLightboxContent(item) {
-    const currentItem = item || studentAchievements.find(a => a.images.includes(activeLightboxImages[0]));
+    const mediaContainer = document.getElementById('lightboxMediaContainer');
     
-    document.getElementById('lightboxMainImage').src = activeLightboxImages[activeImageIndex];
-    document.getElementById('lightboxCounter').textContent = `Image ${activeImageIndex + 1} of ${activeLightboxImages.length}`;
-    
-    if (currentItem) {
-        document.getElementById('lightboxCaption').textContent = `${currentItem.team} — ${currentItem.title} (${currentItem.event})`;
-        document.getElementById('lightboxCategoryBadge').textContent = currentItem.event.toUpperCase();
+    if (item.isVideo) {
+        mediaContainer.innerHTML = `
+            <video id="lightboxVideoPlayer" src="${item.video}" controls autoplay style="max-height: 82vh; max-width: 100%; object-fit: contain;"></video>
+        `;
+        document.getElementById('lightboxCounter').textContent = `Video Promo`;
+    } else {
+        mediaContainer.innerHTML = `
+            <button class="lightbox-nav-btn lightbox-nav-prev" id="lightboxPrevBtn" onclick="showPrevImage()" aria-label="Previous Image">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <img id="lightboxMainImage" src="${item.images[index]}" alt="${item.title}" class="lightbox-img">
+            <button class="lightbox-nav-btn lightbox-nav-next" id="lightboxNextBtn" onclick="showNextImage()" aria-label="Next Image">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+        document.getElementById('lightboxCounter').textContent = `Image ${index + 1} of ${item.images.length}`;
     }
+
+    document.getElementById('lightboxCaption').textContent = `${item.team} — ${item.title} (${item.event})`;
+    document.getElementById('lightboxCategoryBadge').textContent = item.event.toUpperCase();
+
+    currentLightboxModal.show();
 }
 
 function showPrevImage() {
     if (activeLightboxImages.length === 0) return;
     activeImageIndex = (activeImageIndex - 1 + activeLightboxImages.length) % activeLightboxImages.length;
-    updateLightboxContent();
+    const imgEl = document.getElementById('lightboxMainImage');
+    if (imgEl) imgEl.src = activeLightboxImages[activeImageIndex];
+    document.getElementById('lightboxCounter').textContent = `Image ${activeImageIndex + 1} of ${activeLightboxImages.length}`;
 }
 
 function showNextImage() {
     if (activeLightboxImages.length === 0) return;
     activeImageIndex = (activeImageIndex + 1) % activeLightboxImages.length;
-    updateLightboxContent();
+    const imgEl = document.getElementById('lightboxMainImage');
+    if (imgEl) imgEl.src = activeLightboxImages[activeImageIndex];
+    document.getElementById('lightboxCounter').textContent = `Image ${activeImageIndex + 1} of ${activeLightboxImages.length}`;
 }
 </script>
 
