@@ -157,7 +157,7 @@ include "./head.php";
     .house-item {
         position: absolute;
         transform: translate(-50%, -50%);
-        z-index: 10;
+        z-index: 50;
         transition: all 0.3s ease;
         animation: houseItemCounterRotate 20s linear infinite;
         transform-origin: center center;
@@ -2963,7 +2963,7 @@ include "./head.php";
 
 
 
-    <section class="hero-section" style="flex: 1; padding: 150px; margin-top: -180px;">
+    <section class="hero-section" style="flex: 1; padding: 150px; margin-top: -180px; pointer-events: none;">
         <div class="hero-content">
 
 
@@ -2971,7 +2971,7 @@ include "./head.php";
                 Where Talent Meets <span class="highlight">Competition</span>
             </h1>
 
-            <div class="hero-buttons">
+            <div class="hero-buttons" style="pointer-events: auto;">
                 <a href="houses_dashboard.php" class="btn btn-primary">
                     <i class="fas fa-trophy"></i> House Activites </a>
                 <a href="heroes_of_department.php" class="btn" style="background: #7c3aed; color: white;">
