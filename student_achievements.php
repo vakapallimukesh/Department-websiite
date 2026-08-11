@@ -384,7 +384,7 @@ body {
         <span class="hero-tag"><i class="fas fa-trophy me-2"></i> Student Hall of Fame</span>
         <h1 class="hero-title">Student <span>Achievements</span></h1>
         <p class="lead mx-auto" style="max-width: 680px; color: #cbd5e1; font-size: 1.1rem; line-height: 1.6;">
-            Celebrating national hackathon winners, project expo champions, research authors, and student leaders in CSD & CSIT departments.
+            Celebrating national hackathon winners, project expo champions, oratorical semifinalists, and student leaders in CSD & CSIT departments.
         </p>
     </div>
 </section>
@@ -429,13 +429,13 @@ body {
             <button class="category-filter-btn active" data-category="all">🌟 All Achievements</button>
             <button class="category-filter-btn" data-category="hackathons">🏆 Hackathons</button>
             <button class="category-filter-btn" data-category="competitions">🥇 Competitions & Expos</button>
+            <button class="category-filter-btn" data-category="oratory">🎤 Oratory & Leadership</button>
             <button class="category-filter-btn" data-category="technical">💻 Technical Events</button>
             <button class="category-filter-btn" data-category="academics">📚 Academic Achievements</button>
             <button class="category-filter-btn" data-category="research">🔬 Research</button>
-            <button class="category-filter-btn" data-category="conferences">🎤 Conferences</button>
         </div>
 
-        <!-- 🏆 SEPARATE SECTION: HACKATHONS SHOWCASE -->
+        <!-- 🏆 SEPARATE SECTION 1: HACKATHONS SHOWCASE -->
         <div id="hackathonsSectionWrapper" class="mb-5 pb-4">
             <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
@@ -454,21 +454,40 @@ body {
             </div>
         </div>
 
-        <!-- 🥇 SEPARATE SECTION: PROJECT EXPOS & COMPETITIONS SHOWCASE -->
-        <div id="competitionsSectionWrapper" class="mb-4">
+        <!-- 🥇 SEPARATE SECTION 2: PROJECT EXPOS & COMPETITIONS SHOWCASE -->
+        <div id="competitionsSectionWrapper" class="mb-5 pb-4">
             <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
                     <span class="section-badge-tag"><i class="fas fa-medal me-1.5"></i> Project Expos & Competitions</span>
                     <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
                         Project Expos & <span style="color: #d97706;">Technical Contests</span>
                     </h2>
-                    <p class="text-secondary small mb-0">Software solutions, public speaking achievements, and innovations showcased at expos & competitions.</p>
+                    <p class="text-secondary small mb-0">Software solutions and innovations showcased at college project expos and state-level startup events.</p>
                 </div>
                 <span class="badge bg-dark text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
                     🥇 Project Expos & Competitions
                 </span>
             </div>
             <div id="competitionsGridContainer">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+
+        <!-- 🎤 SEPARATE SECTION 3: ORATORY & LEADERSHIP EXCELLENCE SHOWCASE -->
+        <div id="oratorySectionWrapper" class="mb-4">
+            <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div>
+                    <span class="section-badge-tag"><i class="fas fa-microphone-alt me-1.5"></i> Oratory & Public Speaking</span>
+                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
+                        Oratory & <span style="color: #d97706;">Leadership Excellence</span>
+                    </h2>
+                    <p class="text-secondary small mb-0">Celebrating student accomplishments in public speaking, oratorical championships, and leadership forums.</p>
+                </div>
+                <span class="badge bg-primary text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
+                    🎤 Master Orator Championship
+                </span>
+            </div>
+            <div id="oratoryGridContainer">
                 <!-- Rendered by JS -->
             </div>
         </div>
@@ -668,31 +687,6 @@ const studentAchievements = [
         ]
     },
     {
-        id: "master-orator-championship-2023",
-        title: "Semifinalists — Master Orator Championship 2023",
-        event: "Master Orator Championship 2023 (MOC)",
-        category: "competitions",
-        categoryName: "Public Speaking",
-        team: "5 CSD Girl Students",
-        award: "🎤 Semifinalists",
-        cashAward: "MOC 2023 Honor",
-        date: "2023",
-        stage: "Semifinals",
-        department: "Department of CSD & CSIT",
-        description: "Happy to share that 5 girl students of CSD (Subhashini 3/4, Rishita 2/4, Ananya 3/4, Srujana 3/4, Saranya 3/4) reached the semifinals of the Master Orator Championship 2023 in their first attempt. Though they could not make it to the final 10, their performance inspired all and earned immense appreciation.",
-        images: [
-            "assets/achievements/master-orator-championship-2023-1.jpg",
-            "assets/achievements/master-orator-championship-2023-2.jpg"
-        ],
-        featured: true,
-        badges: [
-            { icon: "fas fa-microphone-alt", text: "MOC 2023 Semifinalists" },
-            { icon: "fas fa-female", text: "5 Girl Orators" },
-            { icon: "fas fa-award", text: "Public Speaking" },
-            { icon: "fas fa-user-graduate", text: "CSD Students" }
-        ]
-    },
-    {
         id: "prakalp-project-expo-2024",
         title: "2nd Prize Winners @ Prakalp Project Expo!",
         event: "Prakalp Project Expo — Ramachandra College of Engg",
@@ -716,6 +710,31 @@ const studentAchievements = [
             { icon: "fas fa-indian-rupee-sign", text: "₹10,000 Cash Award" },
             { icon: "fas fa-users", text: "100+ Teams" },
             { icon: "fas fa-user-graduate", text: "3/4 CSD" }
+        ]
+    },
+    {
+        id: "master-orator-championship-2023",
+        title: "Semifinalists — Master Orator Championship 2023",
+        event: "Master Orator Championship 2023 (MOC)",
+        category: "oratory",
+        categoryName: "Public Speaking",
+        team: "5 CSD Girl Students",
+        award: "🎤 Semifinalists",
+        cashAward: "MOC 2023 Honor",
+        date: "2023",
+        stage: "Semifinals",
+        department: "Department of CSD & CSIT",
+        description: "Happy to share that 5 girl students of CSD (Subhashini 3/4, Rishita 2/4, Ananya 3/4, Srujana 3/4, Saranya 3/4) reached the semifinals of the Master Orator Championship 2023 in their first attempt. Though they could not make it to the final 10, their performance inspired all and earned immense appreciation.",
+        images: [
+            "assets/achievements/master-orator-championship-2023-1.jpg",
+            "assets/achievements/master-orator-championship-2023-2.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-microphone-alt", text: "MOC 2023 Semifinalists" },
+            { icon: "fas fa-female", text: "5 Girl Orators" },
+            { icon: "fas fa-award", text: "Public Speaking" },
+            { icon: "fas fa-user-graduate", text: "CSD Students" }
         ]
     }
 ];
@@ -820,7 +839,7 @@ function renderCardHtml(item) {
                 <!-- Category Tag -->
                 <div class="mb-2">
                     <span class="badge bg-warning-subtle text-warning-emphasis fw-bold rounded-pill px-2.5 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">
-                        ${item.categoryName.toUpperCase()} • ${item.stage || 'COMPETITION'}
+                        ${item.categoryName.toUpperCase()} • ${item.stage || 'ACHIEVEMENT'}
                     </span>
                 </div>
 
@@ -866,15 +885,20 @@ function renderCardHtml(item) {
 function renderAchievements(selectedCategory = 'all') {
     const hackathonsContainer = document.getElementById('hackathonsGridContainer');
     const competitionsContainer = document.getElementById('competitionsGridContainer');
+    const oratoryContainer = document.getElementById('oratoryGridContainer');
+
     const hackathonsWrapper = document.getElementById('hackathonsSectionWrapper');
     const competitionsWrapper = document.getElementById('competitionsSectionWrapper');
+    const oratoryWrapper = document.getElementById('oratorySectionWrapper');
 
     hackathonsContainer.innerHTML = '';
     competitionsContainer.innerHTML = '';
+    oratoryContainer.innerHTML = '';
     clearAllSlideshowTimers();
 
     const hackathonItems = studentAchievements.filter(a => a.category === 'hackathons');
     const competitionItems = studentAchievements.filter(a => a.category === 'competitions');
+    const oratoryItems = studentAchievements.filter(a => a.category === 'oratory');
 
     if (selectedCategory === 'all' || selectedCategory === 'hackathons') {
         hackathonsWrapper.style.display = 'block';
@@ -898,6 +922,18 @@ function renderAchievements(selectedCategory = 'all') {
         competitionsContainer.appendChild(rowGrid);
     } else {
         competitionsWrapper.style.display = 'none';
+    }
+
+    if (selectedCategory === 'all' || selectedCategory === 'oratory') {
+        oratoryWrapper.style.display = 'block';
+        const rowGrid = document.createElement('div');
+        rowGrid.className = 'row g-4 align-items-stretch';
+        oratoryItems.forEach(item => {
+            rowGrid.innerHTML += renderCardHtml(item);
+        });
+        oratoryContainer.appendChild(rowGrid);
+    } else {
+        oratoryWrapper.style.display = 'none';
     }
 
     // Initialize Automatic Slideshow for image items with multiple images
