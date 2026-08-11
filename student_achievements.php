@@ -466,6 +466,33 @@ body {
 // Student Achievements Data Store
 const studentAchievements = [
     {
+        id: "ecom-hackathon-2022",
+        title: "Internal Ecom Hackathon 2022",
+        event: "Internal Ecom Hackathon 2022 — SRKREC IDEA Lab",
+        category: "hackathons",
+        categoryName: "Hackathon",
+        team: "CSD Houses (Agni, Vayu, Prithvi, Aakash)",
+        award: "🏆 25 Shops & 1400+ Products",
+        cashAward: "Bhimavaram Online Impact",
+        date: "19th September 2022",
+        stage: "Single Day Hackathon",
+        department: "2nd Year CSD, Department of CSD & CSIT",
+        description: "The 2nd year students of B.Tech Computer Science & Design participated in the Internal Ecom Hackathon 2022 organised by Technology Centre and IDEA Lab of SRKREC on 19th September 2022. 4 houses (Agni, Vayu, Prithvi and Aakash) of CSD competed in teams, onboarding 25 shops and 1400+ products for Bhimavaram Online app on a single day.",
+        video: "assets/achievements/ecom-hackathon-2022-promo.mp4",
+        isVideo: true,
+        images: [
+            "assets/achievements/ecom-hackathon-2022-promo.mp4"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-shopping-cart", text: "25 Local Shops" },
+            { icon: "fas fa-box-open", text: "1400+ Products" },
+            { icon: "fas fa-mobile-alt", text: "Bhimavaram Online" },
+            { icon: "fas fa-users", text: "4 CSD Houses" },
+            { icon: "fas fa-calendar-alt", text: "19th Sept 2022" }
+        ]
+    },
+    {
         id: "sih-2022-winners",
         title: "National Level 1st Prize Winners — Smart India Hackathon 2022",
         event: "Smart India Hackathon 2022 — Grand Finale",
@@ -727,7 +754,7 @@ function renderAchievements(selectedCategory = 'all') {
                 <!-- Category Tag -->
                 <div class="mb-2">
                     <span class="badge bg-warning-subtle text-warning-emphasis fw-bold rounded-pill px-2.5 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">
-                        ${item.categoryName.toUpperCase()} • ${item.stage || 'NATIONAL LEVEL'}
+                        ${item.categoryName.toUpperCase()} • ${item.stage || 'HACKATHON'}
                     </span>
                 </div>
 
@@ -746,7 +773,7 @@ function renderAchievements(selectedCategory = 'all') {
                 <!-- Cash Award Spotlight Box -->
                 <div class="editorial-award-box">
                     <div>
-                        <span class="text-uppercase text-muted d-block fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">Cash Prize</span>
+                        <span class="text-uppercase text-muted d-block fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">Impact / Prize</span>
                         <div class="editorial-award-amount">${item.cashAward}</div>
                     </div>
                     <span class="badge bg-dark text-white rounded-pill px-3 py-1.5 small fw-bold">${item.award}</span>
