@@ -607,6 +607,120 @@ include "connect.php";
             </div>
         </div>
     </div>
+<!-- CULTURAL & SPORTS HEROES OF DEPARTMENT -->
+<section class="py-5 bg-light border-top border-bottom" id="cultural-sports-heroes">
+    <div class="container py-4">
+        <div class="section-header text-center mb-5">
+            <span class="section-tag" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
+                <i class="fas fa-star me-2"></i>Cultural & Sports Icons
+            </span>
+            <h2 class="section-title mt-2">Cultural & Sports Heroes</h2>
+            <p class="lead text-secondary mx-auto mt-2" style="max-width: 680px; font-size: 1.05rem; line-height: 1.6;">
+                Honoring exceptional student achievers who represent CSD & CSIT departments with glory in university martial arts championships and state classical dance performances.
+            </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <!-- Hero Card 1: P.B.S Kruti -->
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
+                        <img src="assets/achievements/classical-dance-1st-kruti.jpg" alt="P.B.S Kruti" style="width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;">
+                        <span class="position-absolute top-0 end-0 bg-warning text-dark px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
+                            🥇 1st Prize Classical Dance
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge bg-primary-subtle text-primary fw-bold rounded-pill px-3 py-1" style="font-size: 0.78rem;">
+                                <i class="fas fa-graduation-cap me-1"></i> 1/4 CSIT
+                            </span>
+                            <span class="small text-muted font-monospace"><i class="fas fa-university me-1"></i> SRKREC</span>
+                        </div>
+                        <h3 class="fw-bold text-dark font-outfit mb-1" style="font-size: 1.35rem;">P.B.S Kruti</h3>
+                        <div class="text-warning-emphasis fw-semibold small mb-3">
+                            <i class="fas fa-music me-1"></i> Particular Talent: <strong>Classical Dance Maestro</strong>
+                        </div>
+                        
+                        <!-- 5 Line Content -->
+                        <ul class="list-unstyled text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.85rem;">
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Talented 1st year CSIT student renowned for her grace, expression, and mastery in Classical Dance.</li>
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Secured 1st Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC.</li>
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Captivates audiences with her mesmerizing rhythmic movements, traditional mudras, and devotion to arts.</li>
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Balances high academic performance in CSIT with artistic excellence and cultural leadership.</li>
+                            <li class="mb-0"><i class="fas fa-check-circle me-1.5 text-success"></i> An inspiring cultural icon of the department embodying creativity, discipline, and Indian heritage.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Card 2: R. Lakshmi Prasanna -->
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
+                        <img src="assets/achievements/classical-dance-2nd-lakshmi-prasanna.jpg" alt="R. Lakshmi Prasanna" style="width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;">
+                        <span class="position-absolute top-0 end-0 bg-secondary text-white px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
+                            🥈 2nd Prize Classical Dance
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge bg-success-subtle text-success fw-bold rounded-pill px-3 py-1" style="font-size: 0.78rem;">
+                                <i class="fas fa-graduation-cap me-1"></i> 2/4 CSD
+                            </span>
+                            <span class="small text-muted font-monospace"><i class="fas fa-university me-1"></i> SRKREC</span>
+                        </div>
+                        <h3 class="fw-bold text-dark font-outfit mb-1" style="font-size: 1.35rem;">R. Lakshmi Prasanna</h3>
+                        <div class="text-warning-emphasis fw-semibold small mb-3">
+                            <i class="fas fa-theater-masks me-1"></i> Particular Talent: <strong>Classical Performing Arts Star</strong>
+                        </div>
+                        
+                        <!-- 5 Line Content -->
+                        <ul class="list-unstyled text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.85rem;">
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Passionate 2nd year Computer Science & Design student dedicated to Indian classical dance forms.</li>
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Won 2nd Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC.</li>
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Renowned for her expressive facial expressions, technical precision, and stage presence.</li>
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Consistently represents the CSD branch with pride, elegance, and cultural enthusiasm.</li>
+                            <li class="mb-0"><i class="fas fa-check-circle me-1.5 text-success"></i> Demonstrates that technology, design, and classical artistic expression go hand in hand.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Card 3: D Pooja Sai Praveena -->
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
+                        <img src="assets/achievements/karate-gold-pooja-sai-praveena.jpg" alt="D Pooja Sai Praveena" style="width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;">
+                        <span class="position-absolute top-0 end-0 bg-danger text-white px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
+                            🥇 Gold Medalist Karate
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge bg-danger-subtle text-danger fw-bold rounded-pill px-3 py-1" style="font-size: 0.78rem;">
+                                <i class="fas fa-graduation-cap me-1"></i> 2/4 CSD
+                            </span>
+                            <span class="small text-muted font-monospace"><i class="fas fa-university me-1"></i> JNTUK / Chennai</span>
+                        </div>
+                        <h3 class="fw-bold text-dark font-outfit mb-1" style="font-size: 1.35rem;">D Pooja Sai Praveena</h3>
+                        <div class="text-warning-emphasis fw-semibold small mb-3">
+                            <i class="fas fa-fist-raised me-1"></i> Particular Talent: <strong>Karate Champion & Martial Artist</strong>
+                        </div>
+                        
+                        <!-- 5 Line Content -->
+                        <ul class="list-unstyled text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.85rem;">
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Formidable 2nd year CSD student and martial artist who exemplifies power, discipline, and athletics.</li>
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Secured Gold Medal 🥇 in JNTUK Inter-Collegiate Karate Tournament with dominant performances.</li>
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Represented JNTUK at the South-West Inter-University Karate Championship 2024–25 in Chennai.</li>
+                            <li class="mb-1.5"><i class="fas fa-check-circle me-1.5 text-success"></i> Inspires fellow students through relentless dedication, physical fitness, and courage in sports.</li>
+                            <li class="mb-0"><i class="fas fa-check-circle me-1.5 text-success"></i> A true hero of the department who proves that hard work, grit, and focus produce national champions.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- Content Section (Star Achievers & Mentors) -->
