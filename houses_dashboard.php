@@ -784,7 +784,9 @@ body {
                         <a href="house_detail.php?house=<?php echo urlencode($house_key); ?>" 
                            class="text-decoration-none house-link">
                             <div class="house-card house-card-<?php echo $clean_key; ?>" 
-                                 data-house="<?php echo $house_key; ?>">
+                                 data-house="<?php echo $house_key; ?>"
+                                 onclick="window.location.href='house_detail.php?house=<?php echo urlencode($house_key); ?>'"
+                                 style="cursor: pointer;">
                                 
                                 <!-- Rank Badge -->
                                 <div style="position: absolute; top: 12px; right: 12px; z-index: 3;">
@@ -1576,7 +1578,7 @@ body {
                 html += `
                     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" style="width:260px">
                         <a href="house_detail.php?house=${encodeURIComponent(houseKey)}" class="text-decoration-none house-link">
-                            <div class="house-card house-card-${cleanKey}" data-house="${houseKey}">
+                            <div class="house-card house-card-${cleanKey}" data-house="${houseKey}" onclick="window.location.href='house_detail.php?house=${encodeURIComponent(houseKey)}'" style="cursor: pointer;">
                                 <div style="position: absolute; top: 12px; right: 12px; z-index: 3;">
                                     <span style="background: ${houseInfo.color}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
                                         #${rankCounter}

@@ -70,8 +70,17 @@ if ($raw_house) {
 
 // Fallback alias lookup
 if (!$selected_house && $raw_house) {
-    if (strcasecmp($raw_house, 'PRUDHVI') === 0 || strcasecmp($raw_house, 'Prudhvi') === 0 || strcasecmp($raw_house, 'Pruthvi') === 0) {
+    $raw_upper = strtoupper($raw_house);
+    if (in_array($raw_upper, ['PRUDHVI', 'PRUTHVI', 'EARTH', 'DELTA', 'PRUTHVI HOUSE', 'PRUDHVI HOUSE'])) {
         $selected_house = 'PRUDHVI';
+    } elseif (in_array($raw_upper, ['AGNI', 'FIRE', 'EPSILON', 'AGNI HOUSE', 'FIRE HOUSE'])) {
+        $selected_house = 'Agni';
+    } elseif (in_array($raw_upper, ['AAKASH', 'AKASH', 'SKY', 'ALPHA', 'AAKASH HOUSE', 'AKASH HOUSE'])) {
+        $selected_house = 'Aakash';
+    } elseif (in_array($raw_upper, ['JAL', 'WATER', 'BETA', 'JAL HOUSE', 'WATER HOUSE'])) {
+        $selected_house = 'Jal';
+    } elseif (in_array($raw_upper, ['VAYU', 'WIND', 'GAMMA', 'VAYU HOUSE', 'WIND HOUSE'])) {
+        $selected_house = 'Vayu';
     }
 }
 
@@ -823,7 +832,7 @@ $house_stats = [
         }
     });
     </script>
-    <?php elseif ($selected_house === 'Agni'): ?>
+    <?php elseif ($selected_house === 'Agni' || strtoupper($selected_house) === 'AGNI'): ?>
     <!-- Premium Full-Screen Hero Section with Animated Fire & Embers for Agni House -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@700;800;900&display=swap');

@@ -532,11 +532,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <i class="fas fa-user-graduate"></i> Students
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="btn btn-primary ms-lg-2 px-3" href="login.php" style="border-radius: 20px;">
-                            <i class="fas fa-sign-in-alt me-1"></i> Login
-                        </a>
-                    </li>
                 <?php endif; ?>
 
                 <!-- More Details (3-Dot Menu) Dropdown - Aligned next to Login/Dashboard -->
