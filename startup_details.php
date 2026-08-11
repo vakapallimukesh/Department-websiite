@@ -1772,6 +1772,9 @@ body {
                     <span class="badge bg-success-subtle text-success border border-success-subtle px-4 py-2 rounded-pill fw-bold text-uppercase tracking-wider shadow-sm mb-3" style="letter-spacing: 1.5px; font-size: 0.85rem;">
                         <i class="fas fa-leaf me-1"></i> NUTRIDELIGHT
                     </span>
+                    <span class="badge bg-danger text-white border border-danger-subtle px-3 py-2 rounded-pill fw-bold text-uppercase tracking-wider shadow-sm mb-3 ms-2" id="galleryInstaMergeBadge" style="font-size: 0.85rem;">
+                        <i class="fab fa-instagram me-1"></i> Merging Live Instagram Uploads...
+                    </span>
                     <h2 class="display-5 fw-extrabold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-weight: 800;">
                         NutriDelight Gallery
                     </h2>
@@ -1779,7 +1782,7 @@ body {
                         "Making Bhimavaram Healthy"
                     </h4>
                     <p class="lead text-muted mx-auto mb-0" style="max-width: 650px; font-size: 1.1rem; line-height: 1.7;">
-                        Explore the moments, people, products and milestones that shaped the NutriDelight journey. A story of nutrition, innovation and community.
+                        Explore the moments, people, products and milestones that shaped the NutriDelight journey. Automatically merged with live Instagram Reels & new post uploads.
                     </p>
                 </div>
 
@@ -2886,20 +2889,39 @@ body {
                                 <i class="fab fa-instagram"></i> Live API & MySQL DB Cache Architecture
                             </span>
                             <h3 class="fw-bold font-outfit text-dark mb-1" style="font-size: 1.8rem;">
-                                Live <span class="text-danger">Instagram Feed</span> (@<?= htmlspecialchars($instaHandle); ?>)
+                                Live <span class="text-danger">Instagram Feed & Reels</span> (@<?= htmlspecialchars($instaHandle); ?>)
                             </h3>
                             <p class="text-secondary small mb-0">
-                                Scraped via PHP Backend API, cached in MySQL DB, and rendered dynamically.
+                                Real-time dynamic sync via PHP Backend API. Click any Reel or Post to play & view directly.
                             </p>
                         </div>
-                        <div class="d-flex align-items-center gap-2">
+                        <div class="d-flex flex-wrap align-items-center gap-2">
                             <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold small" id="instaDbStatus">
                                 <i class="fas fa-database me-1"></i> MySQL DB Cached
                             </span>
-                            <a href="<?= htmlspecialchars($startup['instagram'] ?? 'https://instagram.com/' . $instaHandle); ?>" target="_blank" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold">
+                            <button onclick="loadInstagramFeed(true)" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold" id="syncInstaBtn">
+                                <i class="fas fa-sync-alt me-1" id="syncInstaIcon"></i> Sync Live Feed
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold" data-bs-toggle="modal" data-bs-target="#addReelModal">
+                                <i class="fas fa-plus-circle me-1"></i> Collect New Reel
+                            </button>
+                            <a href="<?= htmlspecialchars($startup['instagram'] ?? 'https://instagram.com/' . $instaHandle); ?>" target="_blank" class="btn btn-dark btn-sm rounded-pill px-3 fw-bold">
                                 <i class="fab fa-instagram me-1"></i> Follow Page
                             </a>
                         </div>
+                    </div>
+
+                    <!-- Category Filter Tabs -->
+                    <div class="d-flex align-items-center gap-2 mb-4 overflow-auto pb-1" id="instaFilterTabs">
+                        <button onclick="filterInstaFeed('all')" class="btn btn-sm btn-danger rounded-pill px-3 py-1 fw-bold filter-btn active" data-filter="all">
+                            <i class="fas fa-th me-1"></i> All Posts (<span id="countAll">0</span>)
+                        </button>
+                        <button onclick="filterInstaFeed('reel')" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-bold filter-btn" data-filter="reel">
+                            <i class="fas fa-video text-danger me-1"></i> 🎬 Reels (<span id="countReel">0</span>)
+                        </button>
+                        <button onclick="filterInstaFeed('photo')" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-bold filter-btn" data-filter="photo">
+                            <i class="fas fa-camera me-1"></i> 📷 Photos (<span id="countPhoto">0</span>)
+                        </button>
                     </div>
 
                     <!-- Instagram Grid Container -->
@@ -2908,7 +2930,98 @@ body {
                         <div class="col-6 col-md-3">
                             <div class="insta-post-card p-2 text-center text-muted py-5">
                                 <div class="spinner-border text-danger spinner-border-sm mb-2" role="status"></div>
-                                <div class="small fw-semibold">Syncing Posts...</div>
+                                <div class="small fw-semibold">Syncing All Posts & Reels...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collect New Instagram Reel / Post Modal -->
+                <div class="modal fade" id="addReelModal" tabindex="-1" aria-labelledby="addReelModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 shadow-lg rounded-4">
+                            <div class="modal-header border-0 bg-danger text-white p-3">
+                                <h5 class="modal-title font-outfit fw-bold d-flex align-items-center gap-2" id="addReelModalLabel">
+                                    <i class="fas fa-plus-circle fs-4"></i>
+                                    <span>Collect New Instagram Reel / Post</span>
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form id="addReelForm" onsubmit="submitCollectReel(event)">
+                                <div class="modal-body p-4">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold small text-dark">Instagram Link (Reel / Post URL) <span class="text-danger">*</span></label>
+                                        <input type="url" name="permalink" class="form-control rounded-3" placeholder="https://www.instagram.com/reel/C_example/" required>
+                                        <div class="form-text small">Paste the link of the newly uploaded Reel or Post on @<?= htmlspecialchars($instaHandle); ?>.</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold small text-dark">Media Type</label>
+                                        <select name="media_type" class="form-select rounded-3">
+                                            <option value="REEL" selected>🎬 Reel / Video</option>
+                                            <option value="IMAGE">📷 Photo Post</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold small text-dark">Caption / Description</label>
+                                        <textarea name="caption" class="form-control rounded-3" rows="3" placeholder="Enter Reel caption, hashtags, and details..."></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold small text-dark">Image / Thumbnail URL (Optional)</label>
+                                        <input type="text" name="media_url" class="form-control rounded-3" placeholder="public/startups/nutridelight/hero.png">
+                                    </div>
+                                    <input type="hidden" name="account_name" value="<?= htmlspecialchars($instaHandle); ?>">
+                                </div>
+                                <div class="modal-footer border-0 bg-light p-3">
+                                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold" id="submitReelBtn">
+                                        <i class="fas fa-save me-1"></i> Collect & Publish Reel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Instagram Reel / Post Player Modal -->
+                <div class="modal fade" id="instaMediaModal" tabindex="-1" aria-labelledby="instaMediaModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                            <div class="modal-header border-0 bg-dark text-white p-3">
+                                <h5 class="modal-title font-outfit fw-bold d-flex align-items-center gap-2" id="instaMediaModalLabel">
+                                    <i class="fab fa-instagram text-danger fs-4"></i>
+                                    <span>Instagram Reel & Post Viewer</span>
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-0 bg-black">
+                                <div class="row g-0">
+                                    <div class="col-md-7 d-flex align-items-center justify-content-center bg-black p-3" style="min-height: 380px;">
+                                        <div id="instaModalPlayerContainer" class="w-100 text-center">
+                                            <!-- Dynamic Media Content -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 p-4 bg-white d-flex flex-column justify-content-between">
+                                        <div>
+                                            <div class="d-flex align-items-center gap-2 mb-3">
+                                                <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center fw-bold" style="width: 38px; height: 38px;">ND</div>
+                                                <div>
+                                                    <div class="fw-bold font-outfit text-dark line-height-1">@<?= htmlspecialchars($instaHandle); ?></div>
+                                                    <small class="text-muted" id="instaModalBadge">Official Post</small>
+                                                </div>
+                                            </div>
+                                            <p class="text-dark small line-height-1.6 mb-3" id="instaModalCaption" style="max-height: 200px; overflow-y: auto;"></p>
+                                            <div class="d-flex align-items-center gap-3 border-top border-bottom py-2 my-2 text-muted small fw-bold">
+                                                <span><i class="fas fa-heart text-danger me-1"></i> <span id="instaModalLikes">0</span> Likes</span>
+                                                <span><i class="fas fa-comment text-primary me-1"></i> <span id="instaModalComments">0</span> Comments</span>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3 pt-2">
+                                            <a href="#" id="instaModalDirectBtn" target="_blank" rel="noopener noreferrer" class="btn btn-danger w-100 rounded-pill fw-bold py-2 shadow-sm">
+                                                <i class="fab fa-instagram me-2"></i> Open Directly on Instagram 🚀
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2916,52 +3029,282 @@ body {
             </section>
 
             <script>
-            function loadInstagramFeed() {
+            var allInstaPosts = [];
+            var currentFilter = 'all';
+
+            function loadInstagramFeed(forceRefresh) {
                 var handle = "<?= urlencode($instaHandle); ?>";
                 var grid = document.getElementById('instaFeedGrid');
                 var statusBadge = document.getElementById('instaDbStatus');
+                var syncIcon = document.getElementById('syncInstaIcon');
 
-                fetch('api/instagram_feed.php?account=' + handle)
-                    .then(function(res) { return res.json(); })
-                    .then(function(data) {
-                        if (!data.success || !data.posts || data.posts.length === 0) {
-                            grid.innerHTML = '<div class="col-12 text-center py-4 text-muted">No Instagram posts found.</div>';
-                            return;
-                        }
+                if (syncIcon) {
+                    syncIcon.classList.add('fa-spin');
+                }
 
-                        if (statusBadge) {
-                            statusBadge.innerHTML = '<i class="fas fa-database me-1"></i> ' + (data.from_cache ? 'MySQL DB Cache Hit' : 'Fresh API Sync');
-                        }
+                var feedUrl = 'api/instagram/feed.php?username=' + handle;
 
-                        var html = '';
-                        data.posts.forEach(function(post) {
-                            html += '<div class="col-6 col-md-3">';
-                            html += '  <div class="insta-post-card">';
-                            html += '    <a href="' + (post.permalink || '#') + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none">';
-                            html += '      <div class="insta-img-wrap">';
-                            html += '        <img src="' + post.media_url + '" alt="Instagram Post" loading="lazy">';
-                            html += '        <div class="insta-overlay">';
-                            html += '          <div class="insta-caption">' + (post.caption || 'Instagram Post') + '</div>';
-                            html += '          <div class="d-flex align-items-center justify-content-between text-white-50 small fw-bold">';
-                            html += '            <span><i class="fas fa-heart text-danger me-1"></i> ' + (post.likes || 0) + '</span>';
-                            html += '            <span><i class="fas fa-comment me-1"></i> ' + (post.comments || 0) + '</span>';
-                            html += '          </div>';
-                            html += '        </div>';
-                            html += '      </div>';
-                            html += '    </a>';
-                            html += '  </div>';
-                            html += '</div>';
+                // Function to fetch and render local MySQL DB cache feed
+                var fetchFeed = function(isFreshSync) {
+                    fetch(feedUrl)
+                        .then(function(res) { return res.json(); })
+                        .then(function(data) {
+                            if (syncIcon) {
+                                syncIcon.classList.remove('fa-spin');
+                            }
+
+                            var postsList = data.media || data.posts || [];
+                            if (!data.success || postsList.length === 0) {
+                                grid.innerHTML = '<div class="col-12 text-center py-4 text-muted">No Instagram posts found for @' + handle + '. <a href="https://instagram.com/' + handle + '" target="_blank" class="text-danger font-bold">View directly on Instagram &rarr;</a></div>';
+                                return;
+                            }
+
+                            // Standardize post array items
+                            allInstaPosts = postsList.map(function(item) {
+                                return {
+                                    post_id: item.instagram_media_id || item.id,
+                                    media_type: item.media_type,
+                                    media_url: item.media_url,
+                                    video_url: item.video_url || null,
+                                    thumbnail_url: item.thumbnail_url,
+                                    caption: item.caption,
+                                    permalink: item.permalink,
+                                    published_at: item.published_at
+                                };
+                            });
+                            
+                            // Update counts
+                            var reelCount = allInstaPosts.filter(function(p) { return p.media_type === 'REEL' || p.media_type === 'VIDEO'; }).length;
+                            var photoCount = allInstaPosts.length - reelCount;
+                            
+                            document.getElementById('countAll').innerText = allInstaPosts.length;
+                            document.getElementById('countReel').innerText = reelCount;
+                            document.getElementById('countPhoto').innerText = photoCount;
+
+                            if (statusBadge) {
+                                statusBadge.innerHTML = '<i class="fas fa-database me-1"></i> ' + (isFreshSync ? 'Fresh Sync (' + allInstaPosts.length + ' Items)' : 'MySQL DB Cached (' + allInstaPosts.length + ' Items)');
+                            }
+
+                            renderInstaGrid();
+                            mergeInstaPostsIntoGallery();
+                        })
+                        .catch(function(err) {
+                            if (syncIcon) {
+                                syncIcon.classList.remove('fa-spin');
+                            }
+                            console.error("Instagram feed error:", err);
+                            grid.innerHTML = '<div class="col-12 text-center py-4 text-muted"><p class="mb-2">Failed to load feed.</p><a href="https://instagram.com/' + handle + '" target="_blank" class="btn btn-outline-danger btn-sm rounded-pill"><i class="fab fa-instagram me-1"></i> Open @' + handle + ' on Instagram</a></div>';
                         });
+                };
 
-                        grid.innerHTML = html;
-                    })
-                    .catch(function(err) {
-                        console.error("Instagram feed error:", err);
-                        grid.innerHTML = '<div class="col-12 text-center py-4 text-muted">Failed to load feed.</div>';
-                    });
+                if (forceRefresh) {
+                    // Trigger sync endpoint first, then fetch updated MySQL cache
+                    fetch('api/instagram/sync.php')
+                        .then(function() { fetchFeed(true); })
+                        .catch(function() { fetchFeed(false); });
+                } else {
+                    fetchFeed(false);
+                }
             }
 
-            document.addEventListener('DOMContentLoaded', loadInstagramFeed);
+            function filterInstaFeed(filterType) {
+                currentFilter = filterType;
+                document.querySelectorAll('.filter-btn').forEach(function(btn) {
+                    if (btn.getAttribute('data-filter') === filterType) {
+                        btn.classList.remove('btn-outline-secondary');
+                        btn.classList.add('btn-danger');
+                    } else {
+                        btn.classList.remove('btn-danger');
+                        btn.classList.add('btn-outline-secondary');
+                    }
+                });
+                renderInstaGrid();
+            }
+
+            function renderInstaGrid() {
+                var grid = document.getElementById('instaFeedGrid');
+                var handle = "<?= urlencode($instaHandle); ?>";
+
+                var filtered = allInstaPosts.filter(function(p) {
+                    if (currentFilter === 'reel') return p.media_type === 'REEL' || p.media_type === 'VIDEO';
+                    if (currentFilter === 'photo') return p.media_type !== 'REEL' && p.media_type !== 'VIDEO';
+                    return true;
+                });
+
+                if (filtered.length === 0) {
+                    grid.innerHTML = '<div class="col-12 text-center py-4 text-muted">No posts found for this filter.</div>';
+                    return;
+                }
+
+                // Limit display to the latest 8 posts/reels
+                var displayPosts = filtered.slice(0, 8);
+
+                // Helper: route Instagram CDN URLs through our server-side proxy
+                function proxyUrl(originalUrl) {
+                    if (!originalUrl) return 'public/startups/nutridelight/hero.png';
+                    if (originalUrl.indexOf('cdninstagram.com') !== -1 || originalUrl.indexOf('fbcdn.net') !== -1) {
+                        return 'api/instagram/media_proxy.php?url=' + encodeURIComponent(originalUrl);
+                    }
+                    return originalUrl;
+                }
+
+                var html = '';
+                displayPosts.forEach(function(post, index) {
+                    var imgUrl = proxyUrl(post.thumbnail_url || post.media_url);
+                    // Video URLs routed through our proxy (which now supports HTTP Range requests)
+                    var videoUrl = post.video_url ? proxyUrl(post.video_url) : null;
+                    var postLink = post.permalink || ('https://instagram.com/' + handle);
+                    var isReel = (post.media_type === 'REEL' || post.media_type === 'VIDEO');
+
+                    if (isReel) {
+                        // Reel card — thumbnail always visible, video overlaid on top
+                        html += '<div class="col-6 col-md-3 mb-4">';
+                        html += '  <div class="insta-post-card shadow-sm border rounded-3 overflow-hidden position-relative h-100" style="cursor: pointer;" onclick="openInstaMediaModal(\'' + post.post_id + '\')">'; 
+                        html += '    <span class="badge bg-danger text-white position-absolute top-0 end-0 m-2 px-2 py-1 shadow-sm fw-bold small" style="z-index: 3;"><i class="fab fa-instagram me-1"></i> Reel</span>';
+                        // Container with thumbnail as background so it's ALWAYS visible (no black)
+                        html += '    <div class="insta-img-wrap" style="aspect-ratio: 1/1; overflow: hidden; position: relative; background: url(\'' + imgUrl + '\') center center / cover no-repeat #f0f0f0;">';
+                        // Thumbnail image layer — centered, always shows
+                        html += '      <img src="' + imgUrl + '" alt="Reel" loading="lazy" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src=\'public/startups/nutridelight/hero.png\';">';
+                        if (videoUrl) {
+                            // Video layer on top — plays over the thumbnail when ready
+                            html += '      <video autoplay loop muted playsinline preload="auto" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: 100%; object-fit: cover; z-index: 1;">';
+                            html += '        <source src="' + videoUrl + '" type="video/mp4">';
+                            html += '      </video>';
+                        }
+                        // Play icon overlay (always centered)
+                        html += '      <div class="position-absolute top-50 start-50 translate-middle" style="z-index: 2; pointer-events: none;">';
+                        html += '        <div class="bg-danger bg-opacity-75 text-white rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 44px; height: 44px;">';
+                        html += '          <i class="fas fa-play fs-6 ms-1"></i>';
+                        html += '        </div>';
+                        html += '      </div>';
+                        html += '      <div class="insta-overlay p-3 d-flex flex-column justify-content-end text-white" style="position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(0,0,0,0.7)); opacity: 0; transition: opacity 0.25s ease; z-index: 3;">';
+                        html += '        <div class="insta-caption small mb-2" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' + (post.caption || 'Instagram Reel') + '</div>';
+                        html += '        <div class="text-white-50 small fw-bold"><i class="fab fa-instagram me-1"></i> Open on Instagram &rarr;</div>';
+                        html += '      </div>';
+                        html += '    </div>';
+                        html += '  </div>';
+                        html += '</div>';
+                    } else {
+                        // Image/Carousel card
+                        html += '<div class="col-6 col-md-3 mb-4">';
+                        html += '  <div class="insta-post-card shadow-sm border rounded-3 overflow-hidden position-relative h-100" style="cursor: pointer;" onclick="openInstaMediaModal(\'' + post.post_id + '\')">'; 
+                        html += '    <div class="insta-img-wrap" style="aspect-ratio: 1/1; overflow: hidden; position: relative;">';
+                        html += '      <img src="' + imgUrl + '" alt="Instagram Post" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src=\'public/startups/nutridelight/hero.png\';">';
+                        html += '      <div class="insta-overlay p-3 d-flex flex-column justify-content-end text-white" style="position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(0,0,0,0.7)); opacity: 0; transition: opacity 0.25s ease;">';
+                        html += '        <div class="insta-caption small mb-2" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' + (post.caption || 'Instagram Post') + '</div>';
+                        html += '        <div class="text-white-50 small fw-bold">';
+                        html += '          <i class="fab fa-instagram me-1"></i> Open Post &rarr;';
+                        html += '        </div>';
+                        html += '      </div>';
+                        html += '    </div>';
+                        html += '  </div>';
+                        html += '</div>';
+                    }
+                });
+
+                grid.innerHTML = html;
+            }
+
+            function mergeInstaPostsIntoGallery() {
+                var trackLeft = document.querySelector('#nutridelight-gallery .nd-track-left');
+                var trackRight = document.querySelector('#nutridelight-gallery .nd-track-right');
+                var mergeBadge = document.getElementById('galleryInstaMergeBadge');
+                
+                if (!allInstaPosts || allInstaPosts.length === 0) return;
+
+                if (mergeBadge) {
+                    mergeBadge.innerHTML = '<i class="fab fa-instagram me-1"></i> Merged: ' + allInstaPosts.length + ' Live Instagram Uploads';
+                }
+
+                if (!trackLeft) return;
+
+                // Remove previously injected Instagram cards to avoid duplicates on re-sync
+                document.querySelectorAll('.merged-insta-card').forEach(function(el) { el.remove(); });
+
+                allInstaPosts.forEach(function(post) {
+                    var isReel = (post.media_type === 'REEL' || post.media_type === 'VIDEO');
+                    var imgUrl = post.media_url || 'public/startups/nutridelight/hero.png';
+                    var rawCap = post.caption || 'NutriDelight Instagram Media';
+                    var shortCap = rawCap.substring(0, 32) + (rawCap.length > 32 ? '...' : '');
+                    
+                    var isFreshUpload = post.post_id.indexOf('CUSTOM_') === 0 || post.post_id.indexOf('IG_') === 0;
+                    var badgeLabel = isReel ? (isFreshUpload ? '🎬 NEW REEL' : '🎬 INSTA REEL') : (isFreshUpload ? '✨ NEW UPLOAD' : '📷 INSTA PHOTO');
+                    var badgeBg = isReel ? 'bg-danger text-white' : (isFreshUpload ? 'bg-success text-white' : 'bg-primary text-white');
+
+                    var cardHtml = `
+                        <div class="nd-ticker-card merged-insta-card shadow-sm border rounded-3 overflow-hidden position-relative" style="cursor: pointer;" onclick="openInstaMediaModal('${post.post_id}')">
+                            <img src="${imgUrl}" alt="Instagram Media" loading="lazy" onerror="this.onerror=null; this.src='public/startups/nutridelight/hero.png';">
+                            <div class="nd-ticker-overlay">
+                                <span class="nd-ticker-badge ${badgeBg} border-0 fw-bold shadow-sm">${badgeLabel}</span>
+                                <div class="nd-ticker-caption">
+                                    <h6 class="text-truncate">${shortCap}</h6>
+                                    <p class="small text-white-50"><i class="fab fa-instagram me-1"></i> @<?= htmlspecialchars($instaHandle); ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    if (isReel && trackLeft) {
+                        trackLeft.insertAdjacentHTML('afterbegin', cardHtml);
+                    } else if (trackRight) {
+                        trackRight.insertAdjacentHTML('afterbegin', cardHtml);
+                    }
+                });
+            }
+
+            function openInstaMediaModal(postId) {
+                var post = allInstaPosts.find(function(p) { return p.post_id === postId; });
+                if (!post) return;
+
+                var handle = "<?= urlencode($instaHandle); ?>";
+                var postLink = post.permalink || ('https://instagram.com/' + handle);
+
+                // Open post or reel directly on Instagram in a new tab
+                window.open(postLink, '_blank', 'noopener,noreferrer');
+            }
+
+            function submitCollectReel(e) {
+                e.preventDefault();
+                var form = document.getElementById('addReelForm');
+                var btn = document.getElementById('submitReelBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Collecting...';
+
+                var formData = new FormData(form);
+
+                fetch('api/add_instagram_post.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-save me-1"></i> Collect & Publish Reel';
+
+                    if (data.success) {
+                        form.reset();
+                        var modalEl = document.getElementById('addReelModal');
+                        if (modalEl) {
+                            var modal = bootstrap.Modal.getInstance(modalEl);
+                            if (modal) modal.hide();
+                        }
+                        loadInstagramFeed(true);
+                    } else {
+                        alert(data.message || 'Failed to collect Reel.');
+                    }
+                })
+                .catch(function(err) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-save me-1"></i> Collect & Publish Reel';
+                    alert('Error connecting to API.');
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                loadInstagramFeed(false);
+                // Auto-sync continuous polling every 2 minutes to collect newly uploaded reels/posts
+                setInterval(function() { loadInstagramFeed(true); }, 120000);
+            });
             </script>
 
             <!-- BACK BUTTON BOTTOM -->

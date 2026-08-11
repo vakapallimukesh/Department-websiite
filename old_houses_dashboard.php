@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 include "./head.php"; 
 include "connect.php";
 
-// Define the house names with enhanced color schemes and details from house_detail pages
+// Define the house names with enhanced color schemes
 $houses = [
     'Aakash' => [
         'name' => 'Aakash', 
@@ -11,10 +11,9 @@ $houses = [
         'gradient' => 'linear-gradient(135deg, #4A90E2 0%, #357ABD 100%)',
         'light_color' => '#E3F2FD',
         'icon' => 'fas fa-cloud',
-        'element' => 'Sky Element',
         'description' => 'Sky House - Reaching for the stars',
-        'full_description' => 'Sky House - Reaching for the stars with boundless ambition and limitless potential. Members of Aakash House are known for their visionary thinking and ability to soar above challenges.',
         'img' => 'assets/img/aakash_bg.jpg'
+    
     ],
     'Jal' => [
         'name' => 'Jal', 
@@ -22,10 +21,9 @@ $houses = [
         'gradient' => 'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)',
         'light_color' => '#E1F5FE',
         'icon' => 'fas fa-water',
-        'element' => 'Water Element',
         'description' => 'Water House - Flowing with wisdom',
-        'full_description' => 'Water House - Flowing with wisdom and adaptability like the eternal river. Jal House members embody fluidity, persistence, and the power to shape their path through any obstacle.',
         'img' => 'assets/img/jal_bg.jpg'
+    
     ],
     'Vayu' => [
         'name' => 'Vayu', 
@@ -33,20 +31,17 @@ $houses = [
         'gradient' => 'linear-gradient(135deg, #4CAF50 0%, #388E3C 100%)',
         'light_color' => '#E8F5E8',
         'icon' => 'fas fa-wind',
-        'element' => 'Wind Element',
         'description' => 'Wind House - Swift and free',
-        'full_description' => 'Wind House - Swift and free like the breeze that carries change across the world. Vayu House students are dynamic, innovative, and bring fresh perspectives to every challenge.',
         'img' => 'assets/img/vayu_bg.png'
     ],
+
     'PRUDHVI' => [
         'name' => 'PRUDHVI', 
         'color' => '#8D6E63', 
         'gradient' => 'linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%)',
         'light_color' => '#EFEBE9',
         'icon' => 'fas fa-mountain',
-        'element' => 'Earth Element',
         'description' => 'Earth House - Strong and steady',
-        'full_description' => 'Earth House - Strong and steady with grounded wisdom and solid foundation. PRUDHVI House members exemplify resilience, strength, and unwavering dependability.',
         'img' => 'assets/img/prudhvi_bg.jpg'    
     ],
     'Agni' => [
@@ -55,10 +50,9 @@ $houses = [
         'gradient' => 'linear-gradient(135deg, #F44336 0%, #D32F2F 100%)',
         'light_color' => '#FFEBEE',
         'icon' => 'fas fa-fire',
-        'element' => 'Fire Element',
         'description' => 'Fire House - Burning with passion',
-        'full_description' => 'Fire House - Burning with passion and illuminating the path forward with fierce determination. Agni House students are energetic, passionate, and ignite inspiration in everyone around them.',
         'img' => 'assets/img/agni_bg.jpg'
+   
     ]
 ];
 
@@ -90,7 +84,7 @@ foreach ($houses as $house_key => $house_info) {
 
     if ($hid) {
         // Get student count
-        $student_count_sql = "SELECT COUNT(*) as student_count FROM students WHERE hid = $hid AND is_alumni = 0";
+        $student_count_sql = "SELECT COUNT(*) as student_count FROM students WHERE hid = $hid";
         $student_count_result = mysqli_query($conn, $student_count_sql);
         if ($student_count_result) {
             $count_data = mysqli_fetch_assoc($student_count_result);
@@ -141,17 +135,6 @@ foreach ($houses as $house_key => $house_info) {
         $stats['avg_points'] = $stats['student_count'] > 0 ? round($stats['total_points'] / $stats['student_count'], 1) : 0;
     }
 
-    $default_student_counts = [
-        'Aakash' => 124,
-        'Jal' => 107,
-        'Vayu' => 116,
-        'PRUDHVI' => 111,
-        'Agni' => 113
-    ];
-    if ($stats['student_count'] === 0 && isset($default_student_counts[$house_key])) {
-        $stats['student_count'] = $default_student_counts[$house_key];
-    }
-
     $house_stats[$house_key] = $stats;
 }
 
@@ -159,33 +142,6 @@ foreach ($houses as $house_key => $house_info) {
 uasort($houses, function($a, $b) use ($house_stats) {
     return $house_stats[$b['name']]['total_points'] <=> $house_stats[$a['name']]['total_points'];
 });
-
-// Calculate overall statistics
-$overall_stats = [
-    'total_houses' => 5,
-    'total_events' => 0,
-    'total_points' => array_sum(array_column($house_stats, 'total_points')),
-    'active_students' => array_sum(array_column($house_stats, 'student_count'))
-];
-
-// Get total events
-$events_sql = "SELECT COUNT(*) as total FROM events WHERE event_date <= CURDATE()";
-$events_result = mysqli_query($conn, $events_sql);
-if ($events_result) {
-    $events_data = mysqli_fetch_assoc($events_result);
-    $overall_stats['total_events'] = (int)$events_data['total'];
-}
-if ($overall_stats['total_events'] === 0) {
-    $overall_stats['total_events'] = 3;
-}
-
-$houses = [
-    'Aakash' => $houses['Aakash'],
-    'Jal' => $houses['Jal'],
-    'Vayu' => $houses['Vayu'],
-    'PRUDHVI' => $houses['PRUDHVI'],
-    'Agni' => $houses['Agni']
-];
 ?>
 
 <style>
@@ -514,15 +470,6 @@ $houses = [
     overflow: hidden;
 }
 
-.hero-explore-button,
-.hero-explore-button *,
-.hero-explore-button:hover,
-.hero-explore-button:focus,
-.hero-explore-button:active,
-.hero-explore-button:visited {
-    text-decoration: none !important;
-}
-
 .hero-explore-button::before {
     content: '';
     position: absolute;
@@ -817,18 +764,8 @@ body {
     <div class="main-content" style="padding: 2rem 0 3rem 0;">
         <div class="container ">
 
-            <!-- Header Section -->
-            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 px-2">
-                <div>
-                    <h3 style="font-weight: 800; font-family: 'Outfit', sans-serif; color: #1a0d06; margin: 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-trophy" style="color: #d97706;"></i> House Standings
-                    </h3>
-                    <p class="text-muted mb-0" style="font-size: 0.88rem; font-weight: 500;">Overall performance and house point rankings</p>
-                </div>
-            </div>
-
             <!-- Houses Grid -->
-            <div class="row p-2 justify-content-center" id="housesGridContainer">
+            <div class="row p-2 justify-content-center" >
                 <?php 
                 $rank_counter = 1;
                 foreach ($houses as $house_key => $house_info): 
@@ -838,9 +775,7 @@ body {
                         <a href="house_detail.php?house=<?php echo urlencode($house_key); ?>" 
                            class="text-decoration-none house-link">
                             <div class="house-card house-card-<?php echo $clean_key; ?>" 
-                                 data-house="<?php echo $house_key; ?>"
-                                 onclick="window.location.href='house_detail.php?house=<?php echo urlencode($house_key); ?>'"
-                                 style="cursor: pointer;">
+                                 data-house="<?php echo $house_key; ?>">
                                 
                                 <!-- Rank Badge -->
                                 <div style="position: absolute; top: 12px; right: 12px; z-index: 3;">
@@ -982,43 +917,90 @@ body {
             </div>
             <!-- Key Statistics Section -->
             <div class="stats-container mb-5">
+                <?php
+                // Calculate overall statistics
+                $total_events = 0;
+                $total_points = 0;
+                $active_students = 0;
+                $total_houses = count($houses);
+                
+                // Get total events
+                $events_query = "SELECT COUNT(*) as total FROM events";
+                $events_result = mysqli_query($conn, $events_query);
+                if ($events_result) {
+                    $events_data = mysqli_fetch_assoc($events_result);
+                    $total_events = $events_data['total'];
+                }
+                
+                // Get total points from all sources
+                $points_sources = [
+                    "SELECT SUM(points) as total FROM participants WHERE points > 0",
+                    "SELECT SUM(points) as total FROM winners WHERE points > 0", 
+                    "SELECT SUM(points) as total FROM organizers WHERE points > 0",
+                    "SELECT SUM(points) as total FROM appreciations WHERE points > 0"
+                ];
+                
+                foreach ($points_sources as $query) {
+                    $result = mysqli_query($conn, $query);
+                    if ($result) {
+                        $data = mysqli_fetch_assoc($result);
+                        $total_points += (int)$data['total'];
+                    }
+                }
+                
+                // Get active students count
+                $students_query = "SELECT COUNT(*) as total FROM students WHERE is_alumni = 0";
+                $students_result = mysqli_query($conn, $students_query);
+                if ($students_result) {
+                    $students_data = mysqli_fetch_assoc($students_result);
+                    $active_students = $students_data['total'];
+                }
+                
+                // Define stats with clean transparent glass design
+                $stats = [
+                    [
+                        'title' => 'Total Houses',
+                        'value' => $total_houses,
+                        'icon' => 'fas fa-home',
+                        'icon_bg' => 'rgba(255, 255, 255, 0.45)',
+                        'icon_color' => '#8B4513'
+                    ],
+                    [
+                        'title' => 'Total Events', 
+                        'value' => $total_events,
+                        'icon' => 'fas fa-calendar-alt',
+                        'icon_bg' => 'rgba(255, 255, 255, 0.45)',
+                        'icon_color' => '#8B4513'
+                    ],
+                    [
+                        'title' => 'Total Points',
+                        'value' => number_format($total_points),
+                        'icon' => 'fas fa-star',
+                        'icon_bg' => 'rgba(255, 255, 255, 0.45)',
+                        'icon_color' => '#8B4513'
+                    ],
+                    [
+                        'title' => 'Active Students',
+                        'value' => number_format($active_students),
+                        'icon' => 'fas fa-users',
+                        'icon_bg' => 'rgba(255, 255, 255, 0.45)',
+                        'icon_color' => '#8B4513'
+                    ]
+                ];
+                ?>
+                
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon-container">
-                            <i class="fas fa-home"></i>
+                    <?php foreach ($stats as $stat): ?>
+                        <div class="stat-card">
+                            <div class="stat-icon-container">
+                                <i class="<?php echo $stat['icon']; ?>"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-label"><?php echo $stat['title']; ?></div>
+                                <div class="stat-value"><?php echo $stat['value']; ?></div>
+                            </div>
                         </div>
-                        <div class="stat-content">
-                            <div class="stat-label">Total Houses</div>
-                            <div class="stat-value" id="statTotalHouses"><?php echo $overall_stats['total_houses']; ?></div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon-container">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label">Total Events</div>
-                            <div class="stat-value" id="statTotalEvents"><?php echo $overall_stats['total_events']; ?></div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon-container">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label">Total Points</div>
-                            <div class="stat-value" id="statTotalPoints"><?php echo number_format($overall_stats['total_points']); ?></div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon-container">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-label">Active Students</div>
-                            <div class="stat-value" id="statActiveStudents"><?php echo number_format($overall_stats['active_students']); ?></div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
 
@@ -1069,7 +1051,7 @@ body {
                                             <th class="py-3 px-3 text-end">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="matrixTableBody">
+                                    <tbody>
                                         <?php 
                                         $matrix_rank = 1;
                                         $max_matrix_points = max(array_column($house_stats, 'total_points'));
@@ -1599,173 +1581,8 @@ body {
         }
 
         // Head to Head Comparison Script
-        let houseStatsMap = <?php echo json_encode($house_stats); ?>;
-        let housesMetaMap = <?php echo json_encode($houses); ?>;
-
-        function renderHousesGrid(housesObj, statsObj) {
-            const container = document.getElementById('housesGridContainer');
-            if (!container) return;
-            
-            let html = '';
-            let rankCounter = 1;
-            
-            const maxPoints = Math.max(...Object.values(statsObj).map(s => s.total_points || 0), 1);
-            
-            for (const [houseKey, houseInfo] of Object.entries(housesObj)) {
-                const cleanKey = (houseKey === 'PRUDHVI' || houseKey === 'Pruthvi') ? 'PRUDHVI' : ((houseKey === 'Jal' || houseKey === 'JAL') ? 'Jal' : ((houseKey === 'Vayu' || houseKey === 'VAYU') ? 'Vayu' : houseKey));
-                const st = statsObj[houseKey] || { total_points: 0, student_count: 0 };
-                const progress = maxPoints > 0 ? ((st.total_points / maxPoints) * 100).toFixed(1) : 0;
-                
-                let overlayBg = houseInfo.gradient;
-                if (houseKey === 'Aakash') {
-                    overlayBg = "linear-gradient(135deg, rgba(30, 136, 229, 0.70) 0%, rgba(79, 195, 247, 0.70) 100%), url('assets/img/aakash_bg.jpg') center/cover no-repeat";
-                } else if (houseKey === 'Agni') {
-                    overlayBg = "linear-gradient(135deg, rgba(244, 67, 54, 0.75) 0%, rgba(211, 47, 47, 0.75) 100%), url('assets/img/agni_bg.jpg') center/cover no-repeat";
-                } else if (houseKey.toUpperCase() === 'PRUDHVI' || houseKey === 'Pruthvi') {
-                    overlayBg = "linear-gradient(135deg, rgba(141, 110, 99, 0.75) 0%, rgba(109, 76, 65, 0.75) 100%), url('assets/img/prudhvi_bg.jpg') center/cover no-repeat";
-                } else if (houseKey.toUpperCase() === 'JAL' || houseKey === 'Jal') {
-                    overlayBg = "linear-gradient(135deg, rgba(33, 150, 243, 0.75) 0%, rgba(25, 118, 210, 0.75) 100%), url('assets/img/jal_bg.jpg') center/cover no-repeat";
-                } else if (houseKey.toUpperCase() === 'VAYU' || houseKey === 'Vayu') {
-                    overlayBg = "linear-gradient(135deg, rgba(76, 175, 80, 0.75) 0%, rgba(56, 142, 60, 0.75) 100%), url('assets/img/vayu_bg.png') center bottom/cover no-repeat";
-                }
-
-                html += `
-                    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" style="width:260px">
-                        <a href="house_detail.php?house=${encodeURIComponent(houseKey)}" class="text-decoration-none house-link">
-                            <div class="house-card house-card-${cleanKey}" data-house="${houseKey}" onclick="window.location.href='house_detail.php?house=${encodeURIComponent(houseKey)}'" style="cursor: pointer;">
-                                <div style="position: absolute; top: 12px; right: 12px; z-index: 3;">
-                                    <span style="background: ${houseInfo.color}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
-                                        #${rankCounter}
-                                    </span>
-                                </div>
-                                <div style="padding: 20px 20px 0 20px; text-align: left;">
-                                    <div style="margin-bottom: 8px;">
-                                        <h4 style="color: ${houseInfo.color}; font-weight: 800; font-size: 1.5rem; margin: 0; line-height: 1.2; text-shadow: 0 1px 2px rgba(255,255,255,0.8);">
-                                            ${houseInfo.name}
-                                        </h4>
-                                        <h6 style="color: #1f2937; font-weight: 700; font-size: 0.95rem; margin: 2px 0 0 0; opacity: 1;">
-                                            House
-                                        </h6>
-                                    </div>
-                                    <p style="color: #111827; font-weight: 600; font-size: 0.85rem; margin: 0 0 16px 0; line-height: 1.4;">
-                                        ${houseInfo.description}
-                                    </p>
-                                </div>
-                                <div style="padding: 0 20px; margin-bottom: 16px;">
-                                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                                        <span style="color: #1f2937; font-size: 0.85rem; font-weight: 700;">Points</span>
-                                        <span style="color: #111827; font-size: 1.25rem; font-weight: 800;">
-                                            ${(st.total_points || 0).toLocaleString()}
-                                        </span>
-                                    </div>
-                                    <div style="width: 100%; height: 6px; background: #e9ecef; border-radius: 3px; margin-top: 8px; overflow: hidden;">
-                                        <div style="width: ${progress}%; height: 100%; background: ${houseInfo.color}; border-radius: 3px; transition: width 0.3s ease;"></div>
-                                    </div>
-                                </div>
-                                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 16px 20px; background: ${houseInfo.light_color}; border-top: 1px solid ${houseInfo.color}20;">
-                                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <i class="fas fa-users" style="color: ${houseInfo.color}; font-size: 0.9rem;"></i>
-                                            <span style="color: #1f2937; font-size: 0.85rem; font-weight: 700;">
-                                                ${st.student_count || 0} students
-                                            </span>
-                                        </div>
-                                        <i class="fas fa-arrow-right" style="color: ${houseInfo.color}; font-size: 0.9rem;"></i>
-                                    </div>
-                                </div>
-                                <div class="house-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: ${overlayBg}; opacity: 0; transition: all 0.3s ease; border-radius: 15px; display: flex; align-items: center; justify-content: center;">
-                                    <div style="color: white; text-align: center;">
-                                        <i class="fas fa-eye" style="font-size: 2rem; margin-bottom: 8px;"></i>
-                                        <div style="font-size: 1rem; font-weight: 600;">View Details</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                `;
-                rankCounter++;
-            }
-            
-            container.innerHTML = html;
-        }
-
-        function renderMatrixTable(housesObj, statsObj) {
-            const tbody = document.getElementById('matrixTableBody');
-            if (!tbody) return;
-            
-            let html = '';
-            let matrixRank = 1;
-            const maxMatrixPoints = Math.max(...Object.values(statsObj).map(s => s.total_points || 0), 1);
-            
-            for (const [hKey, hData] of Object.entries(housesObj)) {
-                const st = statsObj[hKey] || {};
-                const pct = Math.round(((st.total_points || 0) / maxMatrixPoints) * 100);
-                
-                let badgeIcon = '';
-                if (matrixRank === 1) badgeIcon = '🏆 Gold';
-                else if (matrixRank === 2) badgeIcon = '🥈 Silver';
-                else if (matrixRank === 3) badgeIcon = '🥉 Bronze';
-                else badgeIcon = '#' + matrixRank;
-                
-                html += `
-                    <tr style="border-bottom: 1px solid #f1f5f9;">
-                        <td class="px-3">
-                            <span class="badge" style="background: ${hData.light_color}; color: ${hData.color}; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 8px;">
-                                ${badgeIcon}
-                            </span>
-                        </td>
-                        <td class="px-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="position-relative" style="width: 46px; height: 46px; flex-shrink: 0;">
-                                    <img src="${hData.img}" alt="${hData.name}" style="width: 46px; height: 46px; border-radius: 12px; object-fit: cover; border: 2.5px solid ${hData.color}; box-shadow: 0 4px 14px rgba(0,0,0,0.3);">
-                                </div>
-                                <div>
-                                    <strong style="color: #1a0d06; font-size: 1.05rem; font-weight: 800; font-family: 'Outfit', sans-serif;">${hData.name}</strong>
-                                    <div style="font-size: 0.8rem; color: #6f5f54; font-weight: 500;">${hData.description}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-3">
-                            <div class="d-flex align-items-center justify-content-between mb-1">
-                                <strong style="color: ${hData.color}; font-size: 1rem;">${(st.total_points || 0).toLocaleString()} pts</strong>
-                                <span class="text-muted" style="font-size: 0.75rem;">${pct}% of lead</span>
-                            </div>
-                            <div class="progress" style="height: 6px; border-radius: 3px; background: #e2e8f0;">
-                                <div class="progress-bar" role="progressbar" style="width: ${pct}%; background: ${hData.gradient}; border-radius: 3px;" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </td>
-                        <td class="px-3 text-center font-semibold" style="color: #334155;">
-                            <i class="fas fa-user-friends me-1 text-muted"></i>${st.student_count || 0}
-                        </td>
-                        <td class="px-3 text-center">
-                            <span class="badge bg-light text-dark border" style="font-weight: 600;">
-                                ${st.avg_points || 0}
-                            </span>
-                        </td>
-                        <td class="px-3 text-center text-success font-semibold">
-                            +${(st.winners_points || 0).toLocaleString()}
-                        </td>
-                        <td class="px-3 text-center text-info font-semibold">
-                            +${(st.participants_points || 0).toLocaleString()}
-                        </td>
-                        <td class="px-3 text-center text-warning font-semibold">
-                            +${(st.appreciations_points || 0).toLocaleString()}
-                        </td>
-                        <td class="px-3 text-center text-danger font-semibold">
-                            -${(st.penalties_points || 0).toLocaleString()}
-                        </td>
-                        <td class="px-3 text-end">
-                            <a href="house_detail.php?house=${encodeURIComponent(hKey)}" class="btn btn-sm btn-outline-primary rounded-pill px-3" style="font-size: 0.8rem;">
-                                Details <i class="fas fa-chevron-right ms-1"></i>
-                            </a>
-                        </td>
-                    </tr>
-                `;
-                matrixRank++;
-            }
-            
-            tbody.innerHTML = html;
-        }
+        const houseStatsMap = <?php echo json_encode($house_stats); ?>;
+        const housesMetaMap = <?php echo json_encode($houses); ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
             runHeadToHeadCompare();
@@ -1806,10 +1623,6 @@ body {
             const pctA = Math.round(((statA.total_points || 0) / maxPts) * 100);
             const pctB = Math.round(((statB.total_points || 0) / maxPts) * 100);
 
-            const totalDeptStudents = 558;
-            const pctShareA = Math.round(((statA.student_count || 0) / totalDeptStudents) * 100);
-            const pctShareB = Math.round(((statB.student_count || 0) / totalDeptStudents) * 100);
-
             out.innerHTML = `
                 <div class="alert text-center p-3 mb-4 rounded-3 shadow-sm" style="background: #f8fafc; border: 1px solid #e2e8f0; font-size: 1rem;">
                     ${leaderText}
@@ -1827,16 +1640,13 @@ body {
                                     </span>
                                 </div>
                                 <h3 class="font-bold mb-1" style="color: ${infoA.color}; font-weight: 800;">${infoA.name}</h3>
-                                <span class="badge mb-2 px-3 py-1 rounded-pill" style="background: ${infoA.light_color}; color: ${infoA.color}; font-weight: 700; font-size: 0.8rem;">
-                                    <i class="${infoA.icon} me-1"></i> ${infoA.element || 'House'}
-                                </span>
-                                <p class="text-muted small mb-3 px-2" style="font-size: 0.85rem; line-height: 1.5; color: #475569;">${infoA.full_description || infoA.description}</p>
+                                <p class="text-muted small mb-3">${infoA.description}</p>
                                 <div class="p-3 rounded-3 mb-3" style="background: ${infoA.light_color};">
                                     <div class="text-muted small uppercase font-semibold">Total Points</div>
                                     <div class="display-6 font-bold" style="color: ${infoA.color}; font-weight: 800;">${(statA.total_points || 0).toLocaleString()}</div>
                                 </div>
                                 <div class="row g-2 text-start">
-                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Total Members</small><strong>${statA.student_count || 0} students (${pctShareA}%)</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Members</small><strong>${statA.student_count || 0}</strong></div></div>
                                     <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Avg / Student</small><strong>${statA.avg_points || 0}</strong></div></div>
                                     <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Wins Points</small><strong class="text-success">+${(statA.winners_points || 0).toLocaleString()}</strong></div></div>
                                     <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Participation</small><strong class="text-info">+${(statA.participants_points || 0).toLocaleString()}</strong></div></div>
@@ -1858,16 +1668,13 @@ body {
                                     </span>
                                 </div>
                                 <h3 class="font-bold mb-1" style="color: ${infoB.color}; font-weight: 800;">${infoB.name}</h3>
-                                <span class="badge mb-2 px-3 py-1 rounded-pill" style="background: ${infoB.light_color}; color: ${infoB.color}; font-weight: 700; font-size: 0.8rem;">
-                                    <i class="${infoB.icon} me-1"></i> ${infoB.element || 'House'}
-                                </span>
-                                <p class="text-muted small mb-3 px-2" style="font-size: 0.85rem; line-height: 1.5; color: #475569;">${infoB.full_description || infoB.description}</p>
+                                <p class="text-muted small mb-3">${infoB.description}</p>
                                 <div class="p-3 rounded-3 mb-3" style="background: ${infoB.light_color};">
                                     <div class="text-muted small uppercase font-semibold">Total Points</div>
                                     <div class="display-6 font-bold" style="color: ${infoB.color}; font-weight: 800;">${(statB.total_points || 0).toLocaleString()}</div>
                                 </div>
                                 <div class="row g-2 text-start">
-                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Total Members</small><strong>${statB.student_count || 0} students (${pctShareB}%)</strong></div></div>
+                                    <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Members</small><strong>${statB.student_count || 0}</strong></div></div>
                                     <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Avg / Student</small><strong>${statB.avg_points || 0}</strong></div></div>
                                     <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Wins Points</small><strong class="text-success">+${(statB.winners_points || 0).toLocaleString()}</strong></div></div>
                                     <div class="col-6"><div class="p-2 border rounded bg-light"><small class="text-muted d-block">Participation</small><strong class="text-info">+${(statB.participants_points || 0).toLocaleString()}</strong></div></div>

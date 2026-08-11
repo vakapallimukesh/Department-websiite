@@ -11,16 +11,19 @@ if (empty($account_name)) {
 
 // Clean account name handle
 $account_name = strtolower(ltrim(trim($account_name), '@'));
+$force_refresh = isset($_GET['refresh']) && $_GET['refresh'] === 'true';
 
-// Ensure database tables exist if connection is available
+// Ensure database connection uses utf8mb4 and tables exist if connection is available
 if ($conn) {
+    @$conn->set_charset("utf8mb4");
+
     @$conn->query("CREATE TABLE IF NOT EXISTS instagram_accounts (
         id INT AUTO_INCREMENT PRIMARY KEY,
         account_name VARCHAR(100) UNIQUE NOT NULL,
         display_name VARCHAR(150),
         profile_pic VARCHAR(500),
         is_active TINYINT DEFAULT 1
-    )");
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
     @$conn->query("CREATE TABLE IF NOT EXISTS instagram_posts (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,48 +39,57 @@ if ($conn) {
         fetched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         UNIQUE KEY unq_account_post (account_name, post_id),
         INDEX(account_name)
-    )");
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    // Convert existing tables to utf8mb4 in case they were created with latin1/utf8
+    @$conn->query("ALTER TABLE instagram_posts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+    @$conn->query("ALTER TABLE instagram_accounts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 }
 
-// Check database cache first (1 hour cache TTL)
+// Check database cache first (1 hour cache TTL unless forced refresh)
 $posts = [];
 $from_cache = false;
 $cache_ttl_seconds = 3600;
 
-if ($conn) {
-    $stmt = $conn->prepare("SELECT post_id, media_type, media_url, caption, likes_count, comments_count, permalink, timestamp, fetched_at FROM instagram_posts WHERE account_name = ? ORDER BY timestamp DESC LIMIT 12");
-    if ($stmt) {
-        $stmt->bind_param("s", $account_name);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        $latest_fetched = 0;
-        while ($row = $result->fetch_assoc()) {
-            $posts[] = [
-                'post_id' => $row['post_id'],
-                'media_type' => $row['media_type'],
-                'media_url' => $row['media_url'],
-                'caption' => $row['caption'],
-                'likes' => (int)$row['likes_count'],
-                'comments' => (int)$row['comments_count'],
-                'permalink' => $row['permalink'],
-                'timestamp' => $row['timestamp']
-            ];
-            $fetch_time = strtotime($row['fetched_at']);
-            if ($fetch_time > $latest_fetched) {
-                $latest_fetched = $fetch_time;
+if ($conn && !$force_refresh) {
+    try {
+        $stmt = $conn->prepare("SELECT post_id, media_type, media_url, caption, likes_count, comments_count, permalink, timestamp, fetched_at FROM instagram_posts WHERE account_name = ? ORDER BY timestamp DESC LIMIT 50");
+        if ($stmt) {
+            $stmt->bind_param("s", $account_name);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $latest_fetched = 0;
+            while ($row = $result->fetch_assoc()) {
+                $posts[] = [
+                    'post_id' => $row['post_id'],
+                    'media_type' => $row['media_type'],
+                    'media_url' => $row['media_url'],
+                    'caption' => $row['caption'],
+                    'likes' => (int)$row['likes_count'],
+                    'comments' => (int)$row['comments_count'],
+                    'permalink' => $row['permalink'],
+                    'timestamp' => $row['timestamp']
+                ];
+                $fetch_time = strtotime($row['fetched_at']);
+                if ($fetch_time > $latest_fetched) {
+                    $latest_fetched = $fetch_time;
+                }
+            }
+            $stmt->close();
+
+            // If cache is fresh and not empty
+            if (!empty($posts) && (time() - $latest_fetched < $cache_ttl_seconds)) {
+                $from_cache = true;
             }
         }
-        $stmt->close();
-
-        // If cache is fresh and not empty
-        if (!empty($posts) && (time() - $latest_fetched < $cache_ttl_seconds)) {
-            $from_cache = true;
-        }
+    } catch (Exception $e) {
+        // Fallback gracefully if cache query fails
+        $posts = [];
     }
 }
 
-// If cache is empty or expired, trigger Instagram Data Scraper / API Service
+// If cache is empty, expired, or force refresh requested
 if (empty($posts) || !$from_cache) {
     $fresh_posts = fetch_instagram_data($account_name);
     
@@ -86,36 +98,40 @@ if (empty($posts) || !$from_cache) {
         
         // Update MySQL DB cache
         if ($conn) {
-            // Upsert account
-            $stmt = $conn->prepare("INSERT INTO instagram_accounts (account_name, display_name, profile_pic) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE is_active = 1");
-            if ($stmt) {
-                $disp = ucfirst(str_replace('_', ' ', $account_name)) . " Official";
-                $pic = "public/startups/nutridelight/hero.png";
-                $stmt->bind_param("sss", $account_name, $disp, $pic);
-                $stmt->execute();
-                $stmt->close();
-            }
-
-            // Upsert posts
-            $stmt = $conn->prepare("INSERT INTO instagram_posts (account_name, post_id, media_type, media_url, caption, likes_count, comments_count, permalink, timestamp, fetched_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()) 
-                ON DUPLICATE KEY UPDATE media_url = VALUES(media_url), caption = VALUES(caption), likes_count = VALUES(likes_count), comments_count = VALUES(comments_count), fetched_at = NOW()");
-            
-            if ($stmt) {
-                foreach ($posts as $p) {
-                    $pid = $p['post_id'];
-                    $mtype = $p['media_type'];
-                    $murl = $p['media_url'];
-                    $cap = $p['caption'];
-                    $likes = (int)$p['likes'];
-                    $cmts = (int)$p['comments'];
-                    $plink = $p['permalink'];
-                    $ts = $p['timestamp'];
-                    
-                    $stmt->bind_param("sssssiiss", $account_name, $pid, $mtype, $murl, $cap, $likes, $cmts, $plink, $ts);
+            try {
+                // Upsert account
+                $stmt = $conn->prepare("INSERT INTO instagram_accounts (account_name, display_name, profile_pic) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE is_active = 1");
+                if ($stmt) {
+                    $disp = ucfirst(str_replace('_', ' ', $account_name)) . " Official";
+                    $pic = "public/startups/nutridelight/hero.png";
+                    $stmt->bind_param("sss", $account_name, $disp, $pic);
                     $stmt->execute();
+                    $stmt->close();
                 }
-                $stmt->close();
+
+                // Upsert posts
+                $stmt = $conn->prepare("INSERT INTO instagram_posts (account_name, post_id, media_type, media_url, caption, likes_count, comments_count, permalink, timestamp, fetched_at) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()) 
+                    ON DUPLICATE KEY UPDATE media_url = VALUES(media_url), caption = VALUES(caption), likes_count = VALUES(likes_count), comments_count = VALUES(comments_count), fetched_at = NOW()");
+                
+                if ($stmt) {
+                    foreach ($posts as $p) {
+                        $pid = $p['post_id'];
+                        $mtype = $p['media_type'];
+                        $murl = $p['media_url'];
+                        $cap = $p['caption'];
+                        $likes = (int)$p['likes'];
+                        $cmts = (int)$p['comments'];
+                        $plink = $p['permalink'];
+                        $ts = $p['timestamp'];
+                        
+                        $stmt->bind_param("sssssiiss", $account_name, $pid, $mtype, $murl, $cap, $likes, $cmts, $plink, $ts);
+                        $stmt->execute();
+                    }
+                    $stmt->close();
+                }
+            } catch (Exception $e) {
+                // Continue serving posts array even if DB caching encounters an issue
             }
         }
     }
@@ -173,6 +189,26 @@ function fetch_instagram_data($handle) {
         if ($handle === 'nutri__delight' || $handle === 'nutridelight') {
             $scraped_posts = [
                 [
+                    'post_id' => 'ND_REEL_201',
+                    'media_type' => 'REEL',
+                    'media_url' => 'public/startups/nutridelight/hero.png',
+                    'caption' => '🎬 NEW REEL: 100% Pure Cold-Pressed Juice Preparation live from our cloud kitchen! Watch how fresh watermelons & mint leave no room for added sugar! 🥤🔥 #NutriDelight #InstagramReels #ColdPressedJuice',
+                    'likes' => 412,
+                    'comments' => 58,
+                    'permalink' => 'https://www.instagram.com/nutri__delight/reels/',
+                    'timestamp' => date('Y-m-d H:i:s', strtotime('-45 minutes'))
+                ],
+                [
+                    'post_id' => 'ND_REEL_202',
+                    'media_type' => 'REEL',
+                    'media_url' => 'public/startups/nutridelight/gallery/gallery1.jpg',
+                    'caption' => '⚡ REEL: Boost your immunity naturally! Watch our Citrus Orange detox extraction process packed with Vitamin C! 🍊💥 Order chilled delivery across SRKR & Bhimavaram!',
+                    'likes' => 389,
+                    'comments' => 42,
+                    'permalink' => 'https://www.instagram.com/nutri__delight/reels/',
+                    'timestamp' => date('Y-m-d H:i:s', strtotime('-4 hours'))
+                ],
+                [
                     'post_id' => 'ND_POST_101',
                     'media_type' => 'IMAGE',
                     'media_url' => 'public/startups/nutridelight/hero.png',
@@ -180,26 +216,16 @@ function fetch_instagram_data($handle) {
                     'likes' => 184,
                     'comments' => 24,
                     'permalink' => 'https://www.instagram.com/nutri__delight',
-                    'timestamp' => date('Y-m-d H:i:s', strtotime('-2 hours'))
-                ],
-                [
-                    'post_id' => 'ND_POST_102',
-                    'media_type' => 'IMAGE',
-                    'media_url' => 'public/startups/nutridelight/gallery/gallery1.jpg',
-                    'caption' => 'Boost your immunity with our signature Citrus Orange Detox Cold-Pressed Juice! 🍊⚡ Loaded with natural Vitamin C and active fruit enzymes. Order yours today! 🚀',
-                    'likes' => 196,
-                    'comments' => 21,
-                    'permalink' => 'https://www.instagram.com/nutri__delight',
                     'timestamp' => date('Y-m-d H:i:s', strtotime('-1 day'))
                 ],
                 [
-                    'post_id' => 'ND_POST_103',
-                    'media_type' => 'IMAGE',
+                    'post_id' => 'ND_REEL_203',
+                    'media_type' => 'REEL',
                     'media_url' => 'public/startups/nutridelight/gallery/gallery2.jpg',
-                    'caption' => 'Healthy campus eating made simple! Fresh Fruit Milkshakes & Wholesome Protein Bowls prepared daily in our hygienic cloud kitchen. 🥗🍓 #SRKR #NutriDelight',
-                    'likes' => 210,
-                    'comments' => 31,
-                    'permalink' => 'https://www.instagram.com/nutri__delight',
+                    'caption' => '🥗 Fresh Fruit Bowls & Protein Shakes prepared live! Campus healthy snacking made clean & affordable for all SRKR students! 🎓🔥 #SRKR #CampusLife',
+                    'likes' => 530,
+                    'comments' => 67,
+                    'permalink' => 'https://www.instagram.com/nutri__delight/reels/',
                     'timestamp' => date('Y-m-d H:i:s', strtotime('-2 days'))
                 ],
                 [
