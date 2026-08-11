@@ -369,7 +369,7 @@ body {
         <span class="hero-tag"><i class="fas fa-trophy me-2"></i> Student Hall of Fame</span>
         <h1 class="hero-title">Student <span>Achievements</span></h1>
         <p class="lead mx-auto" style="max-width: 680px; color: #cbd5e1; font-size: 1.1rem; line-height: 1.6;">
-            Celebrating national hackathon winners, research authors, competitive coders, and student leaders in CSD & CSIT departments.
+            Celebrating national hackathon winners, project expo champions, research authors, and student leaders in CSD & CSIT departments.
         </p>
     </div>
 </section>
@@ -413,14 +413,14 @@ body {
         <div class="text-center mb-4">
             <span class="hero-tag" style="background: rgba(217, 119, 6, 0.08); color: #d97706; border-color: rgba(217, 119, 6, 0.2);">Excellence Showcase</span>
             <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.6rem; font-weight: 800; color: #0f172a;">Featured <span style="color: #d97706;">Student Achievements</span></h2>
-            <p style="color: #64748b; font-size: 1.02rem; max-width: 600px; margin: 0 auto;">Recognizing outstanding student accomplishments across national hackathons, technical contests, and research events.</p>
+            <p style="color: #64748b; font-size: 1.02rem; max-width: 600px; margin: 0 auto;">Recognizing outstanding student accomplishments across national hackathons, technical contests, project expos, and research events.</p>
         </div>
 
         <!-- Category Filter Pills Bar -->
         <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-5 px-2">
-            <button class="category-filter-btn" data-category="all">🌟 All Achievements</button>
-            <button class="category-filter-btn active" data-category="hackathons">🏆 Hackathons</button>
-            <button class="category-filter-btn" data-category="competitions">🥇 Competitions</button>
+            <button class="category-filter-btn active" data-category="all">🌟 All Achievements</button>
+            <button class="category-filter-btn" data-category="hackathons">🏆 Hackathons</button>
+            <button class="category-filter-btn" data-category="competitions">🥇 Competitions & Expos</button>
             <button class="category-filter-btn" data-category="technical">💻 Technical Events</button>
             <button class="category-filter-btn" data-category="academics">📚 Academic Achievements</button>
             <button class="category-filter-btn" data-category="research">🔬 Research</button>
@@ -440,7 +440,7 @@ body {
         <div class="modal-content border-0 overflow-hidden rounded-4 shadow-lg">
             <div class="modal-header border-0 bg-dark text-white p-3 d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" id="lightboxCategoryBadge">HACKATHON ACHIEVEMENT</span>
+                    <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" id="lightboxCategoryBadge">STUDENT ACHIEVEMENT</span>
                     <span class="small text-muted" id="lightboxCounter">Image 1 of 1</span>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -463,7 +463,7 @@ body {
 </div>
 
 <script>
-// Student Achievements Data Store (Restored Original Order)
+// Student Achievements Data Store
 const studentAchievements = [
     {
         id: "quantum-valley-2025",
@@ -486,6 +486,32 @@ const studentAchievements = [
             { icon: "fas fa-laptop-code", text: "Hackathon" },
             { icon: "fas fa-indian-rupee-sign", text: "₹50,000 Cash Award" },
             { icon: "fas fa-flag-checkered", text: "Grand Finale" }
+        ]
+    },
+    {
+        id: "prakalp-project-expo-2024",
+        title: "2nd Prize Winners @ Prakalp Project Expo!",
+        event: "Prakalp Project Expo — Ramachandra College of Engg",
+        category: "competitions",
+        categoryName: "Project Expo",
+        team: "Team OG",
+        award: "🥈 2nd Prize",
+        cashAward: "₹10,000",
+        stage: "Project Expo",
+        department: "3/4 CSD, Department of CSD & CSIT",
+        description: "🏆 2nd Prize Winners @ Prakalp Project Expo! Out of 100+ competing teams across colleges, Team OG (Uma Sai Pavan, Mohan Siva, Prashanth) from 3/4 CSD, SRKR Engineering College, proudly secured 2nd place and won a ₹10,000 cash prize at Ramachandra College of Engineering, Eluru.",
+        images: [
+            "assets/achievements/prakalp-project-expo-2024-team-og-1.jpg",
+            "assets/achievements/prakalp-project-expo-2024-team-og-2.jpg",
+            "assets/achievements/prakalp-project-expo-2024-team-og-3.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-medal", text: "🥈 2nd Prize Winner" },
+            { icon: "fas fa-project-diagram", text: "Prakalp Expo" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹10,000 Cash Award" },
+            { icon: "fas fa-users", text: "100+ Teams" },
+            { icon: "fas fa-user-graduate", text: "3/4 CSD" }
         ]
     },
     {
@@ -551,7 +577,7 @@ let currentLightboxModal = null;
 const cardSlideshowTimers = {};
 
 document.addEventListener('DOMContentLoaded', function() {
-    renderAchievements('hackathons');
+    renderAchievements('all');
     
     // Lightbox modal instance
     const modalEl = document.getElementById('achievementLightboxModal');
@@ -659,7 +685,7 @@ function renderAchievements(selectedCategory = 'all') {
                 <!-- Category Tag -->
                 <div class="mb-2">
                     <span class="badge bg-warning-subtle text-warning-emphasis fw-bold rounded-pill px-2.5 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">
-                        HACKATHON • ${item.stage || '24 HOURS'}
+                        ${item.categoryName.toUpperCase()} • ${item.stage || 'GRAND FINALE'}
                     </span>
                 </div>
 
