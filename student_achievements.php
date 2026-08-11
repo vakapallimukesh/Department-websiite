@@ -882,7 +882,7 @@ function renderCardHtml(item) {
                     <span class="top-photo-badge">${item.award}</span>
                     
                     ${item.isVideo ? `
-                        <video src="${item.video}" controls preload="metadata" style="width:100%; height:100%; object-fit:cover; border-radius:14px;" onclick="openLightbox('${item.id}', 0)"></video>
+                        <video src="${item.video}" autoplay loop muted playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; border-radius:14px; pointer-events:none;"></video>
                         <span class="bottom-photo-count"><i class="fas fa-video me-1 text-warning"></i> Promo Video</span>
                     ` : `
                         <img id="activeMainImg-${item.id}" src="${item.images[0]}" alt="${item.title}" loading="lazy" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
