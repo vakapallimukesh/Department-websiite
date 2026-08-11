@@ -9,28 +9,29 @@ include "./head.php";
 
 <style>
 :root {
-    --primary: #d97706;
-    --primary-light: #f59e0b;
-    --amber-gold: #d97706;
-    --rich-espresso: #1a0d06;
-    --cream-white: #fdfbf7;
-    --text-primary: #1a0d06;
-    --text-secondary: #6f5f54;
-    --border-light: #f3eae1;
+    --primary-amber: #d97706;
+    --amber-light: #fffbeb;
+    --amber-border: #fde68a;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --bg-page: #f8fafc;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
 }
 
 body {
     font-family: 'Inter', sans-serif;
-    background: #fdfbf7;
-    color: #1a0d06;
+    background: var(--bg-page);
+    color: var(--text-dark);
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* Hero Banner */
 .hero-banner {
-    background: linear-gradient(135deg, #1a0d06 0%, #2a150a 50%, #3d1e0e 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
     color: white;
-    padding: 85px 20px 65px;
+    padding: 75px 20px 60px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -40,291 +41,245 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(230, 194, 128, 0.15) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(245, 158, 11, 0.12) 1px, transparent 1px);
     background-size: 24px 24px;
-    opacity: 0.6;
+    opacity: 0.7;
     pointer-events: none;
 }
 
 .hero-tag {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #f59e0b;
     background: rgba(245, 158, 11, 0.12);
-    padding: 6px 18px;
+    padding: 6px 16px;
     border-radius: 999px;
     display: inline-block;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
     border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .hero-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 3.2rem;
+    font-size: 3rem;
     font-weight: 900;
     line-height: 1.15;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .hero-title span {
     color: #f59e0b;
 }
 
-/* Stats Highlight */
+/* Stats Highlight Bar */
 .stat-card {
     background: #ffffff;
-    border: 1px solid #f3eae1;
-    border-radius: 20px;
-    padding: 25px;
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 22px 18px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(180, 83, 9, 0.06);
-    transition: transform 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: all 0.25s ease;
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
-    border-color: #d97706;
+    transform: translateY(-4px);
+    border-color: var(--primary-amber);
+    box-shadow: 0 10px 25px rgba(217, 119, 6, 0.1);
 }
 
 .stat-number {
     font-family: 'Outfit', sans-serif;
-    font-size: 2.5rem;
+    font-size: 2.3rem;
     font-weight: 900;
-    color: #d97706;
+    color: var(--primary-amber);
 }
 
 .stat-label {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: #1a0d06;
+    color: var(--text-dark);
     margin-top: 4px;
 }
 
-/* Category Filter Tabs */
+/* Category Filter Pills */
 .category-filter-btn {
-    border: 1.5px solid #f3eae1;
+    border: 1px solid #cbd5e1;
     background: #ffffff;
-    color: #6f5f54;
+    color: #475569;
     font-weight: 600;
-    font-size: 0.9rem;
-    padding: 9px 20px;
+    font-size: 0.88rem;
+    padding: 8px 18px;
     border-radius: 999px;
     transition: all 0.25s ease;
     white-space: nowrap;
 }
 
 .category-filter-btn:hover, .category-filter-btn.active {
-    background: #d97706;
+    background: var(--primary-amber);
     color: #ffffff;
-    border-color: #d97706;
-    box-shadow: 0 6px 18px rgba(217, 119, 6, 0.25);
+    border-color: var(--primary-amber);
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
 }
 
-/* Featured Side-by-Side Achievement Card Styling */
-.featured-achievement-card-side {
+/* Clean Editorial Achievement Card */
+.editorial-card {
     background: #ffffff;
-    border: 1.5px solid #f3eae1;
-    border-top: 6px solid #d97706;
-    border-radius: 28px;
-    padding: 28px;
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 24px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 16px 45px rgba(180, 83, 9, 0.08);
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    overflow: hidden;
 }
 
-.featured-achievement-card-side:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 24px 60px rgba(217, 119, 6, 0.18);
-    border-color: #f59e0b;
+.editorial-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
 }
 
-/* Dynamic Interactive Gallery Styling */
-.achievement-gallery-main {
+/* Crisp HD Image Frame */
+.editorial-img-container {
     position: relative;
-    border-radius: 20px;
+    border-radius: 14px;
     overflow: hidden;
-    background: #1a0d06;
-    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.16);
-    cursor: pointer;
+    background: #0f172a;
     aspect-ratio: 16/10;
-    perspective: 1000px;
-    transform-style: preserve-3d;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 20px;
 }
 
-.achievement-gallery-main img {
+.editorial-img-container img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
-    animation: kenBurnsZoom 10s ease-in-out infinite alternate;
+    object-position: center;
+    image-rendering: -webkit-optimize-contrast;
+    transition: transform 0.4s ease;
 }
 
-.achievement-gallery-main.animating img {
-    animation: imgFadeInZoom 0.55s ease-out forwards;
+.editorial-img-container:hover img {
+    transform: scale(1.03);
 }
 
-@keyframes kenBurnsZoom {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.06) translate(-1%, -1%); }
-    100% { transform: scale(1.02); }
-}
-
-@keyframes imgFadeInZoom {
-    0% { opacity: 0.3; transform: scale(1.08); }
-    100% { opacity: 1; transform: scale(1); }
-}
-
-.gallery-hover-overlay {
+.editorial-img-overlay {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, rgba(217, 119, 6, 0.2), rgba(26, 13, 6, 0.6));
+    background: rgba(15, 23, 42, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.35s ease;
-    backdrop-filter: blur(3px);
-    z-index: 5;
+    transition: opacity 0.3s ease;
 }
 
-.achievement-gallery-main:hover .gallery-hover-overlay {
+.editorial-img-container:hover .editorial-img-overlay {
     opacity: 1;
 }
 
-/* Floating Sparkle Particles */
-.sparkle-dot {
+/* Photo Badges Overlay */
+.top-photo-badge {
     position: absolute;
-    width: 6px;
-    height: 6px;
-    background: #f59e0b;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #f59e0b;
-    pointer-events: none;
-    animation: floatSparkle 3s infinite ease-in-out;
-    z-index: 6;
+    top: 12px;
+    left: 12px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #0f172a;
+    font-weight: 800;
+    font-size: 0.78rem;
+    padding: 5px 12px;
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(4px);
+    z-index: 2;
 }
 
-.sparkle-dot:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
-.sparkle-dot:nth-child(2) { top: 70%; right: 15%; animation-delay: 1s; }
-.sparkle-dot:nth-child(3) { bottom: 20%; left: 25%; animation-delay: 2s; }
-
-@keyframes floatSparkle {
-    0%, 100% { transform: translateY(0) scale(0.8); opacity: 0.3; }
-    50% { transform: translateY(-12px) scale(1.4); opacity: 1; }
-}
-
-.gallery-thumbnail {
-    width: 75px;
-    height: 54px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 2.5px solid transparent;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    opacity: 0.7;
-    position: relative;
-}
-
-.gallery-thumbnail.active, .gallery-thumbnail:hover {
-    border-color: #d97706;
-    opacity: 1;
-    transform: scale(1.08);
-    box-shadow: 0 6px 16px rgba(217, 119, 6, 0.3);
-}
-
-.gallery-thumbnail.active::after {
-    content: '✓';
+.bottom-photo-count {
     position: absolute;
-    top: 3px;
-    right: 3px;
-    background: #d97706;
-    color: white;
-    font-size: 0.6rem;
-    font-weight: 900;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(15, 23, 42, 0.75);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+    z-index: 2;
+}
+
+/* Thumbnail Strip */
+.editorial-thumb-strip {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    gap: 8px;
+    margin-bottom: 18px;
 }
 
-.gallery-thumbnail img {
+.editorial-thumb {
+    width: 60px;
+    height: 42px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+}
+
+.editorial-thumb.active, .editorial-thumb:hover {
+    border-color: var(--primary-amber);
+    opacity: 1;
+}
+
+.editorial-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-/* Cash Award Spotlight Box */
-.cash-award-spotlight {
-    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-    border: 1.5px solid #fde68a;
-    border-radius: 18px;
-    padding: 16px 20px;
-    position: relative;
-    overflow: hidden;
+/* Cash Award Badge Box */
+.editorial-award-box {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.cash-award-spotlight::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
-    height: 200%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transform: rotate(30deg);
-    animation: shimmer 3s infinite;
+.editorial-award-amount {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: #b45309;
 }
 
-@keyframes shimmer {
-    0% { transform: translateX(-100%) rotate(30deg); }
-    100% { transform: translateX(200%) rotate(30deg); }
-}
-
-/* Badge Styling */
-.info-badge-item {
-    background: #fdfbf7;
-    border: 1px solid #f3eae1;
-    border-radius: 12px;
-    padding: 8px 14px;
-    font-size: 0.82rem;
+/* Minimal Badge Item */
+.mini-badge {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 0.78rem;
     font-weight: 600;
-    color: #1a0d06;
+    color: #334155;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    transition: all 0.2s ease;
-}
-
-.info-badge-item:hover {
-    background: #ffffff;
-    border-color: #d97706;
-    transform: translateY(-2px);
-}
-
-/* Pulse animation for trophy badge */
-.badge-pulse {
-    animation: pulse-glow 2s infinite;
-}
-
-@keyframes pulse-glow {
-    0% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(217, 119, 6, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+    gap: 5px;
 }
 
 /* Lightbox Modal */
 .lightbox-modal-body {
     position: relative;
-    background: #0d0603;
+    background: #020617;
     padding: 0;
     display: flex;
     align-items: center;
@@ -333,33 +288,32 @@ body {
 }
 
 .lightbox-img {
-    max-height: 80vh;
+    max-height: 82vh;
     max-width: 100%;
     object-fit: contain;
-    transition: transform 0.4s ease, opacity 0.3s ease;
 }
 
 .lightbox-nav-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     color: white;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     transition: all 0.25s ease;
     backdrop-filter: blur(4px);
     z-index: 10;
 }
 
 .lightbox-nav-btn:hover {
-    background: rgba(217, 119, 6, 0.9);
+    background: var(--primary-amber);
     color: white;
 }
 
@@ -374,16 +328,16 @@ body {
     <div class="container position-relative z-1">
         <span class="hero-tag"><i class="fas fa-trophy me-2"></i> Student Hall of Fame</span>
         <h1 class="hero-title">Student <span>Achievements</span></h1>
-        <p class="lead mx-auto" style="max-width: 680px; color: #e5d5c5; font-size: 1.15rem; line-height: 1.6;">
+        <p class="lead mx-auto" style="max-width: 680px; color: #cbd5e1; font-size: 1.1rem; line-height: 1.6;">
             Celebrating national hackathon winners, research authors, competitive coders, and student leaders in CSD & CSIT departments.
         </p>
     </div>
 </section>
 
-<!-- Stats Highlight -->
-<section class="py-5">
+<!-- Stats Highlight Bar -->
+<section class="py-4 bg-white border-bottom">
     <div class="container">
-        <div class="row g-4">
+        <div class="row g-3">
             <div class="col-6 col-md-3">
                 <div class="stat-card">
                     <div class="stat-number">45+</div>
@@ -412,17 +366,17 @@ body {
     </div>
 </section>
 
-<!-- Featured Student Achievements Section -->
-<section class="py-5" style="background: #ffffff; border-top: 1px solid #f3eae1; border-bottom: 1px solid #f3eae1;">
-    <div class="container py-3">
+<!-- Main Student Achievements Section -->
+<section class="py-5" style="background: #f8fafc;">
+    <div class="container py-2">
         <!-- Section Header -->
         <div class="text-center mb-4">
             <span class="hero-tag" style="background: rgba(217, 119, 6, 0.08); color: #d97706; border-color: rgba(217, 119, 6, 0.2);">Excellence Showcase</span>
-            <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; color: #1a0d06;">Featured <span style="color: #d97706;">Student Achievements</span></h2>
-            <p style="color: #6f5f54; font-size: 1.05rem; max-width: 620px; margin: 0 auto;">Recognizing outstanding student accomplishments across national hackathons, technical contests, and research events.</p>
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.6rem; font-weight: 800; color: #0f172a;">Featured <span style="color: #d97706;">Student Achievements</span></h2>
+            <p style="color: #64748b; font-size: 1.02rem; max-width: 600px; margin: 0 auto;">Recognizing outstanding student accomplishments across national hackathons, technical contests, and research events.</p>
         </div>
 
-        <!-- Category Filter Tabs Bar -->
+        <!-- Category Filter Pills Bar -->
         <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-5 px-2">
             <button class="category-filter-btn" data-category="all">🌟 All Achievements</button>
             <button class="category-filter-btn active" data-category="hackathons">🏆 Hackathons</button>
@@ -433,20 +387,20 @@ body {
             <button class="category-filter-btn" data-category="conferences">🎤 Conferences</button>
         </div>
 
-        <!-- Side-by-Side Achievements Container -->
+        <!-- Achievements Grid Container (Desktop 3-col, Tablet 2-col, Mobile 1-col) -->
         <div id="achievementsContainer">
-            <!-- Dynamic side-by-side achievement cards rendered here -->
+            <!-- Rendered by JS -->
         </div>
     </div>
 </section>
 
-<!-- Fullscreen Image Lightbox Modal -->
+<!-- Lightbox Modal -->
 <div class="modal fade" id="achievementLightboxModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content border-0 overflow-hidden rounded-4 shadow-lg">
             <div class="modal-header border-0 bg-dark text-white p-3 d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-bold" id="lightboxCategoryBadge">HACKATHON ACHIEVEMENT</span>
+                    <span class="badge bg-warning text-dark px-3 py-1 rounded-pill fw-bold" id="lightboxCategoryBadge">HACKATHON ACHIEVEMENT</span>
                     <span class="small text-muted" id="lightboxCounter">Image 1 of 1</span>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -469,31 +423,29 @@ body {
 </div>
 
 <script>
-// Data Structure for Student Achievements
+// Student Achievements Data Store
 const studentAchievements = [
     {
         id: "quantum-valley-2025",
         title: "1st Place — Amaravati Quantum Valley Hackathon 2025",
         event: "Amaravati Quantum Valley Hackathon 2025",
         category: "hackathons",
-        categoryName: "Hackathon Achievement",
-        categoryIcon: "fa-trophy",
+        categoryName: "Hackathon",
         team: "Team Entangled Coders",
         award: "🥇 1st Place",
         cashAward: "₹50,000",
         stage: "Grand Finale",
-        department: "Department of CSD & CSIT, SRKR Engineering College",
+        department: "Department of CSD & CSIT",
         description: "Proud moment for Team Entangled Coders from the Department of CSD & CSIT, SRKR Engineering College, for securing 1st Place at the Amaravati Quantum Valley Hackathon 2025 – Grand Finale. Their innovation, teamwork, and dedication earned them the top honor along with a ₹50,000 Cash Award.",
         images: [
             "assets/achievements/quantum-valley-2025-team-entangled-coders-1.jpg"
         ],
         featured: true,
         badges: [
-            { icon: "fas fa-medal", text: "🥇 1st Place", colorClass: "bg-warning text-dark" },
-            { icon: "fas fa-laptop-code", text: "Hackathon", colorClass: "bg-primary text-white" },
-            { icon: "fas fa-indian-rupee-sign", text: "₹50,000 Cash Award", colorClass: "bg-success text-white" },
-            { icon: "fas fa-flag-checkered", text: "Grand Finale", colorClass: "bg-danger text-white" },
-            { icon: "fas fa-rocket", text: "Innovation Honor", colorClass: "bg-info text-dark" }
+            { icon: "fas fa-medal", text: "🥇 1st Place Winner" },
+            { icon: "fas fa-laptop-code", text: "Hackathon" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹50,000 Cash Award" },
+            { icon: "fas fa-flag-checkered", text: "Grand Finale" }
         ]
     },
     {
@@ -501,27 +453,25 @@ const studentAchievements = [
         title: "Distinguished Performer Award — Smart India Hackathon 2025",
         event: "Smart India Hackathon 2025",
         category: "hackathons",
-        categoryName: "Hackathon Achievement",
-        categoryIcon: "fa-trophy",
+        categoryName: "Hackathon",
         team: "Team Ujjval",
-        award: "Distinguished Performer",
+        award: "🏆 Distinguished Performer",
         cashAward: "₹25,000",
-        date: "8th & 9th December 2025",
+        date: "8th & 9th Dec 2025",
         duration: "36 Hours",
-        department: "Department of CSD & CSIT, SRKR Engineering College",
-        description: "Congratulations to Team Ujjval! A proud achievement for the Department of CSD & CSIT, SRKR Engineering College, as Team Ujjval receives the Distinguished Performer Award at the Smart India Hackathon 2025 Grand Finale. Their outstanding performance, innovative thinking, and relentless efforts were recognized with a ₹25,000 cash award.",
+        department: "Department of CSD & CSIT",
+        description: "Congratulations to Team Ujjval! A proud achievement for the Department of CSD & CSIT, SRKR Engineering College, as Team Ujjval receives the Distinguished Performer Award at the Smart India Hackathon 2025 Grand Finale. Their outstanding performance and innovative thinking were recognized with a ₹25,000 cash award.",
         images: [
             "assets/achievements/sih-2025-team-ujjval-1.jpg",
             "assets/achievements/sih-2025-team-ujjval-2.jpg"
         ],
         featured: true,
         badges: [
-            { icon: "fas fa-trophy", text: "Distinguished Performer", colorClass: "bg-warning text-dark" },
-            { icon: "fas fa-laptop-code", text: "Hackathon", colorClass: "bg-primary text-white" },
-            { icon: "fas fa-indian-rupee-sign", text: "₹25,000 Cash Award", colorClass: "bg-success text-white" },
-            { icon: "fas fa-clock", text: "36 Hours", colorClass: "bg-info text-dark" },
-            { icon: "fas fa-calendar-alt", text: "8th & 9th Dec 2025", colorClass: "bg-secondary text-white" },
-            { icon: "fas fa-flag-checkered", text: "Grand Finale", colorClass: "bg-danger text-white" }
+            { icon: "fas fa-trophy", text: "Distinguished Performer" },
+            { icon: "fas fa-laptop-code", text: "Hackathon" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹25,000 Cash Award" },
+            { icon: "fas fa-clock", text: "36 Hours" },
+            { icon: "fas fa-flag-checkered", text: "Grand Finale" }
         ]
     }
 ];
@@ -529,7 +479,6 @@ const studentAchievements = [
 let activeLightboxImages = [];
 let activeImageIndex = 0;
 let currentLightboxModal = null;
-let autoSlideshowInterval = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     renderAchievements('hackathons');
@@ -538,18 +487,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalEl = document.getElementById('achievementLightboxModal');
     currentLightboxModal = new bootstrap.Modal(modalEl);
 
-    // Lightbox Controls
+    // Controls
     document.getElementById('lightboxPrevBtn').addEventListener('click', showPrevImage);
     document.getElementById('lightboxNextBtn').addEventListener('click', showNextImage);
 
-    // Keyboard accessibility for Lightbox
+    // Keyboard navigation
     document.addEventListener('keydown', function(e) {
         if (!modalEl.classList.contains('show')) return;
         if (e.key === 'ArrowLeft') showPrevImage();
         if (e.key === 'ArrowRight') showNextImage();
     });
 
-    // Category Filter Click Event
+    // Category Filter Event
     document.querySelectorAll('.category-filter-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.category-filter-btn').forEach(b => b.classList.remove('active'));
@@ -563,11 +512,6 @@ document.addEventListener('DOMContentLoaded', function() {
 function renderAchievements(selectedCategory = 'all') {
     const container = document.getElementById('achievementsContainer');
     container.innerHTML = '';
-    
-    if (autoSlideshowInterval) {
-        clearInterval(autoSlideshowInterval);
-        autoSlideshowInterval = null;
-    }
 
     const filtered = selectedCategory === 'all' 
         ? studentAchievements 
@@ -576,13 +520,11 @@ function renderAchievements(selectedCategory = 'all') {
     if (filtered.length === 0) {
         container.innerHTML = `
             <div class="row g-4 justify-content-center">
-                <div class="col-12 text-center py-4">
-                    <div class="p-5 rounded-4 shadow-sm bg-white border border-light d-inline-block mx-auto" style="max-width: 550px;">
-                        <div class="mx-auto mb-3" style="width: 70px; height: 70px; font-size: 1.8rem; background: rgba(217, 119, 6, 0.1); color: #d97706; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <h4 class="fw-bold text-dark font-outfit mb-2">No Achievements in this Category</h4>
-                        <p class="text-secondary small mb-0">More student awards and accomplishments in this category will be updated soon.</p>
+                <div class="col-12 text-center py-5">
+                    <div class="p-5 rounded-4 bg-white border border-light d-inline-block mx-auto" style="max-width: 500px;">
+                        <div class="mx-auto mb-3 text-warning fs-1"><i class="fas fa-trophy"></i></div>
+                        <h4 class="fw-bold text-dark font-outfit mb-2">No Achievements Listed</h4>
+                        <p class="text-muted small mb-0">Student awards and accomplishments in this category will be updated soon.</p>
                     </div>
                 </div>
             </div>
@@ -590,108 +532,76 @@ function renderAchievements(selectedCategory = 'all') {
         return;
     }
 
-    // Render Side-by-Side Row Grid Layout
+    // Grid Layout: 3 columns on Desktop (col-lg-4), 2 on Tablet (col-md-6), 1 on Mobile (col-12)
     const rowGrid = document.createElement('div');
     rowGrid.className = 'row g-4 align-items-stretch';
 
     filtered.forEach(item => {
         const colCard = document.createElement('div');
-        colCard.className = 'col-lg-6 d-flex';
+        colCard.className = 'col-lg-4 col-md-6 col-12 d-flex';
 
         colCard.innerHTML = `
-            <div class="featured-achievement-card-side w-100">
-                <!-- Top Main Animated Gallery -->
-                <div class="achievement-gallery-main mb-3" id="mainGalleryBox-${item.id}" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
-                    <span class="sparkle-dot"></span>
-                    <span class="sparkle-dot"></span>
-                    <span class="sparkle-dot"></span>
+            <div class="editorial-card w-100">
+                <!-- HD Image Container -->
+                <div class="editorial-img-container" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
+                    <span class="top-photo-badge">${item.award}</span>
                     <img id="activeMainImg-${item.id}" src="${item.images[0]}" alt="${item.title}" loading="lazy">
-                    <div class="gallery-hover-overlay">
-                        <span class="btn btn-light rounded-pill px-4 py-2 fw-bold shadow-sm">
-                            <i class="fas fa-search-plus me-2 text-warning"></i> View Full Image
+                    <div class="editorial-img-overlay">
+                        <span class="btn btn-light rounded-pill px-3 py-1.5 fw-bold text-dark small shadow-sm">
+                            <i class="fas fa-search-plus me-1 text-warning"></i> View Photo
                         </span>
                     </div>
-                    <div class="position-absolute top-0 start-0 p-3 d-flex gap-2" style="z-index: 6;">
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold shadow-sm" style="font-size: 0.82rem;">
-                            ${item.award}
-                        </span>
-                    </div>
-                    <div class="position-absolute bottom-0 end-0 p-3" style="z-index: 6;">
-                        <span class="badge bg-dark bg-opacity-75 text-white px-3 py-1.5 rounded-pill small" style="backdrop-filter: blur(4px);">
-                            <i class="fas fa-images me-1"></i> ${item.images.length} Photo${item.images.length > 1 ? 's' : ''}
-                        </span>
-                    </div>
+                    ${item.images.length > 1 ? `<span class="bottom-photo-count"><i class="fas fa-images me-1"></i> ${item.images.length} Photos</span>` : ''}
                 </div>
 
                 ${item.images.length > 1 ? `
                     <!-- Thumbnail Strip -->
-                    <div class="d-flex align-items-center justify-content-start gap-2 mb-3">
+                    <div class="editorial-thumb-strip">
                         ${item.images.map((imgSrc, idx) => `
-                            <div class="gallery-thumbnail ${idx === 0 ? 'active' : ''}" id="thumb-${item.id}-${idx}" onclick="switchGalleryImg('${item.id}', ${idx})">
-                                <img src="${imgSrc}" alt="Thumbnail ${idx + 1}">
+                            <div class="editorial-thumb ${idx === 0 ? 'active' : ''}" id="thumb-${item.id}-${idx}" onclick="switchGalleryImg('${item.id}', ${idx})">
+                                <img src="${imgSrc}" alt="Thumb ${idx + 1}">
                             </div>
                         `).join('')}
-                        <span class="small text-muted ms-2"><i class="fas fa-magic me-1 text-warning"></i> Auto Slideshow & 3D Tilt</span>
                     </div>
-                ` : `
-                    <div class="text-start mb-3">
-                        <span class="small text-muted"><i class="fas fa-hand-pointer me-1 text-warning"></i> Click image to open Fullscreen Lightbox</span>
-                    </div>
-                `}
+                ` : ''}
 
-                <!-- Achievement Header Badges -->
-                <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
-                    <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-bold badge-pulse" style="font-size: 0.78rem; letter-spacing: 0.5px;">
-                        ${item.award}
-                    </span>
-                    <span class="badge bg-danger text-white px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.78rem;">
-                        🎯 GRAND FINALE
-                    </span>
-                    <span class="badge bg-primary text-white px-3 py-1.5 rounded-pill fw-semibold" style="font-size: 0.78rem;">
-                        <i class="fas fa-laptop-code me-1"></i> Hackathon
+                <!-- Category Tag -->
+                <div class="mb-2">
+                    <span class="badge bg-warning-subtle text-warning-emphasis fw-bold rounded-pill px-2.5 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">
+                        HACKATHON • ${item.stage || 'GRAND FINALE'}
                     </span>
                 </div>
 
-                <!-- Title & Team -->
-                <h3 class="font-outfit fw-bold text-dark mb-2" style="font-size: 1.65rem; line-height: 1.3;">
-                    ${item.title}
+                <!-- Card Title -->
+                <h3 class="font-outfit fw-bold text-dark mb-2" style="font-size: 1.22rem; line-height: 1.35;">
+                    ${item.event}
                 </h3>
-                
+
+                <!-- Team & Dept -->
                 <div class="d-flex align-items-center gap-2 mb-3">
-                    <span class="fw-bold text-warning fs-6"><i class="fas fa-users me-1"></i> ${item.team}</span>
+                    <span class="fw-bold text-warning small text-truncate"><i class="fas fa-users me-1"></i> ${item.team}</span>
                     <span class="text-muted">•</span>
-                    <span class="fw-semibold text-secondary small"><i class="fas fa-university me-1"></i> CSD & CSIT</span>
+                    <span class="text-secondary small text-truncate"><i class="fas fa-university me-1"></i> ${item.department}</span>
                 </div>
 
-                <!-- Cash Award Spotlight -->
-                <div class="cash-award-spotlight mb-3">
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 position-relative z-1">
-                        <div class="d-flex align-items-center gap-2.5">
-                            <div class="bg-warning text-dark p-2.5 rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 42px; height: 42px;">
-                                <i class="fas fa-gift fs-5"></i>
-                            </div>
-                            <div>
-                                <span class="text-uppercase small fw-bold text-secondary d-block" style="letter-spacing: 0.8px; font-size: 0.7rem;">Cash Award Received</span>
-                                <h4 class="fw-extrabold text-dark mb-0 font-outfit" style="color: #b45309 !important; font-size: 1.45rem;">${item.cashAward}</h4>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="badge bg-dark text-white px-2.5 py-1.5 rounded-pill fw-bold" style="font-size: 0.75rem;">
-                                🏆 ${item.stage || item.duration || 'Grand Finale'}
-                            </span>
-                        </div>
+                <!-- Cash Award Spotlight Box -->
+                <div class="editorial-award-box">
+                    <div>
+                        <span class="text-uppercase text-muted d-block fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">Cash Prize</span>
+                        <div class="editorial-award-amount">${item.cashAward}</div>
                     </div>
+                    <span class="badge bg-dark text-white rounded-pill px-3 py-1.5 small fw-bold">${item.award}</span>
                 </div>
 
                 <!-- Description -->
-                <p class="text-secondary mb-4 flex-grow-1" style="font-size: 0.96rem; line-height: 1.65;">
+                <p class="text-secondary small mb-3 flex-grow-1" style="line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
                     ${item.description}
                 </p>
 
-                <!-- Information Badges Grid -->
-                <div class="d-flex flex-wrap gap-2 pt-3 border-top mt-auto">
+                <!-- Footer Metadata Pills -->
+                <div class="d-flex flex-wrap gap-1.5 pt-3 border-top mt-auto">
                     ${item.badges.map(b => `
-                        <div class="info-badge-item">
+                        <div class="mini-badge">
                             <i class="${b.icon} text-warning"></i> ${b.text}
                         </div>
                     `).join('')}
@@ -703,11 +613,6 @@ function renderAchievements(selectedCategory = 'all') {
     });
 
     container.appendChild(rowGrid);
-
-    // Setup Interactive 3D Tilt Effect and Auto Slideshow for each item
-    filtered.forEach(item => {
-        setupInteractiveGallery(item.id, item.images);
-    });
 }
 
 const currentIdxMap = {};
@@ -716,51 +621,14 @@ function getCurrentIdx(itemId) {
     return currentIdxMap[itemId] || 0;
 }
 
-function setupInteractiveGallery(itemId, images) {
-    let currentIdx = 0;
-    currentIdxMap[itemId] = 0;
-
-    // Auto slideshow if multiple images exist
-    if (images.length > 1) {
-        autoSlideshowInterval = setInterval(() => {
-            currentIdx = (currentIdx + 1) % images.length;
-            switchGalleryImg(itemId, currentIdx, true);
-        }, 4500);
-    }
-
-    // 3D Parallax Tilt Effect on Mousemove
-    const galleryEl = document.getElementById(`mainGalleryBox-${itemId}`);
-    if (galleryEl) {
-        galleryEl.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            const rotateX = (-y / rect.height) * 10;
-            const rotateY = (x / rect.width) * 10;
-            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-        });
-
-        galleryEl.addEventListener('mouseleave', function() {
-            this.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-        });
-    }
-}
-
-function switchGalleryImg(itemId, index, isAuto = false) {
+function switchGalleryImg(itemId, index) {
     const item = studentAchievements.find(a => a.id === itemId);
     if (!item) return;
 
     currentIdxMap[itemId] = index;
-    const galleryEl = document.getElementById(`mainGalleryBox-${itemId}`);
     const mainImg = document.getElementById(`activeMainImg-${itemId}`);
+    if (mainImg) mainImg.src = item.images[index];
 
-    if (mainImg) {
-        galleryEl.classList.remove('animating');
-        void galleryEl.offsetWidth; // Trigger reflow for animation reset
-        mainImg.src = item.images[index];
-        galleryEl.classList.add('animating');
-    }
-    
     item.images.forEach((_, idx) => {
         const thumb = document.getElementById(`thumb-${itemId}-${idx}`);
         if (thumb) {
