@@ -516,6 +516,17 @@ include "connect.php";
                 'section' => 'Section B',
                 'image' => 'public/images/cr/s-d-rani.jpg',
                 'badgeColor' => 'bg-danger'
+            ],
+            [
+                'id' => 'cr-14',
+                'name' => 'PULAVARTHI MOHANA MADHU LASYA SRI',
+                'registrationNumber' => '25B95A6208',
+                'className' => 'CSD - III Year',
+                'branch' => 'CSD',
+                'year' => 'III Year',
+                'section' => '',
+                'image' => 'public/images/cr/pulavarthi-mohana-madhu-lasya-sri.jpg',
+                'badgeColor' => 'bg-warning text-dark'
             ]
         ];
 
@@ -541,6 +552,30 @@ include "connect.php";
                 'year' => 'IV Year',
                 'section' => '',
                 'image' => 'public/images/cr/p-swapna.jpg',
+                'badgeColor' => 'bg-purple text-white',
+                'customBadgeStyle' => 'background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);'
+            ],
+            [
+                'id' => 'cr-12',
+                'name' => 'R DIVYA JYOTHIKA',
+                'registrationNumber' => '23B91A0747',
+                'className' => 'CSIT - IV Year',
+                'branch' => 'CSIT',
+                'year' => 'IV Year',
+                'section' => '',
+                'image' => 'public/images/cr/r-divya-jyothika.jpg',
+                'badgeColor' => 'bg-purple text-white',
+                'customBadgeStyle' => 'background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);'
+            ],
+            [
+                'id' => 'cr-13',
+                'name' => 'CH SAI VIKAS',
+                'registrationNumber' => '23B91A0706',
+                'className' => 'CSIT - IV Year',
+                'branch' => 'CSIT',
+                'year' => 'IV Year',
+                'section' => '',
+                'image' => 'public/images/cr/ch-sai-vikas.jpg',
                 'badgeColor' => 'bg-purple text-white',
                 'customBadgeStyle' => 'background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);'
             ]
@@ -605,7 +640,7 @@ include "connect.php";
                 <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 44px; height: 44px; font-size: 1.1rem;">3rd</div>
                 <div>
                     <h3 class="fw-extrabold text-dark font-outfit mb-0" style="font-size: 1.6rem;">3rd Year Class Representatives</h3>
-                    <p class="text-muted small mb-0">CSIT Section A & CSIT Section B Representatives</p>
+                    <p class="text-muted small mb-0">CSIT Section A, CSIT Section B & CSD III Year Representatives</p>
                 </div>
             </div>
 
@@ -659,7 +694,7 @@ include "connect.php";
                 <div class="text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 44px; height: 44px; font-size: 1.1rem; background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);">4th</div>
                 <div>
                     <h3 class="fw-extrabold text-dark font-outfit mb-0" style="font-size: 1.6rem;">4th Year Class Representatives</h3>
-                    <p class="text-muted small mb-0">CSD IV Year Class Representatives</p>
+                    <p class="text-muted small mb-0">CSD IV Year & CSIT IV Year Class Representatives</p>
                 </div>
             </div>
 

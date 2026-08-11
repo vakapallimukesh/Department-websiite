@@ -101,6 +101,15 @@ export const classRepresentatives: ClassRepresentative[] = [
     section: "Section B",
     image: "public/images/cr/s-d-rani.jpg"
   },
+  {
+    id: "cr-14",
+    name: "PULAVARTHI MOHANA MADHU LASYA SRI",
+    registrationNumber: "25B95A6208",
+    className: "CSD - III Year",
+    branch: "CSD",
+    year: "III Year",
+    image: "public/images/cr/pulavarthi-mohana-madhu-lasya-sri.jpg"
+  },
 
   // 4th Year Class Representatives
   {
@@ -122,5 +131,25 @@ export const classRepresentatives: ClassRepresentative[] = [
     branch: "CSD",
     year: "IV Year",
     image: "public/images/cr/p-swapna.jpg"
+  },
+  {
+    id: "cr-12",
+    name: "R DIVYA JYOTHIKA",
+    registrationNumber: "23B91A0747",
+    phone: "8184923793",
+    className: "CSIT - IV Year",
+    branch: "CSIT",
+    year: "IV Year",
+    image: "public/images/cr/r-divya-jyothika.jpg"
+  },
+  {
+    id: "cr-13",
+    name: "CH SAI VIKAS",
+    registrationNumber: "23B91A0706",
+    phone: "7989001874",
+    className: "CSIT - IV Year",
+    branch: "CSIT",
+    year: "IV Year",
+    image: "public/images/cr/ch-sai-vikas.jpg"
   }
 ];
