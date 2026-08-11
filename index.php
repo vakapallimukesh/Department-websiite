@@ -1933,11 +1933,15 @@ include "./head.php";
                                 <span style="background: rgba(225, 29, 72, 0.10); color: #be123c; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 12px; font-family: 'Outfit', sans-serif; border: 1px solid rgba(225, 29, 72, 0.25);">UPCOMING</span>
                             </div>
 
-                            <!-- Glassy Reddish Title Box -->
+                            <!-- Glassy Reddish Title & Poster Box -->
                             <div style="background: linear-gradient(135deg, rgba(255, 241, 242, 0.85) 0%, rgba(254, 226, 226, 0.6) 100%); border: 1px solid rgba(244, 63, 94, 0.25); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px 20px; box-shadow: 0 4px 14px rgba(225, 29, 72, 0.06);">
-                                <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.3rem; color: #9f1239; margin: 0; line-height: 1.3;">
+                                <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.25rem; color: #9f1239; margin: 0 0 12px 0; line-height: 1.3;">
                                     "Irumudi" Trailer Launch Event
                                 </h4>
+                                <!-- Event Poster Image (Full Poster & Hero Face Visible) -->
+                                <div style="position: relative; border-radius: 12px; overflow: hidden; height: 260px; background: linear-gradient(180deg, #180509 0%, #2a0b14 100%); box-shadow: 0 6px 18px rgba(159, 18, 57, 0.15); border: 1px solid rgba(244, 63, 94, 0.2); display: flex; align-items: center; justify-content: center;">
+                                    <img src="assets/images/irumudi_poster.jpg" alt="Irumudi Trailer Launch Event Poster" style="max-width: 100%; max-height: 100%; width: auto; height: 100%; object-fit: contain; display: block; border-radius: 8px;">
+                                </div>
                             </div>
                         </div>
 
