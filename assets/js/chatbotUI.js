@@ -66,6 +66,9 @@
         windowEl.classList.add('active');
         triggerBtn.classList.add('active');
         triggerBtn.setAttribute('aria-expanded', 'true');
+        if (!bodyEl.children || bodyEl.children.length === 0) {
+            renderWelcomeMessage();
+        }
         setTimeout(() => inputEl.focus(), 300);
         scrollToBottom();
     }
@@ -87,17 +90,31 @@
         const welcomeHTML = `
             <div class="chat-message bot">
                 <div class="msg-bubble">
-                    <p>👋 <strong>Hi! I'm the Department Assistant.</strong></p>
-                    <p>I can help you with department information, courses, faculty, admissions, placements, events, facilities, and more. You can also ask me general questions or just chat with me. How can I help?</p>
+                    <div class="chatbot-welcome-card">
+                        <div class="mini-orbit-avatar welcome-avatar">
+                            <svg class="mini-orbit-svg" viewBox="0 0 100 100" fill="none">
+                                <circle cx="50" cy="50" r="42" stroke="url(#ringGrad1)" stroke-width="1.5" opacity="0.5" />
+                                <circle cx="50" cy="50" r="32" stroke="url(#ringGrad2)" stroke-dasharray="25 10" stroke-width="1" opacity="0.6" />
+                                <circle cx="50" cy="18" r="2.5" fill="#F3D49A" />
+                            </svg>
+                            <div class="mini-glass-core">AI</div>
+                        </div>
+                        <div class="chatbot-welcome-header-text">
+                            <span class="chatbot-brand-tag">CSD &amp; CSIT DEPARTMENT</span>
+                            <h6>DEPARTMENT AI</h6>
+                        </div>
+                    </div>
+                    <p>👋 <strong>Welcome! I am your Department AI Assistant.</strong></p>
+                    <p>Ask me anything about CSD &amp; CSIT courses, faculty, admissions, placements, events, facilities, or startups. How can I help you today?</p>
                     <div class="quick-questions-container">
-                        <button class="quick-btn" data-query="About Department">🎓 About Department</button>
-                        <button class="quick-btn" data-query="What courses are offered?">📚 Courses</button>
-                        <button class="quick-btn" data-query="Who are the faculty members?">👨‍🏫 Faculty</button>
-                        <button class="quick-btn" data-query="How to apply for admission?">📝 Admissions</button>
-                        <button class="quick-btn" data-query="What are the placement opportunities?">💼 Placements</button>
-                        <button class="quick-btn" data-query="Department facilities and labs">🏫 Facilities</button>
-                        <button class="quick-btn" data-query="Department events and workshops">📅 Events</button>
-                        <button class="quick-btn" data-query="How to contact department?">📞 Contact</button>
+                        <button class="quick-btn" data-query="Who are the faculty members?">👨‍🏫 Who are the faculty members?</button>
+                        <button class="quick-btn" data-query="What courses does the department offer?">📚 What courses are offered?</button>
+                        <button class="quick-btn" data-query="What are the placement opportunities?">💼 Placement opportunities</button>
+                        <button class="quick-btn" data-query="Tell me about the department.">🎓 About the Department</button>
+                        <button class="quick-btn" data-query="How to apply for admission?">📝 Admissions guide</button>
+                        <button class="quick-btn" data-query="Department facilities and labs">🏫 Facilities and labs</button>
+                        <button class="quick-btn" data-query="Department events and workshops">📅 Events &amp; Workshops</button>
+                        <button class="quick-btn" data-query="Tell me about startups and incubation">🚀 Startups &amp; Incubation</button>
                     </div>
                 </div>
                 <div class="msg-timestamp">${getTimeString()}</div>
