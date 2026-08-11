@@ -399,16 +399,6 @@ body {
 <!-- Main Student Achievements Showcase Section -->
 <section class="py-4" style="background: #f8fafc;">
     <div class="container py-2">
-        <!-- Category Filter Pills Bar -->
-        <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-4 px-2">
-            <button class="category-filter-btn active" data-category="all">🌟 All Achievements</button>
-            <button class="category-filter-btn" data-category="hackathons">🏆 Hackathons</button>
-            <button class="category-filter-btn" data-category="competitions">🥇 Competitions & Expos</button>
-            <button class="category-filter-btn" data-category="oratory">🎤 Oratory & Leadership</button>
-            <button class="category-filter-btn" data-category="sports">💃 Sports & Cultural</button>
-            <button class="category-filter-btn" data-category="technical">💻 Technical Events</button>
-            <button class="category-filter-btn" data-category="academics">📚 Academic Achievements</button>
-        </div>
 
         <!-- 🏆 SEPARATE SECTION 1: HACKATHONS SHOWCASE -->
         <div id="hackathonsSectionWrapper" class="mb-5 pb-3">
