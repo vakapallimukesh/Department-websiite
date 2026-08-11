@@ -333,33 +333,6 @@ body {
         </div>
 
         <div class="row g-4">
-            <!-- Box 0: TEDx SRKR Card -->
-            <div class="col-md-6 col-lg-4">
-                <div class="news-card" style="border: 1.5px solid #fde68a; background: #ffffff; padding: 22px; border-radius: 24px;">
-                    <!-- Event Poster Image Container -->
-                    <div style="position: relative; border-radius: 18px; overflow: hidden; height: 210px; margin-bottom: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); background: #000000;">
-                        <img src="assets/events/tedx-srkr.jpg" alt="TEDx SRKR Event" style="width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: -webkit-optimize-contrast;">
-                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(220, 38, 38, 0.9); backdrop-filter: blur(8px); color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 4px 12px; border-radius: 20px;">
-                            <i class="fas fa-microphone-alt me-1"></i> TEDx Event
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="date-pill" style="background: rgba(220, 38, 38, 0.1); color: #dc2626; border-color: rgba(220, 38, 38, 0.2);"><i class="fas fa-lightbulb"></i> Ideas Worth Spreading</span>
-                        <span class="insta-handle-tag" style="color: #dc2626;"><i class="fab fa-instagram me-1"></i> @srkrcsdcsit</span>
-                    </div>
-
-                    <h3 class="fw-bold text-dark mb-2" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">TEDx SRKR</h3>
-                    <p class="text-secondary small mb-4">TEDx SRKR — An independently organized TED event at SRKR Engineering College bringing visionary thinkers, innovators, and leaders to share transformative ideas.</p>
-
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="far fa-heart me-1" style="color: #dc2626;"></i> 3,450 Likes</span>
-                        <a href="https://www.instagram.com/srkrcsdcsit/" target="_blank" rel="noopener noreferrer" class="direct-post-btn" style="background: linear-gradient(45deg, #e11d48 0%, #dc2626 50%, #b91c1c 100%); color: #ffffff !important;">
-                            <i class="fab fa-instagram me-1"></i> View @srkrcsdcsit <i class="fas fa-external-link-alt ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
             <!-- Box 1: Potluck Event Video Card -->
             <div class="col-md-6 col-lg-4">
                 <div class="news-card" style="border: 1.5px solid #fecdd3; background: #ffffff; padding: 22px; border-radius: 24px;">
