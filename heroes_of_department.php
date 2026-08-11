@@ -372,7 +372,7 @@ include "connect.php";
             <div class="col-12 col-md-6 col-lg-4 d-flex">
                 <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
                     <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
-                        <img src="assets/images/heroes/mullu-srinu.jpg" alt="Mullu Srinu" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; image-rendering: -webkit-optimize-contrast;">
+                        <img src="assets/images/heroes/mullu-srinu.jpg" alt="Mullu Srinu" style="width: 100%; height: 100%; object-fit: cover; object-position: center 5%; image-rendering: -webkit-optimize-contrast;">
                         <span class="position-absolute top-0 end-0 bg-success text-white border border-light px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
                             🇮🇳 NSS Coordinator
                         </span>
