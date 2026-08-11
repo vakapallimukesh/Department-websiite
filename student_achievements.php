@@ -104,6 +104,21 @@ body {
     margin-top: 4px;
 }
 
+/* Section Header Dividers */
+.section-badge-tag {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #d97706;
+    background: #fffbeb;
+    padding: 6px 16px;
+    border-radius: 999px;
+    display: inline-block;
+    margin-bottom: 10px;
+    border: 1px solid #fde68a;
+}
+
 /* Category Filter Pills */
 .category-filter-btn {
     border: 1px solid #cbd5e1;
@@ -406,16 +421,9 @@ body {
     </div>
 </section>
 
-<!-- Main Student Achievements Section -->
+<!-- Main Student Achievements Showcase Section -->
 <section class="py-5" style="background: #f8fafc;">
     <div class="container py-2">
-        <!-- Section Header -->
-        <div class="text-center mb-4">
-            <span class="hero-tag" style="background: rgba(217, 119, 6, 0.08); color: #d97706; border-color: rgba(217, 119, 6, 0.2);">Excellence Showcase</span>
-            <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.6rem; font-weight: 800; color: #0f172a;">Featured <span style="color: #d97706;">Student Achievements</span></h2>
-            <p style="color: #64748b; font-size: 1.02rem; max-width: 600px; margin: 0 auto;">Recognizing outstanding student accomplishments across national hackathons, technical contests, project expos, and research events.</p>
-        </div>
-
         <!-- Category Filter Pills Bar -->
         <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-5 px-2">
             <button class="category-filter-btn active" data-category="all">🌟 All Achievements</button>
@@ -427,9 +435,42 @@ body {
             <button class="category-filter-btn" data-category="conferences">🎤 Conferences</button>
         </div>
 
-        <!-- Achievements Grid Container (Desktop 3-col, Tablet 2-col, Mobile 1-col) -->
-        <div id="achievementsContainer">
-            <!-- Rendered by JS -->
+        <!-- 🏆 SEPARATE SECTION: HACKATHONS SHOWCASE -->
+        <div id="hackathonsSectionWrapper" class="mb-5 pb-4">
+            <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div>
+                    <span class="section-badge-tag"><i class="fas fa-trophy me-1.5"></i> Hackathon Hall of Fame</span>
+                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
+                        Featured <span style="color: #d97706;">Hackathon Victories</span>
+                    </h2>
+                    <p class="text-secondary small mb-0">National and state level hackathon honors, 24-hour coding marathons, and innovation contests.</p>
+                </div>
+                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
+                    🏆 5 Major Hackathon Wins
+                </span>
+            </div>
+            <div id="hackathonsGridContainer">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+
+        <!-- 🥇 SEPARATE SECTION: PROJECT EXPOS & COMPETITIONS SHOWCASE -->
+        <div id="competitionsSectionWrapper" class="mb-4">
+            <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div>
+                    <span class="section-badge-tag"><i class="fas fa-medal me-1.5"></i> Project Expos & Competitions</span>
+                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
+                        Project Expos & <span style="color: #d97706;">Technical Contests</span>
+                    </h2>
+                    <p class="text-secondary small mb-0">Software solutions and innovations showcased at college project expos and technical competitions.</p>
+                </div>
+                <span class="badge bg-dark text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
+                    🥇 Project Expos
+                </span>
+            </div>
+            <div id="competitionsGridContainer">
+                <!-- Rendered by JS -->
+            </div>
         </div>
     </div>
 </section>
@@ -515,29 +556,29 @@ const studentAchievements = [
         ]
     },
     {
-        id: "prakalp-project-expo-2024",
-        title: "2nd Prize Winners @ Prakalp Project Expo!",
-        event: "Prakalp Project Expo — Ramachandra College of Engg",
-        category: "competitions",
-        categoryName: "Project Expo",
-        team: "Team OG",
-        award: "🥈 2nd Prize",
-        cashAward: "₹10,000",
-        stage: "Project Expo",
-        department: "3/4 CSD, Department of CSD & CSIT",
-        description: "🏆 2nd Prize Winners @ Prakalp Project Expo! Out of 100+ competing teams across colleges, Team OG (Uma Sai Pavan, Mohan Siva, Prashanth) from 3/4 CSD, SRKR Engineering College, proudly secured 2nd place and won a ₹10,000 cash prize at Ramachandra College of Engineering, Eluru.",
+        id: "sih-2022-winners",
+        title: "National Level 1st Prize Winners — Smart India Hackathon 2022",
+        event: "Smart India Hackathon 2022 — Grand Finale",
+        category: "hackathons",
+        categoryName: "Hackathon",
+        team: "SRKREC Student Team",
+        award: "🥇 National 1st Prize",
+        cashAward: "₹1,00,000",
+        stage: "Grand Finale",
+        department: "Department of CSD & CSIT",
+        description: "Winners of Smart India Hackathon 2022! SRKREC Students won the National Level First Prize worth ₹1 Lakh Rupees in the world's largest innovation contest, Smart India Hackathon 2022. Watch the promo video of their inspiring success journey.",
+        video: "assets/achievements/sih-2022-promo.mp4",
+        isVideo: true,
         images: [
-            "assets/achievements/prakalp-project-expo-2024-team-og-1.jpg",
-            "assets/achievements/prakalp-project-expo-2024-team-og-2.jpg",
-            "assets/achievements/prakalp-project-expo-2024-team-og-3.jpg"
+            "assets/achievements/sih-2022-promo.mp4"
         ],
         featured: true,
         badges: [
-            { icon: "fas fa-medal", text: "🥈 2nd Prize Winner" },
-            { icon: "fas fa-project-diagram", text: "Prakalp Expo" },
-            { icon: "fas fa-indian-rupee-sign", text: "₹10,000 Cash Award" },
-            { icon: "fas fa-users", text: "100+ Teams" },
-            { icon: "fas fa-user-graduate", text: "3/4 CSD" }
+            { icon: "fas fa-trophy", text: "🥇 National 1st Prize" },
+            { icon: "fas fa-laptop-code", text: "SIH 2022" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹1,00,000 Cash Award" },
+            { icon: "fas fa-play-circle", text: "Promo Video" },
+            { icon: "fas fa-flag-checkered", text: "Grand Finale" }
         ]
     },
     {
@@ -570,32 +611,6 @@ const studentAchievements = [
         ]
     },
     {
-        id: "sih-2022-winners",
-        title: "National Level 1st Prize Winners — Smart India Hackathon 2022",
-        event: "Smart India Hackathon 2022 — Grand Finale",
-        category: "hackathons",
-        categoryName: "Hackathon",
-        team: "SRKREC Student Team",
-        award: "🥇 National 1st Prize",
-        cashAward: "₹1,00,000",
-        stage: "Grand Finale",
-        department: "Department of CSD & CSIT",
-        description: "Winners of Smart India Hackathon 2022! SRKREC Students won the National Level First Prize worth ₹1 Lakh Rupees in the world's largest innovation contest, Smart India Hackathon 2022. Watch the promo video of their inspiring success journey.",
-        video: "assets/achievements/sih-2022-promo.mp4",
-        isVideo: true,
-        images: [
-            "assets/achievements/sih-2022-promo.mp4"
-        ],
-        featured: true,
-        badges: [
-            { icon: "fas fa-trophy", text: "🥇 National 1st Prize" },
-            { icon: "fas fa-laptop-code", text: "SIH 2022" },
-            { icon: "fas fa-indian-rupee-sign", text: "₹1,00,000 Cash Award" },
-            { icon: "fas fa-play-circle", text: "Promo Video" },
-            { icon: "fas fa-flag-checkered", text: "Grand Finale" }
-        ]
-    },
-    {
         id: "ecom-hackathon-2022",
         title: "Internal Ecom Hackathon 2022",
         event: "Internal Ecom Hackathon 2022 — SRKREC IDEA Lab",
@@ -620,6 +635,32 @@ const studentAchievements = [
             { icon: "fas fa-mobile-alt", text: "Bhimavaram Online" },
             { icon: "fas fa-users", text: "4 CSD Houses" },
             { icon: "fas fa-calendar-alt", text: "19th Sept 2022" }
+        ]
+    },
+    {
+        id: "prakalp-project-expo-2024",
+        title: "2nd Prize Winners @ Prakalp Project Expo!",
+        event: "Prakalp Project Expo — Ramachandra College of Engg",
+        category: "competitions",
+        categoryName: "Project Expo",
+        team: "Team OG",
+        award: "🥈 2nd Prize",
+        cashAward: "₹10,000",
+        stage: "Project Expo",
+        department: "3/4 CSD, Department of CSD & CSIT",
+        description: "🏆 2nd Prize Winners @ Prakalp Project Expo! Out of 100+ competing teams across colleges, Team OG (Uma Sai Pavan, Mohan Siva, Prashanth) from 3/4 CSD, SRKR Engineering College, proudly secured 2nd place and won a ₹10,000 cash prize at Ramachandra College of Engineering, Eluru.",
+        images: [
+            "assets/achievements/prakalp-project-expo-2024-team-og-1.jpg",
+            "assets/achievements/prakalp-project-expo-2024-team-og-2.jpg",
+            "assets/achievements/prakalp-project-expo-2024-team-og-3.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-medal", text: "🥈 2nd Prize Winner" },
+            { icon: "fas fa-project-diagram", text: "Prakalp Expo" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹10,000 Cash Award" },
+            { icon: "fas fa-users", text: "100+ Teams" },
+            { icon: "fas fa-user-graduate", text: "3/4 CSD" }
         ]
     }
 ];
@@ -671,39 +712,9 @@ function clearAllSlideshowTimers() {
     });
 }
 
-function renderAchievements(selectedCategory = 'all') {
-    const container = document.getElementById('achievementsContainer');
-    container.innerHTML = '';
-    clearAllSlideshowTimers();
-
-    const filtered = selectedCategory === 'all' 
-        ? studentAchievements 
-        : studentAchievements.filter(a => a.category === selectedCategory);
-
-    if (filtered.length === 0) {
-        container.innerHTML = `
-            <div class="row g-4 justify-content-center">
-                <div class="col-12 text-center py-5">
-                    <div class="p-5 rounded-4 bg-white border border-light d-inline-block mx-auto" style="max-width: 500px;">
-                        <div class="mx-auto mb-3 text-warning fs-1"><i class="fas fa-trophy"></i></div>
-                        <h4 class="fw-bold text-dark font-outfit mb-2">No Achievements Listed</h4>
-                        <p class="text-muted small mb-0">Student awards and accomplishments in this category will be updated soon.</p>
-                    </div>
-                </div>
-            </div>
-        `;
-        return;
-    }
-
-    // Grid Layout: 3 columns on Desktop (col-lg-4), 2 on Tablet (col-md-6), 1 on Mobile (col-12)
-    const rowGrid = document.createElement('div');
-    rowGrid.className = 'row g-4 align-items-stretch';
-
-    filtered.forEach(item => {
-        const colCard = document.createElement('div');
-        colCard.className = 'col-lg-4 col-md-6 col-12 d-flex';
-
-        colCard.innerHTML = `
+function renderCardHtml(item) {
+    return `
+        <div class="col-lg-4 col-md-6 col-12 d-flex">
             <div class="editorial-card w-100" id="card-${item.id}">
                 <!-- HD Media Container (Image or Video) -->
                 <div class="editorial-img-container" id="imgBox-${item.id}">
@@ -793,15 +804,49 @@ function renderAchievements(selectedCategory = 'all') {
                     `).join('')}
                 </div>
             </div>
-        `;
+        </div>
+    `;
+}
 
-        rowGrid.appendChild(colCard);
-    });
+function renderAchievements(selectedCategory = 'all') {
+    const hackathonsContainer = document.getElementById('hackathonsGridContainer');
+    const competitionsContainer = document.getElementById('competitionsGridContainer');
+    const hackathonsWrapper = document.getElementById('hackathonsSectionWrapper');
+    const competitionsWrapper = document.getElementById('competitionsSectionWrapper');
 
-    container.appendChild(rowGrid);
+    hackathonsContainer.innerHTML = '';
+    competitionsContainer.innerHTML = '';
+    clearAllSlideshowTimers();
+
+    const hackathonItems = studentAchievements.filter(a => a.category === 'hackathons');
+    const competitionItems = studentAchievements.filter(a => a.category === 'competitions');
+
+    if (selectedCategory === 'all' || selectedCategory === 'hackathons') {
+        hackathonsWrapper.style.display = 'block';
+        const rowGrid = document.createElement('div');
+        rowGrid.className = 'row g-4 align-items-stretch';
+        hackathonItems.forEach(item => {
+            rowGrid.innerHTML += renderCardHtml(item);
+        });
+        hackathonsContainer.appendChild(rowGrid);
+    } else {
+        hackathonsWrapper.style.display = 'none';
+    }
+
+    if (selectedCategory === 'all' || selectedCategory === 'competitions') {
+        competitionsWrapper.style.display = 'block';
+        const rowGrid = document.createElement('div');
+        rowGrid.className = 'row g-4 align-items-stretch';
+        competitionItems.forEach(item => {
+            rowGrid.innerHTML += renderCardHtml(item);
+        });
+        competitionsContainer.appendChild(rowGrid);
+    } else {
+        competitionsWrapper.style.display = 'none';
+    }
 
     // Initialize Automatic Slideshow for image items with multiple images
-    filtered.forEach(item => {
+    studentAchievements.forEach(item => {
         if (!item.isVideo && item.images.length > 1) {
             initAutoSlideshow(item.id, item.images.length);
         }
