@@ -638,6 +638,35 @@ const studentAchievements = [
         ]
     },
     {
+        id: "startup-expo-2023-nit-ap",
+        title: "Winners of Startup Expo 2023 @ NIT AP!",
+        event: "VULCANZY 2k23 Start-Up Expo — NIT AP",
+        category: "competitions",
+        categoryName: "Startup Expo",
+        team: "Bhimavaram Online Fellows",
+        award: "🏆 Winner Certificate",
+        cashAward: "NIT AP Winner Award",
+        date: "23rd February 2023",
+        stage: "State Level Expo",
+        department: "Department of CSD & CSIT",
+        description: "Winners of Startup Expo 2023! Our Bhimavaram Online Startup was declared Winner among state-level innovative startups at VULCANZY 2k23 Start-Up Expo conducted by National Institute of Technology (NIT) AP on 23rd Feb 2023. CSD student fellows presented 3 startup initiatives of Bhimavaram Online (Kumar SSPC, Anusha Chennamsetti, Chaitanya Srujana Pudi).",
+        images: [
+            "assets/achievements/startup-expo-2023-nit-ap-1.jpg",
+            "assets/achievements/startup-expo-2023-nit-ap-4.jpg",
+            "assets/achievements/startup-expo-2023-nit-ap-3.jpg",
+            "assets/achievements/startup-expo-2023-nit-ap-5.jpg",
+            "assets/achievements/startup-expo-2023-nit-ap-2.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-trophy", text: "🏆 NIT AP Winner" },
+            { icon: "fas fa-rocket", text: "Startup Expo" },
+            { icon: "fas fa-mobile-alt", text: "Bhimavaram Online" },
+            { icon: "fas fa-university", text: "NIT Andhra Pradesh" },
+            { icon: "fas fa-calendar-alt", text: "23rd Feb 2023" }
+        ]
+    },
+    {
         id: "prakalp-project-expo-2024",
         title: "2nd Prize Winners @ Prakalp Project Expo!",
         event: "Prakalp Project Expo — Ramachandra College of Engg",
