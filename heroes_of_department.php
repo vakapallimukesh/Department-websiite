@@ -645,6 +645,34 @@ include "connect.php";
                     </div>
                 </div>
             </div>
+
+            <!-- Hero Card 4: Preeti Avvula -->
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
+                        <img src="assets/images/heroes/preeti-avvula.jpg" alt="Preeti Avvula" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; image-rendering: -webkit-optimize-contrast;">
+                        <span class="position-absolute top-0 end-0 bg-dark text-white border border-secondary px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
+                            🎙️ TEDx Organizer & Anchor
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column text-start">
+                        <!-- Row 1: Name -->
+                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">Preeti Avvula</h3>
+                        
+                        <!-- Row 2: Register No -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>24B91A0701</strong>
+                            </span>
+                        </div>
+
+                        <!-- Row 3: 4 to 5 Line Context -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
+                            Preeti Avvula is a dynamic student leader and master anchor who served as a core organizer for TEDx SRKR. Known for her powerful stage presence, eloquence, and exceptional event coordination, she led the independently organized TED event with distinction. Her leadership, communication skills, and passion for hosting campus conferences inspire students across the department. She exemplifies true public speaking excellence and organizational brilliance as a department hero.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
