@@ -262,7 +262,6 @@ include "connect.php";
                 'id' => 'cr-5',
                 'name' => 'JAVVADI MOHANA DURGA',
                 'registrationNumber' => '25B91A6223',
-                'phone' => '8919965254',
                 'className' => 'CSD - II Year',
                 'branch' => 'CSD',
                 'year' => 'II Year',
@@ -274,7 +273,6 @@ include "connect.php";
                 'id' => 'cr-6',
                 'name' => 'VASA HARI NAGENDRA PRATAP',
                 'registrationNumber' => '25B91A6263',
-                'phone' => '9491091836',
                 'className' => 'CSD - II Year',
                 'branch' => 'CSD',
                 'year' => 'II Year',
@@ -286,7 +284,6 @@ include "connect.php";
                 'id' => 'cr-3',
                 'name' => 'P HARSHA',
                 'registrationNumber' => '25B91A0786',
-                'phone' => '8639127960',
                 'className' => 'CSIT - II Year - Section A',
                 'branch' => 'CSIT',
                 'year' => 'II Year',
@@ -298,7 +295,6 @@ include "connect.php";
                 'id' => 'cr-4',
                 'name' => 'B J S V D N ASRITHA',
                 'registrationNumber' => '25B91A0711',
-                'phone' => '6281771313',
                 'className' => 'CSIT - II Year - Section A',
                 'branch' => 'CSIT',
                 'year' => 'II Year',
@@ -310,7 +306,6 @@ include "connect.php";
                 'id' => 'cr-1',
                 'name' => 'PAMU AMRUTHA',
                 'registrationNumber' => '25B91A0782',
-                'phone' => '7842878358',
                 'className' => 'CSIT - II Year - Section B',
                 'branch' => 'CSIT',
                 'year' => 'II Year',
@@ -322,7 +317,6 @@ include "connect.php";
                 'id' => 'cr-2',
                 'name' => 'B PRASANNA VARUN',
                 'registrationNumber' => '25B91A0717',
-                'phone' => '9014443289',
                 'className' => 'CSIT - II Year - Section B',
                 'branch' => 'CSIT',
                 'year' => 'II Year',
@@ -337,7 +331,6 @@ include "connect.php";
                 'id' => 'cr-7',
                 'name' => 'CHANDANI VIVEKANANDA',
                 'registrationNumber' => '24B91A0720',
-                'phone' => '9063449226',
                 'className' => 'CSIT - III Year - Section A',
                 'branch' => 'CSIT',
                 'year' => 'III Year',
@@ -349,7 +342,6 @@ include "connect.php";
                 'id' => 'cr-8',
                 'name' => 'THOTA JOHAN BENEDICT',
                 'registrationNumber' => '24B91A07B7',
-                'phone' => '9121901011',
                 'className' => 'CSIT - III Year - Section B',
                 'branch' => 'CSIT',
                 'year' => 'III Year',
@@ -361,7 +353,6 @@ include "connect.php";
                 'id' => 'cr-9',
                 'name' => 'S D RANI',
                 'registrationNumber' => '24B91A07B3',
-                'phone' => '7095183812',
                 'className' => 'CSIT - III Year - Section B',
                 'branch' => 'CSIT',
                 'year' => 'III Year',
@@ -376,7 +367,6 @@ include "connect.php";
                 'id' => 'cr-10',
                 'name' => 'P SAI HARSHA',
                 'registrationNumber' => '23B81A6252',
-                'phone' => '8919892669',
                 'className' => 'CSD - IV Year',
                 'branch' => 'CSD',
                 'year' => 'IV Year',
@@ -389,7 +379,6 @@ include "connect.php";
                 'id' => 'cr-11',
                 'name' => 'P SWAPNA',
                 'registrationNumber' => '23B91A6255',
-                'phone' => '9390827275',
                 'className' => 'CSD - IV Year',
                 'branch' => 'CSD',
                 'year' => 'IV Year',
@@ -441,26 +430,10 @@ include "connect.php";
                             </h4>
 
                             <!-- Registration Number -->
-                            <div class="mb-3">
+                            <div>
                                 <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
                                     <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong><?= htmlspecialchars($cr['registrationNumber']) ?></strong>
                                 </span>
-                            </div>
-
-                            <!-- Phone Number Privacy Button -->
-                            <div class="mt-auto pt-3 border-top w-100">
-                                <div class="cr-phone-box">
-                                    <button type="button" 
-                                            class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold shadow-xs cr-reveal-btn" 
-                                            onclick="toggleCrPhone(this)">
-                                        <i class="fas fa-phone-alt me-1"></i> Show Phone
-                                    </button>
-                                    <div class="cr-phone-display d-none text-center">
-                                        <a href="tel:<?= htmlspecialchars($cr['phone']) ?>" class="btn btn-success btn-sm rounded-pill px-3 fw-bold text-white shadow-xs">
-                                            <i class="fas fa-phone-volume me-1"></i> +91 <?= htmlspecialchars(substr($cr['phone'], 0, 5) . ' ' . substr($cr['phone'], 5)) ?>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
 
                         </div>
@@ -511,26 +484,10 @@ include "connect.php";
                             </h4>
 
                             <!-- Registration Number -->
-                            <div class="mb-3">
+                            <div>
                                 <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
                                     <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong><?= htmlspecialchars($cr['registrationNumber']) ?></strong>
                                 </span>
-                            </div>
-
-                            <!-- Phone Number Privacy Button -->
-                            <div class="mt-auto pt-3 border-top w-100">
-                                <div class="cr-phone-box">
-                                    <button type="button" 
-                                            class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold shadow-xs cr-reveal-btn" 
-                                            onclick="toggleCrPhone(this)">
-                                        <i class="fas fa-phone-alt me-1"></i> Show Phone
-                                    </button>
-                                    <div class="cr-phone-display d-none text-center">
-                                        <a href="tel:<?= htmlspecialchars($cr['phone']) ?>" class="btn btn-success btn-sm rounded-pill px-3 fw-bold text-white shadow-xs">
-                                            <i class="fas fa-phone-volume me-1"></i> +91 <?= htmlspecialchars(substr($cr['phone'], 0, 5) . ' ' . substr($cr['phone'], 5)) ?>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
 
                         </div>
@@ -579,26 +536,10 @@ include "connect.php";
                             </h4>
 
                             <!-- Registration Number -->
-                            <div class="mb-3">
+                            <div>
                                 <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
                                     <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong><?= htmlspecialchars($cr['registrationNumber']) ?></strong>
                                 </span>
-                            </div>
-
-                            <!-- Phone Number Privacy Button -->
-                            <div class="mt-auto pt-3 border-top w-100">
-                                <div class="cr-phone-box">
-                                    <button type="button" 
-                                            class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-semibold shadow-xs cr-reveal-btn" 
-                                            onclick="toggleCrPhone(this)">
-                                        <i class="fas fa-phone-alt me-1"></i> Show Phone
-                                    </button>
-                                    <div class="cr-phone-display d-none text-center">
-                                        <a href="tel:<?= htmlspecialchars($cr['phone']) ?>" class="btn btn-success btn-sm rounded-pill px-3 fw-bold text-white shadow-xs">
-                                            <i class="fas fa-phone-volume me-1"></i> +91 <?= htmlspecialchars(substr($cr['phone'], 0, 5) . ' ' . substr($cr['phone'], 5)) ?>
-                                        </a>
-                                    </div>
-                                </div>
                             </div>
 
                         </div>
