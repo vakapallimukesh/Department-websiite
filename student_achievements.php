@@ -31,7 +31,7 @@ body {
 .hero-banner {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
     color: white;
-    padding: 75px 20px 60px;
+    padding: 65px 20px 50px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -48,25 +48,25 @@ body {
 }
 
 .hero-tag {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #f59e0b;
     background: rgba(245, 158, 11, 0.12);
-    padding: 6px 16px;
+    padding: 5px 14px;
     border-radius: 999px;
     display: inline-block;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
     border: 1px solid rgba(245, 158, 11, 0.25);
 }
 
 .hero-title {
     font-family: 'Outfit', sans-serif;
-    font-size: 3rem;
+    font-size: 2.75rem;
     font-weight: 900;
     line-height: 1.15;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .hero-title span {
@@ -77,8 +77,8 @@ body {
 .stat-card {
     background: #ffffff;
     border: 1px solid var(--card-border);
-    border-radius: 18px;
-    padding: 22px 18px;
+    border-radius: 16px;
+    padding: 16px 14px;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     transition: all 0.25s ease;
@@ -92,30 +92,30 @@ body {
 
 .stat-number {
     font-family: 'Outfit', sans-serif;
-    font-size: 2.3rem;
+    font-size: 2rem;
     font-weight: 900;
     color: var(--primary-amber);
 }
 
 .stat-label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--text-dark);
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 /* Section Header Dividers */
 .section-badge-tag {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: #d97706;
     background: #fffbeb;
-    padding: 6px 16px;
+    padding: 5px 14px;
     border-radius: 999px;
     display: inline-block;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     border: 1px solid #fde68a;
 }
 
@@ -125,8 +125,8 @@ body {
     background: #ffffff;
     color: #475569;
     font-weight: 600;
-    font-size: 0.88rem;
-    padding: 8px 18px;
+    font-size: 0.84rem;
+    padding: 7px 16px;
     border-radius: 999px;
     transition: all 0.25s ease;
     white-space: nowrap;
@@ -139,40 +139,42 @@ body {
     box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
 }
 
-/* Clean Editorial Achievement Card */
+/* Compact Premium Achievement Card Box */
 .editorial-card {
     background: #ffffff;
     border: 1px solid var(--card-border);
-    border-radius: 20px;
-    padding: 24px;
+    border-radius: 18px;
+    padding: 18px 20px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
 }
 
 .editorial-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
     border-color: #cbd5e1;
 }
 
-/* Crisp HD Image Frame (Standard 16:10 or Square 1:1) */
+/* Compact Crisp HD Image Frame */
 .editorial-img-container {
     position: relative;
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
     background: #0f172a;
-    aspect-ratio: 16/10;
+    aspect-ratio: 16/9.5;
+    max-height: 200px;
     cursor: pointer;
     border: 1px solid #e2e8f0;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .editorial-img-container.square-frame {
-    aspect-ratio: 1/1 !important;
+    aspect-ratio: 1/0.9 !important;
+    max-height: 220px !important;
 }
 
 .editorial-img-container img, .editorial-img-container video {
@@ -193,8 +195,8 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: rgba(15, 23, 42, 0.65);
     color: #ffffff;
@@ -202,7 +204,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     opacity: 0;
     transition: all 0.25s ease;
     z-index: 5;
@@ -219,8 +221,8 @@ body {
     transform: translateY(-50%) scale(1.1);
 }
 
-.slide-arrow-prev { left: 10px; }
-.slide-arrow-next { right: 10px; }
+.slide-arrow-prev { left: 8px; }
+.slide-arrow-next { right: 8px; }
 
 .editorial-img-overlay {
     position: absolute;
@@ -241,48 +243,48 @@ body {
 /* Photo Badges Overlay */
 .top-photo-badge {
     position: absolute;
-    top: 12px;
-    left: 12px;
+    top: 10px;
+    left: 10px;
     background: rgba(255, 255, 255, 0.95);
     color: #0f172a;
     font-weight: 800;
-    font-size: 0.78rem;
-    padding: 5px 12px;
+    font-size: 0.74rem;
+    padding: 4px 10px;
     border-radius: 999px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     backdrop-filter: blur(4px);
     z-index: 2;
 }
 
 .bottom-photo-count {
     position: absolute;
-    bottom: 12px;
-    right: 12px;
+    bottom: 10px;
+    right: 10px;
     background: rgba(15, 23, 42, 0.85);
     color: #ffffff;
     font-weight: 600;
-    font-size: 0.72rem;
-    padding: 4px 10px;
+    font-size: 0.7rem;
+    padding: 3px 8px;
     border-radius: 999px;
     backdrop-filter: blur(4px);
     z-index: 2;
 }
 
-/* Thumbnail Strip */
+/* Compact Thumbnail Strip */
 .editorial-thumb-strip {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 18px;
+    gap: 6px;
+    margin-bottom: 12px;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-bottom: 2px;
 }
 
 .editorial-thumb {
-    width: 58px;
-    height: 40px;
+    width: 48px;
+    height: 32px;
     flex-shrink: 0;
-    border-radius: 8px;
+    border-radius: 6px;
     overflow: hidden;
     border: 2px solid transparent;
     cursor: pointer;
@@ -302,13 +304,13 @@ body {
     object-fit: cover;
 }
 
-/* Cash Award Badge Box */
+/* Cash Award Spotlight Box */
 .editorial-award-box {
     background: #fffbeb;
     border: 1px solid #fde68a;
-    border-radius: 14px;
-    padding: 14px 18px;
-    margin-bottom: 18px;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -317,7 +319,7 @@ body {
 .editorial-award-amount {
     font-family: 'Outfit', sans-serif;
     font-weight: 800;
-    font-size: 1.35rem;
+    font-size: 1.15rem;
     color: #b45309;
 }
 
@@ -325,14 +327,14 @@ body {
 .mini-badge {
     background: #f1f5f9;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 5px 10px;
-    font-size: 0.78rem;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.74rem;
     font-weight: 600;
     color: #334155;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 }
 
 /* Lightbox Modal */
@@ -387,14 +389,14 @@ body {
     <div class="container position-relative z-1">
         <span class="hero-tag"><i class="fas fa-trophy me-2"></i> Student Hall of Fame</span>
         <h1 class="hero-title">Student <span>Achievements</span></h1>
-        <p class="lead mx-auto" style="max-width: 680px; color: #cbd5e1; font-size: 1.1rem; line-height: 1.6;">
+        <p class="lead mx-auto" style="max-width: 680px; color: #cbd5e1; font-size: 1.05rem; line-height: 1.55;">
             Celebrating national hackathon winners, project expo champions, sports gold medalists, classical dancers, and student leaders in CSD & CSIT departments.
         </p>
     </div>
 </section>
 
 <!-- Stats Highlight Bar -->
-<section class="py-4 bg-white border-bottom">
+<section class="py-3.5 bg-white border-bottom">
     <div class="container">
         <div class="row g-3">
             <div class="col-6 col-md-3">
@@ -426,10 +428,10 @@ body {
 </section>
 
 <!-- Main Student Achievements Showcase Section -->
-<section class="py-5" style="background: #f8fafc;">
+<section class="py-4" style="background: #f8fafc;">
     <div class="container py-2">
         <!-- Category Filter Pills Bar -->
-        <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-5 px-2">
+        <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-4 px-2">
             <button class="category-filter-btn active" data-category="all">🌟 All Achievements</button>
             <button class="category-filter-btn" data-category="hackathons">🏆 Hackathons</button>
             <button class="category-filter-btn" data-category="competitions">🥇 Competitions & Expos</button>
@@ -440,16 +442,16 @@ body {
         </div>
 
         <!-- 🏆 SEPARATE SECTION 1: HACKATHONS SHOWCASE -->
-        <div id="hackathonsSectionWrapper" class="mb-5 pb-4">
-            <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div id="hackathonsSectionWrapper" class="mb-5 pb-3">
+            <div class="text-start mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
                     <span class="section-badge-tag"><i class="fas fa-trophy me-1.5"></i> Hackathon Hall of Fame</span>
-                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
+                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 1.95rem;">
                         Featured <span style="color: #d97706;">Hackathon Victories</span>
                     </h2>
                     <p class="text-secondary small mb-0">National and state level hackathon honors, 24-hour coding marathons, and innovation contests.</p>
                 </div>
-                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
+                <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.8rem;">
                     🏆 5 Major Hackathon Wins
                 </span>
             </div>
@@ -459,16 +461,16 @@ body {
         </div>
 
         <!-- 🥇 SEPARATE SECTION 2: PROJECT EXPOS & COMPETITIONS SHOWCASE -->
-        <div id="competitionsSectionWrapper" class="mb-5 pb-4">
-            <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div id="competitionsSectionWrapper" class="mb-5 pb-3">
+            <div class="text-start mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
                     <span class="section-badge-tag"><i class="fas fa-medal me-1.5"></i> Project Expos & Competitions</span>
-                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
+                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 1.95rem;">
                         Project Expos & <span style="color: #d97706;">Technical Contests</span>
                     </h2>
                     <p class="text-secondary small mb-0">Software solutions and innovations showcased at college project expos and state-level startup events.</p>
                 </div>
-                <span class="badge bg-dark text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
+                <span class="badge bg-dark text-white px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.8rem;">
                     🥇 Project Expos & Competitions
                 </span>
             </div>
@@ -478,16 +480,16 @@ body {
         </div>
 
         <!-- 🎤 SEPARATE SECTION 3: ORATORY & LEADERSHIP EXCELLENCE SHOWCASE -->
-        <div id="oratorySectionWrapper" class="mb-5 pb-4">
-            <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div id="oratorySectionWrapper" class="mb-5 pb-3">
+            <div class="text-start mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
                     <span class="section-badge-tag"><i class="fas fa-microphone-alt me-1.5"></i> Oratory & Leadership Excellence</span>
-                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
+                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 1.95rem;">
                         Oratory & <span style="color: #d97706;">Leadership Excellence</span>
                     </h2>
                     <p class="text-secondary small mb-0">Celebrating student accomplishments in public speaking, oratorical championships, and entrepreneurship workshops.</p>
                 </div>
-                <span class="badge bg-primary text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
+                <span class="badge bg-primary text-white px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.8rem;">
                     🎤 Leadership & Oratory
                 </span>
             </div>
@@ -498,15 +500,15 @@ body {
 
         <!-- 💃 SEPARATE SECTION 4: SPORTS & CULTURAL EXCELLENCE SHOWCASE -->
         <div id="sportsSectionWrapper" class="mb-4">
-            <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div class="text-start mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
                     <span class="section-badge-tag"><i class="fas fa-running me-1.5"></i> Sports & Cultural Hall of Fame</span>
-                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
+                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 1.95rem;">
                         Sports, Arts & <span style="color: #d97706;">Cultural Excellence</span>
                     </h2>
                     <p class="text-secondary small mb-0">Honoring Gold Medalists in martial arts, university representatives, and classical dance champions.</p>
                 </div>
-                <span class="badge bg-success text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
+                <span class="badge bg-success text-white px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.8rem;">
                     💃 Sports & Cultural Champions
                 </span>
             </div>
@@ -963,19 +965,19 @@ function renderCardHtml(item) {
                 ` : ''}
 
                 <!-- Category Tag -->
-                <div class="mb-2">
+                <div class="mb-1.5">
                     <span class="badge bg-warning-subtle text-warning-emphasis fw-bold rounded-pill px-2.5 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">
                         ${item.categoryName.toUpperCase()} • ${item.stage || 'ACHIEVEMENT'}
                     </span>
                 </div>
 
                 <!-- Card Title -->
-                <h3 class="font-outfit fw-bold text-dark mb-2" style="font-size: 1.22rem; line-height: 1.35;">
+                <h3 class="font-outfit fw-bold text-dark mb-1.5" style="font-size: 1.15rem; line-height: 1.3;">
                     ${item.event}
                 </h3>
 
                 <!-- Team & Dept -->
-                <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
                     <span class="fw-bold text-warning small text-truncate"><i class="fas fa-users me-1"></i> ${item.team}</span>
                     <span class="text-muted">•</span>
                     <span class="text-secondary small text-truncate"><i class="fas fa-university me-1"></i> ${item.department}</span>
@@ -984,19 +986,19 @@ function renderCardHtml(item) {
                 <!-- Cash Award Spotlight Box -->
                 <div class="editorial-award-box">
                     <div>
-                        <span class="text-uppercase text-muted d-block fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">Impact / Honor</span>
+                        <span class="text-uppercase text-muted d-block fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">Impact / Honor</span>
                         <div class="editorial-award-amount">${item.cashAward}</div>
                     </div>
-                    <span class="badge bg-dark text-white rounded-pill px-3 py-1.5 small fw-bold">${item.award}</span>
+                    <span class="badge bg-dark text-white rounded-pill px-2.5 py-1 small fw-bold">${item.award}</span>
                 </div>
 
                 <!-- Description -->
-                <p class="text-secondary small mb-3 flex-grow-1" style="line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
+                <p class="text-secondary small mb-2 flex-grow-1" style="line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
                     ${item.description}
                 </p>
 
                 <!-- Footer Metadata Pills -->
-                <div class="d-flex flex-wrap gap-1.5 pt-3 border-top mt-auto">
+                <div class="d-flex flex-wrap gap-1.5 pt-2 border-top mt-auto">
                     ${item.badges.map(b => `
                         <div class="mini-badge">
                             <i class="${b.icon} text-warning"></i> ${b.text}
