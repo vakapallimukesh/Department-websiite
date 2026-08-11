@@ -466,59 +466,6 @@ body {
 // Student Achievements Data Store
 const studentAchievements = [
     {
-        id: "ecom-hackathon-2022",
-        title: "Internal Ecom Hackathon 2022",
-        event: "Internal Ecom Hackathon 2022 — SRKREC IDEA Lab",
-        category: "hackathons",
-        categoryName: "Hackathon",
-        team: "CSD Houses (Agni, Vayu, Prithvi, Aakash)",
-        award: "🏆 25 Shops & 1400+ Products",
-        cashAward: "Bhimavaram Online Impact",
-        date: "19th September 2022",
-        stage: "Single Day Hackathon",
-        department: "2nd Year CSD, Department of CSD & CSIT",
-        description: "The 2nd year students of B.Tech Computer Science & Design participated in the Internal Ecom Hackathon 2022 organised by Technology Centre and IDEA Lab of SRKREC on 19th September 2022. 4 houses (Agni, Vayu, Prithvi and Aakash) of CSD competed in teams, onboarding 25 shops and 1400+ products for Bhimavaram Online app on a single day.",
-        video: "assets/achievements/ecom-hackathon-2022-promo.mp4",
-        isVideo: true,
-        images: [
-            "assets/achievements/ecom-hackathon-2022-promo.mp4"
-        ],
-        featured: true,
-        badges: [
-            { icon: "fas fa-shopping-cart", text: "25 Local Shops" },
-            { icon: "fas fa-box-open", text: "1400+ Products" },
-            { icon: "fas fa-mobile-alt", text: "Bhimavaram Online" },
-            { icon: "fas fa-users", text: "4 CSD Houses" },
-            { icon: "fas fa-calendar-alt", text: "19th Sept 2022" }
-        ]
-    },
-    {
-        id: "sih-2022-winners",
-        title: "National Level 1st Prize Winners — Smart India Hackathon 2022",
-        event: "Smart India Hackathon 2022 — Grand Finale",
-        category: "hackathons",
-        categoryName: "Hackathon",
-        team: "SRKREC Student Team",
-        award: "🥇 National 1st Prize",
-        cashAward: "₹1,00,000",
-        stage: "Grand Finale",
-        department: "Department of CSD & CSIT",
-        description: "Winners of Smart India Hackathon 2022! SRKREC Students won the National Level First Prize worth ₹1 Lakh Rupees in the world's largest innovation contest, Smart India Hackathon 2022. Watch the promo video of their inspiring success journey.",
-        video: "assets/achievements/sih-2022-promo.mp4",
-        isVideo: true,
-        images: [
-            "assets/achievements/sih-2022-promo.mp4"
-        ],
-        featured: true,
-        badges: [
-            { icon: "fas fa-trophy", text: "🥇 National 1st Prize" },
-            { icon: "fas fa-laptop-code", text: "SIH 2022" },
-            { icon: "fas fa-indian-rupee-sign", text: "₹1,00,000 Cash Award" },
-            { icon: "fas fa-play-circle", text: "Promo Video" },
-            { icon: "fas fa-flag-checkered", text: "Grand Finale" }
-        ]
-    },
-    {
         id: "quantum-valley-2025",
         title: "1st Place — Amaravati Quantum Valley Hackathon 2025",
         event: "Amaravati Quantum Valley Hackathon 2025",
@@ -538,6 +485,32 @@ const studentAchievements = [
             { icon: "fas fa-medal", text: "🥇 1st Place Winner" },
             { icon: "fas fa-laptop-code", text: "Hackathon" },
             { icon: "fas fa-indian-rupee-sign", text: "₹50,000 Cash Award" },
+            { icon: "fas fa-flag-checkered", text: "Grand Finale" }
+        ]
+    },
+    {
+        id: "sih-2025-team-ujjval",
+        title: "Distinguished Performer Award — Smart India Hackathon 2025",
+        event: "Smart India Hackathon 2025",
+        category: "hackathons",
+        categoryName: "Hackathon",
+        team: "Team Ujjval",
+        award: "🏆 Distinguished Performer",
+        cashAward: "₹25,000",
+        date: "8th & 9th Dec 2025",
+        duration: "36 Hours",
+        department: "Department of CSD & CSIT",
+        description: "Congratulations to Team Ujjval! A proud achievement for the Department of CSD & CSIT, SRKR Engineering College, as Team Ujjval receives the Distinguished Performer Award at the Smart India Hackathon 2025 Grand Finale. Their outstanding performance and innovative thinking were recognized with a ₹25,000 cash award.",
+        images: [
+            "assets/achievements/sih-2025-team-ujjval-1.jpg",
+            "assets/achievements/sih-2025-team-ujjval-2.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-trophy", text: "Distinguished Performer" },
+            { icon: "fas fa-laptop-code", text: "Hackathon" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹25,000 Cash Award" },
+            { icon: "fas fa-clock", text: "36 Hours" },
             { icon: "fas fa-flag-checkered", text: "Grand Finale" }
         ]
     },
@@ -568,32 +541,6 @@ const studentAchievements = [
         ]
     },
     {
-        id: "sih-2025-team-ujjval",
-        title: "Distinguished Performer Award — Smart India Hackathon 2025",
-        event: "Smart India Hackathon 2025",
-        category: "hackathons",
-        categoryName: "Hackathon",
-        team: "Team Ujjval",
-        award: "🏆 Distinguished Performer",
-        cashAward: "₹25,000",
-        date: "8th & 9th Dec 2025",
-        duration: "36 Hours",
-        department: "Department of CSD & CSIT",
-        description: "Congratulations to Team Ujjval! A proud achievement for the Department of CSD & CSIT, SRKR Engineering College, as Team Ujjval receives the Distinguished Performer Award at the Smart India Hackathon 2025 Grand Finale. Their outstanding performance and innovative thinking were recognized with a ₹25,000 cash award.",
-        images: [
-            "assets/achievements/sih-2025-team-ujjval-1.jpg",
-            "assets/achievements/sih-2025-team-ujjval-2.jpg"
-        ],
-        featured: true,
-        badges: [
-            { icon: "fas fa-trophy", text: "Distinguished Performer" },
-            { icon: "fas fa-laptop-code", text: "Hackathon" },
-            { icon: "fas fa-indian-rupee-sign", text: "₹25,000 Cash Award" },
-            { icon: "fas fa-clock", text: "36 Hours" },
-            { icon: "fas fa-flag-checkered", text: "Grand Finale" }
-        ]
-    },
-    {
         id: "prajwalan-2k23-team-virtual-bridge",
         title: "2nd Prize — Prajwalan 2K23 (24-Hour Hackathon)",
         event: "Prajwalan 2K23 — 24 Hour Hackathon",
@@ -620,6 +567,59 @@ const studentAchievements = [
             { icon: "fas fa-indian-rupee-sign", text: "₹10,000 Cash Award" },
             { icon: "fas fa-users", text: "45 AP Teams" },
             { icon: "fas fa-calendar-alt", text: "23rd & 24th March 2023" }
+        ]
+    },
+    {
+        id: "sih-2022-winners",
+        title: "National Level 1st Prize Winners — Smart India Hackathon 2022",
+        event: "Smart India Hackathon 2022 — Grand Finale",
+        category: "hackathons",
+        categoryName: "Hackathon",
+        team: "SRKREC Student Team",
+        award: "🥇 National 1st Prize",
+        cashAward: "₹1,00,000",
+        stage: "Grand Finale",
+        department: "Department of CSD & CSIT",
+        description: "Winners of Smart India Hackathon 2022! SRKREC Students won the National Level First Prize worth ₹1 Lakh Rupees in the world's largest innovation contest, Smart India Hackathon 2022. Watch the promo video of their inspiring success journey.",
+        video: "assets/achievements/sih-2022-promo.mp4",
+        isVideo: true,
+        images: [
+            "assets/achievements/sih-2022-promo.mp4"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-trophy", text: "🥇 National 1st Prize" },
+            { icon: "fas fa-laptop-code", text: "SIH 2022" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹1,00,000 Cash Award" },
+            { icon: "fas fa-play-circle", text: "Promo Video" },
+            { icon: "fas fa-flag-checkered", text: "Grand Finale" }
+        ]
+    },
+    {
+        id: "ecom-hackathon-2022",
+        title: "Internal Ecom Hackathon 2022",
+        event: "Internal Ecom Hackathon 2022 — SRKREC IDEA Lab",
+        category: "hackathons",
+        categoryName: "Hackathon",
+        team: "CSD Houses (Agni, Vayu, Prithvi, Aakash)",
+        award: "🏆 25 Shops & 1400+ Products",
+        cashAward: "Bhimavaram Online Impact",
+        date: "19th September 2022",
+        stage: "Single Day Hackathon",
+        department: "2nd Year CSD, Department of CSD & CSIT",
+        description: "The 2nd year students of B.Tech Computer Science & Design participated in the Internal Ecom Hackathon 2022 organised by Technology Centre and IDEA Lab of SRKREC on 19th September 2022. 4 houses (Agni, Vayu, Prithvi and Aakash) of CSD competed in teams, onboarding 25 shops and 1400+ products for Bhimavaram Online app on a single day.",
+        video: "assets/achievements/ecom-hackathon-2022-promo.mp4",
+        isVideo: true,
+        images: [
+            "assets/achievements/ecom-hackathon-2022-promo.mp4"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-shopping-cart", text: "25 Local Shops" },
+            { icon: "fas fa-box-open", text: "1400+ Products" },
+            { icon: "fas fa-mobile-alt", text: "Bhimavaram Online" },
+            { icon: "fas fa-users", text: "4 CSD Houses" },
+            { icon: "fas fa-calendar-alt", text: "19th Sept 2022" }
         ]
     }
 ];
