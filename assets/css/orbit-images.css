@@ -43,12 +43,12 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 110px;
-  height: 110px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: #ffffff;
-  border: 3px solid rgba(37, 99, 235, 0.35);
-  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22), 0 4px 14px rgba(0,0,0,0.09);
+  border: 2px solid rgba(37, 99, 235, 0.35);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18), 0 3px 10px rgba(0,0,0,0.07);
   padding: 0;
   display: flex;
   align-items: center;
@@ -72,13 +72,13 @@
   max-height: 100%;
   object-fit: contain;
   pointer-events: none;
-  transform: scale(2.15);
+  transform: scale(1.6);
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   filter: drop-shadow(0 2px 5px rgba(0,0,0,0.05));
 }
 
 .orbit-item:hover .orbit-image {
-  transform: scale(2.35);
+  transform: scale(1.8);
 }
 
 .orbit-center-content {
@@ -221,12 +221,12 @@
   }
 
   .orbit-item {
-    width: 88px;
-    height: 88px;
+    width: 60px;
+    height: 60px;
     padding: 0;
   }
   .orbit-image {
-    transform: scale(1.95);
+    transform: scale(1.4);
   }
 
   .startup-scroll-card {
