@@ -219,11 +219,14 @@ body {
     display: flex;
     gap: 8px;
     margin-bottom: 18px;
+    overflow-x: auto;
+    padding-bottom: 4px;
 }
 
 .editorial-thumb {
-    width: 60px;
-    height: 42px;
+    width: 58px;
+    height: 40px;
+    flex-shrink: 0;
     border-radius: 8px;
     overflow: hidden;
     border: 2px solid transparent;
@@ -472,6 +475,35 @@ const studentAchievements = [
             { icon: "fas fa-indian-rupee-sign", text: "₹25,000 Cash Award" },
             { icon: "fas fa-clock", text: "36 Hours" },
             { icon: "fas fa-flag-checkered", text: "Grand Finale" }
+        ]
+    },
+    {
+        id: "prajwalan-2k23-team-virtual-bridge",
+        title: "2nd Prize — Prajwalan 2K23 (24-Hour Hackathon)",
+        event: "Prajwalan 2K23 — 24 Hour Hackathon",
+        category: "hackathons",
+        categoryName: "Hackathon",
+        team: "Team Virtual Bridge",
+        award: "🥈 2nd Prize",
+        cashAward: "₹10,000",
+        date: "23rd & 24th March 2023",
+        duration: "24 Hours",
+        department: "Department of CSD & CSIT",
+        description: "Another Feather in the CSD Cap! Team Virtual Bridge (2/4 CSD) won 2nd Prize in Prajwalan 2K23, a 24-hour Hackathon conducted by CSE Dept of SRKREC. Out of 45 participating teams across AP colleges, Team Virtual Bridge (K. Sanju, Ch. Ravi Kumar, Ch. Anusha, Chaitanya Srujana, K. Puneeth, V. Siva Mani) stood 2nd winning ₹10,000 cash award for developing a Lunch Box service software.",
+        images: [
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-4.jpg",
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-1.jpg",
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-2.jpg",
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-3.jpg",
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-5.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-medal", text: "🥈 2nd Prize Winner" },
+            { icon: "fas fa-laptop-code", text: "24-Hour Hackathon" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹10,000 Cash Award" },
+            { icon: "fas fa-users", text: "45 AP Teams" },
+            { icon: "fas fa-calendar-alt", text: "23rd & 24th March 2023" }
         ]
     }
 ];
