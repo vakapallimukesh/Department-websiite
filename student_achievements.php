@@ -159,7 +159,7 @@ body {
     border-color: #cbd5e1;
 }
 
-/* Crisp HD Image Frame */
+/* Crisp HD Image Frame (Standard 16:10 or Square 1:1) */
 .editorial-img-container {
     position: relative;
     border-radius: 14px;
@@ -169,6 +169,10 @@ body {
     cursor: pointer;
     border: 1px solid #e2e8f0;
     margin-bottom: 16px;
+}
+
+.editorial-img-container.square-frame {
+    aspect-ratio: 1/1 !important;
 }
 
 .editorial-img-container img, .editorial-img-container video {
@@ -384,7 +388,7 @@ body {
         <span class="hero-tag"><i class="fas fa-trophy me-2"></i> Student Hall of Fame</span>
         <h1 class="hero-title">Student <span>Achievements</span></h1>
         <p class="lead mx-auto" style="max-width: 680px; color: #cbd5e1; font-size: 1.1rem; line-height: 1.6;">
-            Celebrating national hackathon winners, project expo champions, oratorical semifinalists, and student leaders in CSD & CSIT departments.
+            Celebrating national hackathon winners, project expo champions, sports gold medalists, classical dancers, and student leaders in CSD & CSIT departments.
         </p>
     </div>
 </section>
@@ -430,9 +434,9 @@ body {
             <button class="category-filter-btn" data-category="hackathons">🏆 Hackathons</button>
             <button class="category-filter-btn" data-category="competitions">🥇 Competitions & Expos</button>
             <button class="category-filter-btn" data-category="oratory">🎤 Oratory & Leadership</button>
+            <button class="category-filter-btn" data-category="sports">💃 Sports & Cultural</button>
             <button class="category-filter-btn" data-category="technical">💻 Technical Events</button>
             <button class="category-filter-btn" data-category="academics">📚 Academic Achievements</button>
-            <button class="category-filter-btn" data-category="research">🔬 Research</button>
         </div>
 
         <!-- 🏆 SEPARATE SECTION 1: HACKATHONS SHOWCASE -->
@@ -474,20 +478,39 @@ body {
         </div>
 
         <!-- 🎤 SEPARATE SECTION 3: ORATORY & LEADERSHIP EXCELLENCE SHOWCASE -->
-        <div id="oratorySectionWrapper" class="mb-4">
+        <div id="oratorySectionWrapper" class="mb-5 pb-4">
             <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
                     <span class="section-badge-tag"><i class="fas fa-microphone-alt me-1.5"></i> Oratory & Leadership Excellence</span>
                     <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
                         Oratory & <span style="color: #d97706;">Leadership Excellence</span>
                     </h2>
-                    <p class="text-secondary small mb-0">Celebrating student accomplishments in public speaking, oratorical championships, and leadership forums.</p>
+                    <p class="text-secondary small mb-0">Celebrating student accomplishments in public speaking, oratorical championships, and entrepreneurship workshops.</p>
                 </div>
                 <span class="badge bg-primary text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
                     🎤 Leadership & Oratory
                 </span>
             </div>
             <div id="oratoryGridContainer">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+
+        <!-- 💃 SEPARATE SECTION 4: SPORTS & CULTURAL EXCELLENCE SHOWCASE -->
+        <div id="sportsSectionWrapper" class="mb-4">
+            <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div>
+                    <span class="section-badge-tag"><i class="fas fa-running me-1.5"></i> Sports & Cultural Hall of Fame</span>
+                    <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
+                        Sports, Arts & <span style="color: #d97706;">Cultural Excellence</span>
+                    </h2>
+                    <p class="text-secondary small mb-0">Honoring Gold Medalists in martial arts, university representatives, and classical dance champions.</p>
+                </div>
+                <span class="badge bg-success text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
+                    💃 Sports & Cultural Champions
+                </span>
+            </div>
+            <div id="sportsGridContainer">
                 <!-- Rendered by JS -->
             </div>
         </div>
@@ -763,6 +786,81 @@ const studentAchievements = [
             { icon: "fas fa-award", text: "Public Speaking" },
             { icon: "fas fa-user-graduate", text: "CSD Students" }
         ]
+    },
+    {
+        id: "karate-gold-pooja-sai-praveena",
+        title: "Gold Medal — JNTUK Inter-Collegiate Karate 2024-25",
+        event: "JNTUK Inter-Collegiate & South-West Inter-University Karate",
+        category: "sports",
+        categoryName: "Sports & Martial Arts",
+        team: "D Pooja Sai Praveena (2/4 CSD)",
+        award: "🥇 Gold Medal",
+        cashAward: "Inter-University Representative",
+        date: "2024–25",
+        stage: "State & University Level",
+        department: "2/4 CSD, Department of CSD & CSIT",
+        description: "🥋💥 Kickin' it with Gold! 💫🏅 Hearty congratulations to D Pooja Sai Praveena from 2/4 CSD for securing the GOLD MEDAL 🥇 in the JNTUK Inter-Collegiate Karate Tournament and proudly representing the university at the South-West Inter-University Karate Championship 2024–25, Chennai! Your strength, dedication, and discipline are truly inspiring! 💪🔥 Keep fighting, keep shining! 🌟🙌",
+        images: [
+            "assets/achievements/karate-gold-pooja-sai-praveena.jpg"
+        ],
+        isSquare: true,
+        featured: true,
+        badges: [
+            { icon: "fas fa-medal", text: "🥇 Gold Medalist" },
+            { icon: "fas fa-fist-raised", text: "Karate Championship" },
+            { icon: "fas fa-university", text: "JNTUK / Inter-University" },
+            { icon: "fas fa-user-graduate", text: "2/4 CSD" }
+        ]
+    },
+    {
+        id: "classical-dance-1st-kruti",
+        title: "1st Prize — Classical Dance @ SRKREC 45th Annual Day",
+        event: "45th Annual Day Celebrations of SRKREC",
+        category: "sports",
+        categoryName: "Cultural & Arts",
+        team: "P.B.S Kruti (1/4 CSIT)",
+        award: "🥇 1st Prize Winner",
+        cashAward: "SRKREC Annual Day Honor",
+        date: "45th Annual Day",
+        stage: "Group Performance",
+        department: "1/4 CSIT, Department of CSD & CSIT",
+        description: "“Celebrating talent and grace! ✨ Hearty congratulations to P.B.S Kruti from 1/4 CSIT for securing 1st Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC! Her dedication, elegance, and mastery of classical arts are truly inspiring.”",
+        images: [
+            "assets/achievements/classical-dance-1st-kruti.jpg"
+        ],
+        isSquare: true,
+        featured: true,
+        badges: [
+            { icon: "fas fa-award", text: "🥇 1st Prize Winner" },
+            { icon: "fas fa-music", text: "Classical Dance" },
+            { icon: "fas fa-calendar-star", text: "45th Annual Day" },
+            { icon: "fas fa-user-graduate", text: "1/4 CSIT" }
+        ]
+    },
+    {
+        id: "classical-dance-2nd-lakshmi-prasanna",
+        title: "2nd Prize — Classical Dance @ SRKREC 45th Annual Day",
+        event: "45th Annual Day Celebrations of SRKREC",
+        category: "sports",
+        categoryName: "Cultural & Arts",
+        team: "R. Lakshmi Prasanna (2/4 CSD)",
+        award: "🥈 2nd Prize Winner",
+        cashAward: "SRKREC Annual Day Honor",
+        date: "45th Annual Day",
+        stage: "Group Performance",
+        department: "2/4 CSD, Department of CSD & CSIT",
+        description: "“Congratulations to R. Lakshmi Prasanna from 2/4 CSD for winning 2nd Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC! Her dedication, expression, and passion for Indian classical dance are truly inspiring.”",
+        images: [
+            "assets/achievements/classical-dance-2nd-lakshmi-prasanna.jpg"
+        ],
+        isSquare: true,
+        featured: true,
+        badges: [
+            { icon: "fas fa-medal", text: "🥈 2nd Prize Winner" },
+            { icon: "fas fa-music", text: "Classical Dance" },
+            { icon: "fas fa-calendar-star", text: "45th Annual Day" },
+            { icon: "fas fa-user-graduate", text: "2/4 CSD" }
+        ]
     }
 ];
 
@@ -814,11 +912,12 @@ function clearAllSlideshowTimers() {
 }
 
 function renderCardHtml(item) {
+    const frameClass = item.isSquare ? 'editorial-img-container square-frame' : 'editorial-img-container';
     return `
         <div class="col-lg-4 col-md-6 col-12 d-flex">
             <div class="editorial-card w-100" id="card-${item.id}">
                 <!-- HD Media Container (Image or Video) -->
-                <div class="editorial-img-container" id="imgBox-${item.id}">
+                <div class="${frameClass}" id="imgBox-${item.id}">
                     <span class="top-photo-badge">${item.award}</span>
                     
                     ${item.isVideo ? `
@@ -885,7 +984,7 @@ function renderCardHtml(item) {
                 <!-- Cash Award Spotlight Box -->
                 <div class="editorial-award-box">
                     <div>
-                        <span class="text-uppercase text-muted d-block fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">Impact / Prize</span>
+                        <span class="text-uppercase text-muted d-block fw-bold" style="font-size: 0.68rem; letter-spacing: 0.5px;">Impact / Honor</span>
                         <div class="editorial-award-amount">${item.cashAward}</div>
                     </div>
                     <span class="badge bg-dark text-white rounded-pill px-3 py-1.5 small fw-bold">${item.award}</span>
@@ -913,19 +1012,23 @@ function renderAchievements(selectedCategory = 'all') {
     const hackathonsContainer = document.getElementById('hackathonsGridContainer');
     const competitionsContainer = document.getElementById('competitionsGridContainer');
     const oratoryContainer = document.getElementById('oratoryGridContainer');
+    const sportsContainer = document.getElementById('sportsGridContainer');
 
     const hackathonsWrapper = document.getElementById('hackathonsSectionWrapper');
     const competitionsWrapper = document.getElementById('competitionsSectionWrapper');
     const oratoryWrapper = document.getElementById('oratorySectionWrapper');
+    const sportsWrapper = document.getElementById('sportsSectionWrapper');
 
     hackathonsContainer.innerHTML = '';
     competitionsContainer.innerHTML = '';
     oratoryContainer.innerHTML = '';
+    sportsContainer.innerHTML = '';
     clearAllSlideshowTimers();
 
     const hackathonItems = studentAchievements.filter(a => a.category === 'hackathons');
     const competitionItems = studentAchievements.filter(a => a.category === 'competitions');
     const oratoryItems = studentAchievements.filter(a => a.category === 'oratory');
+    const sportsItems = studentAchievements.filter(a => a.category === 'sports');
 
     if (selectedCategory === 'all' || selectedCategory === 'hackathons') {
         hackathonsWrapper.style.display = 'block';
@@ -961,6 +1064,18 @@ function renderAchievements(selectedCategory = 'all') {
         oratoryContainer.appendChild(rowGrid);
     } else {
         oratoryWrapper.style.display = 'none';
+    }
+
+    if (selectedCategory === 'all' || selectedCategory === 'sports') {
+        sportsWrapper.style.display = 'block';
+        const rowGrid = document.createElement('div');
+        rowGrid.className = 'row g-4 align-items-stretch';
+        sportsItems.forEach(item => {
+            rowGrid.innerHTML += renderCardHtml(item);
+        });
+        sportsContainer.appendChild(rowGrid);
+    } else {
+        sportsWrapper.style.display = 'none';
     }
 
     // Initialize Automatic Slideshow for image items with multiple images
