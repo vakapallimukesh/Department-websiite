@@ -1112,7 +1112,7 @@ function openLightbox(itemId, index) {
     
     if (item.isVideo) {
         mediaContainer.innerHTML = `
-            <video id="lightboxVideoPlayer" src="${item.video}" controls autoplay style="max-height: 82vh; max-width: 100%; object-fit: contain;"></video>
+            <video id="lightboxVideoPlayer" src="${item.video}" autoplay loop muted playsinline style="max-height: 82vh; max-width: 100%; object-fit: contain; pointer-events: none;"></video>
         `;
         document.getElementById('lightboxCounter').textContent = `Video Promo`;
     } else {
