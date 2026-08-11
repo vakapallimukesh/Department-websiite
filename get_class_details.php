@@ -52,7 +52,7 @@ try {
         f.email,
         f.phone_number
     FROM faculties f 
-    WHERE f.class_id = '$class_id' AND f.is_active = 1
+    WHERE (FIND_IN_SET('$class_id', f.class_id) > 0 OR f.class_id = '$class_id') AND f.is_active = 1
     ORDER BY f.faculty_name ASC";
     
     $faculty_result = mysqli_query($conn, $faculty_query);

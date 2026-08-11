@@ -135,7 +135,7 @@ $class_query = "SELECT
     f.email as faculty_email
 FROM classes c
 LEFT JOIN students s ON c.class_id = s.class_id AND s.is_alumni = 0
-LEFT JOIN faculties f ON c.class_id = f.class_id AND f.is_active = 1
+LEFT JOIN faculties f ON (FIND_IN_SET(c.class_id, f.class_id) > 0 OR f.class_id = c.class_id) AND f.is_active = 1
 GROUP BY c.class_id, f.faculty_id
 ORDER BY c.year, c.branch, c.section";
 
