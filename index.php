@@ -2883,10 +2883,6 @@ include "./head.php";
                         <p style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 20px; line-height: 1.4;">
                             20+ software applications developed by students with 50+ internships/live projects from startups.
                         </p>
-                        <div style="display: inline-flex; align-items: center; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
-                            <span style="margin-right: 6px;">Explore Projects</span>
-                            <i class="fas fa-arrow-right" style="transition: transform 0.3s ease; font-size: 0.7rem;"></i>
-                        </div>
                     </div>
                 </div>
 
@@ -2939,10 +2935,6 @@ include "./head.php";
                     <p style="font-size: 0.9rem; color: #4b5563; margin-bottom: 20px; line-height: 1.5;">
                         MOUs with Swecha AP, Wadhwani Foundation, AICTE IDEALab, KAIZEN, PurpleLane. Student-led clubs and houses focusing on emotional intelligence, leadership, design thinking, and entrepreneurship.
                     </p>
-                    <div style="display: inline-flex; align-items: center; background: #22c55e; color: white; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); font-size: 0.85rem;">
-                        <span style="margin-right: 8px;">Explore Student Clubs</span>
-                        <i class="fas fa-arrow-right" style="transition: transform 0.3s ease; font-size: 0.7rem;"></i>
-                    </div>
                 </div>
                 <div style="position: relative;">
                     <div style="background: white; border-radius: 15px; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
@@ -3563,21 +3555,6 @@ include "./head.php";
         }
     </style>
 
-    <!-- Call to Action -->
-    <section class="cta-section" style="padding: 80px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center;">
-        <div class="container">
-            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Ready to Shape Your Future?</h2>
-            <!-- <p style="font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9;">Join our community of innovators, creators, and future technology leaders</p> -->
-            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                <a href="student_dashboard.php" class="btn" style="background: white; color: #667eea; padding: 15px 30px; border-radius: 25px; text-decoration: none; font-weight: 600;">
-                    Student Portal
-                </a>
-                <a href="faculty_dashboard.php" class="btn" style="background: rgba(255,255,255,0.2); color: white; padding: 15px 30px; border-radius: 25px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3);">
-                    Faculty Portal
-                </a>
-            </div>
-        </div>
-    </section>
 
 
     <?php include "footer.php"; ?>

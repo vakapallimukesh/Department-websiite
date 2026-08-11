@@ -67,6 +67,7 @@ body {
     font-weight: 900;
     line-height: 1.15;
     margin-bottom: 14px;
+    color: #ffffff;
 }
 
 .hero-title span {
