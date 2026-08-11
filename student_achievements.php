@@ -477,14 +477,14 @@ body {
         <div id="oratorySectionWrapper" class="mb-4">
             <div class="text-start mb-4 pb-2 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div>
-                    <span class="section-badge-tag"><i class="fas fa-microphone-alt me-1.5"></i> Oratory & Public Speaking</span>
+                    <span class="section-badge-tag"><i class="fas fa-microphone-alt me-1.5"></i> Oratory & Leadership Excellence</span>
                     <h2 class="font-outfit fw-bold text-dark mb-1" style="font-size: 2.2rem;">
                         Oratory & <span style="color: #d97706;">Leadership Excellence</span>
                     </h2>
                     <p class="text-secondary small mb-0">Celebrating student accomplishments in public speaking, oratorical championships, and leadership forums.</p>
                 </div>
                 <span class="badge bg-primary text-white px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
-                    🎤 Master Orator Championship
+                    🎤 Leadership & Oratory
                 </span>
             </div>
             <div id="oratoryGridContainer">
@@ -710,6 +710,33 @@ const studentAchievements = [
             { icon: "fas fa-indian-rupee-sign", text: "₹10,000 Cash Award" },
             { icon: "fas fa-users", text: "100+ Teams" },
             { icon: "fas fa-user-graduate", text: "3/4 CSD" }
+        ]
+    },
+    {
+        id: "deeptech-entrepreneurship-iit-hyd",
+        title: "DeepTech Entrepreneurship Workshop @ IIT Hyderabad",
+        event: "DeepTech Entrepreneurship — BVR SCIONT, IIT Hyd",
+        category: "oratory",
+        categoryName: "Entrepreneurship",
+        team: "CSD Student Delegates",
+        award: "🎓 IIT Hyd Certification",
+        cashAward: "IIT Hyderabad Honor",
+        date: "2023",
+        stage: "IIT Hyderabad",
+        department: "Department of CSD & CSIT",
+        description: "CSD Students Attended DeepTech Entrepreneurship @ IIT Hyderabad! Student leaders from the Department of Computer Science & Design, SRKR Engineering College, attended the prestigious DeepTech Entrepreneurship workshop at Dr. BVR Mohan Reddy School of Innovation and Entrepreneurship (BVR SCIONT), IIT Hyderabad.",
+        images: [
+            "assets/achievements/deeptech-entrepreneurship-iit-hyd-1.jpg",
+            "assets/achievements/deeptech-entrepreneurship-iit-hyd-2.jpg",
+            "assets/achievements/deeptech-entrepreneurship-iit-hyd-3.jpg",
+            "assets/achievements/deeptech-entrepreneurship-iit-hyd-4.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-lightbulb", text: "DeepTech Entrepreneurship" },
+            { icon: "fas fa-university", text: "IIT Hyderabad" },
+            { icon: "fas fa-certificate", text: "BVR SCIONT Certification" },
+            { icon: "fas fa-user-graduate", text: "CSD Student Leaders" }
         ]
     },
     {
