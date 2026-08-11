@@ -548,16 +548,16 @@ include "connect.php";
             </div>
         </div>
     </div>
-<!-- CULTURAL & SPORTS HEROES OF DEPARTMENT -->
-<section class="py-5 bg-light border-top border-bottom" id="cultural-sports-heroes">
+<!-- HEROES OF THE DEPARTMENT SECTION -->
+<section class="py-5 bg-light border-top border-bottom" id="heroes-of-department">
     <div class="container py-4">
         <div class="section-header text-center mb-5">
             <span class="section-tag" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
-                <i class="fas fa-star me-2"></i>Cultural & Sports Icons
+                <i class="fas fa-medal me-2"></i>Hall of Fame
             </span>
-            <h2 class="section-title mt-2">Cultural & Sports Heroes</h2>
+            <h2 class="section-title mt-2">Heroes of the Department</h2>
             <p class="lead text-secondary mx-auto mt-2" style="max-width: 680px; font-size: 1.05rem; line-height: 1.6;">
-                Honoring exceptional student achievers who represent CSD & CSIT departments with glory in university martial arts championships and state classical dance performances.
+                Honoring exceptional student achievers, TEDx organizers, martial arts champions, classical dancers, and leaders representing CSD & CSIT departments with glory.
             </p>
         </div>
 
