@@ -153,7 +153,7 @@ body {
     aspect-ratio: 16/10;
     cursor: pointer;
     border: 1px solid #e2e8f0;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .editorial-img-container img {
@@ -162,22 +162,57 @@ body {
     object-fit: cover;
     object-position: center;
     image-rendering: -webkit-optimize-contrast;
-    transition: transform 0.4s ease;
+    transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .editorial-img-container:hover img {
     transform: scale(1.03);
 }
 
+/* Slide Arrow Navigation Overlay */
+.slide-arrow-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.65);
+    color: #ffffff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: all 0.25s ease;
+    z-index: 5;
+    backdrop-filter: blur(4px);
+}
+
+.editorial-img-container:hover .slide-arrow-btn {
+    opacity: 1;
+}
+
+.slide-arrow-btn:hover {
+    background: var(--primary-amber);
+    color: #ffffff;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slide-arrow-prev { left: 10px; }
+.slide-arrow-next { right: 10px; }
+
 .editorial-img-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(15, 23, 42, 0.35);
+    background: rgba(15, 23, 42, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .editorial-img-container:hover .editorial-img-overlay {
@@ -204,10 +239,10 @@ body {
     position: absolute;
     bottom: 12px;
     right: 12px;
-    background: rgba(15, 23, 42, 0.75);
+    background: rgba(15, 23, 42, 0.85);
     color: #ffffff;
     font-weight: 600;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     padding: 4px 10px;
     border-radius: 999px;
     backdrop-filter: blur(4px);
@@ -217,6 +252,7 @@ body {
 /* Thumbnail Strip */
 .editorial-thumb-strip {
     display: flex;
+    align-items: center;
     gap: 8px;
     margin-bottom: 18px;
     overflow-x: auto;
@@ -231,13 +267,14 @@ body {
     overflow: hidden;
     border: 2px solid transparent;
     cursor: pointer;
-    opacity: 0.6;
-    transition: all 0.2s ease;
+    opacity: 0.55;
+    transition: all 0.25s ease;
 }
 
 .editorial-thumb.active, .editorial-thumb:hover {
     border-color: var(--primary-amber);
     opacity: 1;
+    transform: scale(1.05);
 }
 
 .editorial-thumb img {
@@ -429,6 +466,35 @@ body {
 // Student Achievements Data Store
 const studentAchievements = [
     {
+        id: "prajwalan-2k23-team-virtual-bridge",
+        title: "2nd Prize — Prajwalan 2K23 (24-Hour Hackathon)",
+        event: "Prajwalan 2K23 — 24 Hour Hackathon",
+        category: "hackathons",
+        categoryName: "Hackathon",
+        team: "Team Virtual Bridge",
+        award: "🥈 2nd Prize",
+        cashAward: "₹10,000",
+        date: "23rd & 24th March 2023",
+        duration: "24 Hours",
+        department: "Department of CSD & CSIT",
+        description: "Another Feather in the CSD Cap! Team Virtual Bridge (2/4 CSD) won 2nd Prize in Prajwalan 2K23, a 24-hour Hackathon conducted by CSE Dept of SRKREC. Out of 45 participating teams across AP colleges, Team Virtual Bridge (K. Sanju, Ch. Ravi Kumar, Ch. Anusha, Chaitanya Srujana, K. Puneeth, V. Siva Mani) stood 2nd winning ₹10,000 cash award for developing a Lunch Box service software.",
+        images: [
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-4.jpg",
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-1.jpg",
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-2.jpg",
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-3.jpg",
+            "assets/achievements/prajwalan-2k23-team-virtual-bridge-5.jpg"
+        ],
+        featured: true,
+        badges: [
+            { icon: "fas fa-medal", text: "🥈 2nd Prize Winner" },
+            { icon: "fas fa-laptop-code", text: "24-Hour Hackathon" },
+            { icon: "fas fa-indian-rupee-sign", text: "₹10,000 Cash Award" },
+            { icon: "fas fa-users", text: "45 AP Teams" },
+            { icon: "fas fa-calendar-alt", text: "23rd & 24th March 2023" }
+        ]
+    },
+    {
         id: "quantum-valley-2025",
         title: "1st Place — Amaravati Quantum Valley Hackathon 2025",
         event: "Amaravati Quantum Valley Hackathon 2025",
@@ -476,41 +542,13 @@ const studentAchievements = [
             { icon: "fas fa-clock", text: "36 Hours" },
             { icon: "fas fa-flag-checkered", text: "Grand Finale" }
         ]
-    },
-    {
-        id: "prajwalan-2k23-team-virtual-bridge",
-        title: "2nd Prize — Prajwalan 2K23 (24-Hour Hackathon)",
-        event: "Prajwalan 2K23 — 24 Hour Hackathon",
-        category: "hackathons",
-        categoryName: "Hackathon",
-        team: "Team Virtual Bridge",
-        award: "🥈 2nd Prize",
-        cashAward: "₹10,000",
-        date: "23rd & 24th March 2023",
-        duration: "24 Hours",
-        department: "Department of CSD & CSIT",
-        description: "Another Feather in the CSD Cap! Team Virtual Bridge (2/4 CSD) won 2nd Prize in Prajwalan 2K23, a 24-hour Hackathon conducted by CSE Dept of SRKREC. Out of 45 participating teams across AP colleges, Team Virtual Bridge (K. Sanju, Ch. Ravi Kumar, Ch. Anusha, Chaitanya Srujana, K. Puneeth, V. Siva Mani) stood 2nd winning ₹10,000 cash award for developing a Lunch Box service software.",
-        images: [
-            "assets/achievements/prajwalan-2k23-team-virtual-bridge-4.jpg",
-            "assets/achievements/prajwalan-2k23-team-virtual-bridge-1.jpg",
-            "assets/achievements/prajwalan-2k23-team-virtual-bridge-2.jpg",
-            "assets/achievements/prajwalan-2k23-team-virtual-bridge-3.jpg",
-            "assets/achievements/prajwalan-2k23-team-virtual-bridge-5.jpg"
-        ],
-        featured: true,
-        badges: [
-            { icon: "fas fa-medal", text: "🥈 2nd Prize Winner" },
-            { icon: "fas fa-laptop-code", text: "24-Hour Hackathon" },
-            { icon: "fas fa-indian-rupee-sign", text: "₹10,000 Cash Award" },
-            { icon: "fas fa-users", text: "45 AP Teams" },
-            { icon: "fas fa-calendar-alt", text: "23rd & 24th March 2023" }
-        ]
     }
 ];
 
 let activeLightboxImages = [];
 let activeImageIndex = 0;
 let currentLightboxModal = null;
+const cardSlideshowTimers = {};
 
 document.addEventListener('DOMContentLoaded', function() {
     renderAchievements('hackathons');
@@ -541,9 +579,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+function clearAllSlideshowTimers() {
+    Object.keys(cardSlideshowTimers).forEach(id => {
+        clearInterval(cardSlideshowTimers[id]);
+        delete cardSlideshowTimers[id];
+    });
+}
+
 function renderAchievements(selectedCategory = 'all') {
     const container = document.getElementById('achievementsContainer');
     container.innerHTML = '';
+    clearAllSlideshowTimers();
 
     const filtered = selectedCategory === 'all' 
         ? studentAchievements 
@@ -573,21 +619,34 @@ function renderAchievements(selectedCategory = 'all') {
         colCard.className = 'col-lg-4 col-md-6 col-12 d-flex';
 
         colCard.innerHTML = `
-            <div class="editorial-card w-100">
-                <!-- HD Image Container -->
-                <div class="editorial-img-container" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
+            <div class="editorial-card w-100" id="card-${item.id}">
+                <!-- HD Image Container with Automatic Slideshow & Arrows -->
+                <div class="editorial-img-container" id="imgBox-${item.id}">
                     <span class="top-photo-badge">${item.award}</span>
-                    <img id="activeMainImg-${item.id}" src="${item.images[0]}" alt="${item.title}" loading="lazy">
-                    <div class="editorial-img-overlay">
-                        <span class="btn btn-light rounded-pill px-3 py-1.5 fw-bold text-dark small shadow-sm">
-                            <i class="fas fa-search-plus me-1 text-warning"></i> View Photo
+                    <img id="activeMainImg-${item.id}" src="${item.images[0]}" alt="${item.title}" loading="lazy" onclick="openLightbox('${item.id}', getCurrentIdx('${item.id}'))">
+                    
+                    ${item.images.length > 1 ? `
+                        <!-- Left/Right Slide Arrows -->
+                        <button class="slide-arrow-btn slide-arrow-prev" onclick="event.stopPropagation(); stepSlideshow('${item.id}', -1)" aria-label="Previous Slide">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="slide-arrow-btn slide-arrow-next" onclick="event.stopPropagation(); stepSlideshow('${item.id}', 1)" aria-label="Next Slide">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <span class="bottom-photo-count" id="photoCount-${item.id}">
+                            <i class="fas fa-images me-1 text-warning"></i> Photo 1 of ${item.images.length}
                         </span>
-                    </div>
-                    ${item.images.length > 1 ? `<span class="bottom-photo-count"><i class="fas fa-images me-1"></i> ${item.images.length} Photos</span>` : ''}
+                    ` : ''}
                 </div>
 
                 ${item.images.length > 1 ? `
-                    <!-- Thumbnail Strip -->
+                    <!-- Thumbnail Strip with Auto Slideshow Indicator -->
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="small text-muted fw-semibold" style="font-size: 0.72rem;">
+                            <i class="fas fa-play me-1 text-warning"></i> Auto Slideshow (${item.images.length} Photos)
+                        </span>
+                        <span class="small text-secondary" style="font-size: 0.7rem;">Click photo to expand</span>
+                    </div>
                     <div class="editorial-thumb-strip">
                         ${item.images.map((imgSrc, idx) => `
                             <div class="editorial-thumb ${idx === 0 ? 'active' : ''}" id="thumb-${item.id}-${idx}" onclick="switchGalleryImg('${item.id}', ${idx})">
@@ -600,7 +659,7 @@ function renderAchievements(selectedCategory = 'all') {
                 <!-- Category Tag -->
                 <div class="mb-2">
                     <span class="badge bg-warning-subtle text-warning-emphasis fw-bold rounded-pill px-2.5 py-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">
-                        HACKATHON • ${item.stage || 'GRAND FINALE'}
+                        HACKATHON • ${item.stage || '24 HOURS'}
                     </span>
                 </div>
 
@@ -645,6 +704,13 @@ function renderAchievements(selectedCategory = 'all') {
     });
 
     container.appendChild(rowGrid);
+
+    // Initialize Automatic Slideshow for items with multiple images
+    filtered.forEach(item => {
+        if (item.images.length > 1) {
+            initAutoSlideshow(item.id, item.images.length);
+        }
+    });
 }
 
 const currentIdxMap = {};
@@ -653,13 +719,44 @@ function getCurrentIdx(itemId) {
     return currentIdxMap[itemId] || 0;
 }
 
+function initAutoSlideshow(itemId, totalPhotos) {
+    currentIdxMap[itemId] = 0;
+    
+    // Cycle every 3.5 seconds
+    cardSlideshowTimers[itemId] = setInterval(() => {
+        let current = getCurrentIdx(itemId);
+        let next = (current + 1) % totalPhotos;
+        switchGalleryImg(itemId, next);
+    }, 3500);
+}
+
+function stepSlideshow(itemId, direction) {
+    const item = studentAchievements.find(a => a.id === itemId);
+    if (!item || item.images.length <= 1) return;
+
+    let current = getCurrentIdx(itemId);
+    let next = (current + direction + item.images.length) % item.images.length;
+    switchGalleryImg(itemId, next);
+}
+
 function switchGalleryImg(itemId, index) {
     const item = studentAchievements.find(a => a.id === itemId);
     if (!item) return;
 
     currentIdxMap[itemId] = index;
     const mainImg = document.getElementById(`activeMainImg-${itemId}`);
-    if (mainImg) mainImg.src = item.images[index];
+    if (mainImg) {
+        mainImg.style.opacity = '0.4';
+        setTimeout(() => {
+            mainImg.src = item.images[index];
+            mainImg.style.opacity = '1';
+        }, 120);
+    }
+
+    const countEl = document.getElementById(`photoCount-${itemId}`);
+    if (countEl) {
+        countEl.innerHTML = `<i class="fas fa-images me-1 text-warning"></i> Photo ${index + 1} of ${item.images.length}`;
+    }
 
     item.images.forEach((_, idx) => {
         const thumb = document.getElementById(`thumb-${itemId}-${idx}`);
