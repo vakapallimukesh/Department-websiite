@@ -651,6 +651,7 @@ const studentAchievements = [
         department: "Department of CSD & CSIT",
         description: "Winners of Startup Expo 2023! Our Bhimavaram Online Startup was declared Winner among state-level innovative startups at VULCANZY 2k23 Start-Up Expo conducted by National Institute of Technology (NIT) AP on 23rd Feb 2023. CSD student fellows presented 3 startup initiatives of Bhimavaram Online (Kumar SSPC, Anusha Chennamsetti, Chaitanya Srujana Pudi).",
         images: [
+            "assets/achievements/startup-expo-2023-nit-ap-poster.jpg",
             "assets/achievements/startup-expo-2023-nit-ap-1.jpg",
             "assets/achievements/startup-expo-2023-nit-ap-4.jpg",
             "assets/achievements/startup-expo-2023-nit-ap-3.jpg",
