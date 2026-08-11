@@ -571,21 +571,20 @@ include "connect.php";
                             🥇 1st Prize Classical Dance
                         </span>
                     </div>
-                    <div class="card-body p-4 d-flex flex-column">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="badge bg-primary-subtle text-primary fw-bold rounded-pill px-3 py-1" style="font-size: 0.78rem;">
-                                <i class="fas fa-graduation-cap me-1"></i> 1/4 CSIT
-                            </span>
-                            <span class="small text-muted font-monospace"><i class="fas fa-university me-1"></i> SRKREC</span>
-                        </div>
-                        <h3 class="fw-bold text-dark font-outfit mb-1" style="font-size: 1.35rem;">P.B.S Kruti</h3>
-                        <div class="text-warning-emphasis fw-semibold small mb-3">
-                            <i class="fas fa-music me-1"></i> Particular Talent: <strong>Classical Dance Maestro</strong>
-                        </div>
+                    <div class="card-body p-4 d-flex flex-column text-start">
+                        <!-- Row 1: Name -->
+                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">P.B.S Kruti</h3>
                         
-                        <!-- Reduced Concise Paragraph Content -->
-                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.55; font-size: 0.85rem;">
-                            P.B.S Kruti (1/4 CSIT) is an exceptional classical dancer who secured 1st Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Renowned for her mesmerizing expressions, mudras, and devotion to traditional arts, she seamlessly balances CSIT academics with cultural leadership. She stands as a proud cultural hero of our department.
+                        <!-- Row 2: Register No -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>25B91A0789</strong>
+                            </span>
+                        </div>
+
+                        <!-- Row 3: 4 to 5 Line Context -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
+                            P.B.S Kruti is an exceptional classical dancer who secured 1st Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Renowned for her mesmerizing expressions, mudras, and devotion to traditional Indian arts, she balances academics with cultural leadership. Her artistic excellence and talent bring immense honor to our department. She stands as a proud cultural hero inspiring students across campus.
                         </p>
                     </div>
                 </div>
@@ -600,21 +599,20 @@ include "connect.php";
                             🥈 2nd Prize Classical Dance
                         </span>
                     </div>
-                    <div class="card-body p-4 d-flex flex-column">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="badge bg-success-subtle text-success fw-bold rounded-pill px-3 py-1" style="font-size: 0.78rem;">
-                                <i class="fas fa-graduation-cap me-1"></i> 2/4 CSD
-                            </span>
-                            <span class="small text-muted font-monospace"><i class="fas fa-university me-1"></i> SRKREC</span>
-                        </div>
-                        <h3 class="fw-bold text-dark font-outfit mb-1" style="font-size: 1.35rem;">R. Lakshmi Prasanna</h3>
-                        <div class="text-warning-emphasis fw-semibold small mb-3">
-                            <i class="fas fa-theater-masks me-1"></i> Particular Talent: <strong>Classical Performing Arts Star</strong>
-                        </div>
+                    <div class="card-body p-4 d-flex flex-column text-start">
+                        <!-- Row 1: Name -->
+                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">R. Lakshmi Prasanna</h3>
                         
-                        <!-- Reduced Concise Paragraph Content -->
-                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.55; font-size: 0.85rem;">
-                            R. Lakshmi Prasanna (2/4 CSD) is a passionate performing artist who won 2nd Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Celebrated for her technical precision and graceful stage presence, she represents the CSD branch with immense pride. She proves that technology, design, and classical arts go hand in hand.
+                        <!-- Row 2: Register No -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>24B91A6245</strong>
+                            </span>
+                        </div>
+
+                        <!-- Row 3: 4 to 5 Line Context -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
+                            R. Lakshmi Prasanna is a passionate performing artist who won 2nd Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Celebrated for her technical precision, graceful stage presence, and expressive mudras, she illuminates every cultural event. She represents the department with immense pride, elegance, and artistic enthusiasm. Lakshmi Prasanna demonstrates that cutting-edge technology, design, and classical arts go hand in hand.
                         </p>
                     </div>
                 </div>
@@ -629,21 +627,20 @@ include "connect.php";
                             🥇 Gold Medalist Karate
                         </span>
                     </div>
-                    <div class="card-body p-4 d-flex flex-column">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="badge bg-danger-subtle text-danger fw-bold rounded-pill px-3 py-1" style="font-size: 0.78rem;">
-                                <i class="fas fa-graduation-cap me-1"></i> 2/4 CSD
-                            </span>
-                            <span class="small text-muted font-monospace"><i class="fas fa-university me-1"></i> JNTUK / Chennai</span>
-                        </div>
-                        <h3 class="fw-bold text-dark font-outfit mb-1" style="font-size: 1.35rem;">D Pooja Sai Praveena</h3>
-                        <div class="text-warning-emphasis fw-semibold small mb-3">
-                            <i class="fas fa-fist-raised me-1"></i> Particular Talent: <strong>Karate Champion & Martial Artist</strong>
-                        </div>
+                    <div class="card-body p-4 d-flex flex-column text-start">
+                        <!-- Row 1: Name -->
+                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">D Pooja Sai Praveena</h3>
                         
-                        <!-- Reduced Concise Paragraph Content -->
-                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.55; font-size: 0.85rem;">
-                            D Pooja Sai Praveena (2/4 CSD) is a formidable martial artist who won the Gold Medal 🥇 in the JNTUK Inter-Collegiate Karate Tournament and represented JNTUK at the South-West Inter-University Karate Championship 2024–25 in Chennai. Her power, discipline, and athletic brilliance inspire the department. She exemplifies how dedication and focus create national champions.
+                        <!-- Row 2: Register No -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>24B91A6218</strong>
+                            </span>
+                        </div>
+
+                        <!-- Row 3: 4 to 5 Line Context -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
+                            D Pooja Sai Praveena is a formidable martial artist who secured the Gold Medal 🥇 in the JNTUK Inter-Collegiate Karate Tournament with dominant performances. She proudly represented JNTUK University at the South-West Inter-University Karate Championship 2024–25 in Chennai. Her athletic power, discipline, and courage inspire students across our institution. She is a true department hero who proves that hard work, grit, and focus produce national champions.
                         </p>
                     </div>
                 </div>
