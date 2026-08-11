@@ -242,12 +242,141 @@ include "connect.php";
     </div>
 </section>
 
-<!-- CLASS REPRESENTATIVES SECTION -->
+<!-- HEROES OF THE DEPARTMENT SECTION (TOP) -->
+<section class="py-5 bg-light border-bottom" id="heroes-of-department">
+    <div class="container py-4">
+        <div class="section-header text-center mb-5">
+            <span class="section-tag" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
+                <i class="fas fa-medal me-2"></i>Hall of Fame
+            </span>
+            <h2 class="section-title mt-2">Heroes of the Department</h2>
+            <p class="lead text-secondary mx-auto mt-2" style="max-width: 680px; font-size: 1.05rem; line-height: 1.6;">
+                Honoring exceptional student achievers, TEDx organizers, martial arts champions, classical dancers, and leaders representing CSD & CSIT departments with glory.
+            </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <!-- Hero Card 1: P.B.S Kruti -->
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
+                        <img src="assets/achievements/classical-dance-1st-kruti.jpg" alt="P.B.S Kruti" style="width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;">
+                        <span class="position-absolute top-0 end-0 bg-warning text-dark px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
+                            🥇 1st Prize Classical Dance
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column text-start">
+                        <!-- Row 1: Name -->
+                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">P.B.S Kruti</h3>
+                        
+                        <!-- Row 2: Register No -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>25B91A0789</strong>
+                            </span>
+                        </div>
+
+                        <!-- Row 3: 4 to 5 Line Context -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
+                            P.B.S Kruti is an exceptional classical dancer who secured 1st Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Renowned for her mesmerizing expressions, mudras, and devotion to traditional Indian arts, she balances academics with cultural leadership. Her artistic excellence and talent bring immense honor to our department. She stands as a proud cultural hero inspiring students across campus.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Card 2: R. Lakshmi Prasanna -->
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
+                        <img src="assets/achievements/classical-dance-2nd-lakshmi-prasanna.jpg" alt="R. Lakshmi Prasanna" style="width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;">
+                        <span class="position-absolute top-0 end-0 bg-secondary text-white px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
+                            🥈 2nd Prize Classical Dance
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column text-start">
+                        <!-- Row 1: Name -->
+                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">R. Lakshmi Prasanna</h3>
+                        
+                        <!-- Row 2: Register No -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>24B91A6245</strong>
+                            </span>
+                        </div>
+
+                        <!-- Row 3: 4 to 5 Line Context -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
+                            R. Lakshmi Prasanna is a passionate performing artist who won 2nd Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Celebrated for her technical precision, graceful stage presence, and expressive mudras, she illuminates every cultural event. She represents the department with immense pride, elegance, and artistic enthusiasm. Lakshmi Prasanna demonstrates that cutting-edge technology, design, and classical arts go hand in hand.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Card 3: D Pooja Sai Praveena -->
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
+                        <img src="assets/achievements/karate-gold-pooja-sai-praveena.jpg" alt="D Pooja Sai Praveena" style="width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;">
+                        <span class="position-absolute top-0 end-0 bg-danger text-white px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
+                            🥇 Gold Medalist Karate
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column text-start">
+                        <!-- Row 1: Name -->
+                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">D Pooja Sai Praveena</h3>
+                        
+                        <!-- Row 2: Register No -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>24B91A6218</strong>
+                            </span>
+                        </div>
+
+                        <!-- Row 3: 4 to 5 Line Context -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
+                            D Pooja Sai Praveena is a formidable martial artist who secured the Gold Medal 🥇 in the JNTUK Inter-Collegiate Karate Tournament with dominant performances. She proudly represented JNTUK University at the South-West Inter-University Karate Championship 2024–25 in Chennai. Her athletic power, discipline, and courage inspire students across our institution. She is a true department hero who proves that hard work, grit, and focus produce national champions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Card 4: Preeti Avvula -->
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
+                        <img src="assets/images/heroes/preeti-avvula.jpg" alt="Preeti Avvula" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; image-rendering: -webkit-optimize-contrast;">
+                        <span class="position-absolute top-0 end-0 bg-dark text-white border border-secondary px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
+                            🎙️ TEDx Organizer & Anchor
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column text-start">
+                        <!-- Row 1: Name -->
+                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">Preeti Avvula</h3>
+                        
+                        <!-- Row 2: Register No -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>24B91A0701</strong>
+                            </span>
+                        </div>
+
+                        <!-- Row 3: 4 to 5 Line Context -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
+                            Preeti Avvula is a dynamic student leader and master anchor who served as a core organizer for TEDx SRKR. Known for her powerful stage presence, eloquence, and exceptional event coordination, she led the independently organized TED event with distinction. Her leadership, communication skills, and passion for hosting campus conferences inspire students across the department. She exemplifies true public speaking excellence and organizational brilliance as a department hero.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CLASS REPRESENTATIVES SECTION (BOTTOM) -->
 <section class="py-5 bg-white border-bottom" id="class-representatives">
     <div class="container py-3">
         <div class="section-header mb-4">
             <span class="section-tag" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed;">
-                <i class="fas fa-user-shield me-2"></i>Heroes of Department
+                <i class="fas fa-user-shield me-2"></i>Class Leadership
             </span>
             <h2 class="section-title mt-2">Class Representatives</h2>
             <p class="lead text-secondary mx-auto mt-2" style="max-width: 650px; font-size: 1.05rem; line-height: 1.6;">
@@ -548,135 +677,6 @@ include "connect.php";
             </div>
         </div>
     </div>
-<!-- HEROES OF THE DEPARTMENT SECTION -->
-<section class="py-5 bg-light border-top border-bottom" id="heroes-of-department">
-    <div class="container py-4">
-        <div class="section-header text-center mb-5">
-            <span class="section-tag" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
-                <i class="fas fa-medal me-2"></i>Hall of Fame
-            </span>
-            <h2 class="section-title mt-2">Heroes of the Department</h2>
-            <p class="lead text-secondary mx-auto mt-2" style="max-width: 680px; font-size: 1.05rem; line-height: 1.6;">
-                Honoring exceptional student achievers, TEDx organizers, martial arts champions, classical dancers, and leaders representing CSD & CSIT departments with glory.
-            </p>
-        </div>
-
-        <div class="row g-4 justify-content-center">
-            <!-- Hero Card 1: P.B.S Kruti -->
-            <div class="col-12 col-md-6 col-lg-4 d-flex">
-                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
-                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
-                        <img src="assets/achievements/classical-dance-1st-kruti.jpg" alt="P.B.S Kruti" style="width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;">
-                        <span class="position-absolute top-0 end-0 bg-warning text-dark px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
-                            🥇 1st Prize Classical Dance
-                        </span>
-                    </div>
-                    <div class="card-body p-4 d-flex flex-column text-start">
-                        <!-- Row 1: Name -->
-                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">P.B.S Kruti</h3>
-                        
-                        <!-- Row 2: Register No -->
-                        <div class="mb-3">
-                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
-                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>25B91A0789</strong>
-                            </span>
-                        </div>
-
-                        <!-- Row 3: 4 to 5 Line Context -->
-                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
-                            P.B.S Kruti is an exceptional classical dancer who secured 1st Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Renowned for her mesmerizing expressions, mudras, and devotion to traditional Indian arts, she balances academics with cultural leadership. Her artistic excellence and talent bring immense honor to our department. She stands as a proud cultural hero inspiring students across campus.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hero Card 2: R. Lakshmi Prasanna -->
-            <div class="col-12 col-md-6 col-lg-4 d-flex">
-                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
-                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
-                        <img src="assets/achievements/classical-dance-2nd-lakshmi-prasanna.jpg" alt="R. Lakshmi Prasanna" style="width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;">
-                        <span class="position-absolute top-0 end-0 bg-secondary text-white px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
-                            🥈 2nd Prize Classical Dance
-                        </span>
-                    </div>
-                    <div class="card-body p-4 d-flex flex-column text-start">
-                        <!-- Row 1: Name -->
-                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">R. Lakshmi Prasanna</h3>
-                        
-                        <!-- Row 2: Register No -->
-                        <div class="mb-3">
-                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
-                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>24B91A6245</strong>
-                            </span>
-                        </div>
-
-                        <!-- Row 3: 4 to 5 Line Context -->
-                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
-                            R. Lakshmi Prasanna is a passionate performing artist who won 2nd Prize in Classical Dance Group Performance at the 45th Annual Day Celebrations of SRKREC. Celebrated for her technical precision, graceful stage presence, and expressive mudras, she illuminates every cultural event. She represents the department with immense pride, elegance, and artistic enthusiasm. Lakshmi Prasanna demonstrates that cutting-edge technology, design, and classical arts go hand in hand.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hero Card 3: D Pooja Sai Praveena -->
-            <div class="col-12 col-md-6 col-lg-4 d-flex">
-                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
-                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
-                        <img src="assets/achievements/karate-gold-pooja-sai-praveena.jpg" alt="D Pooja Sai Praveena" style="width: 100%; height: 100%; object-fit: cover; image-rendering: -webkit-optimize-contrast;">
-                        <span class="position-absolute top-0 end-0 bg-danger text-white px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
-                            🥇 Gold Medalist Karate
-                        </span>
-                    </div>
-                    <div class="card-body p-4 d-flex flex-column text-start">
-                        <!-- Row 1: Name -->
-                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">D Pooja Sai Praveena</h3>
-                        
-                        <!-- Row 2: Register No -->
-                        <div class="mb-3">
-                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
-                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>24B91A6218</strong>
-                            </span>
-                        </div>
-
-                        <!-- Row 3: 4 to 5 Line Context -->
-                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
-                            D Pooja Sai Praveena is a formidable martial artist who secured the Gold Medal 🥇 in the JNTUK Inter-Collegiate Karate Tournament with dominant performances. She proudly represented JNTUK University at the South-West Inter-University Karate Championship 2024–25 in Chennai. Her athletic power, discipline, and courage inspire students across our institution. She is a true department hero who proves that hard work, grit, and focus produce national champions.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hero Card 4: Preeti Avvula -->
-            <div class="col-12 col-md-6 col-lg-4 d-flex">
-                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
-                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
-                        <img src="assets/images/heroes/preeti-avvula.jpg" alt="Preeti Avvula" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; image-rendering: -webkit-optimize-contrast;">
-                        <span class="position-absolute top-0 end-0 bg-dark text-white border border-secondary px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
-                            🎙️ TEDx Organizer & Anchor
-                        </span>
-                    </div>
-                    <div class="card-body p-4 d-flex flex-column text-start">
-                        <!-- Row 1: Name -->
-                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">Preeti Avvula</h3>
-                        
-                        <!-- Row 2: Register No -->
-                        <div class="mb-3">
-                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
-                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>24B91A0701</strong>
-                            </span>
-                        </div>
-
-                        <!-- Row 3: 4 to 5 Line Context -->
-                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
-                            Preeti Avvula is a dynamic student leader and master anchor who served as a core organizer for TEDx SRKR. Known for her powerful stage presence, eloquence, and exceptional event coordination, she led the independently organized TED event with distinction. Her leadership, communication skills, and passion for hosting campus conferences inspire students across the department. She exemplifies true public speaking excellence and organizational brilliance as a department hero.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- Script for Filter Logic -->
 <script>
 function toggleCrPhone(btn) {
