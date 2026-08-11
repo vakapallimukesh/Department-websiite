@@ -367,6 +367,34 @@ include "connect.php";
                     </div>
                 </div>
             </div>
+
+            <!-- Hero Card 5: Mullu Srinu -->
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden w-100 d-flex flex-column" style="background: #ffffff; border: 1px solid #e2e8f0; transition: all 0.3s ease;">
+                    <div style="position: relative; height: 260px; overflow: hidden; background: #0f172a;">
+                        <img src="assets/images/heroes/mullu-srinu.jpg" alt="Mullu Srinu" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; image-rendering: -webkit-optimize-contrast;">
+                        <span class="position-absolute top-0 end-0 bg-success text-white border border-light px-3 py-1 m-3 rounded-pill fw-bold small shadow-sm">
+                            🇮🇳 NSS Coordinator
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column text-start">
+                        <!-- Row 1: Name -->
+                        <h3 class="fw-extrabold text-dark font-outfit mb-1" style="font-size: 1.35rem; letter-spacing: -0.3px;">Mullu Srinu</h3>
+                        
+                        <!-- Row 2: Register No -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-secondary border px-3 py-1.5 rounded-pill font-monospace" style="font-size: 0.85rem;">
+                                <i class="fas fa-id-card me-1 text-primary"></i> Reg: <strong>25B95A6206</strong>
+                            </span>
+                        </div>
+
+                        <!-- Row 3: 4 to 5 Line Context -->
+                        <p class="text-secondary small mb-0 flex-grow-1" style="line-height: 1.6; font-size: 0.86rem; text-align: justify;">
+                            Mullu Srinu is a dedicated student leader and NSS Coordinator who leads blood donation drives, community service camps, and social welfare initiatives across SRKREC. Renowned for his discipline, leadership in ceremonial parades, and commitment to public service, he represents the department with exemplary pride. His selflessness, organizational skills, and devotion to national service inspire students campus-wide. He stands as a distinguished department hero driving impactful social change.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
