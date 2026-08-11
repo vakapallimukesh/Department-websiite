@@ -395,37 +395,6 @@ body {
     </div>
 </section>
 
-<!-- Stats Highlight Bar -->
-<section class="py-3.5 bg-white border-bottom">
-    <div class="container">
-        <div class="row g-3">
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-number">45+</div>
-                    <div class="stat-label">Hackathon Awards</div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-number">30+</div>
-                    <div class="stat-label">Research Papers</div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">Patent Applications</div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-number">200+</div>
-                    <div class="stat-label">Global Certifications</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Main Student Achievements Showcase Section -->
 <section class="py-4" style="background: #f8fafc;">
