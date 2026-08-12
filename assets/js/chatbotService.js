@@ -2,13 +2,17 @@
  * AI Department Assistant — Google Gemini API & Scalable Hybrid RAG Engine
  * SRKREC CSD & CSIT Departments
  *
- * Robust & Generalized Retrieval Engine:
- * 1. Intent Classification Engine (PROFILE, DEPARTMENT, BRANCH, ROLE, YEAR, SECTION, REG_NO, etc.)
- * 2. Generalized Person Extraction & Multi-Priority Search (Full Name -> Normalized Name -> Unique First Name -> Unique Last Name -> Reg No)
- * 3. Structured Knowledge Base (650+ Persons Indexed: Faculty, Heroes, CRs, House Members)
- * 4. Person-First Field-Level Precision Answer Synthesizer (No list dumps for single person questions)
- * 5. Synonym Resolution (CR / CRs / Class Representative / Class Reps)
- * 6. Preserved Faculty Matching (Satyam Sir, Trinadh Sir, HODs)
+ * Strict Priority-Based Intent Detection & Person Search Architecture:
+ * Priority 1: Exact person/faculty/student lookup
+ * Priority 2: Person + department/branch/role/attribute query
+ * Priority 3: House-specific query ("jal house members", "what are the five houses")
+ * Priority 4: Faculty directory queries ("who are the faculty members")
+ * Priority 5: Student directory queries ("who are the students")
+ * Priority 6: Class representative queries ("who is the cr", "who are the crs")
+ * Priority 7: Academics / Placements / Clubs / Startups / Labs / Courses
+ * Priority 8: Heroes / Hall of Fame queries ("who are the department heroes")
+ * Priority 9: General department information ("about department", "contact info")
+ * Priority 10: Unknown / clarification
  */
 
 const ChatbotService = (function () {
@@ -34,15 +38,15 @@ const ChatbotService = (function () {
     function normalizePersonName(str) {
         if (!str) return '';
         let s = str.toLowerCase().trim();
-        s = s.replace(/\b(dr\.|dr|prof\.|prof|professor|mr\.|mr|mrs\.|mrs|ms\.|ms|miss|sir|madam|ma'am|mam|teacher|faculty)\b/g, '');
-        s = s.replace(/[\?\!\.\,\;\:]/g, '');
+        s = s.replace(/\b(dr\.|dr|prof\.|prof|professor|mr\.|mr|mrs\.|mrs|ms\.|ms|miss|sir|madam|ma'am|mam|teacher|faculty)\b/g, ' ');
+        s = s.replace(/[\?\!\.\,\;\:]/g, ' ');
         return s.replace(/\s+/g, ' ').trim();
     }
 
     function tokenizeName(str) {
         if (!str) return [];
         let clean = normalizePersonName(str);
-        clean = clean.replace(/\b(who|is|are|tell|me|about|give|details|of|show|profile|the|a|an|registration|number|reg|no|which|what|belong|belongs|from|studying|branch|department|role)\b/g, '');
+        clean = clean.replace(/\b(who|is|are|tell|me|about|give|details|of|show|profile|the|a|an|registration|number|reg|no|which|what|belong|belongs|from|studying|branch|department|role)\b/g, ' ');
         return clean.split(/\s+/).filter(t => t.length > 0);
     }
 
@@ -55,10 +59,10 @@ const ChatbotService = (function () {
         if (!rawQuery) return 'PROFILE';
         const q = rawQuery.toLowerCase();
 
-        if (/\b(which department|what department|belong to|belongs to|department of|which dept|what dept|dept is|dept of)\b/i.test(q)) {
+        if (/\b(which department|what department|belong to|belongs to|department of|which dept|what dept|dept is|dept of|department)\b/i.test(q)) {
             return 'DEPARTMENT';
         }
-        if (/\b(which branch|what branch|branch is|branch of|branch from)\b/i.test(q)) {
+        if (/\b(which branch|what branch|branch is|branch of|branch from|branch)\b/i.test(q)) {
             return 'BRANCH';
         }
         if (/\b(role|designation|position|job|title|what role|what designation|role is|designation is)\b/i.test(q)) {
@@ -95,21 +99,6 @@ const ChatbotService = (function () {
             return 'CONTACT';
         }
         return 'PROFILE';
-    }
-
-    function extractCandidateName(rawQuery) {
-        if (!rawQuery) return '';
-        let clean = rawQuery.trim();
-
-        // Strip leading phrase patterns
-        clean = clean.replace(/^(can i know|do you know|can you tell me|please tell me|tell me|who is|who are|who's|details of|details about|info on|info about|information about|profile of|which department does|which branch is|what is|where is|is|about)\s+/i, '');
-        // Strip trailing phrase patterns
-        clean = clean.replace(/\s+(belong to|belongs to|from|studying in|studying|work in|working in|working|teach|teaching|teach in|teach at)\??$/i, '');
-        clean = clean.replace(/\s+(belong|belongs|from)\??$/i, '');
-        clean = clean.replace(/\s*(department|dept|branch|role|designation|year|section|registration number|reg no|achievements|email|contact)\s*$/i, '');
-        clean = clean.replace(/[\?\!\.\,\;\:]/g, '');
-
-        return normalizePersonName(clean);
     }
 
     /**
@@ -153,6 +142,27 @@ const ChatbotService = (function () {
      */
     const MASTER_PERSON_INDEX = [
         // --- FACULTY MEMBERS (25 FACULTY RECORDS) ---
+        {
+            id: 'faculty_aneela',
+            fullName: 'N. Aneela',
+            firstName: 'aneela',
+            lastName: 'n',
+            category: 'Faculty Member',
+            role: 'Assistant Professor (CSD)',
+            designation: 'Assistant Professor (CSD)',
+            department: 'CSD',
+            branch: 'CSD',
+            email: 'aneela@srkrec.ac.in',
+            qualification: 'M.Tech in CSE (JNTUK, 2018)',
+            specialization: 'Machine Learning & Data Mining',
+            subjects: 'Machine Learning, Data Mining',
+            experience: '5+ Years',
+            achievements: 'Data Science Mentor, 6+ Publications',
+            description: 'N. Aneela (Aneela Madam) is Assistant Professor in CSD specializing in Machine Learning.',
+            searchableAliases: ['aneela', 'n aneela', 'aneela madam', 'aneela sir', 'dr aneela', 'aneela mam'],
+            url: 'faculty.php',
+            ctaText: 'View Faculty Profile →'
+        },
         {
             id: 'faculty_suresh_babu',
             fullName: 'Dr. Suresh Babu Mudunuri',
@@ -358,27 +368,6 @@ const ChatbotService = (function () {
             achievements: 'AWS Certified Solution Architect, 5+ Publications',
             description: 'K. Bhanu Rajesh Naidu is Assistant Professor in CSD specializing in Cloud Computing and DevOps.',
             searchableAliases: ['bhanu rajesh', 'bhanu rajesh naidu', 'k bhanu rajesh naidu', 'bhanu sir', 'bhanu rajesh sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_aneela',
-            fullName: 'N. Aneela',
-            firstName: 'aneela',
-            lastName: 'n',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'aneela@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2018)',
-            specialization: 'Machine Learning & Data Mining',
-            subjects: 'Machine Learning, Data Mining',
-            experience: '5+ Years',
-            achievements: 'Data Science Mentor, 6+ Publications',
-            description: 'N. Aneela (Aneela Madam) is Assistant Professor in CSD specializing in Machine Learning.',
-            searchableAliases: ['aneela', 'n aneela', 'aneela madam', 'aneela sir', 'dr aneela'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
@@ -1019,7 +1008,6 @@ const ChatbotService = (function () {
                 const firstName = tokens[0] || normName;
                 const lastName = tokens[tokens.length - 1] || normName;
 
-                // Check if already in index
                 const exists = MASTER_PERSON_INDEX.some(p => normalizePersonName(p.fullName) === normName);
                 if (!exists) {
                     MASTER_PERSON_INDEX.push({
@@ -1077,7 +1065,7 @@ const ChatbotService = (function () {
             content: `Department Faculty Leadership:
 • HOD CSD: Dr. M. Suresh Babu (Professor & Head of Department, CSD)
 • HOD CSIT: Dr. N. Gopala Krishna Murthy (Professor & Head of Department, CSIT)
-• Key Faculty: Angara Satyam Sir (Assistant Professor CSD), K V V Satya Trinadh Naidu Sir (Assistant Professor CSIT), P Manoj Sir, A Aswini Priyanka Madam, S Mohan Krishna Sir, P S V Surya Kumar Sir, Dr. K. Srinivasa Rao Sir, K. Bhanu Rajesh Naidu Sir, N. Aneela Madam, and 15+ faculty members.`,
+• Key Faculty: Angara Satyam Sir (Assistant Professor CSD), K V V Satya Trinadh Naidu Sir (Assistant Professor CSIT), P Manoj Sir, A Aswini Priyanka Madam, N Aneela Madam, S Mohan Krishna Sir, P S V Surya Kumar Sir, Dr. K. Srinivasa Rao Sir, K. Bhanu Rajesh Naidu Sir, M S Suseela Madam, M Srinu Sir, J Mohan Surendra Sir, G Sudhakar Sir, K Girichar Sir, and 10+ faculty members.`,
             url: 'faculty.php',
             ctaText: 'View Complete Faculty Directory →'
         },
@@ -1190,7 +1178,7 @@ const ChatbotService = (function () {
             id: 'clubs_activities',
             category: 'Clubs',
             title: 'Department Clubs & Student Societies',
-            keywords: ['what clubs are available', 'clubs', 'activities', 'coding club', 'design club', 'tedx', 'nss', 'cultural club'],
+            keywords: ['what clubs are available', 'clubs', 'activities', 'societies', 'coding club', 'design club', 'tedx', 'nss', 'cultural club'],
             tokens: ['clubs', 'activities', 'societies', 'events', 'tedx', 'nss'],
             content: `Active Department Clubs & Societies:
 1. AI & Coding Club — Competitive programming & AI hackathons.
@@ -1218,23 +1206,15 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 6. PERSON-FIRST MULTI-PRIORITY SEARCH ALGORITHM
-     * Matches Full Name -> Normalized Name -> Unique First Name -> Unique Last Name -> Reg No
+     * 6. PERSON ENTITY DETECTION IN QUERY (PRIORITY 1 & 2)
+     * Scans prompt for any person entity in actual department records.
      * =========================================================================
      */
-    function searchPersonSystem(rawQuery) {
+    function detectPersonInQuery(rawQuery) {
         if (!rawQuery) return null;
+        const lowerRaw = rawQuery.toLowerCase().trim();
 
-        const candidateName = extractCandidateName(rawQuery);
-        const queryIntent = detectQueryIntent(rawQuery);
-
-        if (!candidateName || candidateName.length < 2) return null;
-
-        // Skip topic keyword queries
-        const topicKeywords = /^\b(the|department|college|hod|hods|head|head of department|hero|heroes|department heroes|faculty|faculties|student|students|houses|courses|labs|placements|startups|incubation|events|clubs|syllabus|contact|achievements|internships|research|publications|projects|cr|crs|c\.r\.|c\.r\.s|class representative|class representatives|class rep|class reps|jal|agni|vayu|akash|aakash|prudhvi|pruthvi)\b$/i;
-        if (topicKeywords.test(candidateName)) return null;
-
-        // Check Reg No match
+        // 1. Check Reg No Match
         const regMatch = rawQuery.match(/\b([0-9]{2}[a-z0-9]{8,10})\b/i);
         if (regMatch) {
             const searchedReg = regMatch[1].toUpperCase();
@@ -1244,101 +1224,90 @@ const ChatbotService = (function () {
                     found: true,
                     isMultiple: false,
                     person: foundByReg,
-                    intent: queryIntent,
-                    rawQuery: rawQuery
+                    intent: detectQueryIntent(rawQuery)
                 };
             }
         }
 
-        // Priority 1: Exact Full-Name Match
-        const exactMatches = MASTER_PERSON_INDEX.filter(p => {
-            const normFull = normalizePersonName(p.fullName);
-            return candidateName === normFull;
-        });
+        // Clean query for token matching (remove honorifics: sir, madam, mam, dr, prof)
+        let cleanQuery = lowerRaw.replace(/\b(dr\.|dr|prof\.|prof|professor|mr\.|mr|mrs\.|mrs|ms\.|ms|miss|sir|madam|ma'am|mam|teacher|faculty)\b/g, ' ');
+        cleanQuery = cleanQuery.replace(/[\?\!\.\,\;\:]/g, ' ').replace(/\s+/g, ' ').trim();
+        const queryTokens = cleanQuery.split(' ').filter(t => t.length > 0);
 
-        if (exactMatches.length === 1) {
-            return {
-                found: true,
-                isMultiple: false,
-                person: exactMatches[0],
-                intent: queryIntent,
-                rawQuery: rawQuery
-            };
-        }
+        const intent = detectQueryIntent(rawQuery);
 
-        // Priority 2: Alias / Substring Full-Name Match
-        const aliasMatches = MASTER_PERSON_INDEX.filter(p => {
-            const normFull = normalizePersonName(p.fullName);
-            if (candidateName.length >= 4 && (normFull.includes(candidateName) || candidateName.includes(normFull))) {
-                return true;
+        // Stopwords to ignore when checking person names
+        const stopWords = new Set(['who', 'is', 'are', 'which', 'department', 'dept', 'branch', 'does', 'belong', 'belongs', 'to', 'from', 'what', 'role', 'designation', 'qualification', 'specialization', 'subjects', 'teach', 'teaches', 'email', 'contact', 'tell', 'me', 'about', 'can', 'know', 'the', 'a', 'an', 'in', 'of', 'work', 'working', 'studying', 'year', 'section']);
+
+        // Filter candidate tokens from query
+        const nameCandidateTokens = queryTokens.filter(t => !stopWords.has(t) && t.length >= 2);
+
+        if (nameCandidateTokens.length === 0) return null;
+
+        const candidateString = nameCandidateTokens.join(' ');
+
+        let candidates = [];
+
+        for (const person of MASTER_PERSON_INDEX) {
+            const normFull = normalizePersonName(person.fullName);
+            const normFirst = normalizePersonName(person.firstName);
+            const normLast = normalizePersonName(person.lastName);
+            const aliases = person.searchableAliases ? person.searchableAliases.map(a => normalizePersonName(a)) : [];
+
+            // Check 1: Candidate string matches full name or alias exactly
+            if (candidateString === normFull || aliases.includes(candidateString)) {
+                return {
+                    found: true,
+                    isMultiple: false,
+                    person: person,
+                    intent: intent
+                };
             }
-            if (p.searchableAliases) {
-                return p.searchableAliases.some(alias => normalizePersonName(alias) === candidateName);
+
+            // Check 2: All candidate tokens appear in person's full name or aliases
+            const personTokens = tokenizeName(person.fullName);
+            const allTokensInPerson = nameCandidateTokens.every(qTok => {
+                const inName = personTokens.some(pTok => pTok === qTok);
+                const inAlias = aliases.some(alias => alias.split(/\s+/).includes(qTok));
+                return inName || inAlias;
+            });
+
+            // Prevent substring bleed (e.g. "Mohana" vs "Mohan")
+            const hasSubstringBleed = nameCandidateTokens.some(qTok => {
+                return personTokens.some(pTok => pTok !== qTok && (pTok.startsWith(qTok) || qTok.startsWith(pTok)));
+            });
+
+            if (allTokensInPerson && !hasSubstringBleed) {
+                candidates.push(person);
+                continue;
             }
-            return false;
-        });
 
-        if (aliasMatches.length === 1) {
+            // Check 3: Single token match for unique first name or unique last name
+            if (nameCandidateTokens.length === 1) {
+                const singleTok = nameCandidateTokens[0];
+                if (singleTok === normFirst || singleTok === normLast || aliases.includes(singleTok)) {
+                    if (!candidates.includes(person)) {
+                        candidates.push(person);
+                    }
+                }
+            }
+        }
+
+        if (candidates.length === 1) {
             return {
                 found: true,
                 isMultiple: false,
-                person: aliasMatches[0],
-                intent: queryIntent,
-                rawQuery: rawQuery
+                person: candidates[0],
+                intent: intent
             };
         }
 
-        // Priority 3: Unique First-Name Match
-        const firstNameMatches = MASTER_PERSON_INDEX.filter(p => {
-            const normFirst = normalizePersonName(p.firstName);
-            return candidateName === normFirst || (candidateName.length >= 3 && normFirst.startsWith(candidateName));
-        });
-
-        if (firstNameMatches.length === 1) {
-            return {
-                found: true,
-                isMultiple: false,
-                person: firstNameMatches[0],
-                intent: queryIntent,
-                rawQuery: rawQuery
-            };
-        }
-
-        // Priority 4: Unique Last-Name Match
-        const lastNameMatches = MASTER_PERSON_INDEX.filter(p => {
-            const normLast = normalizePersonName(p.lastName);
-            return candidateName.length >= 4 && (candidateName === normLast || normLast.startsWith(candidateName));
-        });
-
-        if (lastNameMatches.length === 1) {
-            return {
-                found: true,
-                isMultiple: false,
-                person: lastNameMatches[0],
-                intent: queryIntent,
-                rawQuery: rawQuery
-            };
-        }
-
-        // Priority 5: Multiple Candidate Disambiguation
-        const totalCandidates = Array.from(new Set([...exactMatches, ...aliasMatches, ...firstNameMatches, ...lastNameMatches]));
-        if (totalCandidates.length > 1) {
+        if (candidates.length > 1) {
             return {
                 found: true,
                 isMultiple: true,
-                candidates: totalCandidates,
-                rawQuery: rawQuery
-            };
-        }
-
-        // Priority 6: Explicit Person Question Not Found
-        const isExplicitPersonQuery = /^\b(who is|tell me about|profile of|info on|details of|which department does|which branch is|what is the role of)\b/i.test(rawQuery.trim());
-        if (isExplicitPersonQuery) {
-            const formattedName = candidateName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-            return {
-                found: false,
-                requestedName: formattedName,
-                rawQuery: rawQuery
+                candidates: candidates,
+                intent: intent
             };
         }
 
@@ -1587,94 +1556,171 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 10. PRIMARY RAG HYBRID DISPATCHER
-     * Priority Order: Person Search -> House System -> CR System -> Knowledge Matrix
+     * 10. PRIMARY RAG HYBRID DISPATCHER ENFORCING STRICT INTENT PRIORITY
+     * Priority 1 & 2: Exact Person / Faculty / Student Lookup & Attribute Query
+     * Priority 3: House-Specific Query ("jal house members", "what are the five houses")
+     * Priority 4: Faculty Directory Queries ("who are the faculty members")
+     * Priority 5: Student Directory Queries ("who are the students")
+     * Priority 6: Class Representative Queries ("who is the cr", "who are the crs")
+     * Priority 7: Academics / Placements / Clubs / Startups / Labs / Courses
+     * Priority 8: Heroes / Hall of Fame Queries ("who are the department heroes")
+     * Priority 9: General Department Information ("about department", "contact info")
+     * Priority 10: Unknown / Clarification
      * =========================================================================
      */
     function searchKnowledgeVector(rawQuery) {
         if (!rawQuery) return null;
+        const lower = rawQuery.toLowerCase().trim();
 
-        // Priority 1: Person-First Search
-        const personMatch = searchPersonSystem(rawQuery);
-        if (personMatch) {
-            if (personMatch.found) {
-                if (personMatch.isMultiple) {
-                    let listItems = personMatch.candidates.map((p, idx) => `${idx + 1}. <strong>${p.fullName}</strong> (${p.role || p.category})`).join('<br>');
+        // -------------------------------------------------------------------------
+        // PRIORITY 1 & 2: PERSON / FACULTY / STUDENT LOOKUP (+ ATTRIBUTE QUERY)
+        // First scan query for any person entity in actual department records.
+        // -------------------------------------------------------------------------
+        const personResult = detectPersonInQuery(rawQuery);
+        if (personResult) {
+            if (personResult.found) {
+                if (personResult.isMultiple) {
+                    let listItems = personResult.candidates.map((p, idx) => `${idx + 1}. <strong>${p.fullName}</strong> (${p.role || p.category})`).join('<br>');
                     return {
                         id: 'people_multiple_matches',
                         category: 'People Search',
                         title: 'Multiple Matching People Found',
-                        content: `I found multiple people matching your question:<br><br>${listItems}<br><br>Could you please specify the person's full name, year, section, or registration number?`,
+                        content: `I found multiple people with similar names:<br><br>${listItems}<br><br>Could you please provide their full name, role, or department?`,
                         url: 'heroes_of_department.php',
                         ctaText: 'Explore Department People Directory →'
                     };
                 } else {
-                    console.log('[CHATBOT RAG] Person Match Found:', personMatch.person.fullName);
-                    return formatFieldLevelAnswer(personMatch.person, personMatch.intent, rawQuery);
+                    console.log('[CHATBOT INTENT 1/2] Person Entity Match:', personResult.person.fullName, '| Intent:', personResult.intent);
+                    return formatFieldLevelAnswer(personResult.person, personResult.intent, rawQuery);
                 }
-            } else if (personMatch.requestedName) {
-                console.log('[CHATBOT RAG] Person Not Found:', personMatch.requestedName);
-                return {
-                    id: 'person_not_found',
-                    category: 'People Search',
-                    title: 'Person Not Found',
-                    isNotFound: true,
-                    requestedName: personMatch.requestedName,
-                    content: `I couldn't find a person named <strong>${personMatch.requestedName}</strong> in the current department records.`,
-                    url: 'heroes_of_department.php',
-                    ctaText: 'View Department Directory →'
-                };
             }
         }
 
-        // Special handling for HOD query
-        if (/\b(hod|hods|head of department|head of the department)\b/i.test(rawQuery)) {
+        // -------------------------------------------------------------------------
+        // PRIORITY 3: HOUSE-SPECIFIC QUERY ("jal house members", "members of agni")
+        // vs FIVE HOUSES OVERVIEW ("what are the five houses")
+        // -------------------------------------------------------------------------
+        const houseResult = searchHouseSystem(rawQuery);
+        if (houseResult) {
+            console.log('[CHATBOT INTENT 3] House System Match:', houseResult.title);
+            return houseResult;
+        }
+
+        // -------------------------------------------------------------------------
+        // PRIORITY 4: FACULTY DIRECTORY QUERIES ("who are the faculty members")
+        // -------------------------------------------------------------------------
+        const isFacultyCategoryQuery = /\b(who are the (faculty|faculties|teachers|professors)|faculty members|faculty directory|list of faculty|all faculty)\b/i.test(lower);
+        if (isFacultyCategoryQuery) {
+            return {
+                id: 'faculty_overview',
+                category: 'Faculty Directory',
+                title: 'CSD & CSIT Department Faculty Members',
+                content: `Department Faculty Leadership & Staff:<br><br>
+• <strong>HOD CSD:</strong> Dr. M. Suresh Babu (Professor & Head of Department, CSD)<br>
+• <strong>HOD CSIT:</strong> Dr. N. Gopala Krishna Murthy (Professor & Head of Department, CSIT)<br>
+• <strong>Faculty Members:</strong> Angara Satyam Sir, K V V Satya Trinadh Naidu Sir, P Manoj Sir, A Aswini Priyanka Madam, N Aneela Madam, S Mohan Krishna Sir, P S V Surya Kumar Sir, Dr. K. Srinivasa Rao Sir, K. Bhanu Rajesh Naidu Sir, M S Suseela Madam, M Srinu Sir, J Mohan Surendra Sir, G Sudhakar Sir, K Girichar Sir, and 10+ faculty members.`,
+                url: 'faculty.php',
+                ctaText: 'View Complete Faculty Directory →'
+            };
+        }
+
+        // Special HOD Query
+        if (/\b(hod|hods|head of department|head of the department)\b/i.test(lower)) {
             return {
                 id: 'hod_overview',
                 category: 'Department Leadership',
                 title: 'Heads of Department (HODs)',
                 content: `Our department has two distinguished Heads of Department (HODs):<br><br>
-1. <strong>Dr. M. Suresh Babu</strong> — Professor & Head of Department, Computer Science & Design (CSD)<br>• Email: suresh.mudunuri@srkrec.ac.in | Qualification: Ph.D (2010) | Experience: 20+ Years<br><br>
-2. <strong>Dr. N. Gopala Krishna Murthy</strong> — Professor & Head of Department, Computer Science & Information Technology (CSIT)<br>• Email: gopinukala@gmail.com | Qualification: Ph.D (2011) | Experience: 18+ Years`,
+1. <strong>Dr. M. Suresh Babu</strong> — Professor & Head of Department, Computer Science & Design (CSD)<br>• Email: suresh.mudunuri@srkrec.ac.in | Qualification: Ph.D (2010)<br><br>
+2. <strong>Dr. N. Gopala Krishna Murthy</strong> — Professor & Head of Department, Computer Science & Information Technology (CSIT)<br>• Email: gopinukala@gmail.com | Qualification: Ph.D (2011)`,
                 url: 'faculty.php',
                 ctaText: 'View Faculty Leadership Page →'
             };
         }
 
-        // Priority 2: House Member & Leaderboard Search
-        const houseResult = searchHouseSystem(rawQuery);
-        if (houseResult) {
-            console.log('[CHATBOT RAG] House Match Found:', houseResult.title);
-            return houseResult;
+        // -------------------------------------------------------------------------
+        // PRIORITY 5: STUDENT DIRECTORY QUERIES ("who are the students")
+        // -------------------------------------------------------------------------
+        const isStudentCategoryQuery = /\b(who are the students|student body|students list|list of students|student directory)\b/i.test(lower);
+        if (isStudentCategoryQuery) {
+            return {
+                id: 'students_overview',
+                category: 'Student Directory',
+                title: 'CSD & CSIT Student Body & Sections',
+                content: `CSD & CSIT Student Directory & Academic Sections:<br><br>
+• <strong>Total Enrolled Students:</strong> 600+ across 2nd, 3rd, and 4th Years in CSD & CSIT.<br>
+• <strong>Academic Sections:</strong> CSD II Year, CSD III Year, CSD IV Year, CSIT II Year Sec A & B, CSIT III Year Sec A & B, CSIT IV Year.<br>
+• <strong>Student Houses:</strong> Jal, Agni, Vayu, Akash, Prudhvi.`,
+                url: 'heroes_of_department.php',
+                ctaText: 'View Student Directory & Leadership →'
+            };
         }
 
-        // Priority 3: Class Representative (CR) Search
+        // -------------------------------------------------------------------------
+        // PRIORITY 6: CLASS REPRESENTATIVE (CR) QUERIES ("who is the cr", "who are the crs")
+        // -------------------------------------------------------------------------
         const crResult = searchCRSystem(rawQuery);
         if (crResult) {
-            console.log('[CHATBOT RAG] CR Match Found:', crResult.title);
+            console.log('[CHATBOT INTENT 6] CR Match Found:', crResult.title);
             return crResult;
         }
 
-        // Priority 4: Knowledge Matrix Keyword / Section Reranking
-        let scoredChunks = KNOWLEDGE_MATRIX.map(chunk => {
-            let score = 0;
-            const qLower = rawQuery.toLowerCase().trim();
-            for (const kw of chunk.keywords) {
-                if (qLower.includes(kw.toLowerCase())) score += 200;
-            }
-            const tokens = qLower.replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(t => t.length > 2);
-            for (const token of tokens) {
-                if (chunk.tokens && chunk.tokens.includes(token)) score += 30;
-                if (new RegExp(`\\b${token}\\b`, 'i').test(chunk.title)) score += 40;
-                if (new RegExp(`\\b${token}\\b`, 'i').test(chunk.category)) score += 35;
-            }
-            return { chunk: chunk, score: score };
-        });
+        // -------------------------------------------------------------------------
+        // PRIORITY 7: ACADEMICS / PLACEMENTS / CLUBS / STARTUPS / LABS / COURSES
+        // -------------------------------------------------------------------------
+        if (/\b(startups|startup|incubation|bhimavaram online|smart wash|lunch box|nutridelight)\b/i.test(lower)) {
+            return KNOWLEDGE_MATRIX.find(c => c.id === 'startups_incubation');
+        }
+        if (/\b(internships|internship|stipend|ppo)\b/i.test(lower)) {
+            return KNOWLEDGE_MATRIX.find(c => c.id === 'internships_overview');
+        }
+        if (/\b(placements|placement|package|lpa|recruiters|jobs)\b/i.test(lower)) {
+            return KNOWLEDGE_MATRIX.find(c => c.id === 'placements_overview');
+        }
+        if (/\b(courses|programs|b\.tech csd|b\.tech csit|degree|curriculum|syllabus)\b/i.test(lower)) {
+            return KNOWLEDGE_MATRIX.find(c => c.id === 'courses_overview');
+        }
+        if (/\b(labs|laboratories|infrastructure|ai lab|iot lab)\b/i.test(lower)) {
+            return KNOWLEDGE_MATRIX.find(c => c.id === 'labs_infrastructure');
+        }
+        if (/\b(clubs|activities|societies|coding club)\b/i.test(lower)) {
+            return KNOWLEDGE_MATRIX.find(c => c.id === 'clubs_activities');
+        }
 
-        scoredChunks.sort((a, b) => b.score - a.score);
-        const top = scoredChunks[0];
-        if (top && top.score > 20) {
-            return top.chunk;
+        // -------------------------------------------------------------------------
+        // PRIORITY 8: HEROES / HALL OF FAME QUERIES ("who are the department heroes", "hall of fame")
+        // Strict match so general questions don't fall into Heroes.
+        // -------------------------------------------------------------------------
+        const isHeroesCategoryQuery = /\b(who are the (department heroes|heroes|heroes of the department)|hall of fame|department heroes|heroes page)\b/i.test(lower);
+        if (isHeroesCategoryQuery) {
+            return KNOWLEDGE_MATRIX.find(c => c.id === 'heroes_overview');
+        }
+
+        // -------------------------------------------------------------------------
+        // PRIORITY 9: GENERAL DEPARTMENT INFORMATION ("about department", "contact info")
+        // -------------------------------------------------------------------------
+        if (/\b(contact|address|location|phone|email|where is college)\b/i.test(lower)) {
+            return KNOWLEDGE_MATRIX.find(c => c.id === 'contact_info');
+        }
+        if (/\b(about department|tell me about department|tell me about this department|overview)\b/i.test(lower)) {
+            return KNOWLEDGE_MATRIX.find(c => c.id === 'dept_overview');
+        }
+
+        // -------------------------------------------------------------------------
+        // PRIORITY 10: UNKNOWN / CLARIFICATION
+        // If an explicit person query ("who is X", "department of X") was asked but person not found
+        // -------------------------------------------------------------------------
+        const isExplicitPersonQuery = /^\b(who is|tell me about|profile of|info on|details of|which department does|which branch is|what is the role of|department of)\b/i.test(lower);
+        if (isExplicitPersonQuery) {
+            return {
+                id: 'person_not_found',
+                category: 'People Search',
+                title: 'Person Not Found',
+                isNotFound: true,
+                content: `I couldn't identify the person exactly in current department records. Could you provide their full name, role, or department?`,
+                url: 'heroes_of_department.php',
+                ctaText: 'View Department Directory →'
+            };
         }
 
         return null;
