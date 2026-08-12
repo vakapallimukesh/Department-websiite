@@ -2,15 +2,15 @@
  * AI Department Assistant — Google Gemini API & Scalable Hybrid RAG Engine
  * SRKREC CSD & CSIT Departments
  *
- * Strict Person & CR Matching Architecture:
+ * Strict Person, CR & House Member Search Architecture:
  * 1. Tokenized Exact Word Equality Matcher (Prevents "Mohana" matching "Mohan" substring bleed)
- * 2. Priority Retrieval Pipeline:
- *    - Priority 1: Exact Registration Number Match (e.g. 25B91A6223 -> JAVVADI MOHANA DURGA)
- *    - Priority 2: Exact Full-Name Match
- *    - Priority 3: Normalized Exact Token Match
- *    - Priority 4: Strict Token Sequence Match (no character/word bleed)
- *    - Priority 5: Ambiguous Query Disambiguation Prompt
- *    - Priority 6: No Match / Safe Fallback
+ * 2. Master House Roster Engine (All 612 verified house members for Jal, Agni, Vayu, Akash, Prudhvi)
+ * 3. Master Class Representatives (CR) Engine (14 Verified CRs from website)
+ * 4. Priority Retrieval Pipeline:
+ *    - Priority 1: House Member / House Overview / House Follow-up Search
+ *    - Priority 2: Class Representatives (CR) Intent & Filtering Engine
+ *    - Priority 3: Exact Registration Number & Tokenized Person Search
+ *    - Priority 4: Granular Website Knowledge Matrix (22 Section Chunks)
  */
 
 const ChatbotService = (function () {
@@ -23,6 +23,7 @@ const ChatbotService = (function () {
     let conversationContext = {
         activeEntity: null,
         activeTopic: null,
+        activeHouse: null,
         lastQuery: null,
         history: [] // Array of { role: 'user'|'model', text: string }
     };
@@ -35,11 +36,8 @@ const ChatbotService = (function () {
     function normalizePersonName(str) {
         if (!str) return '';
         let s = str.toLowerCase().trim();
-        // Strip honorifics
         s = s.replace(/\b(dr\.|dr|prof\.|prof|professor|mr\.|mr|mrs\.|mrs|ms\.|ms|miss|sir|madam|ma'am|mam|teacher|faculty)\b/g, '');
-        // Strip question lead-ins
         s = s.replace(/^(who is|tell me about|information about|info on|details of|details about|profile of|who|tell me|about|give details of|show profile of|is|a cr|a class representative)/g, '');
-        // Strip punctuation
         s = s.replace(/[\?\!\.\,]/g, '');
         return s.replace(/\s+/g, ' ').trim();
     }
@@ -53,7 +51,42 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 2. MASTER CLASS REPRESENTATIVES (CR) INDEX (14 VERIFIED CRs FROM WEBSITE)
+     * 2. MASTER HOUSE ROSTER ENGINE (612 VERIFIED HOUSE MEMBERS FROM DATABASE)
+     * Data Source: house_detail.php & Database houses/students tables
+     * =========================================================================
+     */
+    const MASTER_HOUSE_ROSTER = {
+        'JAL': {
+            name: 'Jal',
+            description: 'Water House - Flowing with wisdom and adaptability like the eternal river.',
+            members: [{"name":"ABDUL SHARIFUNNISA","regNo":"N\/A","section":"A","points":0},{"name":"ARETI JAYA CHARAN KRISHNA","regNo":"N\/A","section":"B","points":0},{"name":"BANDE DALI AKSHAYA","regNo":"N\/A","section":"A","points":0},{"name":"BAREPU VAMSI","regNo":"N\/A","section":"B","points":0},{"name":"BARRI SRAVYA SREE","regNo":"N\/A","section":"A","points":0},{"name":"BEERA YASMIN","regNo":"N\/A","section":"A","points":0},{"name":"BEJAVADA V S S N RAMA GANESH","regNo":"N\/A","section":"B","points":0},{"name":"BELAMARA SIVANI","regNo":"N\/A","section":"A","points":0},{"name":"BELLAPU J S VENKATA DURGA NAGA ASRITHA","regNo":"N\/A","section":"A","points":0},{"name":"BODDETI DEVI NAGA VENKATA SAI DEEPAK","regNo":"N\/A","section":"A","points":0},{"name":"BODDETI SARVANI","regNo":"N\/A","section":"A","points":0},{"name":"BONAM ADI LAKSHAMMA","regNo":"N\/A","section":"A","points":0},{"name":"BONIGALA RISHITHA","regNo":"N\/A","section":"B","points":0},{"name":"BORRA TERESSA","regNo":"N\/A","section":"A","points":0},{"name":"BUDDIGA GAYATRI","regNo":"N\/A","section":"A","points":0},{"name":"CHADARAM BHANU VENKATA MANIKANTA","regNo":"N\/A","section":"A","points":0},{"name":"CHIKKALA SHYAM KISHORE","regNo":"N\/A","section":"B","points":0},{"name":"CHINTADA NISSY SUDEEPTHI","regNo":"N\/A","section":"A","points":0},{"name":"CHINTAPALLI NAGA SYAMALA","regNo":"N\/A","section":"A","points":0},{"name":"CHITTALA DILEEP RAM KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"DAGGU ROHITH SUBRAHMANYA SAI","regNo":"N\/A","section":"A","points":0},{"name":"DAMMU PRANEETH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"DODDI NIVEDITHA","regNo":"N\/A","section":"A","points":0},{"name":"DODDIPATLA DANA VENKATA SIVASANKAR","regNo":"N\/A","section":"A","points":0},{"name":"DOMMETI SAI NIKHITHA","regNo":"N\/A","section":"A","points":0},{"name":"DONAVALLI REVATHI","regNo":"N\/A","section":"A","points":0},{"name":"DONTHU VIJAYA SRI","regNo":"N\/A","section":"A","points":0},{"name":"EUDU HARSHA VARDHAN","regNo":"N\/A","section":"A","points":0},{"name":"GANDREDDY RAM GANESH","regNo":"N\/A","section":"A","points":0},{"name":"GANESNA SATYA RAJESH","regNo":"N\/A","section":"A","points":0},{"name":"GEDDAM JACINTHA","regNo":"N\/A","section":"A","points":0},{"name":"GOLLAPALLI ROHAN SAMIT","regNo":"N\/A","section":"A","points":0},{"name":"GOPINEEDI DIVIJA","regNo":"N\/A","section":"A","points":0},{"name":"GOTTUMUKKALA BHARGAVI","regNo":"N\/A","section":"A","points":0},{"name":"INUMARTHI SRINAVYA","regNo":"N\/A","section":"A","points":0},{"name":"JADDU LEELA PAVAN KRISHNA","regNo":"N\/A","section":"A","points":0},{"name":"JAKKAMPUDI REVANTH","regNo":"N\/A","section":"A","points":0},{"name":"JALLI SURENDRA VARMA","regNo":"N\/A","section":"A","points":0},{"name":"JOGI PRASANTH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"KACHETTI RUCHITA LAKSHMI","regNo":"N\/A","section":"A","points":0},{"name":"KADIYALA NAVYA SRI","regNo":"N\/A","section":"A","points":0},{"name":"KANNIPAMULA TEJASWI","regNo":"N\/A","section":"B","points":0},{"name":"KAPUDASI SNIGDHA","regNo":"N\/A","section":"A","points":0},{"name":"KARIMERAKA DOLLY GANYA","regNo":"N\/A","section":"A","points":0},{"name":"KAROTHI SAI MANIKANTA","regNo":"N\/A","section":"A","points":0},{"name":"KATIKI RAJANI","regNo":"N\/A","section":"A","points":0},{"name":"KETHA SURYA PRAKASH","regNo":"N\/A","section":"A","points":0},{"name":"KETHINEDI SRI RAM","regNo":"N\/A","section":"A","points":0},{"name":"KODETI SATISH","regNo":"N\/A","section":"A","points":0},{"name":"KODI VAISHNAVI","regNo":"N\/A","section":"A","points":0},{"name":"KOLA YESWANTH","regNo":"N\/A","section":"A","points":0},{"name":"KOSETTI AHARON KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"KUKUNOORI POORNA SRI CHANDRA SEKHAR","regNo":"N\/A","section":"A","points":0},{"name":"KUNCHE SRI NAGA GANESH","regNo":"N\/A","section":"A","points":0},{"name":"KURASALA HARSHA VARDHAN","regNo":"N\/A","section":"A","points":0},{"name":"MAILABATTULA LOUKYATHA","regNo":"N\/A","section":"A","points":0},{"name":"MALLABATTULA SIVA KRISHNA","regNo":"N\/A","section":"A","points":0},{"name":"MANDA RAJA PRASANNA KUMAR","regNo":"N\/A","section":"B","points":0},{"name":"MANELLI SRAVANI","regNo":"N\/A","section":"A","points":0},{"name":"MATTAPARTHI REETHIKA","regNo":"N\/A","section":"A","points":0},{"name":"MOTUPALLI MEENA PHANI SRI","regNo":"N\/A","section":"B","points":0},{"name":"MULE ADILAKSHMI","regNo":"N\/A","section":"A","points":0},{"name":"MUTCHARLA YASASWI","regNo":"N\/A","section":"A","points":0},{"name":"NAGISETTY VISHNUVARDHAN","regNo":"N\/A","section":"A","points":0},{"name":"NAKKA MOHITH SRI NAGA SAI PAVAN","regNo":"N\/A","section":"A","points":0},{"name":"NALLAM HEMA SAI SRI LAKSHMI","regNo":"N\/A","section":"A","points":0},{"name":"NELAPOGULA SRI POSI LAKSHMI","regNo":"N\/A","section":"A","points":0},{"name":"NELAPUDI PRASANTH SEKHAR","regNo":"N\/A","section":"B","points":0},{"name":"NETHULA MAHESH","regNo":"N\/A","section":"B","points":0},{"name":"NOUPADA LIKHITHA","regNo":"N\/A","section":"A","points":0},{"name":"PALA THANUJA","regNo":"N\/A","section":"B","points":0},{"name":"PANDAVA MEGHANA CHOUDHARY","regNo":"N\/A","section":"A","points":0},{"name":"PANKAJ NARAYAN TYADA","regNo":"N\/A","section":"A","points":0},{"name":"PASUPULETI JASWANTH RAMANA TEJA","regNo":"N\/A","section":"A","points":0},{"name":"PECHETTI LAKSHMI TANUJA","regNo":"N\/A","section":"A","points":0},{"name":"PEPETI GANESH","regNo":"N\/A","section":"A","points":0},{"name":"PETTA PRANATHI","regNo":"N\/A","section":"A","points":0},{"name":"POGIRI BHANU PRASAD","regNo":"N\/A","section":"A","points":0},{"name":"PONNAGANTI JYOTHIKA SAI","regNo":"N\/A","section":"B","points":0},{"name":"POTHAMSETTI KODANDA RAMA NAGA GANESH","regNo":"N\/A","section":"A","points":0},{"name":"REDDI GEETHIKA","regNo":"N\/A","section":"A","points":0},{"name":"RELANGI JYOTHSNA SRI","regNo":"N\/A","section":"A","points":0},{"name":"SAKHIMSETTI HARI SATYA PRIYA DEVI","regNo":"N\/A","section":"B","points":0},{"name":"SAMBANGI VENKATA JASWANTH","regNo":"N\/A","section":"A","points":0},{"name":"SARELLA VINCY ANGELINE","regNo":"N\/A","section":"A","points":0},{"name":"SETTI NARENDRA KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"SHAIK AMEENA","regNo":"N\/A","section":"B","points":0},{"name":"SIDDA MAHESH","regNo":"N\/A","section":"A","points":0},{"name":"SIRAPARAPU PRANATHI SAI VARSHINI","regNo":"N\/A","section":"A","points":0},{"name":"SRIKAKULAPU SANTHI PRIYA","regNo":"N\/A","section":"A","points":0},{"name":"SUTHAPALLI SRI PAVAN KRISHNA","regNo":"N\/A","section":"A","points":0},{"name":"TAMMA LOKESH","regNo":"N\/A","section":"A","points":0},{"name":"TANINKI SREEDHAR","regNo":"N\/A","section":"A","points":0},{"name":"THOTA JOHAN BENEDICT","regNo":"N\/A","section":"B","points":0},{"name":"TUMMA SRI HARSHA","regNo":"N\/A","section":"A","points":0},{"name":"UNDAPALLI DIVYA","regNo":"N\/A","section":"A","points":0},{"name":"UTTARILLI HARSHA VARDHAN","regNo":"N\/A","section":"B","points":0},{"name":"VAKAPALLI H V SAI SURYA SWAPANTH","regNo":"N\/A","section":"A","points":0},{"name":"VAKAPALLI PHANI SAI MUKESH","regNo":"N\/A","section":"A","points":0},{"name":"VANAPARTHI ASMITHA VYSHNAVI","regNo":"N\/A","section":"B","points":0},{"name":"VASKA JYOTHI","regNo":"N\/A","section":"B","points":0},{"name":"VEERANKI MAHESH BABU","regNo":"N\/A","section":"A","points":0},{"name":"VEMAVARAPU MADHU SARIKA","regNo":"N\/A","section":"A","points":0},{"name":"VENKATA NISHITHA REDDY DATLA","regNo":"N\/A","section":"B","points":0},{"name":"YALLA CHANDANA","regNo":"N\/A","section":"A","points":0},{"name":"YALLAPU TANUJA","regNo":"N\/A","section":"B","points":0},{"name":"YATHAM LAKSHMI PRASANNA","regNo":"N\/A","section":"A","points":0}]
+        },
+        'AGNI': {
+            name: 'Agni',
+            description: 'Fire House - Burning with passion and illuminating the path forward.',
+            members: [{"name":"ADABALA ROHITH VEERA VENKATA DURGESH","regNo":"N\/A","section":"B","points":0},{"name":"ADDAGARLA R S S K V V S D N RAJESH","regNo":"N\/A","section":"A","points":0},{"name":"AKSHINTALA HARSHATH","regNo":"N\/A","section":"A","points":0},{"name":"ALLADI DILEEP KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"ATCHUTHUNI SAI SPURANTHI","regNo":"N\/A","section":"A","points":0},{"name":"BOKINALA MANJUSHA","regNo":"N\/A","section":"A","points":0},{"name":"BOKKA LIKHITHA","regNo":"N\/A","section":"A","points":0},{"name":"BOMMI VENKATA SAI","regNo":"N\/A","section":"A","points":0},{"name":"BORRA AVINASH","regNo":"N\/A","section":"A","points":0},{"name":"BOTCHA AVINASH","regNo":"N\/A","section":"B","points":0},{"name":"BURRA MANI CHANDU KUTA RAO","regNo":"N\/A","section":"A","points":0},{"name":"CHAMARLAKOTA SIREESH VALI","regNo":"N\/A","section":"A","points":0},{"name":"CHELAMKURI LOHITH","regNo":"N\/A","section":"B","points":0},{"name":"CHETTU BHAVANA","regNo":"N\/A","section":"A","points":0},{"name":"CHIMAKURTHI TEJA RUPAK","regNo":"N\/A","section":"A","points":0},{"name":"CHINDADA JYOTHI","regNo":"N\/A","section":"A","points":0},{"name":"CHINIMILLI SAJEEVUDU","regNo":"N\/A","section":"A","points":0},{"name":"CHINNAM NIKHILESH","regNo":"N\/A","section":"A","points":0},{"name":"CHINTAPALLI PREM TEJA","regNo":"N\/A","section":"A","points":0},{"name":"CHIRAPA ESWAR VENKATA SATYA NARAYANA","regNo":"N\/A","section":"A","points":0},{"name":"CHITAKANA RACHITHA","regNo":"N\/A","section":"A","points":0},{"name":"DAIDA RANI","regNo":"N\/A","section":"A","points":0},{"name":"DASARI KARTHIKEYA","regNo":"N\/A","section":"B","points":0},{"name":"DASARI MOHAN CHANDRA SHEKAR","regNo":"N\/A","section":"B","points":0},{"name":"DHANANI SRI LAKSHMI VENKATA AASHRITA","regNo":"N\/A","section":"A","points":0},{"name":"DONGA JHANSI","regNo":"N\/A","section":"A","points":0},{"name":"DURU MERY SUNEETHA","regNo":"N\/A","section":"A","points":0},{"name":"EDA PRASANTH","regNo":"N\/A","section":"A","points":0},{"name":"GADDAM CHANDRIKA SRI PRIYA","regNo":"N\/A","section":"A","points":0},{"name":"GAYATRI PADHI","regNo":"N\/A","section":"A","points":0},{"name":"GEDA HARI SAI","regNo":"N\/A","section":"B","points":0},{"name":"GHANTA LIKITHA VENKATA RAGHU SAI","regNo":"N\/A","section":"A","points":0},{"name":"GIDUGU NEHANTH SRIHARSHA NAVADEEP","regNo":"N\/A","section":"A","points":0},{"name":"GOWTHU LEELA RUKMINI","regNo":"N\/A","section":"A","points":0},{"name":"GUBBALA GNAANA PRASANNA","regNo":"N\/A","section":"A","points":0},{"name":"GUDAPATI LALITHA DEVI SRI","regNo":"N\/A","section":"A","points":0},{"name":"GUDDALA SAI CHARAN","regNo":"N\/A","section":"A","points":0},{"name":"GUNDUMOGULA SARUPYA","regNo":"N\/A","section":"A","points":0},{"name":"GUTTULA TEJASWI","regNo":"N\/A","section":"A","points":0},{"name":"JAKKAMSETTI SANJANI","regNo":"N\/A","section":"A","points":0},{"name":"JANAKI MADDALA","regNo":"N\/A","section":"A","points":0},{"name":"JOGI ABISHAI","regNo":"N\/A","section":"A","points":0},{"name":"KALIGITA SIDDHU","regNo":"N\/A","section":"A","points":0},{"name":"KAMIREDDY SRI RAMA CHARAN SARESH KUMAR","regNo":"N\/A","section":"B","points":0},{"name":"KANDIBOYINA CHANDRASHEKAR","regNo":"N\/A","section":"A","points":0},{"name":"KANUMURI DEEKSHITA","regNo":"N\/A","section":"A","points":0},{"name":"KARRI LAKSHMI PRASANNA","regNo":"N\/A","section":"A","points":0},{"name":"KAVURU GUNA SRAVANI","regNo":"N\/A","section":"A","points":0},{"name":"KILLADA DAVID ENOSH","regNo":"N\/A","section":"A","points":0},{"name":"KODE NARASIMHA NAIDU","regNo":"N\/A","section":"A","points":0},{"name":"KOLATI STEPHEN SOUDH","regNo":"N\/A","section":"A","points":0},{"name":"KOLLATI SAILAJA","regNo":"N\/A","section":"A","points":0},{"name":"KOLLI SHANMUKHA SRIRAM CHARAN TEJA","regNo":"N\/A","section":"A","points":0},{"name":"KOMARADA KIRAN KISHORE","regNo":"N\/A","section":"A","points":0},{"name":"KONDAPALLI SUBHAKAR BHANCY RAJ","regNo":"N\/A","section":"A","points":0},{"name":"KOPPARTI HONEY NAGA SANDEEP","regNo":"N\/A","section":"A","points":0},{"name":"KORLAPATI GEETHIKA RATNAM","regNo":"N\/A","section":"A","points":0},{"name":"KOTAPATI MAHENDRA REDDY","regNo":"N\/A","section":"A","points":0},{"name":"LALITHA MANOJNA VELIVELA","regNo":"N\/A","section":"A","points":0},{"name":"MADDI AKSHAYA SRI","regNo":"N\/A","section":"A","points":0},{"name":"MALLAVARAPU GANGOTHRI","regNo":"N\/A","section":"A","points":0},{"name":"MANDAPATI VENKATA YAMINI","regNo":"N\/A","section":"A","points":0},{"name":"MANGENA JAHNAVI","regNo":"N\/A","section":"A","points":0},{"name":"MEDABALIMI ADITHYA VARDHAN","regNo":"N\/A","section":"A","points":0},{"name":"MEDIDI BENNYBABU","regNo":"N\/A","section":"A","points":0},{"name":"MOTURI SANDILYA","regNo":"N\/A","section":"A","points":0},{"name":"MUNDRI RAKESH","regNo":"N\/A","section":"A","points":0},{"name":"MUNGARA LOHITH","regNo":"N\/A","section":"A","points":0},{"name":"MURALA NEETHI SURYA","regNo":"N\/A","section":"A","points":0},{"name":"MURIKITHA ARCHANA SAI SRI","regNo":"N\/A","section":"B","points":0},{"name":"NAKKA SUNISCHAL","regNo":"N\/A","section":"A","points":0},{"name":"NANDAMURI BALA SESHA SATYA SRI","regNo":"N\/A","section":"A","points":0},{"name":"NANDE D V V SIVA SWAMY ARAVINDH","regNo":"N\/A","section":"A","points":0},{"name":"NANDIKA LIKHITHA","regNo":"N\/A","section":"A","points":0},{"name":"NARISETTY AKSHAYA NAIDU","regNo":"N\/A","section":"A","points":0},{"name":"NELLURI CHAITRIKA SRI NIDHI","regNo":"N\/A","section":"B","points":0},{"name":"NIMMALA BHANU SRI HARSHA","regNo":"N\/A","section":"B","points":0},{"name":"NUKALA CHARAN JASWANTH","regNo":"N\/A","section":"A","points":0},{"name":"NUKALA KAUSHAL","regNo":"N\/A","section":"A","points":0},{"name":"OGURI LAKSHMI NARAYANA","regNo":"N\/A","section":"B","points":0},{"name":"PACHIGOLLA RISHITHA MANASA SURYA GAYATRI","regNo":"N\/A","section":"A","points":0},{"name":"PAMU AMRUTHA","regNo":"N\/A","section":"B","points":0},{"name":"PANAKALA RAMA NAGESWARA RAO","regNo":"N\/A","section":"A","points":0},{"name":"PENMETSA HARSHINI","regNo":"N\/A","section":"B","points":0},{"name":"PENTAKOTA LEELA SRI","regNo":"N\/A","section":"A","points":0},{"name":"PENTAPATI HARSHA VARDHAN RAJU","regNo":"N\/A","section":"A","points":0},{"name":"PERICHERLA ROHAN KRISHNA VARMA","regNo":"N\/A","section":"A","points":0},{"name":"PINNINTI SIVANI","regNo":"N\/A","section":"A","points":0},{"name":"PONAMANDI PRASHANTH","regNo":"N\/A","section":"A","points":0},{"name":"POSIMSETTY SRI VISWA BHARATH","regNo":"N\/A","section":"A","points":0},{"name":"PULAPARTHI KALYAN VENKATA SAI","regNo":"N\/A","section":"B","points":0},{"name":"PULI DURGA BHAVANI","regNo":"N\/A","section":"A","points":0},{"name":"ROTTE SUSHANTH","regNo":"N\/A","section":"B","points":0},{"name":"SAKHINETIPALLI CHAKRI ADITYA PAVAN KUMAR","regNo":"N\/A","section":"B","points":0},{"name":"SANA SHANMUKHA DURGA","regNo":"N\/A","section":"B","points":0},{"name":"SHAIK DADA KHALANDER","regNo":"N\/A","section":"A","points":0},{"name":"SHAIK NAGUR MADEENA BEGAM","regNo":"N\/A","section":"B","points":0},{"name":"SIDDAMSETTI VIVEK SAI","regNo":"N\/A","section":"B","points":0},{"name":"SIRIPURAPU PARDHA SARADHI","regNo":"N\/A","section":"B","points":0},{"name":"SUNKARA KETHAN SAI","regNo":"N\/A","section":"A","points":0},{"name":"SUNKARA SWATHI","regNo":"N\/A","section":"A","points":0},{"name":"SWARNA GOWTHAMI","regNo":"N\/A","section":"B","points":0},{"name":"TADELA SUSMITHA","regNo":"N\/A","section":"A","points":0},{"name":"TANGUTURI S V NAGA PAVAN SAI","regNo":"N\/A","section":"A","points":0},{"name":"UPPULURI VENKATA JASWANTH","regNo":"N\/A","section":"A","points":0},{"name":"VADDIMUKKALA KRANTHI KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"VADREVU LAHARI DEVI","regNo":"N\/A","section":"B","points":0},{"name":"VALLABHANI SAHITHI","regNo":"N\/A","section":"A","points":0},{"name":"VANUKURI SAI BHARADWAJA REDDY","regNo":"N\/A","section":"A","points":0},{"name":"VARIKUTI ANJALI","regNo":"N\/A","section":"A","points":0},{"name":"VEERAVALLI KUNDANA SAI SANTHI","regNo":"N\/A","section":"A","points":0},{"name":"VEERLAPATI HASINI","regNo":"N\/A","section":"A","points":0},{"name":"VETCHA G N V S L SAISREE","regNo":"N\/A","section":"A","points":0}]
+        },
+        'VAYU': {
+            name: 'Vayu',
+            description: 'Wind House - Swift and free like the breeze that carries change.',
+            members: [{"name":"A PREETHI","regNo":"N\/A","section":"A","points":0},{"name":"ADDAGARLA HEMANTH NAGA MANIKANTA","regNo":"N\/A","section":"A","points":0},{"name":"ADDAGARLA SRI VIDYA SAGAR","regNo":"N\/A","section":"A","points":0},{"name":"ALAPATI ANASUYA DEVI","regNo":"N\/A","section":"A","points":0},{"name":"ARNEPALLI MEGANA","regNo":"N\/A","section":"A","points":0},{"name":"BAGGU MOHITH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"BANDARU BHANU SATYA PRAKASH","regNo":"N\/A","section":"A","points":0},{"name":"BARAMA NAVYA NAGA RAMYA SRI","regNo":"N\/A","section":"A","points":0},{"name":"BEERA JNANENDRA VARMA","regNo":"N\/A","section":"A","points":0},{"name":"BELLAMKONDA JOSHITHA SHANMUKHI","regNo":"N\/A","section":"A","points":0},{"name":"BHOGIREDDY TEJASRI SAI VAISHNAVI","regNo":"N\/A","section":"A","points":0},{"name":"BODASINGI SHANMUKHA SAI","regNo":"N\/A","section":"A","points":0},{"name":"BOLISETTY KEDARESWARI","regNo":"N\/A","section":"A","points":0},{"name":"BOLLEDDU GIRIDHARA VENKATA SAI","regNo":"N\/A","section":"A","points":0},{"name":"BONDA YOGESH","regNo":"N\/A","section":"B","points":0},{"name":"BORRA HIMA SRI","regNo":"N\/A","section":"A","points":0},{"name":"BUDITHI SAI ADARSH","regNo":"N\/A","section":"A","points":0},{"name":"CHADALAVADA SHAKEENA","regNo":"N\/A","section":"B","points":0},{"name":"CHAGANTI DHANESH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"CHALAMALASETTI SAI DURGA","regNo":"N\/A","section":"A","points":0},{"name":"CHANDANI VIVEKANANDA","regNo":"N\/A","section":"A","points":0},{"name":"CHELLABOYINA YAMINI","regNo":"N\/A","section":"A","points":0},{"name":"CHUNDRU GOWTHAM KRISHNA","regNo":"N\/A","section":"A","points":0},{"name":"DACHEPALLI BHANU UDAY","regNo":"N\/A","section":"A","points":0},{"name":"DAKKUMALLA VARSHA","regNo":"N\/A","section":"A","points":0},{"name":"DANDUBOYINA VENKATA PRABHAS","regNo":"N\/A","section":"A","points":0},{"name":"DHARMAVARUPU CHANDANA","regNo":"N\/A","section":"A","points":0},{"name":"EVANA CHANDU VENKATA SAI GANESH","regNo":"N\/A","section":"A","points":0},{"name":"GADAMSETTY VENKATA SAI HARISH","regNo":"N\/A","section":"A","points":0},{"name":"GANDRETI KALYANI","regNo":"N\/A","section":"A","points":0},{"name":"GANTA HARSHINI","regNo":"N\/A","section":"A","points":0},{"name":"GHANTASALA DEEVEN KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"GONAPALA SRI GOWTHAM","regNo":"N\/A","section":"A","points":0},{"name":"GOTTUMUKKALA NIKHILA VALLI","regNo":"N\/A","section":"A","points":0},{"name":"GOWRIPATNAM BHAGYAKIRAN","regNo":"N\/A","section":"A","points":0},{"name":"GUDAPALLI VEENA SRUTHI","regNo":"N\/A","section":"A","points":0},{"name":"GUNDEPALLI SNEHITH","regNo":"N\/A","section":"B","points":0},{"name":"GUNDU TARUN SAI","regNo":"N\/A","section":"A","points":0},{"name":"JAVVADI NEHA","regNo":"N\/A","section":"B","points":0},{"name":"KADALI SRI SURYA SATYA SAI","regNo":"N\/A","section":"B","points":0},{"name":"KARRI REVANTH RATAN REDDY","regNo":"N\/A","section":"A","points":0},{"name":"KATTA DILEEP","regNo":"N\/A","section":"B","points":0},{"name":"KATTA SRAVANI","regNo":"N\/A","section":"A","points":0},{"name":"KELLA CHAKRA VAMSI","regNo":"N\/A","section":"A","points":0},{"name":"KOCHERLA YESWANTH","regNo":"N\/A","section":"A","points":0},{"name":"KOMATI JAYASRI LAKSHMI","regNo":"N\/A","section":"A","points":0},{"name":"KOTA MADHU VENKATESH","regNo":"N\/A","section":"A","points":0},{"name":"KOTHAPALLI CHINMAY SATYA KRISHNA","regNo":"N\/A","section":"A","points":0},{"name":"KUKKALA SUDHEERA","regNo":"N\/A","section":"A","points":0},{"name":"LAKSHMISETTI KAVYA","regNo":"N\/A","section":"A","points":0},{"name":"LINGAMPALLI VIJAY VARDHAN","regNo":"N\/A","section":"A","points":0},{"name":"MADABHUSHI SRI RANGA SUDARSAN","regNo":"N\/A","section":"A","points":0},{"name":"MALLULA KAVERI","regNo":"N\/A","section":"A","points":0},{"name":"MAMIDISETTI VASUDHA BHANU","regNo":"N\/A","section":"A","points":0},{"name":"MANDANGI MOUNIKA","regNo":"N\/A","section":"A","points":0},{"name":"MANDAVA YAGNA AKHIL SAI","regNo":"N\/A","section":"A","points":0},{"name":"MANGINETI MOHAN SATYA SIVA ROHITH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"MATTA BALA VEERRAJU","regNo":"N\/A","section":"A","points":0},{"name":"MEDIDI LALITH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"MEESALA JAYA RAM","regNo":"N\/A","section":"A","points":0},{"name":"MOHAMMAD SIKINDAR KHAN","regNo":"N\/A","section":"A","points":0},{"name":"MUCHARLA MANI VENKATA SATYANARAYANA","regNo":"N\/A","section":"B","points":0},{"name":"MUCHU MAHADEV","regNo":"N\/A","section":"A","points":0},{"name":"MUGADA DURGA PRASAD","regNo":"N\/A","section":"B","points":0},{"name":"MUPPIDI AMAR DATTA REDDY","regNo":"N\/A","section":"A","points":0},{"name":"MYLABATHULA SUPRIYA","regNo":"N\/A","section":"A","points":0},{"name":"NARKEDAMILLI TANISHA","regNo":"N\/A","section":"A","points":0},{"name":"NIMMALA BHUVANA LAKSHMI","regNo":"N\/A","section":"B","points":0},{"name":"NUKALA NAGA HARSHINI","regNo":"N\/A","section":"A","points":0},{"name":"NULAKANI LEELA MADHAVA RAO","regNo":"N\/A","section":"A","points":0},{"name":"PABBINEEDI SRI RAMA SATYA MAHESH","regNo":"N\/A","section":"A","points":0},{"name":"PABOLU SAI HARSHA","regNo":"N\/A","section":"A","points":0},{"name":"PAILA NIKHIL","regNo":"N\/A","section":"A","points":0},{"name":"PALAPARTHI SANTHOSH KUMAR","regNo":"N\/A","section":"B","points":0},{"name":"PANJA SOMARANGA SAI","regNo":"N\/A","section":"B","points":0},{"name":"PASUPULETI DAIVA PRASAD","regNo":"N\/A","section":"A","points":0},{"name":"PENAPOTHU JOHARIKA","regNo":"N\/A","section":"A","points":0},{"name":"PENMATSA SAI SATHWIKA","regNo":"N\/A","section":"B","points":0},{"name":"PENMETSA PUJITH NAGA SANJAY VARMA","regNo":"N\/A","section":"A","points":0},{"name":"PENMETSA SAI ANVESH VARMA","regNo":"N\/A","section":"A","points":0},{"name":"PERICHARLA HEMA ASWANI","regNo":"N\/A","section":"A","points":0},{"name":"PERURI V V S L VINAY","regNo":"N\/A","section":"A","points":0},{"name":"PIPPALLA MADHURI VENKATA NAGA DIVYA","regNo":"N\/A","section":"A","points":0},{"name":"PIPPALLA RUSHI GUNA SHANMUKH","regNo":"N\/A","section":"A","points":0},{"name":"PODAGATLA PRASANTH","regNo":"N\/A","section":"A","points":0},{"name":"PONNALA VAISHNAVI PRIYADARSHINI","regNo":"N\/A","section":"A","points":0},{"name":"POTHINEEDI TEJA NAGA VENKATA SAI PAVAN","regNo":"N\/A","section":"A","points":0},{"name":"POTTURI GAYATRI","regNo":"N\/A","section":"A","points":0},{"name":"PULLURU KRISHNA VAMSI","regNo":"N\/A","section":"A","points":0},{"name":"PUVVALA SANJANA GAYATHRI","regNo":"N\/A","section":"B","points":0},{"name":"RAJ KAMALINI MEENAKSHI BALABHADRA","regNo":"N\/A","section":"A","points":0},{"name":"RAMANA DIVYA JYOTHIKA","regNo":"N\/A","section":"A","points":0},{"name":"RONGALA SRINIVAS","regNo":"N\/A","section":"B","points":0},{"name":"SALUMURI JYOTHI","regNo":"N\/A","section":"A","points":0},{"name":"SAMAYAMANTHULA SRIVYSHNAVI ISWARYA LAKSHMI","regNo":"N\/A","section":"A","points":0},{"name":"SAMUDRALA JESRAVAN MANIKANTA","regNo":"N\/A","section":"B","points":0},{"name":"SATTINENI NIHITHA","regNo":"N\/A","section":"A","points":0},{"name":"SAVARAM VENKATA SATYA NAGA DURGA SUBHASH","regNo":"N\/A","section":"A","points":0},{"name":"SAYED AMEENA FIRDOUS","regNo":"N\/A","section":"A","points":0},{"name":"SEELABOYINA JEEVANA","regNo":"N\/A","section":"B","points":0},{"name":"SHAIK AHMED","regNo":"N\/A","section":"A","points":0},{"name":"SHAIK SANIYA BEGUM","regNo":"N\/A","section":"A","points":0},{"name":"SINGAMSETTI SAI SHANKAR","regNo":"N\/A","section":"A","points":0},{"name":"SISTU SNEHA","regNo":"N\/A","section":"A","points":0},{"name":"SWAMYREDDY SAI DURGA SAGAR","regNo":"N\/A","section":"A","points":0},{"name":"THIRUMALARAJU VENKATA SATYA PAVAN RAJU","regNo":"N\/A","section":"A","points":0},{"name":"VALAVALA RAMA LAKSHMI ANJANA","regNo":"N\/A","section":"B","points":0},{"name":"VASA HARI NAGENDRA PRATAP","regNo":"N\/A","section":"A","points":0},{"name":"VASIMTHA SATYA SAI KALYANI MALLAPAREDY","regNo":"N\/A","section":"A","points":0},{"name":"VEERAMALLA NAGAVALLI GANGOTHRI","regNo":"N\/A","section":"A","points":0},{"name":"VEERAVALLI SATYA VENKATA SRINADH","regNo":"N\/A","section":"A","points":0},{"name":"VOONNA HEMANTH","regNo":"N\/A","section":"A","points":0},{"name":"YALLA PRADEEP KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"YARLAGADDA TAMOGHNA","regNo":"N\/A","section":"B","points":0},{"name":"YENUGAPALLI DIVYA MADHURI","regNo":"N\/A","section":"A","points":0},{"name":"YIRRI BHANU NAGA PRAKASH","regNo":"N\/A","section":"A","points":0}]
+        },
+        'AAKASH': {
+            name: 'Akash',
+            description: 'Sky House - Reaching for the stars with boundless ambition.',
+            members: [{"name":"ACHANTA MOKSHITH CHOWDARY","regNo":"N\/A","section":"A","points":0},{"name":"ADABALA GANGA PRAVEEN KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"ADDAGARLA LAKSHMI DEVI","regNo":"N\/A","section":"A","points":0},{"name":"ADINA VENKATA SURYA SAI VISHAL","regNo":"N\/A","section":"A","points":0},{"name":"ALLURI BHUVAN SAI TEJA MANI VARMA","regNo":"N\/A","section":"A","points":0},{"name":"ANDE NAGA SATYA SAI VAMSI KIRAN","regNo":"N\/A","section":"A","points":0},{"name":"ASILETI JAHNAVI","regNo":"N\/A","section":"A","points":0},{"name":"BANAVATHU MALLIKARJUNA SAI","regNo":"N\/A","section":"A","points":0},{"name":"BHAVANAM LAKSHMAN KUMAR REDDY","regNo":"N\/A","section":"A","points":0},{"name":"BILLA SAHITHI","regNo":"N\/A","section":"A","points":0},{"name":"BOGA NISHANTH","regNo":"N\/A","section":"A","points":0},{"name":"BOPPINEEDI GEETHIKA","regNo":"N\/A","section":"A","points":0},{"name":"BUDIDA NAGA VAISHNAVI","regNo":"N\/A","section":"A","points":0},{"name":"CHIKILE RAJESH","regNo":"N\/A","section":"A","points":0},{"name":"CHILAKALAPUDI ABHI RAAMA PHANINDRA","regNo":"N\/A","section":"A","points":0},{"name":"CHINNAM LAKSHMI SANTHOSHI","regNo":"N\/A","section":"A","points":0},{"name":"CHODAGAM SHANMUKHA SIVA SRI VENKAT","regNo":"N\/A","section":"A","points":0},{"name":"DATTI VENKATA RAMANA","regNo":"N\/A","section":"A","points":0},{"name":"DEVADA SRI VENKATESWARA SWAMY","regNo":"N\/A","section":"A","points":0},{"name":"DIRISIMILLI MAHI AVINASH","regNo":"N\/A","section":"A","points":0},{"name":"DODDIPATLA POOJA SAI PRAVEENA","regNo":"N\/A","section":"A","points":0},{"name":"DONGA MADHURI","regNo":"N\/A","section":"A","points":0},{"name":"DURVASULA SITA SRI VYSHNAVI","regNo":"N\/A","section":"A","points":0},{"name":"DUVVADA VINAY","regNo":"N\/A","section":"A","points":0},{"name":"GADDAM MANOJ KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"GANDHAM MAHATHI","regNo":"N\/A","section":"A","points":0},{"name":"GANDROJU ESWAR SRI KALI KRISHNA","regNo":"N\/A","section":"A","points":0},{"name":"GOPATHI KALYANI","regNo":"N\/A","section":"A","points":0},{"name":"GUNTAMUKKALA SHAILESH","regNo":"N\/A","section":"A","points":0},{"name":"GURRAM VIKAS","regNo":"N\/A","section":"A","points":0},{"name":"GUTTULA CHAITANYA AKSHAY","regNo":"N\/A","section":"A","points":0},{"name":"INDIGIMELLI RESHMA SUDEEPA","regNo":"N\/A","section":"A","points":0},{"name":"INDUKURI YASWANTH ACHYUTA VARMA","regNo":"N\/A","section":"A","points":0},{"name":"JAKKAMPUDI JAHNAVI","regNo":"N\/A","section":"A","points":0},{"name":"JALDHI PRINCESS GLORY JASMINE","regNo":"N\/A","section":"A","points":0},{"name":"JILLELA VINAY","regNo":"N\/A","section":"A","points":0},{"name":"JITHENDRA VENKATA KANAKA SRI SURYA AYITHAM","regNo":"N\/A","section":"B","points":0},{"name":"KAGITHA BHANU DURGA PRASAD","regNo":"N\/A","section":"A","points":0},{"name":"KALIDINDI SAI VARMA","regNo":"N\/A","section":"B","points":0},{"name":"KALLA GUNADEEP","regNo":"N\/A","section":"A","points":0},{"name":"KAMBHAMPATI SHALANI SINDHU SRI","regNo":"N\/A","section":"A","points":0},{"name":"KANUBOINA VIJAYA LAKSHMI","regNo":"N\/A","section":"A","points":0},{"name":"KANUMURI SUDHA","regNo":"N\/A","section":"A","points":0},{"name":"KARRI LAKSHMI SRAVANTHI","regNo":"N\/A","section":"A","points":0},{"name":"KARUMANCHI SUNEEL","regNo":"N\/A","section":"A","points":0},{"name":"KARUMURI TEJA SIDDARDHA PAVAN KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"KATARI HASWANTH SIVA BHASKAR","regNo":"N\/A","section":"B","points":0},{"name":"KATRAGADDA ARJUN NAIDU","regNo":"N\/A","section":"A","points":0},{"name":"KATREDDI BHANU TEJA SRI","regNo":"N\/A","section":"A","points":0},{"name":"KETHA BHAVYASRI SAILAKSHMI","regNo":"N\/A","section":"A","points":0},{"name":"KHANDAVALLI VYSHNAVI","regNo":"N\/A","section":"A","points":0},{"name":"KODI HEMANTH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"KOLLA RAMA SAI","regNo":"N\/A","section":"B","points":0},{"name":"KOLLABATHULA SHYAM BABU","regNo":"N\/A","section":"A","points":0},{"name":"KOLLEPARA PREM","regNo":"N\/A","section":"A","points":0},{"name":"KOLLI VINEEL","regNo":"N\/A","section":"A","points":0},{"name":"KONKEY BINDHU VASANTHI","regNo":"N\/A","section":"A","points":0},{"name":"KOPPARTHI DURGA BHAVANI","regNo":"N\/A","section":"A","points":0},{"name":"KOREDLA MEDHO SAI ASESH","regNo":"N\/A","section":"A","points":0},{"name":"KOTTA S N VASAVI SRIVALLI","regNo":"N\/A","section":"A","points":0},{"name":"KUCHIMANCHI PRANAV","regNo":"N\/A","section":"A","points":0},{"name":"KUSAMPUDI VENKATA SATYA SAI TEJAS VARMA","regNo":"N\/A","section":"A","points":0},{"name":"MADDALA MANI NAGA SAI NARASIMHA TRINADH","regNo":"N\/A","section":"B","points":0},{"name":"MADDALA VARSHINI","regNo":"N\/A","section":"A","points":0},{"name":"MADDULA AAKASH NAGENDRA SAI PAVAN","regNo":"N\/A","section":"A","points":0},{"name":"MADUPALLI JNANESH","regNo":"N\/A","section":"A","points":0},{"name":"MAKKA SAI GOWR","regNo":"N\/A","section":"A","points":0},{"name":"MALLULA MADHU VARSHINI","regNo":"N\/A","section":"A","points":0},{"name":"MANCHALA SHANMUKA LAKSHMI DEEPIKA","regNo":"N\/A","section":"A","points":0},{"name":"MANDA TANMAY VENKATA SAI LALA GUPTA","regNo":"N\/A","section":"A","points":0},{"name":"MANDELA MUKUNDA PADMA PRIYA","regNo":"N\/A","section":"A","points":0},{"name":"MANGENA SAI VENKATA VENU GOPALA CHARAN","regNo":"N\/A","section":"A","points":0},{"name":"MEDISETTI SRINIJA","regNo":"N\/A","section":"B","points":0},{"name":"MOHAMMAD NUMAAN RAZA","regNo":"N\/A","section":"B","points":0},{"name":"MULAGALA PRANATI SANDHYA","regNo":"N\/A","section":"B","points":0},{"name":"MUTHABATHULA PUNEETH","regNo":"N\/A","section":"A","points":0},{"name":"NADIKUPPALA THANUSH","regNo":"N\/A","section":"A","points":0},{"name":"NADIMPALLI BABAJI AMRUTHA VARMA","regNo":"N\/A","section":"A","points":0},{"name":"NALLAM MANOGNYA DEVI","regNo":"N\/A","section":"A","points":0},{"name":"NAMALA THANUSHA","regNo":"N\/A","section":"B","points":0},{"name":"NANDRU VINAY BABU","regNo":"N\/A","section":"A","points":0},{"name":"NODAGALA NANDA GOPAL SWAMY","regNo":"N\/A","section":"B","points":0},{"name":"NULI LAKSHMI SAI LIKITH","regNo":"N\/A","section":"B","points":0},{"name":"PAVULURI SAI KRISHNA","regNo":"N\/A","section":"B","points":0},{"name":"PENUGONDA ENMANUYEL","regNo":"N\/A","section":"B","points":0},{"name":"PERABATHULA SOMESWARA RAO","regNo":"N\/A","section":"A","points":0},{"name":"POLIMERA SWAPNA","regNo":"N\/A","section":"A","points":0},{"name":"POTHURI SIVA SAI KRISHNA VARMA","regNo":"N\/A","section":"A","points":0},{"name":"PULI MYTHILI","regNo":"N\/A","section":"B","points":0},{"name":"PULIDINDI BLOOMY CHRIS ANGEL","regNo":"N\/A","section":"A","points":0},{"name":"PUTHINIDI JNANESWARI","regNo":"N\/A","section":"A","points":0},{"name":"PUVVALA DEVI AISHWARYA","regNo":"N\/A","section":"A","points":0},{"name":"RAJA AKASH","regNo":"N\/A","section":"B","points":0},{"name":"RAMISETTY SANHITHA SRI","regNo":"N\/A","section":"A","points":0},{"name":"RANGISETTI HEMA SAHASRA","regNo":"N\/A","section":"B","points":0},{"name":"REDDEM LEELA MEGHANA","regNo":"N\/A","section":"B","points":0},{"name":"REDDY VENKATA SAKETH","regNo":"N\/A","section":"A","points":0},{"name":"RELLU LAKSHMI PRASANNA","regNo":"N\/A","section":"A","points":0},{"name":"SEELABOINA RAMADEVI","regNo":"N\/A","section":"A","points":0},{"name":"SEELABOINA SANTOSH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"SEELABOYINA JEEVIKA","regNo":"N\/A","section":"B","points":0},{"name":"SHAIK AFZAL DANISH","regNo":"N\/A","section":"A","points":0},{"name":"SHAIK ILIYAS","regNo":"N\/A","section":"A","points":0},{"name":"SHAIK SAMEERA","regNo":"N\/A","section":"A","points":0},{"name":"SHAIK SUHANA","regNo":"N\/A","section":"B","points":0},{"name":"SHAIK THAHIR BASHA","regNo":"N\/A","section":"A","points":0},{"name":"SUNKARA CHAITANYA VEERA BHAIRAV","regNo":"N\/A","section":"A","points":0},{"name":"TANUKULA UMA SAI PAVAN","regNo":"N\/A","section":"A","points":0},{"name":"TAPPETA GANESH REDDY","regNo":"N\/A","section":"A","points":0},{"name":"TEKU DURGA SRINIVAS","regNo":"N\/A","section":"A","points":0},{"name":"THOTA DEVI SRI SAI SREEKAR","regNo":"N\/A","section":"A","points":0},{"name":"THOTA MOHAN SIVA","regNo":"N\/A","section":"A","points":0},{"name":"THOTA SUJAY BABU","regNo":"N\/A","section":"A","points":0},{"name":"UNDURTHI MANOJ","regNo":"N\/A","section":"A","points":0},{"name":"UNGARALA RADHIKA AISHWARYA","regNo":"N\/A","section":"B","points":0},{"name":"UPPALA ABHINAYA SREE","regNo":"N\/A","section":"B","points":0},{"name":"VARADA NAGA SURYA LAKSHMI","regNo":"N\/A","section":"A","points":0},{"name":"VARRE GEETHA NAGA VALLI","regNo":"N\/A","section":"B","points":0},{"name":"VATTIVELLA RAMKI","regNo":"N\/A","section":"B","points":0},{"name":"VILLURI MOHINI MANGA LAKSHMI MANASA","regNo":"N\/A","section":"A","points":0},{"name":"VISSAPRAGADA RAMA PRANEETH","regNo":"N\/A","section":"A","points":0},{"name":"YENDA RASHMIKA","regNo":"N\/A","section":"B","points":0},{"name":"YERICHERLA JOHN ELISHA","regNo":"N\/A","section":"B","points":0},{"name":"YERRA YASVASI SATYA KAVERI","regNo":"N\/A","section":"B","points":0}]
+        },
+        'PRUDHVI': {
+            name: 'Prudhvi',
+            description: 'Earth House - Strong and steady like the mountains that stand the test of time.',
+            members: [{"name":"ADABALA SAI NAGA SURYANARAYANA","regNo":"N\/A","section":"B","points":0},{"name":"AKULA BALA BHAGYA SRI","regNo":"N\/A","section":"A","points":0},{"name":"BANDARU MANOGNA NAGAVALLI","regNo":"N\/A","section":"A","points":0},{"name":"BANDI HARI KRISHNA","regNo":"N\/A","section":"A","points":0},{"name":"BARAKATA TARUN SWAMY","regNo":"N\/A","section":"A","points":0},{"name":"BASIVIREDDY HEMALATHA","regNo":"N\/A","section":"A","points":0},{"name":"BAYYE JOSEPH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"BILLAKURTHI HARSHA VARDHAN SRINIVASU","regNo":"N\/A","section":"B","points":0},{"name":"BIRUDUKOTA SATYA VARA PRASAD","regNo":"N\/A","section":"B","points":0},{"name":"BOLEM PRAVALIKA","regNo":"N\/A","section":"B","points":0},{"name":"BOMMIDI JAHNAVI","regNo":"N\/A","section":"A","points":0},{"name":"BOYAPATI PRASANNA VARUN","regNo":"N\/A","section":"B","points":0},{"name":"BUDDE VENKATA SATYA TEJESH","regNo":"N\/A","section":"A","points":0},{"name":"CHALLA JITHENDRA ABHIRAM","regNo":"N\/A","section":"A","points":0},{"name":"CHALLAGUNDLA HINDRIKA SRI","regNo":"N\/A","section":"A","points":0},{"name":"CHANDAKA KEDARA SRINIVAS","regNo":"N\/A","section":"A","points":0},{"name":"CHATRAGADDA TEJASWINI","regNo":"N\/A","section":"B","points":0},{"name":"CHEEPU SAI VIKAS","regNo":"N\/A","section":"A","points":0},{"name":"CHEGONDI HARSHINI","regNo":"N\/A","section":"A","points":0},{"name":"CHEYYETI VENKATA SINDHU","regNo":"N\/A","section":"B","points":0},{"name":"CHINTAPALLI VENKATA DURGESH","regNo":"N\/A","section":"A","points":0},{"name":"CHOKKA ARYAN SANTHOSH","regNo":"N\/A","section":"A","points":0},{"name":"CHUNDRU VISWA TEJA","regNo":"N\/A","section":"A","points":0},{"name":"DASARI YUVA RAM","regNo":"N\/A","section":"B","points":0},{"name":"DIRSIPOM INDHU PRIYA","regNo":"N\/A","section":"B","points":0},{"name":"DONGA CHANDINI","regNo":"N\/A","section":"A","points":0},{"name":"DONGA MAHESH","regNo":"N\/A","section":"B","points":0},{"name":"DWARAMPUDI PURNA NAGA GOWTHAM REDDY","regNo":"N\/A","section":"B","points":0},{"name":"EDIMUDI SURIBABU","regNo":"N\/A","section":"A","points":0},{"name":"ESURU CHAITANYA","regNo":"N\/A","section":"A","points":0},{"name":"G UDAY KIRAN","regNo":"N\/A","section":"A","points":0},{"name":"GADDAMUDI VENKATA GOPICHAND","regNo":"N\/A","section":"A","points":0},{"name":"GANJI JYOTHSNA","regNo":"N\/A","section":"B","points":0},{"name":"GANTA GOWTHAM","regNo":"N\/A","section":"A","points":0},{"name":"GAYAKAWADA PALLAVI","regNo":"N\/A","section":"A","points":0},{"name":"GEDELA SAI ABHINAY","regNo":"N\/A","section":"A","points":0},{"name":"GIRIJALA PRASHANTH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"GUBBALA RESHMA GANGAVATHI","regNo":"N\/A","section":"A","points":0},{"name":"GUDDATI DURGA NAGA LAKSHMI SHIVA SARANYA","regNo":"N\/A","section":"A","points":0},{"name":"GUDDETI DATHRI SRI SAI ANVITHA","regNo":"N\/A","section":"A","points":0},{"name":"GUDIMETLA JNANA SANDEEP REDDY","regNo":"N\/A","section":"A","points":0},{"name":"GUDURI KARTHIK SRI NAGA SAI","regNo":"N\/A","section":"A","points":0},{"name":"GUMMALLA NAGA GAYATHRI","regNo":"N\/A","section":"A","points":0},{"name":"ITTA VASAVI","regNo":"N\/A","section":"A","points":0},{"name":"JADDU JYOTHIRMAI INDIRA PRIYADARSINI DEVI","regNo":"N\/A","section":"A","points":0},{"name":"JALDANI ABHIRAM CHARAN","regNo":"N\/A","section":"A","points":0},{"name":"JAVVADI MOHANA DURGA","regNo":"N\/A","section":"A","points":0},{"name":"JOGI PAVAN TEJA","regNo":"N\/A","section":"A","points":0},{"name":"JONNALAGADDA LAKSHMI MOUNIKA","regNo":"N\/A","section":"A","points":0},{"name":"KADALI BHANU","regNo":"N\/A","section":"A","points":0},{"name":"KANCHARLA N V L DURGA NIHARIKA","regNo":"N\/A","section":"A","points":0},{"name":"KANDANALA PURNASRI","regNo":"N\/A","section":"A","points":0},{"name":"KANUMURI RISHITHA VARMA","regNo":"N\/A","section":"A","points":0},{"name":"KAPAKAYALA NAGA SAI PAVAN","regNo":"N\/A","section":"A","points":0},{"name":"KARATAM SANTHOSH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"KARIBANDI PAVAN RAVINDRA KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"KAYITHA LAHARI","regNo":"N\/A","section":"A","points":0},{"name":"KESANAKURTHI MANASA SATYA","regNo":"N\/A","section":"A","points":0},{"name":"KETA PURNA PAVAN","regNo":"N\/A","section":"A","points":0},{"name":"KOLLATI SAGAR","regNo":"N\/A","section":"A","points":0},{"name":"KOLLATI VISHNU TEJA","regNo":"N\/A","section":"A","points":0},{"name":"KOMMULA DIVYA MANOGNA","regNo":"N\/A","section":"A","points":0},{"name":"KORANGI TRINADH","regNo":"N\/A","section":"A","points":0},{"name":"KOTA DEEPIKA","regNo":"N\/A","section":"A","points":0},{"name":"KOTLA VENKAT","regNo":"N\/A","section":"A","points":0},{"name":"KUMMARAPURUGU SAIRAM","regNo":"N\/A","section":"A","points":0},{"name":"KUSUMA KOMALI","regNo":"N\/A","section":"A","points":0},{"name":"KUTIKUPPALA CHARAN TEJA","regNo":"N\/A","section":"A","points":0},{"name":"LAKKU NOMU NARASIMHA SAI PAVAN","regNo":"N\/A","section":"A","points":0},{"name":"LAKSHMI VENKATA NIKHITHA","regNo":"N\/A","section":"A","points":0},{"name":"LOKAM MAHITANJALI","regNo":"N\/A","section":"A","points":0},{"name":"MADABHUSHI SRI RANGA SUDARSAN ","regNo":"N\/A","section":"A","points":0},{"name":"MADAMANCHI MANIKANTA","regNo":"N\/A","section":"A","points":0},{"name":"MALLA DEEPANVITHA","regNo":"N\/A","section":"A","points":0},{"name":"MAMUDURI PRABHAS","regNo":"N\/A","section":"B","points":0},{"name":"MANAPARAPU DEEPIKA","regNo":"N\/A","section":"A","points":0},{"name":"MANDA KEERTHI","regNo":"N\/A","section":"A","points":0},{"name":"MANDAGIRI SAI ASWITHA","regNo":"N\/A","section":"A","points":0},{"name":"MANDAVALLI DHANA KARTHIKEYA","regNo":"N\/A","section":"A","points":0},{"name":"MARUBOINA KARTHIK VENKATA SRI SAI TEJA","regNo":"N\/A","section":"A","points":0},{"name":"MEDISETTI RAMA KRISHNA SAI","regNo":"N\/A","section":"A","points":0},{"name":"MEER IKRAAM HUSSAIN","regNo":"N\/A","section":"B","points":0},{"name":"MEESALA KARTHIK RAJ KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"MEESALA RAJANIKUMAR","regNo":"N\/A","section":"A","points":0},{"name":"MOHAMMAD IBRAHIM KHAN","regNo":"N\/A","section":"A","points":0},{"name":"MOHAMMAD ROOFIYA TASNEEM","regNo":"N\/A","section":"A","points":0},{"name":"MORTHA ANUSRI","regNo":"N\/A","section":"A","points":0},{"name":"MUDUNURI MANOJ SAI ASWANTH VARMA","regNo":"N\/A","section":"A","points":0},{"name":"MUNGARA LOKESH KUMAR","regNo":"N\/A","section":"A","points":0},{"name":"MUTHYALAPALLI","regNo":"N\/A","section":"B","points":0},{"name":"NAKKINA GANESH","regNo":"N\/A","section":"A","points":0},{"name":"NALAMALA KEVIN RISHITH","regNo":"N\/A","section":"B","points":0},{"name":"NALLA TANOJ SITHARAM","regNo":"N\/A","section":"A","points":0},{"name":"NAMUDURI MAHESH","regNo":"N\/A","section":"A","points":0},{"name":"NANDURI SURYA NAGA VENKATA SAI VIGNESH","regNo":"N\/A","section":"A","points":0},{"name":"NEPALA BESWANTH","regNo":"N\/A","section":"B","points":0},{"name":"NETHALA HEMA DURGA SAI KUMAR","regNo":"N\/A","section":"B","points":0},{"name":"NIMMANA NARENDRA","regNo":"N\/A","section":"B","points":0},{"name":"PADAVALA GANIF RAJU","regNo":"N\/A","section":"A","points":0},{"name":"PAIDI TANUJA","regNo":"N\/A","section":"A","points":0},{"name":"PAKA RENITA JESSIE","regNo":"N\/A","section":"B","points":0},{"name":"PALANI BHUVANA SAI KRUTHI","regNo":"N\/A","section":"B","points":0},{"name":"PALIVELA BALA BHASKARA PRADEEP","regNo":"N\/A","section":"A","points":0},{"name":"PALLAPU HARITHA","regNo":"N\/A","section":"B","points":0},{"name":"PANDA SUJAN PRASAD","regNo":"N\/A","section":"B","points":0},{"name":"PANJA MUKUNDA SRI NAGA SANTOSH","regNo":"N\/A","section":"A","points":0},{"name":"PANJA NAGA VENKATA PRASAD RAJA","regNo":"N\/A","section":"A","points":0},{"name":"PARAVASTU VENKATA RAMA SURI","regNo":"N\/A","section":"B","points":0},{"name":"PAREPALLI RAMA HARI NAIDU","regNo":"N\/A","section":"A","points":0},{"name":"PATAN ABDUL RASHEED KHAN","regNo":"N\/A","section":"B","points":0},{"name":"PECHETTI SRI VINAYAK","regNo":"N\/A","section":"A","points":0},{"name":"PEETHANI UDAYA SRI","regNo":"N\/A","section":"A","points":0},{"name":"PERICHERLA VIGNESH VARMA","regNo":"N\/A","section":"A","points":0},{"name":"PILLI MEGHANA","regNo":"N\/A","section":"A","points":0},{"name":"POTLA RAVI","regNo":"N\/A","section":"B","points":0},{"name":"PUPPALA JANARDHAN SAI","regNo":"N\/A","section":"B","points":0},{"name":"RAAVI CHARWAK","regNo":"N\/A","section":"A","points":0},{"name":"RANGISETTI SAI PAVAN KUMAR","regNo":"N\/A","section":"B","points":0},{"name":"REBBA RAJESH","regNo":"N\/A","section":"B","points":0},{"name":"REDDY SRIJA","regNo":"N\/A","section":"B","points":0},{"name":"REDDY VENKATA SATYA SRAVANI","regNo":"N\/A","section":"B","points":0},{"name":"REKHAPALLI RUTHIKA AKSHAYA SAI SRI","regNo":"N\/A","section":"A","points":0},{"name":"RODDA VENKATA SIVA SAI","regNo":"N\/A","section":"A","points":0},{"name":"ROMPILLI SATEESH","regNo":"N\/A","section":"B","points":0},{"name":"RUDRAKSHULA PRAVEENA","regNo":"N\/A","section":"A","points":0},{"name":"SANDHI SHAMM ROY","regNo":"N\/A","section":"A","points":0},{"name":"SANKU VEERA VENKATA SANTOSH","regNo":"N\/A","section":"A","points":0},{"name":"SARIPALLI GNANESWAR","regNo":"N\/A","section":"B","points":0},{"name":"SHAIK ABDUL GAFOOR","regNo":"N\/A","section":"B","points":0},{"name":"SHAIK KARIMUNNISA","regNo":"N\/A","section":"A","points":0},{"name":"Shaik madeena","regNo":"N\/A","section":"A","points":0},{"name":"SHAIK REENAZ","regNo":"N\/A","section":"A","points":0},{"name":"SIDAGAM ABHIRAM","regNo":"N\/A","section":"B","points":0},{"name":"SIRRA DURGA RANI","regNo":"N\/A","section":"B","points":0},{"name":"SUNKARA LOKESH VIJAY SAI","regNo":"N\/A","section":"B","points":0},{"name":"SURARAPU HASINI","regNo":"N\/A","section":"A","points":0},{"name":"SWARNA SAHITHI","regNo":"N\/A","section":"B","points":0},{"name":"SYED MANSOOR","regNo":"N\/A","section":"A","points":0},{"name":"TALARI JYOTHI","regNo":"N\/A","section":"B","points":0},{"name":"TAMARANA SRUTHI","regNo":"N\/A","section":"A","points":0},{"name":"TELLAKULA VEERA RAGHAVA","regNo":"N\/A","section":"A","points":0},{"name":"TELU YUVA PRIYA MOULIKA","regNo":"N\/A","section":"A","points":0},{"name":"TIRUMALASETTY SIDDARDHA","regNo":"N\/A","section":"B","points":0},{"name":"VASE ASHITHA","regNo":"N\/A","section":"B","points":0},{"name":"VATAPALLI GNANA SEKHAR","regNo":"N\/A","section":"A","points":0},{"name":"VATHADI NAGAVINAY","regNo":"N\/A","section":"B","points":0},{"name":"VEERAVALLI LEELA NAGA BABU","regNo":"N\/A","section":"A","points":0},{"name":"VEERAVARAPU NAGA VENKATA JASWANTH","regNo":"N\/A","section":"A","points":0},{"name":"VEERLAPATI HARSHINI","regNo":"N\/A","section":"A","points":0},{"name":"VENNAPUSA MANISHA","regNo":"N\/A","section":"B","points":0},{"name":"VUNNAM RAVINDRA BABU","regNo":"N\/A","section":"A","points":0},{"name":"YARAMALA MOHAN BHAGAVAN NARASIMHA","regNo":"N\/A","section":"A","points":0}]
+        }
+    };
+
+    /**
+     * =========================================================================
+     * 3. MASTER CLASS REPRESENTATIVES (CR) INDEX (14 VERIFIED CRs FROM WEBSITE)
+     * Data Source: heroes_of_department.php (#class-representatives)
      * =========================================================================
      */
     const MASTER_CR_INDEX = [
@@ -75,11 +108,10 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 3. MASTER PERSON INDEX (FACULTY + HEROES + CLASS REPRESENTATIVES)
+     * 4. MASTER PERSON INDEX (FACULTY + HEROES + CLASS REPRESENTATIVES)
      * =========================================================================
      */
     const MASTER_PERSON_INDEX = [
-        // --- CLASS REPRESENTATIVES (14 PEOPLE) ---
         {
             id: 'person_mohana_durga',
             fullName: 'JAVVADI MOHANA DURGA',
@@ -996,7 +1028,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 4. GRANULAR WEBSITE KNOWLEDGE MATRIX (22 SECTIONS)
+     * 5. GRANULAR WEBSITE KNOWLEDGE MATRIX (22 SECTIONS)
      * =========================================================================
      */
     const KNOWLEDGE_MATRIX = [
@@ -1281,7 +1313,106 @@ We build real-world engineering skills through corporate internships, paid indus
 
     /**
      * =========================================================================
-     * 5. CLASS REPRESENTATIVE (CR) INTENT & RETRIEVAL ENGINE
+     * 6. HOUSE MEMBER & LEAGUE INTENT ENGINE
+     * Handles specific house member lookup ("jal house members", "members of agni")
+     * vs general 5-house overview ("what are the five houses") vs follow-ups.
+     * =========================================================================
+     */
+    function searchHouseSystem(rawQuery) {
+        if (!rawQuery) return null;
+        const lower = rawQuery.toLowerCase().trim();
+
+        // 1. GENERAL 5-HOUSES OVERVIEW QUERY
+        const isFiveHousesOverview = /^(what are the (five|5) houses\??|five houses|5 houses|tell me about the (five|5) houses|student houses|what houses are available\??)$/i.test(lower);
+        if (isFiveHousesOverview) {
+            return {
+                id: 'student_houses_overview',
+                category: 'Student Houses Overview',
+                title: 'Five Student Houses (Elemental Leagues)',
+                content: `Five Student Houses & Elemental Leagues:
+• 💧 Jal — Water Element (Adaptability, Fluidity & Analytics)
+• 🔥 Agni — Fire Element (Passion, Illumination & Innovation)
+• 💨 Vayu — Air Element (Agile Speed & Dynamic Thinking)
+• 🌌 Akash — Ether/Sky Element (Vision, Ambition & AI/Cloud)
+• 🌍 Prudhvi — Earth Element (Grounded Strength, Ethics & Discipline)
+
+Students compete in continuous hackathons, coding contests, sports, and cultural battles for the Annual Championship Shield. Ask for "Jal house members", "Agni house members", "Vayu house members", "Akash house members", or "Prudhvi house members" to view specific house rosters!`,
+                url: 'houses_dashboard.php',
+                ctaText: 'View House Leaderboard →'
+            };
+        }
+
+        // 2. DETECT SPECIFIC HOUSE NAME (Jal, Agni, Vayu, Akash/Aakash, Prudhvi/Prithvi)
+        let requestedHouseKey = null;
+        if (/\b(jal|water|beta)\b/i.test(lower)) requestedHouseKey = 'JAL';
+        else if (/\b(agni|fire|epsilon)\b/i.test(lower)) requestedHouseKey = 'AGNI';
+        else if (/\b(vayu|wind|gamma)\b/i.test(lower)) requestedHouseKey = 'VAYU';
+        else if (/\b(akash|aakash|sky|alpha)\b/i.test(lower)) requestedHouseKey = 'AAKASH';
+        else if (/\b(prudhvi|pruthvi|earth|delta)\b/i.test(lower)) requestedHouseKey = 'PRUDHVI';
+
+        // 3. DETECT FOLLOW-UP CONVERSATIONAL INTENTS ("show their registration numbers", "who has highest points?")
+        const isFollowUpRegQuery = /\b(registration number|registration numbers|reg no|reg number|reg numbers|show reg|show registration)\b/i.test(lower);
+        const isFollowUpTopQuery = /\b(highest points|top points|top performer|top member|captain|who has highest points)\b/i.test(lower);
+
+        if (!requestedHouseKey && (isFollowUpRegQuery || isFollowUpTopQuery) && conversationContext.activeHouse) {
+            requestedHouseKey = conversationContext.activeHouse;
+        }
+
+        if (!requestedHouseKey) return null;
+
+        // Save active house in conversation context for follow-up questions
+        conversationContext.activeHouse = requestedHouseKey;
+
+        const houseData = MASTER_HOUSE_ROSTER[requestedHouseKey];
+        if (!houseData) return null;
+
+        const displayName = houseData.name;
+        const membersList = houseData.members;
+
+        // Sub-case 3.1: Follow-up question for Registration Numbers
+        if (isFollowUpRegQuery) {
+            let regItems = membersList.slice(0, 15).map((m, idx) => `${idx + 1}. <strong>${m.name}</strong> — Reg: ${m.regNo || 'N/A'} (${m.section || 'CSD/CSIT'})`).join('<br>');
+            return {
+                id: `house_reg_${requestedHouseKey}`,
+                category: 'House Members',
+                title: `${displayName} House Members — Registration Numbers`,
+                content: `Here are the registration numbers for ${displayName} House members (Total: ${membersList.length} students):<br><br>${regItems}<br><br><em>Showing top 15 members. View full roster on house page.</em>`,
+                url: `house_detail.php?house=${displayName}`,
+                ctaText: `View Complete ${displayName} House Page →`
+            };
+        }
+
+        // Sub-case 3.2: Follow-up question for Top Points / Captain
+        if (isFollowUpTopQuery) {
+            let sortedByPoints = [...membersList].sort((a, b) => (b.points || 0) - (a.points || 0));
+            let topMember = sortedByPoints[0] || membersList[0];
+            return {
+                id: `house_top_${requestedHouseKey}`,
+                category: 'House Members',
+                title: `${displayName} House — Top Performer`,
+                content: `🏆 <strong>Top Performer in ${displayName} House:</strong><br><br>• <strong>Name:</strong> ${topMember.name}<br>• <strong>Registration Number:</strong> ${topMember.regNo || 'N/A'}<br>• <strong>Section:</strong> ${topMember.section || 'CSD/CSIT'}<br>• <strong>House Points:</strong> ${topMember.points || 0} pts`,
+                url: `house_detail.php?house=${displayName}`,
+                ctaText: `View ${displayName} House Details →`
+            };
+        }
+
+        // Sub-case 3.3: Primary House Members Query ("jal house members", "members of agni", "vayu students", "jal")
+        let displayedMembers = membersList.slice(0, 15);
+        let listItems = displayedMembers.map((m, idx) => `${idx + 1}. <strong>${m.name}</strong> — Reg: ${m.regNo || 'N/A'} | Section: ${m.section || 'CSD/CSIT'}`).join('<br>');
+
+        return {
+            id: `house_members_${requestedHouseKey}`,
+            category: 'House Members',
+            title: `${displayName} House Members`,
+            content: `Here are the members of <strong>${displayName} House</strong> (Total: ${membersList.length} students):<br><br>${listItems}<br><br><em>Showing top 15 of ${membersList.length} members. You can ask "show their registration numbers" or "who has highest points?".</em>`,
+            url: `house_detail.php?house=${displayName}`,
+            ctaText: `View Full ${displayName} House Roster →`
+        };
+    }
+
+    /**
+     * =========================================================================
+     * 7. CLASS REPRESENTATIVE (CR) INTENT & RETRIEVAL ENGINE
      * =========================================================================
      */
     function searchCRSystem(rawQuery) {
@@ -1395,7 +1526,7 @@ We build real-world engineering skills through corporate internships, paid indus
 
     /**
      * =========================================================================
-     * 6. STRICT TOKENIZED PERSON SEARCH ENGINE (SOLVES MOHANA DURGA BUG)
+     * 8. STRICT TOKENIZED PERSON SEARCH ENGINE (SOLVES MOHANA DURGA BUG)
      * =========================================================================
      */
     function searchPersonSystem(rawQuery) {
@@ -1404,11 +1535,9 @@ We build real-world engineering skills through corporate internships, paid indus
         const normQuery = normalizePersonName(rawQuery);
         if (!normQuery || normQuery.length < 2) return null;
 
-        // Skip person search if query is a general topic or category term
-        const nonPersonTopicKeywords = /^\b(the|department|college|hod|hods|head|head of department|hero|heroes|department heroes|faculty|faculties|student|students|houses|courses|labs|placements|startups|incubation|events|clubs|syllabus|contact|achievements|internships|research|publications|projects|cr|crs|c\.r\.|c\.r\.s|class representative|class representatives|class rep|class reps)\b$/i;
-        if (nonPersonTopicKeywords.test(normQuery) || /\b(hod|hods|head of department|department heroes|faculty members|who are the faculty|who are the students|who are the heroes|who is the cr|who are the crs|class representative|class rep)\b/i.test(rawQuery)) return null;
+        const nonPersonTopicKeywords = /^\b(the|department|college|hod|hods|head|head of department|hero|heroes|department heroes|faculty|faculties|student|students|houses|courses|labs|placements|startups|incubation|events|clubs|syllabus|contact|achievements|internships|research|publications|projects|cr|crs|c\.r\.|c\.r\.s|class representative|class representatives|class rep|class reps|jal|agni|vayu|akash|aakash|prudhvi|pruthvi)\b$/i;
+        if (nonPersonTopicKeywords.test(normQuery) || /\b(hod|hods|head of department|department heroes|faculty members|who are the faculty|who are the students|who are the heroes|who is the cr|who are the crs|class representative|class rep|jal house|agni house|vayu house|akash house|prudhvi house|members of jal|members of agni|members of vayu|members of akash|members of prudhvi)\b/i.test(rawQuery)) return null;
 
-        // PRIORITY 1: Registration Number Match (e.g. "25B91A6223")
         const regMatch = rawQuery.match(/\b([0-9]{2}[a-z0-9]{8,10})\b/i);
         if (regMatch) {
             const searchedReg = regMatch[1].toUpperCase();
@@ -1440,20 +1569,17 @@ We build real-world engineering skills through corporate internships, paid indus
             const normFullName = normalizePersonName(person.fullName);
             const personTokens = tokenizeName(person.fullName);
 
-            // Priority 2: Exact Full Name Match (normalized string equality)
             if (normQuery === normFullName) {
                 exactFullMatches.push(person);
                 continue;
             }
 
-            // Priority 3: Check if ALL query tokens strictly match individual person tokens (EXACT TOKEN EQUALITY)
             let allTokensMatched = queryTokens.every(qTok => {
                 const matchInName = personTokens.some(pTok => pTok === qTok);
                 const matchInAlias = person.searchableAliases && person.searchableAliases.some(alias => tokenizeName(alias).includes(qTok));
                 return matchInName || matchInAlias;
             });
 
-            // Prevent substring bleed (e.g. "mohan" matching "mohana")
             let hasSubstringBleed = queryTokens.some(qTok => {
                 return personTokens.some(pTok => pTok !== qTok && (pTok.startsWith(qTok) || qTok.startsWith(pTok)));
             });
@@ -1463,7 +1589,6 @@ We build real-world engineering skills through corporate internships, paid indus
             }
         }
 
-        // Case A: Exactly 1 Exact Full Name Match
         if (exactFullMatches.length === 1) {
             const p = exactFullMatches[0];
             return {
@@ -1481,7 +1606,6 @@ We build real-world engineering skills through corporate internships, paid indus
             };
         }
 
-        // Case B: Exactly 1 All Tokens Matched Candidate
         if (allTokensMatchedCandidates.length === 1) {
             const p = allTokensMatchedCandidates[0];
             return {
@@ -1499,7 +1623,6 @@ We build real-world engineering skills through corporate internships, paid indus
             };
         }
 
-        // Case C: Multiple Candidates Matched (Disambiguation required)
         const totalMatches = [...exactFullMatches, ...allTokensMatchedCandidates];
         const uniqueMatches = Array.from(new Set(totalMatches.map(p => p.id))).map(id => totalMatches.find(p => p.id === id));
 
@@ -1519,7 +1642,6 @@ We build real-world engineering skills through corporate internships, paid indus
             };
         }
 
-        // Case D: Explicit person question (e.g. "Who is XYZ?") but 0 matches found
         const isExplicitPersonQuestion = /^\b(who is|tell me about|profile of|info on)\b/i.test(rawQuery.trim());
         if (isExplicitPersonQuestion) {
             const formattedName = normQuery.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
@@ -1541,9 +1663,6 @@ We build real-world engineering skills through corporate internships, paid indus
         return null;
     }
 
-    /**
-     * Helper for backward compatibility
-     */
     function extractFacultyQueryName(rawQuery) {
         const lower = rawQuery.toLowerCase().trim();
         const explicitFacultyHonorifics = ['sir', 'madam', 'ma\'am', 'mam', 'dr.', 'dr ', 'prof.', 'prof ', 'faculty', 'teacher'];
@@ -1561,7 +1680,7 @@ We build real-world engineering skills through corporate internships, paid indus
 
     /**
      * =========================================================================
-     * 7. RELEVANCE VECTOR RERANKING ENGINE & HYBRID SEARCH
+     * 9. RELEVANCE VECTOR RERANKING ENGINE & HYBRID SEARCH
      * =========================================================================
      */
     function calculateChunkScore(chunk, rawQueryStr) {
@@ -1623,14 +1742,18 @@ We build real-world engineering skills through corporate internships, paid indus
     }
 
     function searchKnowledgeVector(rawQuery) {
-        // Step A: CHECK CLASS REPRESENTATIVE (CR) ENGINE FIRST
+        const houseResult = searchHouseSystem(rawQuery);
+        if (houseResult) {
+            console.log('[CHATBOT RAG] House Match Found:', houseResult.title);
+            return houseResult;
+        }
+
         const crResult = searchCRSystem(rawQuery);
         if (crResult) {
             console.log('[CHATBOT RAG] CR Match Found:', crResult.title);
             return crResult;
         }
 
-        // Step B: PRIORITY PERSON SEARCH SECOND (Strict Token Matching)
         const personResult = searchPersonSystem(rawQuery);
         if (personResult) {
             if (personResult.found) {
@@ -1642,7 +1765,6 @@ We build real-world engineering skills through corporate internships, paid indus
             }
         }
 
-        // Step C: GENERAL KNOWLEDGE MATRIX RAG SEARCH THIRD
         let scoredChunks = KNOWLEDGE_MATRIX.map(chunk => {
             return {
                 chunk: chunk,
@@ -1660,16 +1782,10 @@ We build real-world engineering skills through corporate internships, paid indus
         return null;
     }
 
-    /**
-     * Verification Guard (PRESERVED)
-     */
     function verifyAndEnforceFacultyResponse(userInput, matchedChunk, rawAnswer) {
         return rawAnswer;
     }
 
-    /**
-     * Client-side Gemini API Invocation
-     */
     async function callGeminiDirect(userInput, matchedChunk, apiKey) {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
@@ -1717,9 +1833,6 @@ We build real-world engineering skills through corporate internships, paid indus
         return replyText;
     }
 
-    /**
-     * Local Synthesis Fallback Engine
-     */
     function synthesizeLocalAnswer(matchedChunk, rawQuery) {
         if (!matchedChunk) {
             return {
@@ -1740,16 +1853,12 @@ We build real-world engineering skills through corporate internships, paid indus
         return {
             answer: `<strong>${matchedChunk.title}:</strong><br><br>${matchedChunk.content.replace(/\n/g, '<br>')}`,
             ctaLinks: [{ text: matchedChunk.ctaText, url: matchedChunk.url }],
-            suggestions: ['What courses are offered?', 'Who is the HOD?', 'Tell me about placements', 'Who are the CRs?']
+            suggestions: ['Jal house members', 'Agni house members', 'Vayu house members', 'Akash house members', 'Prudhvi house members']
         };
     }
 
-    // Response Cache for repeated questions
     const responseCache = new Map();
 
-    /**
-     * Public API Interface
-     */
     async function getBotResponse(userInput, config = {}) {
         if (isProcessingRequest) {
             console.log('[CHATBOT] Request ignored (debounced).');
@@ -1770,12 +1879,11 @@ We build real-world engineering skills through corporate internships, paid indus
                 return cachedRes;
             }
 
-            // Step 1: Conversational & Friendly Greetings Intercept
             if (/^(hi|hello|hey|greetings|good morning|good afternoon|good evening)$/i.test(normalizedQuery)) {
                 const greetingRes = {
                     answer: `Hello! 👋 I'm the official AI Department Assistant for SRKR CSD & CSIT. How can I help you today?`,
                     ctaLinks: [{ text: 'Explore Department →', url: 'explore.php' }],
-                    suggestions: ['Who is Mohana Durga?', 'Who is Mohan Krishna?', 'Who is Satyam Sir?', 'What courses are offered?']
+                    suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?', 'Who is Satyam Sir?']
                 };
                 responseCache.set(normalizedQuery, greetingRes);
                 return greetingRes;
@@ -1783,9 +1891,9 @@ We build real-world engineering skills through corporate internships, paid indus
 
             if (/^(how are you|how are you\?|how r u)$/i.test(normalizedQuery)) {
                 const res = {
-                    answer: `I'm doing great! Thank you for asking. 😊 I'm fully equipped to answer questions about our faculty, student heroes, class representatives (CRs), courses, labs, placements, startups, and events. How can I assist you today?`,
+                    answer: `I'm doing great! Thank you for asking. 😊 I'm fully equipped to answer questions about house members (Jal, Agni, Vayu, Akash, Prudhvi), faculty, student heroes, CRs, courses, labs, placements, and startups. How can I assist you today?`,
                     ctaLinks: [{ text: 'View Department Overview →', url: 'explore.php' }],
-                    suggestions: ['Who is Mohana Durga?', 'Who is Mohan Krishna?', 'Who is Satyam Sir?']
+                    suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?']
                 };
                 responseCache.set(normalizedQuery, res);
                 return res;
@@ -1795,7 +1903,7 @@ We build real-world engineering skills through corporate internships, paid indus
                 const res = {
                     answer: `I am the official **Department AI Assistant** for the Computer Science & Design (CSD) and Computer Science & Information Technology (CSIT) departments at SRKR Engineering College, Bhimavaram.`,
                     ctaLinks: [{ text: 'Explore Department →', url: 'explore.php' }],
-                    suggestions: ['What can you do?', 'Who is the HOD?', 'Who is Mohana Durga?']
+                    suggestions: ['What can you do?', 'Jal house members', 'Who is the HOD?']
                 };
                 responseCache.set(normalizedQuery, res);
                 return res;
@@ -1804,6 +1912,7 @@ We build real-world engineering skills through corporate internships, paid indus
             if (/^(what can you do\??|help|what can i ask\??)$/i.test(normalizedQuery)) {
                 const res = {
                     answer: `Here is what I can help you with:<br><br>
+• <strong>House Members</strong> (e.g. "Jal house members", "Agni house members", "Vayu house members")<br>
 • <strong>Class Representatives (CRs)</strong> (e.g. "Who is Mohana Durga?", "Who are the CRs?")<br>
 • <strong>Faculty Information</strong> (e.g. "Who is Mohan Krishna?", "Who is Satyam Sir?")<br>
 • <strong>Department Heroes & Achievers</strong> (e.g. "Who is Preeti?", "Who is Mullu Srinu?")<br>
@@ -1811,10 +1920,9 @@ We build real-world engineering skills through corporate internships, paid indus
 • <strong>Laboratories & Infrastructure</strong> (e.g. "What labs are available?")<br>
 • <strong>Placements & Internships</strong> (e.g. "Tell me about placements", "Tell me about internships")<br>
 • <strong>Startups & Incubation</strong> (e.g. "What startups are there?")<br>
-• <strong>Student Houses & Clubs</strong> (e.g. "What are the five student houses?")<br>
 • <strong>Events & Contact Info</strong> (e.g. "What events are there?", "What is the contact information?")`,
                     ctaLinks: [{ text: 'Explore Department →', url: 'explore.php' }],
-                    suggestions: ['Who is Mohana Durga?', 'Who is Mohan Krishna?', 'Who is Satyam Sir?']
+                    suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?']
                 };
                 responseCache.set(normalizedQuery, res);
                 return res;
@@ -1822,13 +1930,11 @@ We build real-world engineering skills through corporate internships, paid indus
 
             conversationContext.lastQuery = userInput;
 
-            // Step 2: Perform Hybrid RAG Search
             let timeRetrievalStart = performance.now();
             let matchedChunk = searchKnowledgeVector(userInput);
             const timeRetrievalEnd = performance.now();
             console.log(`[CHATBOT] Retrieval: ${(timeRetrievalEnd - timeRetrievalStart).toFixed(2)} ms`);
 
-            // Step 2.1: Person or Faculty not-found intercept
             if (matchedChunk && matchedChunk.isNotFound) {
                 const notFoundRes = synthesizeLocalAnswer(matchedChunk, userInput);
                 responseCache.set(normalizedQuery, notFoundRes);
@@ -1837,13 +1943,12 @@ We build real-world engineering skills through corporate internships, paid indus
 
             let finalResponse = null;
 
-            // Step 2.5: Smart Gemini Bypassing for Factual, Person & CR Queries
             if (matchedChunk) {
                 const wordCount = normalizedQuery.split(/\s+/).length;
                 const requiresReasoning = /\b(why|how|difference|compare|explain|give|example|skills|need|help)\b/i.test(normalizedQuery);
 
-                if (matchedChunk.category === 'Class Representative' || matchedChunk.category === 'Class Representatives' || matchedChunk.category === 'Faculty' || matchedChunk.category.includes('Hero') || matchedChunk.category.includes('People') || (wordCount <= 6 && !requiresReasoning)) {
-                    console.log('[CHATBOT] Smart Bypass: Factual/Person/CR query. Skipping Gemini to save API quota.');
+                if (matchedChunk.category === 'House Members' || matchedChunk.category === 'Student Houses Overview' || matchedChunk.category === 'Class Representative' || matchedChunk.category === 'Class Representatives' || matchedChunk.category === 'Faculty' || matchedChunk.category.includes('Hero') || matchedChunk.category.includes('People') || (wordCount <= 6 && !requiresReasoning)) {
+                    console.log('[CHATBOT] Smart Bypass: Factual/Person/CR/House query. Skipping Gemini to save API quota.');
                     finalResponse = synthesizeLocalAnswer(matchedChunk, userInput);
                     finalResponse.answer = verifyAndEnforceFacultyResponse(userInput, matchedChunk, finalResponse.answer);
                     responseCache.set(normalizedQuery, finalResponse);
@@ -1854,7 +1959,6 @@ We build real-world engineering skills through corporate internships, paid indus
                 }
             }
 
-            // Step 3: Try Backend PHP Proxy (`api/gemini_chat.php`)
             const timeGeminiStart = performance.now();
             const proxyUrl = config.remoteApiUrl || 'api/gemini_chat.php';
             try {
@@ -1880,13 +1984,13 @@ We build real-world engineering skills through corporate internships, paid indus
                         finalResponse = {
                             answer: verifiedReply.replace(/\n/g, '<br>'),
                             ctaLinks: matchedChunk ? [{ text: matchedChunk.ctaText, url: matchedChunk.url }] : [],
-                            suggestions: ['Who is Mohana Durga?', 'Who is Mohan Krishna?', 'Tell me about placements']
+                            suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?']
                         };
                     } else if (proxyData.status === 'api_error' && proxyData.message && proxyData.message.includes('429')) {
                         finalResponse = {
                             answer: `I am currently receiving too many requests (API Rate Limit). Please wait a moment, or ask me a direct question about the department which I can answer from my local database!`,
                             ctaLinks: [],
-                            suggestions: ['Who is Mohana Durga?', 'Who is Mohan Krishna?', 'Tell me about placements']
+                            suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?']
                         };
                     }
                 }
@@ -1894,7 +1998,6 @@ We build real-world engineering skills through corporate internships, paid indus
                 console.warn('Backend proxy check failed, checking direct Gemini client key...', err);
             }
 
-            // Step 4: Try Direct Client API Key if set
             if (!finalResponse) {
                 const clientKey = userApiKey || config.apiKey || (typeof window !== 'undefined' ? (window.GEMINI_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem('gemini_api_key') : null)) : null);
                 if (clientKey) {
@@ -1908,7 +2011,7 @@ We build real-world engineering skills through corporate internships, paid indus
                         finalResponse = {
                             answer: verifiedText.replace(/\n/g, '<br>'),
                             ctaLinks: matchedChunk ? [{ text: matchedChunk.ctaText, url: matchedChunk.url }] : [],
-                            suggestions: ['Who is Mohana Durga?', 'Who is Mohan Krishna?', 'Tell me about placements']
+                            suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?']
                         };
                     } catch (err) {
                         console.warn('Client Gemini call failed, executing local RAG Engine:', err);
@@ -1919,7 +2022,6 @@ We build real-world engineering skills through corporate internships, paid indus
             const timeGeminiEnd = performance.now();
             console.log(`[CHATBOT] Gemini: ${(timeGeminiEnd - timeGeminiStart).toFixed(2)} ms`);
 
-            // Step 5: Local RAG Fallback
             if (!finalResponse) {
                 finalResponse = synthesizeLocalAnswer(matchedChunk, userInput);
                 finalResponse.answer = verifyAndEnforceFacultyResponse(userInput, matchedChunk, finalResponse.answer);
@@ -1946,9 +2048,10 @@ We build real-world engineering skills through corporate internships, paid indus
         getMasterFacultyRoster: function () { return MASTER_FACULTY_ROSTER; },
         getMasterPersonIndex: function () { return MASTER_PERSON_INDEX; },
         getMasterCRIndex: function () { return MASTER_CR_INDEX; },
+        getMasterHouseRoster: function () { return MASTER_HOUSE_ROSTER; },
         getContextState: function () { return conversationContext; },
         resetContext: function () {
-            conversationContext = { activeEntity: null, activeTopic: null, lastQuery: null, history: [] };
+            conversationContext = { activeEntity: null, activeTopic: null, activeHouse: null, lastQuery: null, history: [] };
         }
     };
 })();
