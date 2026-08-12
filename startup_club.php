@@ -197,7 +197,8 @@ body {
     <!-- Full-Screen 100vh High-Clarity Background Video Hero Section -->
     <section class="hero-section">
         <video autoplay loop muted playsinline class="hero-bg-video">
-            <source src="assets/videos/web.mp4" type="video/mp4">
+            <source src="assets/videos/startup_meet.mp4" type="video/mp4">
+            <source src="assets/videos/hero-background.mp4" type="video/mp4">
         </video>
         <div class="hero-video-overlay"></div>
 
