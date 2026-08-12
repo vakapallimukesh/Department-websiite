@@ -63,6 +63,16 @@ if (empty($apiKey)) {
     exit();
 }
 
+if ($ragContext && !empty($ragContext['isNotFound'])) {
+    $requested = isset($ragContext['requestedName']) ? $ragContext['requestedName'] : 'the requested faculty member';
+    echo json_encode([
+        'status' => 'success',
+        'reply' => "I couldn't find a faculty member named {$requested} in the department faculty records.",
+        'source' => 'local_enforcement'
+    ]);
+    exit();
+}
+
 // Build System Prompt
 $systemInstruction = "You are the official AI Assistant for the Department of Computer Science & Design (CSD) and Computer Science & Information Technology (CSIT) at SRKR Engineering College, Bhimavaram.\n\n";
 
@@ -70,7 +80,7 @@ if ($ragContext && !empty($ragContext['content'])) {
     $systemInstruction .= "VERIFIED WEBSITE CONTEXT:\n";
     $systemInstruction .= "Title: " . $ragContext['title'] . "\n";
     $systemInstruction .= "Content: " . $ragContext['content'] . "\n\n";
-    $systemInstruction .= "Instructions: Answer the user question using the verified website context above. Do not invent fake faculty names, fees, or dates. If the detail is missing, state politely that it could not be found on the website.\n";
+    $systemInstruction .= "Instructions: Answer the user question using the verified website context above. Do not invent fake faculty names, fees, or dates. If the user is asking about a faculty member, ONLY provide information about that specific faculty member in the context. DO NOT mention or substitute any other faculty member.\n";
 } else {
     $systemInstruction .= "Instructions: Answer general computer science, programming, placement, or casual conversation questions naturally, politely, and accurately as a helpful department assistant.\n";
 }
