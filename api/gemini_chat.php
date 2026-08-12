@@ -64,10 +64,10 @@ if (empty($apiKey)) {
 }
 
 if ($ragContext && !empty($ragContext['isNotFound'])) {
-    $requested = isset($ragContext['requestedName']) ? $ragContext['requestedName'] : 'the requested faculty member';
+    $requested = isset($ragContext['requestedName']) ? $ragContext['requestedName'] : 'the requested person';
     echo json_encode([
         'status' => 'success',
-        'reply' => "I couldn't find a faculty member named {$requested} in the department faculty records.",
+        'reply' => "I couldn't find a person named {$requested} in the current department records.",
         'source' => 'local_enforcement'
     ]);
     exit();
@@ -80,7 +80,14 @@ if ($ragContext && !empty($ragContext['content'])) {
     $systemInstruction .= "VERIFIED WEBSITE CONTEXT:\n";
     $systemInstruction .= "Title: " . $ragContext['title'] . "\n";
     $systemInstruction .= "Content: " . $ragContext['content'] . "\n\n";
-    $systemInstruction .= "Instructions: Answer the user question using the verified website context above. Do not invent fake faculty names, fees, or dates. If the user is asking about a faculty member, ONLY provide information about that specific faculty member in the context. DO NOT mention or substitute any other faculty member.\n";
+    
+    if (!empty($ragContext['isPersonQuery'])) {
+        $field = isset($ragContext['requestedField']) ? $ragContext['requestedField'] : 'profile';
+        $systemInstruction .= "IMPORTANT INSTRUCTION FOR PERSON QUERY:\n";
+        $systemInstruction .= "The user is asking specifically about a person. Use ONLY the verified person record above. Answer the requested field ('{$field}') directly and concisely. DO NOT list unrelated people or substitute another person.\n";
+    } else {
+        $systemInstruction .= "Instructions: Answer the user question using the verified website context above. Do not invent fake names, fees, or dates.\n";
+    }
 } else {
     $systemInstruction .= "Instructions: Answer general computer science, programming, placement, or casual conversation questions naturally, politely, and accurately as a helpful department assistant.\n";
 }
@@ -119,7 +126,7 @@ $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lat
 $payload = [
     "contents" => $contents,
     "generationConfig" => [
-        "temperature" => 0.7,
+        "temperature" => 0.4,
         "maxOutputTokens" => 800
     ]
 ];
