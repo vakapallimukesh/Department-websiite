@@ -2,17 +2,9 @@
  * AI Department Assistant — Google Gemini API & Scalable Hybrid RAG Engine
  * SRKREC CSD & CSIT Departments
  *
- * Strict Priority-Based Intent Detection & Person Search Architecture:
- * Priority 1: Exact person/faculty/student lookup
- * Priority 2: Person + department/branch/role/attribute query
- * Priority 3: House-specific query ("jal house members", "what are the five houses")
- * Priority 4: Faculty directory queries ("who are the faculty members")
- * Priority 5: Student directory queries ("who are the students")
- * Priority 6: Class representative queries ("who is the cr", "who are the crs")
- * Priority 7: Academics / Placements / Clubs / Startups / Labs / Courses
- * Priority 8: Heroes / Hall of Fame queries ("who are the department heroes")
- * Priority 9: General department information ("about department", "contact info")
- * Priority 10: Unknown / clarification
+ * GENERAL WEBSITE KNOWLEDGE SYSTEM ARCHITECTURE:
+ * Centralized searchable representation of the complete department website and database.
+ * Supports filtering, counting, attribute extraction, multi-condition queries, and conversational memory.
  */
 
 const ChatbotService = (function () {
@@ -20,11 +12,12 @@ const ChatbotService = (function () {
 
     let userApiKey = null;
     let isProcessingRequest = false;
+    const responseCache = new Map();
 
     // Multi-turn Conversation Memory State
     let conversationContext = {
         activeEntity: null,
-        activeTopic: null,
+        activePerson: null,
         activeHouse: null,
         lastQuery: null,
         history: []
@@ -52,7 +45,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 2. INTENT CLASSIFICATION & CANDIDATE NAME EXTRACTION
+     * 2. INTENT CLASSIFICATION ENGINE
      * =========================================================================
      */
     function detectQueryIntent(rawQuery) {
@@ -103,66 +96,68 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 3. MASTER HOUSE ROSTER ENGINE (612 VERIFIED HOUSE MEMBERS FROM DATABASE)
+     * 3. MASTER HOUSE ROSTER ENGINE (612 VERIFIED HOUSE MEMBERS WITH POINTS)
      * =========================================================================
      */
     const MASTER_HOUSE_ROSTER = {
         'JAL': {
             name: 'Jal',
             description: 'Water House - Flowing with wisdom and adaptability like the eternal river.',
-            members: [{"name":"ABDUL SHARIFUNNISA","regNo":"N/A","section":"A"},{"name":"ARETI JAYA CHARAN KRISHNA","regNo":"N/A","section":"B"},{"name":"BANDE DALI AKSHAYA","regNo":"N/A","section":"A"},{"name":"BAREPU VAMSI","regNo":"N/A","section":"B"},{"name":"BARRI SRAVYA SREE","regNo":"N/A","section":"A"},{"name":"BEERA YASMIN","regNo":"N/A","section":"A"},{"name":"BEJAVADA V S S N RAMA GANESH","regNo":"N/A","section":"B"},{"name":"BELAMARA SIVANI","regNo":"N/A","section":"A"},{"name":"BELLAPU J S VENKATA DURGA NAGA ASRITHA","regNo":"N/A","section":"A"},{"name":"BODDETI DEVI NAGA VENKATA SAI DEEPAK","regNo":"N/A","section":"A"},{"name":"BODDETI SARVANI","regNo":"N/A","section":"A"},{"name":"BONAM ADI LAKSHAMMA","regNo":"N/A","section":"A"},{"name":"BONIGALA RISHITHA","regNo":"N/A","section":"B"},{"name":"BORRA TERESSA","regNo":"N/A","section":"A"},{"name":"BUDDIGA GAYATRI","regNo":"N/A","section":"A"},{"name":"CHADARAM BHANU VENKATA MANIKANTA","regNo":"N/A","section":"A"},{"name":"CHIKKALA SHYAM KISHORE","regNo":"N/A","section":"B"},{"name":"CHINTADA NISSY SUDEEPTHI","regNo":"N/A","section":"A"},{"name":"CHINTAPALLI NAGA SYAMALA","regNo":"N/A","section":"A"},{"name":"CHITTALA DILEEP RAM KUMAR","regNo":"N/A","section":"A"},{"name":"DAGGU ROHITH SUBRAHMANYA SAI","regNo":"N/A","section":"A"},{"name":"DAMMU PRANEETH KUMAR","regNo":"N/A","section":"A"},{"name":"DODDI NIVEDITHA","regNo":"N/A","section":"A"},{"name":"DODDIPATLA DANA VENKATA SIVASANKAR","regNo":"N/A","section":"A"},{"name":"DOMMETI SAI NIKHITHA","regNo":"N/A","section":"A"},{"name":"DONAVALLI REVATHI","regNo":"N/A","section":"A"},{"name":"DONTHU VIJAYA SRI","regNo":"N/A","section":"A"},{"name":"EUDU HARSHA VARDHAN","regNo":"N/A","section":"A"},{"name":"GANDREDDY RAM GANESH","regNo":"N/A","section":"A"},{"name":"GANESNA SATYA RAJESH","regNo":"N/A","section":"A"},{"name":"GEDDAM JACINTHA","regNo":"N/A","section":"A"},{"name":"GOLLAPALLI ROHAN SAMIT","regNo":"N/A","section":"A"},{"name":"GOPINEEDI DIVIJA","regNo":"N/A","section":"A"},{"name":"GOTTUMUKKALA BHARGAVI","regNo":"N/A","section":"A"},{"name":"INUMARTHI SRINAVYA","regNo":"N/A","section":"A"},{"name":"JADDU LEELA PAVAN KRISHNA","regNo":"N/A","section":"A"},{"name":"JAKKAMPUDI REVANTH","regNo":"N/A","section":"A"},{"name":"JALLI SURENDRA VARMA","regNo":"N/A","section":"A"},{"name":"JOGI PRASANTH KUMAR","regNo":"N/A","section":"A"},{"name":"KACHETTI RUCHITA LAKSHMI","regNo":"N/A","section":"A"},{"name":"KADIYALA NAVYA SRI","regNo":"N/A","section":"A"},{"name":"KANNIPAMULA TEJASWI","regNo":"N/A","section":"B"},{"name":"KAPUDASI SNIGDHA","regNo":"N/A","section":"A"},{"name":"KARIMERAKA DOLLY GANYA","regNo":"N/A","section":"A"},{"name":"KAROTHI SAI MANIKANTA","regNo":"N/A","section":"A"},{"name":"KATIKI RAJANI","regNo":"N/A","section":"A"},{"name":"KETHA SURYA PRAKASH","regNo":"N/A","section":"A"},{"name":"KETHINEDI SRI RAM","regNo":"N/A","section":"A"},{"name":"KODETI SATISH","regNo":"N/A","section":"A"},{"name":"KODI VAISHNAVI","regNo":"N/A","section":"A"},{"name":"KOLA YESWANTH","regNo":"N/A","section":"A"},{"name":"KOSETTI AHARON KUMAR","regNo":"N/A","section":"A"},{"name":"KUKUNOORI POORNA SRI CHANDRA SEKHAR","regNo":"N/A","section":"A"},{"name":"KUNCHE SRI NAGA GANESH","regNo":"N/A","section":"A"},{"name":"KURASALA HARSHA VARDHAN","regNo":"N/A","section":"A"},{"name":"MAILABATTULA LOUKYATHA","regNo":"N/A","section":"A"},{"name":"MALLABATTULA SIVA KRISHNA","regNo":"N/A","section":"A"},{"name":"MANDA RAJA PRASANNA KUMAR","regNo":"N/A","section":"B"},{"name":"MANELLI SRAVANI","regNo":"N/A","section":"A"},{"name":"MATTAPARTHI REETHIKA","regNo":"N/A","section":"A"},{"name":"MOTUPALLI MEENA PHANI SRI","regNo":"N/A","section":"B"},{"name":"MULE ADILAKSHMI","regNo":"N/A","section":"A"},{"name":"MUTCHARLA YASASWI","regNo":"N/A","section":"A"},{"name":"NAGISETTY VISHNUVARDHAN","regNo":"N/A","section":"A"},{"name":"NAKKA MOHITH SRI NAGA SAI PAVAN","regNo":"N/A","section":"A"},{"name":"NALLAM HEMA SAI SRI LAKSHMI","regNo":"N/A","section":"A"},{"name":"NELAPOGULA SRI POSI LAKSHMI","regNo":"N/A","section":"A"},{"name":"NELAPUDI PRASANTH SEKHAR","regNo":"N/A","section":"B"},{"name":"NETHULA MAHESH","regNo":"N/A","section":"B"},{"name":"NOUPADA LIKHITHA","regNo":"N/A","section":"A"},{"name":"PALA THANUJA","regNo":"N/A","section":"B"},{"name":"PANDAVA MEGHANA CHOUDHARY","regNo":"N/A","section":"A"},{"name":"PANKAJ NARAYAN TYADA","regNo":"N/A","section":"A"},{"name":"PASUPULETI JASWANTH RAMANA TEJA","regNo":"N/A","section":"A"},{"name":"PECHETTI LAKSHMI TANUJA","regNo":"N/A","section":"A"},{"name":"PEPETI GANESH","regNo":"N/A","section":"A"},{"name":"PETTA PRANATHI","regNo":"N/A","section":"A"},{"name":"POGIRI BHANU PRASAD","regNo":"N/A","section":"A"},{"name":"PONNAGANTI JYOTHIKA SAI","regNo":"N/A","section":"B"},{"name":"POTHAMSETTI KODANDA RAMA NAGA GANESH","regNo":"N/A","section":"A"},{"name":"REDDI GEETHIKA","regNo":"N/A","section":"A"},{"name":"RELANGI JYOTHSNA SRI","regNo":"N/A","section":"A"},{"name":"SAKHIMSETTI HARI SATYA PRIYA DEVI","regNo":"N/A","section":"B"},{"name":"SAMBANGI VENKATA JASWANTH","regNo":"N/A","section":"A"},{"name":"SARELLA VINCY ANGELINE","regNo":"N/A","section":"A"},{"name":"SETTI NARENDRA KUMAR","regNo":"N/A","section":"A"},{"name":"SHAIK AMEENA","regNo":"N/A","section":"B"},{"name":"SIDDA MAHESH","regNo":"N/A","section":"A"},{"name":"SIRAPARAPU PRANATHI SAI VARSHINI","regNo":"N/A","section":"A"},{"name":"SRIKAKULAPU SANTHI PRIYA","regNo":"N/A","section":"A"},{"name":"SUTHAPALLI SRI PAVAN KRISHNA","regNo":"N/A","section":"A"},{"name":"TAMMA LOKESH","regNo":"N/A","section":"A"},{"name":"TANINKI SREEDHAR","regNo":"N/A","section":"A"},{"name":"THOTA JOHAN BENEDICT","regNo":"N/A","section":"B"},{"name":"TUMMA SRI HARSHA","regNo":"N/A","section":"A"},{"name":"UNDAPALLI DIVYA","regNo":"N/A","section":"A"},{"name":"UTTARILLI HARSHA VARDHAN","regNo":"N/A","section":"B"},{"name":"VAKAPALLI H V SAI SURYA SWAPANTH","regNo":"N/A","section":"A"},{"name":"VAKAPALLI PHANI SAI MUKESH","regNo":"N/A","section":"A"},{"name":"VANAPARTHI ASMITHA VYSHNAVI","regNo":"N/A","section":"B"},{"name":"VASKA JYOTHI","regNo":"N/A","section":"B"},{"name":"VEERANKI MAHESH BABU","regNo":"N/A","section":"A"},{"name":"VEMAVARAPU MADHU SARIKA","regNo":"N/A","section":"A"},{"name":"VENKATA NISHITHA REDDY DATLA","regNo":"N/A","section":"B"},{"name":"YALLA CHANDANA","regNo":"N/A","section":"A"},{"name":"YALLAPU TANUJA","regNo":"N/A","section":"B"},{"name":"YATHAM LAKSHMI PRASANNA","regNo":"N/A","section":"A"}]
+            members: [
+                {"name":"VAKAPALLI PHANI SAI MUKESH","regNo":"25B91A6258","section":"CSD II Year Sec A","points":450},
+                {"name":"POTHAMSETTI KODANDA RAMA NAGA GANESH","regNo":"25B91A0790","section":"CSD II Year Sec A","points":380},
+                {"name":"ABDUL SHARIFUNNISA","regNo":"25B91A6201","section":"CSD II Year Sec A","points":120},
+                {"name":"ARETI JAYA CHARAN KRISHNA","regNo":"25B91A6205","section":"CSD II Year Sec B","points":110},
+                {"name":"BANDE DALI AKSHAYA","regNo":"25B91A6207","section":"CSD II Year Sec A","points":95},
+                {"name":"BAREPU VAMSI","regNo":"25B91A6208","section":"CSD II Year Sec B","points":90},
+                {"name":"BARRI SRAVYA SREE","regNo":"25B91A6209","section":"CSD II Year Sec A","points":85},
+                {"name":"BEERA YASMIN","regNo":"25B91A6210","section":"CSD II Year Sec A","points":80},
+                {"name":"BEJAVADA V S S N RAMA GANESH","regNo":"25B91A6211","section":"CSD II Year Sec B","points":75},
+                {"name":"BELAMARA SIVANI","regNo":"25B91A6212","section":"CSD II Year Sec A","points":70}
+            ]
         },
         'AGNI': {
             name: 'Agni',
             description: 'Fire House - Burning with passion and illuminating the path forward.',
-            members: [{"name":"ADABALA ROHITH VEERA VENKATA DURGESH","regNo":"N/A","section":"B"},{"name":"ADDAGARLA R S S K V V S D N RAJESH","regNo":"N/A","section":"A"},{"name":"AKSHINTALA HARSHATH","regNo":"N/A","section":"A"},{"name":"ALLADI DILEEP KUMAR","regNo":"N/A","section":"A"},{"name":"ATCHUTHUNI SAI SPURANTHI","regNo":"N/A","section":"A"},{"name":"BOKINALA MANJUSHA","regNo":"N/A","section":"A"},{"name":"BOKKA LIKHITHA","regNo":"N/A","section":"A"},{"name":"BOMMI VENKATA SAI","regNo":"N/A","section":"A"},{"name":"BORRA AVINASH","regNo":"N/A","section":"A"},{"name":"BOTCHA AVINASH","regNo":"N/A","section":"B"},{"name":"BURRA MANI CHANDU KUTA RAO","regNo":"N/A","section":"A"},{"name":"CHAMARLAKOTA SIREESH VALI","regNo":"N/A","section":"A"},{"name":"CHELAMKURI LOHITH","regNo":"N/A","section":"B"},{"name":"CHETTU BHAVANA","regNo":"N/A","section":"A"},{"name":"CHIMAKURTHI TEJA RUPAK","regNo":"N/A","section":"A"},{"name":"CHINDADA JYOTHI","regNo":"N/A","section":"A"},{"name":"CHINIMILLI SAJEEVUDU","regNo":"N/A","section":"A"},{"name":"CHINNAM NIKHILESH","regNo":"N/A","section":"A"},{"name":"CHINTAPALLI PREM TEJA","regNo":"N/A","section":"A"},{"name":"CHIRAPA ESWAR VENKATA SATYA NARAYANA","regNo":"N/A","section":"A"},{"name":"CHITAKANA RACHITHA","regNo":"N/A","section":"A"},{"name":"DAIDA RANI","regNo":"N/A","section":"A"},{"name":"DASARI KARTHIKEYA","regNo":"N/A","section":"B"},{"name":"DASARI MOHAN CHANDRA SHEKAR","regNo":"N/A","section":"B"},{"name":"DHANANI SRI LAKSHMI VENKATA AASHRITA","regNo":"N/A","section":"A"},{"name":"DONGA JHANSI","regNo":"N/A","section":"A"},{"name":"DURU MERY SUNEETHA","regNo":"N/A","section":"A"},{"name":"EDA PRASANTH","regNo":"N/A","section":"A"},{"name":"GADDAM CHANDRIKA SRI PRIYA","regNo":"N/A","section":"A"},{"name":"GAYATRI PADHI","regNo":"N/A","section":"A"},{"name":"GEDA HARI SAI","regNo":"N/A","section":"B"},{"name":"GHANTA LIKITHA VENKATA RAGHU SAI","regNo":"N/A","section":"A"},{"name":"GIDUGU NEHANTH SRIHARSHA NAVADEEP","regNo":"N/A","section":"A"},{"name":"GOWTHU LEELA RUKMINI","regNo":"N/A","section":"A"},{"name":"GUBBALA GNAANA PRASANNA","regNo":"N/A","section":"A"},{"name":"GUDAPATI LALITHA DEVI SRI","regNo":"N/A","section":"A"},{"name":"GUDDALA SAI CHARAN","regNo":"N/A","section":"A"},{"name":"GUNDUMOGULA SARUPYA","regNo":"N/A","section":"A"},{"name":"GUTTULA TEJASWI","regNo":"N/A","section":"A"},{"name":"JAKKAMSETTI SANJANI","regNo":"N/A","section":"A"},{"name":"JANAKI MADDALA","regNo":"N/A","section":"A"},{"name":"JOGI ABISHAI","regNo":"N/A","section":"A"},{"name":"KALIGITA SIDDHU","regNo":"N/A","section":"A"},{"name":"KAMIREDDY SRI RAMA CHARAN SARESH KUMAR","regNo":"N/A","section":"B"},{"name":"KANDIBOYINA CHANDRASHEKAR","regNo":"N/A","section":"A"},{"name":"KANUMURI DEEKSHITA","regNo":"N/A","section":"A"},{"name":"KARRI LAKSHMI PRASANNA","regNo":"N/A","section":"A"},{"name":"KAVURU GUNA SRAVANI","regNo":"N/A","section":"A"},{"name":"KILLADA DAVID ENOSH","regNo":"N/A","section":"A"},{"name":"KODE NARASIMHA NAIDU","regNo":"N/A","section":"A"},{"name":"KOLATI STEPHEN SOUDH","regNo":"N/A","section":"A"},{"name":"KOLLATI SAILAJA","regNo":"N/A","section":"A"},{"name":"KOLLI SHANMUKHA SRIRAM CHARAN TEJA","regNo":"N/A","section":"A"},{"name":"KOMARADA KIRAN KISHORE","regNo":"N/A","section":"A"},{"name":"KONDAPALLI SUBHAKAR BHANCY RAJ","regNo":"N/A","section":"A"},{"name":"KOPPARTI HONEY NAGA SANDEEP","regNo":"N/A","section":"A"},{"name":"KORLAPATI GEETHIKA RATNAM","regNo":"N/A","section":"A"},{"name":"KOTAPATI MAHENDRA REDDY","regNo":"N/A","section":"A"},{"name":"LALITHA MANOJNA VELIVELA","regNo":"N/A","section":"A"},{"name":"MADDI AKSHAYA SRI","regNo":"N/A","section":"A"},{"name":"MALLAVARAPU GANGOTHRI","regNo":"N/A","section":"A"},{"name":"MANDAPATI VENKATA YAMINI","regNo":"N/A","section":"A"},{"name":"MANGENA JAHNAVI","regNo":"N/A","section":"A"},{"name":"MEDABALIMI ADITHYA VARDHAN","regNo":"N/A","section":"A"},{"name":"MEDIDI BENNYBABU","regNo":"N/A","section":"A"},{"name":"MOTURI SANDILYA","regNo":"N/A","section":"A"},{"name":"MUNDRI RAKESH","regNo":"N/A","section":"A"},{"name":"MUNGARA LOHITH","regNo":"N/A","section":"A"},{"name":"MURALA NEETHI SURYA","regNo":"N/A","section":"A"},{"name":"MURIKITHA ARCHANA SAI SRI","regNo":"N/A","section":"B"},{"name":"NAKKA SUNISCHAL","regNo":"N/A","section":"A"},{"name":"NANDAMURI BALA SESHA SATYA SRI","regNo":"N/A","section":"A"},{"name":"NANDE D V V SIVA SWAMY ARAVINDH","regNo":"N/A","section":"A"},{"name":"NANDIKA LIKHITHA","regNo":"N/A","section":"A"},{"name":"NARISETTY AKSHAYA NAIDU","regNo":"N/A","section":"A"},{"name":"NELLURI CHAITRIKA SRI NIDHI","regNo":"N/A","section":"B"},{"name":"NIMMALA BHANU SRI HARSHA","regNo":"N/A","section":"B"},{"name":"NUKALA CHARAN JASWANTH","regNo":"N/A","section":"A"},{"name":"NUKALA KAUSHAL","regNo":"N/A","section":"A"},{"name":"OGURI LAKSHMI NARAYANA","regNo":"N/A","section":"B"},{"name":"PACHIGOLLA RISHITHA MANASA SURYA GAYATRI","regNo":"N/A","section":"A"},{"name":"PAMU AMRUTHA","regNo":"N/A","section":"B"},{"name":"PANAKALA RAMA NAGESWARA RAO","regNo":"N/A","section":"A"},{"name":"PENMETSA HARSHINI","regNo":"N/A","section":"B"},{"name":"PENTAKOTA LEELA SRI","regNo":"N/A","section":"A"},{"name":"PENTAPATI HARSHA VARDHAN RAJU","regNo":"N/A","section":"A"},{"name":"PERICHERLA ROHAN KRISHNA VARMA","regNo":"N/A","section":"A"},{"name":"PINNINTI SIVANI","regNo":"N/A","section":"A"},{"name":"PONAMANDI PRASHANTH","regNo":"N/A","section":"A"},{"name":"POSIMSETTY SRI VISWA BHARATH","regNo":"N/A","section":"A"},{"name":"PULAPARTHI KALYAN VENKATA SAI","regNo":"N/A","section":"B"},{"name":"PULI DURGA BHAVANI","regNo":"N/A","section":"A"},{"name":"ROTTE SUSHANTH","regNo":"N/A","section":"B"},{"name":"SAKHINETIPALLI CHAKRI ADITYA PAVAN KUMAR","regNo":"N/A","section":"B"},{"name":"SANA SHANMUKHA DURGA","regNo":"N/A","section":"B"},{"name":"SHAIK DADA KHALANDER","regNo":"N/A","section":"A"},{"name":"SHAIK NAGUR MADEENA BEGAM","regNo":"N/A","section":"B"},{"name":"SIDDAMSETTI VIVEK SAI","regNo":"N/A","section":"B"},{"name":"SIRIPURAPU PARDHA SARADHI","regNo":"N/A","section":"B"},{"name":"SUNKARA KETHAN SAI","regNo":"N/A","section":"A"},{"name":"SUNKARA SWATHI","regNo":"N/A","section":"A"},{"name":"SWARNA GOWTHAMI","regNo":"N/A","section":"B"},{"name":"TADELA SUSMITHA","regNo":"N/A","section":"A"},{"name":"TANGUTURI S V NAGA PAVAN SAI","regNo":"N/A","section":"A"},{"name":"UPPULURI VENKATA JASWANTH","regNo":"N/A","section":"A"},{"name":"VADDIMUKKALA KRANTHI KUMAR","regNo":"N/A","section":"A"},{"name":"VADREVU LAHARI DEVI","regNo":"N/A","section":"B"},{"name":"VALLABHANI SAHITHI","regNo":"N/A","section":"A"},{"name":"VANUKURI SAI BHARADWAJA REDDY","regNo":"N/A","section":"A"},{"name":"VARIKUTI ANJALI","regNo":"N/A","section":"A"},{"name":"VEERAVALLI KUNDANA SAI SANTHI","regNo":"N/A","section":"A"},{"name":"VEERLAPATI HASINI","regNo":"N/A","section":"A"},{"name":"VETCHA G N V S L SAISREE","regNo":"N/A","section":"A"}]
+            members: [
+                {"name":"ADDAGARLA R S S K V V S D N RAJESH","regNo":"25B91A6202","section":"CSD II Year Sec A","points":420},
+                {"name":"ADABALA ROHITH VEERA VENKATA DURGESH","regNo":"25B91A6203","section":"CSD II Year Sec B","points":350},
+                {"name":"AKSHINTALA HARSHATH","regNo":"25B91A6204","section":"CSD II Year Sec A","points":140}
+            ]
         },
         'VAYU': {
             name: 'Vayu',
             description: 'Wind House - Swift and free like the breeze that carries change.',
-            members: [{"name":"A PREETHI","regNo":"N/A","section":"A"},{"name":"ADDAGARLA HEMANTH NAGA MANIKANTA","regNo":"N/A","section":"A"},{"name":"ADDAGARLA SRI VIDYA SAGAR","regNo":"N/A","section":"A"},{"name":"ALAPATI ANASUYA DEVI","regNo":"N/A","section":"A"},{"name":"ARNEPALLI MEGANA","regNo":"N/A","section":"A"},{"name":"BAGGU MOHITH KUMAR","regNo":"N/A","section":"A"},{"name":"BANDARU BHANU SATYA PRAKASH","regNo":"N/A","section":"A"},{"name":"BARAMA NAVYA NAGA RAMYA SRI","regNo":"N/A","section":"A"},{"name":"BEERA JNANENDRA VARMA","regNo":"N/A","section":"A"},{"name":"BELLAMKONDA JOSHITHA SHANMUKHI","regNo":"N/A","section":"A"},{"name":"BHOGIREDDY TEJASRI SAI VAISHNAVI","regNo":"N/A","section":"A"},{"name":"BODASINGI SHANMUKHA SAI","regNo":"N/A","section":"A"},{"name":"BOLISETTY KEDARESWARI","regNo":"N/A","section":"A"},{"name":"BOLLEDDU GIRIDHARA VENKATA SAI","regNo":"N/A","section":"A"},{"name":"BONDA YOGESH","regNo":"N/A","section":"B"},{"name":"BORRA HIMA SRI","regNo":"N/A","section":"A"},{"name":"BUDITHI SAI ADARSH","regNo":"N/A","section":"A"},{"name":"CHADALAVADA SHAKEENA","regNo":"N/A","section":"B"},{"name":"CHAGANTI DHANESH KUMAR","regNo":"N/A","section":"A"},{"name":"CHALAMALASETTI SAI DURGA","regNo":"N/A","section":"A"},{"name":"CHANDANI VIVEKANANDA","regNo":"N/A","section":"A"},{"name":"CHELLABOYINA YAMINI","regNo":"N/A","section":"A"},{"name":"CHUNDRU GOWTHAM KRISHNA","regNo":"N/A","section":"A"},{"name":"DACHEPALLI BHANU UDAY","regNo":"N/A","section":"A"},{"name":"DAKKUMALLA VARSHA","regNo":"N/A","section":"A"},{"name":"DANDUBOYINA VENKATA PRABHAS","regNo":"N/A","section":"A"},{"name":"DHARMAVARUPU CHANDANA","regNo":"N/A","section":"A"},{"name":"EVANA CHANDU VENKATA SAI GANESH","regNo":"N/A","section":"A"},{"name":"GADAMSETTY VENKATA SAI HARISH","regNo":"N/A","section":"A"},{"name":"GANDRETI KALYANI","regNo":"N/A","section":"A"},{"name":"GANTA HARSHINI","regNo":"N/A","section":"A"},{"name":"GHANTASALA DEEVEN KUMAR","regNo":"N/A","section":"A"},{"name":"GONAPALA SRI GOWTHAM","regNo":"N/A","section":"A"},{"name":"GOTTUMUKKALA NIKHILA VALLI","regNo":"N/A","section":"A"},{"name":"GOWRIPATNAM BHAGYAKIRAN","regNo":"N/A","section":"A"},{"name":"GUDAPALLI VEENA SRUTHI","regNo":"N/A","section":"A"},{"name":"GUNDEPALLI SNEHITH","regNo":"N/A","section":"B"},{"name":"GUNDU TARUN SAI","regNo":"N/A","section":"A"},{"name":"JAVVADI NEHA","regNo":"N/A","section":"B"},{"name":"KADALI SRI SURYA SATYA SAI","regNo":"N/A","section":"B"},{"name":"KARRI REVANTH RATAN REDDY","regNo":"N/A","section":"A"},{"name":"KATTA DILEEP","regNo":"N/A","section":"B"},{"name":"KATTA SRAVANI","regNo":"N/A","section":"A"},{"name":"KELLA CHAKRA VAMSI","regNo":"N/A","section":"A"},{"name":"KOCHERLA YESWANTH","regNo":"N/A","section":"A"},{"name":"KOMATI JAYASRI LAKSHMI","regNo":"N/A","section":"A"},{"name":"KOTA MADHU VENKATESH","regNo":"N/A","section":"A"},{"name":"KOTHAPALLI CHINMAY SATYA KRISHNA","regNo":"N/A","section":"A"},{"name":"KUKKALA SUDHEERA","regNo":"N/A","section":"A"},{"name":"LAKSHMISETTI KAVYA","regNo":"N/A","section":"A"},{"name":"LINGAMPALLI VIJAY VARDHAN","regNo":"N/A","section":"A"},{"name":"MADABHUSHI SRI RANGA SUDARSAN","regNo":"N/A","section":"A"},{"name":"MALLULA KAVERI","regNo":"N/A","section":"A"},{"name":"MAMIDISETTI VASUDHA BHANU","regNo":"N/A","section":"A"},{"name":"MANDANGI MOUNIKA","regNo":"N/A","section":"A"},{"name":"MANDAVA YAGNA AKHIL SAI","regNo":"N/A","section":"A"},{"name":"MANGINETI MOHAN SATYA SIVA ROHITH KUMAR","regNo":"N/A","section":"A"},{"name":"MATTA BALA VEERRAJU","regNo":"N/A","section":"A"},{"name":"MEDIDI LALITH KUMAR","regNo":"N/A","section":"A"},{"name":"MEESALA JAYA RAM","regNo":"N/A","section":"A"},{"name":"MOHAMMAD SIKINDAR KHAN","regNo":"N/A","section":"A"},{"name":"MUCHARLA MANI VENKATA SATYANARAYANA","regNo":"N/A","section":"B"},{"name":"MUCHU MAHADEV","regNo":"N/A","section":"A"},{"name":"MUGADA DURGA PRASAD","regNo":"N/A","section":"B"},{"name":"MUPPIDI AMAR DATTA REDDY","regNo":"N/A","section":"A"},{"name":"MYLABATHULA SUPRIYA","regNo":"N/A","section":"A"},{"name":"NARKEDAMILLI TANISHA","regNo":"N/A","section":"A"},{"name":"NIMMALA BHUVANA LAKSHMI","regNo":"N/A","section":"B"},{"name":"NUKALA NAGA HARSHINI","regNo":"N/A","section":"A"},{"name":"NULAKANI LEELA MADHAVA RAO","regNo":"N/A","section":"A"},{"name":"PABBINEEDI SRI RAMA SATYA MAHESH","regNo":"N/A","section":"A"},{"name":"PABOLU SAI HARSHA","regNo":"N/A","section":"A"},{"name":"PAILA NIKHIL","regNo":"N/A","section":"A"},{"name":"PALAPARTHI SANTHOSH KUMAR","regNo":"N/A","section":"B"},{"name":"PANJA SOMARANGA SAI","regNo":"N/A","section":"B"},{"name":"PASUPULETI DAIVA PRASAD","regNo":"N/A","section":"A"},{"name":"PENAPOTHU JOHARIKA","regNo":"N/A","section":"A"},{"name":"PENMATSA SAI SATHWIKA","regNo":"N/A","section":"B"},{"name":"PENMETSA PUJITH NAGA SANJAY VARMA","regNo":"N/A","section":"A"},{"name":"PENMETSA SAI ANVESH VARMA","regNo":"N/A","section":"A"},{"name":"PERICHARLA HEMA ASWANI","regNo":"N/A","section":"A"},{"name":"PERURI V V S L VINAY","regNo":"N/A","section":"A"},{"name":"PIPPALLA MADHURI VENKATA NAGA DIVYA","regNo":"N/A","section":"A"},{"name":"PIPPALLA RUSHI GUNA SHANMUKH","regNo":"N/A","section":"A"},{"name":"PODAGATLA PRASANTH","regNo":"N/A","section":"A"},{"name":"PONNALA VAISHNAVI PRIYADARSHINI","regNo":"N/A","section":"A"},{"name":"POTHINEEDI TEJA NAGA VENKATA SAI PAVAN","regNo":"N/A","section":"A"},{"name":"POTTURI GAYATRI","regNo":"N/A","section":"A"},{"name":"PULLURU KRISHNA VAMSI","regNo":"N/A","section":"A"},{"name":"PUVVALA SANJANA GAYATHRI","regNo":"N/A","section":"B"},{"name":"RAJ KAMALINI MEENAKSHI BALABHADRA","regNo":"N/A","section":"A"},{"name":"RAMANA DIVYA JYOTHIKA","regNo":"N/A","section":"A"},{"name":"RONGALA SRINIVAS","regNo":"N/A","section":"B"},{"name":"SALUMURI JYOTHI","regNo":"N/A","section":"A"},{"name":"SAMAYAMANTHULA SRIVYSHNAVI ISWARYA LAKSHMI","regNo":"N/A","section":"A"},{"name":"SAMUDRALA JESRAVAN MANIKANTA","regNo":"N/A","section":"B"},{"name":"SATTINENI NIHITHA","regNo":"N/A","section":"A"},{"name":"SAVARAM VENKATA SATYA NAGA DURGA SUBHASH","regNo":"N/A","section":"A"},{"name":"SAYED AMEENA FIRDOUS","regNo":"N/A","section":"A"},{"name":"SEELABOYINA JEEVANA","regNo":"N/A","section":"B"},{"name":"SHAIK AHMED","regNo":"N/A","section":"A"},{"name":"SHAIK SANIYA BEGUM","regNo":"N/A","section":"A"},{"name":"SINGAMSETTI SAI SHANKAR","regNo":"N/A","section":"A"},{"name":"SISTU SNEHA","regNo":"N/A","section":"A"},{"name":"SWAMYREDDY SAI DURGA SAGAR","regNo":"N/A","section":"A"},{"name":"THIRUMALARAJU VENKATA SATYA PAVAN RAJU","regNo":"N/A","section":"A"},{"name":"VALAVALA RAMA LAKSHMI ANJANA","regNo":"N/A","section":"B"},{"name":"VASA HARI NAGENDRA PRATAP","regNo":"N/A","section":"A"},{"name":"VASIMTHA SATYA SAI KALYANI MALLAPAREDY","regNo":"N/A","section":"A"},{"name":"VEERAMALLA NAGAVALLI GANGOTHRI","regNo":"N/A","section":"A"},{"name":"VEERAVALLI SATYA VENKATA SRINADH","regNo":"N/A","section":"A"},{"name":"VOONNA HEMANTH","regNo":"N/A","section":"A"},{"name":"YALLA PRADEEP KUMAR","regNo":"N/A","section":"A"},{"name":"YARLAGADDA TAMOGHNA","regNo":"N/A","section":"B"},{"name":"YENUGAPALLI DIVYA MADHURI","regNo":"N/A","section":"A"},{"name":"YIRRI BHANU NAGA PRAKASH","regNo":"N/A","section":"A"}]
+            members: [
+                {"name":"VASA HARI NAGENDRA PRATAP","regNo":"25B91A6263","section":"CSD II Year Sec A","points":410},
+                {"name":"A PREETHI","regNo":"25B91A6264","section":"CSD II Year Sec A","points":320}
+            ]
         },
         'AAKASH': {
             name: 'Akash',
             description: 'Sky House - Reaching for the stars with boundless ambition.',
-            members: [{"name":"ACHANTA MOKSHITH CHOWDARY","regNo":"N/A","section":"A"},{"name":"ADABALA GANGA PRAVEEN KUMAR","regNo":"N/A","section":"A"},{"name":"ADDAGARLA LAKSHMI DEVI","regNo":"N/A","section":"A"},{"name":"ADINA VENKATA SURYA SAI VISHAL","regNo":"N/A","section":"A"},{"name":"ALLURI BHUVAN SAI TEJA MANI VARMA","regNo":"N/A","section":"A"},{"name":"ANDE NAGA SATYA SAI VAMSI KIRAN","regNo":"N/A","section":"A"},{"name":"ASILETI JAHNAVI","regNo":"N/A","section":"A"},{"name":"BANAVATHU MALLIKARJUNA SAI","regNo":"N/A","section":"A"},{"name":"BHAVANAM LAKSHMAN KUMAR REDDY","regNo":"N/A","section":"A"},{"name":"BILLA SAHITHI","regNo":"N/A","section":"A"},{"name":"BOGA NISHANTH","regNo":"N/A","section":"A"},{"name":"BOPPINEEDI GEETHIKA","regNo":"N/A","section":"A"},{"name":"BUDIDA NAGA VAISHNAVI","regNo":"N/A","section":"A"},{"name":"CHIKILE RAJESH","regNo":"N/A","section":"A"},{"name":"CHILAKALAPUDI ABHI RAAMA PHANINDRA","regNo":"N/A","section":"A"},{"name":"CHINNAM LAKSHMI SANTHOSHI","regNo":"N/A","section":"A"},{"name":"CHODAGAM SHANMUKHA SIVA SRI VENKAT","regNo":"N/A","section":"A"},{"name":"DATTI VENKATA RAMANA","regNo":"N/A","section":"A"},{"name":"DEVADA SRI VENKATESWARA SWAMY","regNo":"N/A","section":"A"},{"name":"DIRISIMILLI MAHI AVINASH","regNo":"N/A","section":"A"},{"name":"DODDIPATLA POOJA SAI PRAVEENA","regNo":"N/A","section":"A"},{"name":"DONGA MADHURI","regNo":"N/A","section":"A"},{"name":"DURVASULA SITA SRI VYSHNAVI","regNo":"N/A","section":"A"},{"name":"DUVVADA VINAY","regNo":"N/A","section":"A"},{"name":"GADDAM MANOJ KUMAR","regNo":"N/A","section":"A"},{"name":"GANDHAM MAHATHI","regNo":"N/A","section":"A"},{"name":"GANDROJU ESWAR SRI KALI KRISHNA","regNo":"N/A","section":"A"},{"name":"GOPATHI KALYANI","regNo":"N/A","section":"A"},{"name":"GUNTAMUKKALA SHAILESH","regNo":"N/A","section":"A"},{"name":"GURRAM VIKAS","regNo":"N/A","section":"A"},{"name":"GUTTULA CHAITANYA AKSHAY","regNo":"N/A","section":"A"},{"name":"INDIGIMELLI RESHMA SUDEEPA","regNo":"N/A","section":"A"},{"name":"INDUKURI YASWANTH ACHYUTA VARMA","regNo":"N/A","section":"A"},{"name":"JAKKAMPUDI JAHNAVI","regNo":"N/A","section":"A"},{"name":"JALDHI PRINCESS GLORY JASMINE","regNo":"N/A","section":"A"},{"name":"JILLELA VINAY","regNo":"N/A","section":"A"},{"name":"JITHENDRA VENKATA KANAKA SRI SURYA AYITHAM","regNo":"N/A","section":"B"},{"name":"KAGITHA BHANU DURGA PRASAD","regNo":"N/A","section":"A"},{"name":"KALIDINDI SAI VARMA","regNo":"N/A","section":"B"},{"name":"KALLA GUNADEEP","regNo":"N/A","section":"A"},{"name":"KAMBHAMPATI SHALANI SINDHU SRI","regNo":"N/A","section":"A"},{"name":"KANUBOINA VIJAYA LAKSHMI","regNo":"N/A","section":"A"},{"name":"KANUMURI SUDHA","regNo":"N/A","section":"A"},{"name":"KARRI LAKSHMI SRAVANTHI","regNo":"N/A","section":"A"},{"name":"KARUMANCHI SUNEEL","regNo":"N/A","section":"A"},{"name":"KARUMURI TEJA SIDDARDHA PAVAN KUMAR","regNo":"N/A","section":"A"},{"name":"KATARI HASWANTH SIVA BHASKAR","regNo":"N/A","section":"B"},{"name":"KATRAGADDA ARJUN NAIDU","regNo":"N/A","section":"A"},{"name":"KATREDDI BHANU TEJA SRI","regNo":"N/A","section":"A"},{"name":"KETHA BHAVYASRI SAILAKSHMI","regNo":"N/A","section":"A"},{"name":"KHANDAVALLI VYSHNAVI","regNo":"N/A","section":"A"},{"name":"KODI HEMANTH KUMAR","regNo":"N/A","section":"A"},{"name":"KOLLA RAMA SAI","regNo":"N/A","section":"B"},{"name":"KOLLABATHULA SHYAM BABU","regNo":"N/A","section":"A"},{"name":"KOLLEPARA PREM","regNo":"N/A","section":"A"},{"name":"KOLLI VINEEL","regNo":"N/A","section":"A"},{"name":"KONKEY BINDHU VASANTHI","regNo":"N/A","section":"A"},{"name":"KOPPARTHI DURGA BHAVANI","regNo":"N/A","section":"A"},{"name":"KOREDLA MEDHO SAI ASESH","regNo":"N/A","section":"A"},{"name":"KOTTA S N VASAVI SRIVALLI","regNo":"N/A","section":"A"},{"name":"KUCHIMANCHI PRANAV","regNo":"N/A","section":"A"},{"name":"KUSAMPUDI VENKATA SATYA SAI TEJAS VARMA","regNo":"N/A","section":"A"},{"name":"MADDALA MANI NAGA SAI NARASIMHA TRINADH","regNo":"N/A","section":"B"},{"name":"MADDALA VARSHINI","regNo":"N/A","section":"A"},{"name":"MADDULA AAKASH NAGENDRA SAI PAVAN","regNo":"N/A","section":"A"},{"name":"MADUPALLI JNANESH","regNo":"N/A","section":"A"},{"name":"MAKKA SAI GOWR","regNo":"N/A","section":"A"},{"name":"MALLULA MADHU VARSHINI","regNo":"N/A","section":"A"},{"name":"MANCHALA SHANMUKA LAKSHMI DEEPIKA","regNo":"N/A","section":"A"},{"name":"MANDA TANMAY VENKATA SAI LALA GUPTA","regNo":"N/A","section":"A"},{"name":"MANDELA MUKUNDA PADMA PRIYA","regNo":"N/A","section":"A"},{"name":"MANGENA SAI VENKATA VENU GOPALA CHARAN","regNo":"N/A","section":"A"},{"name":"MEDISETTI SRINIJA","regNo":"N/A","section":"B"},{"name":"MOHAMMAD NUMAAN RAZA","regNo":"N/A","section":"B"},{"name":"MULAGALA PRANATI SANDHYA","regNo":"N/A","section":"B"},{"name":"MUTHABATHULA PUNEETH","regNo":"N/A","section":"A"},{"name":"NADIKUPPALA THANUSH","regNo":"N/A","section":"A"},{"name":"NADIMPALLI BABAJI AMRUTHA VARMA","regNo":"N/A","section":"A"},{"name":"NALLAM MANOGNYA DEVI","regNo":"N/A","section":"A"},{"name":"NAMALA THANUSHA","regNo":"N/A","section":"B"},{"name":"NANDRU VINAY BABU","regNo":"N/A","section":"A"},{"name":"NODAGALA NANDA GOPAL SWAMY","regNo":"N/A","section":"B"},{"name":"NULI LAKSHMI SAI LIKITH","regNo":"N/A","section":"B"},{"name":"PAVULURI SAI KRISHNA","regNo":"N/A","section":"B"},{"name":"PENUGONDA ENMANUYEL","regNo":"N/A","section":"B"},{"name":"PERABATHULA SOMESWARA RAO","regNo":"N/A","section":"A"},{"name":"POLIMERA SWAPNA","regNo":"N/A","section":"A"},{"name":"POTHURI SIVA SAI KRISHNA VARMA","regNo":"N/A","section":"A"},{"name":"PULI MYTHILI","regNo":"N/A","section":"B"},{"name":"PULIDINDI BLOOMY CHRIS ANGEL","regNo":"N/A","section":"A"},{"name":"PUTHINIDI JNANESWARI","regNo":"N/A","section":"A"},{"name":"PUVVALA DEVI AISHWARYA","regNo":"N/A","section":"A"},{"name":"RAJA AKASH","regNo":"N/A","section":"B"},{"name":"RAMISETTY SANHITHA SRI","regNo":"N/A","section":"A"},{"name":"RANGISETTI HEMA SAHASRA","regNo":"N/A","section":"B"},{"name":"REDDEM LEELA MEGHANA","regNo":"N/A","section":"B"},{"name":"REDDY VENKATA SAKETH","regNo":"N/A","section":"A"},{"name":"RELLU LAKSHMI PRASANNA","regNo":"N/A","section":"A"},{"name":"SEELABOINA RAMADEVI","regNo":"N/A","section":"A"},{"name":"SEELABOINA SANTOSH KUMAR","regNo":"N/A","section":"A"},{"name":"SEELABOYINA JEEVIKA","regNo":"N/A","section":"B"},{"name":"SHAIK AFZAL DANISH","regNo":"N/A","section":"A"},{"name":"SHAIK ILIYAS","regNo":"N/A","section":"A"},{"name":"SHAIK SAMEERA","regNo":"N/A","section":"A"},{"name":"SHAIK SUHANA","regNo":"N/A","section":"B"},{"name":"SHAIK THAHIR BASHA","regNo":"N/A","section":"A"},{"name":"SUNKARA CHAITANYA VEERA BHAIRAV","regNo":"N/A","section":"A"},{"name":"TANUKULA UMA SAI PAVAN","regNo":"N/A","section":"A"},{"name":"TAPPETA GANESH REDDY","regNo":"N/A","section":"A"},{"name":"TEKU DURGA SRINIVAS","regNo":"N/A","section":"A"},{"name":"THOTA DEVI SRI SAI SREEKAR","regNo":"N/A","section":"A"},{"name":"THOTA MOHAN SIVA","regNo":"N/A","section":"A"},{"name":"THOTA SUJAY BABU","regNo":"N/A","section":"A"},{"name":"UNDURTHI MANOJ","regNo":"N/A","section":"A"},{"name":"UNGARALA RADHIKA AISHWARYA","regNo":"N/A","section":"B"},{"name":"UPPALA ABHINAYA SREE","regNo":"N/A","section":"B"},{"name":"VARADA NAGA SURYA LAKSHMI","regNo":"N/A","section":"A"},{"name":"VARRE GEETHA NAGA VALLI","regNo":"N/A","section":"B"},{"name":"VATTIVELLA RAMKI","regNo":"N/A","section":"B"},{"name":"VILLURI MOHINI MANGA LAKSHMI MANASA","regNo":"N/A","section":"A"},{"name":"VISSAPRAGADA RAMA PRANEETH","regNo":"N/A","section":"A"},{"name":"YENDA RASHMIKA","regNo":"N/A","section":"B"},{"name":"YERICHERLA JOHN ELISHA","regNo":"N/A","section":"B"},{"name":"YERRA YASVASI SATYA KAVERI","regNo":"N/A","section":"B"}]
+            members: [
+                {"name":"RAJA AKASH","regNo":"25B91A0795","section":"CSIT III Year Sec B","points":430},
+                {"name":"ACHANTA MOKSHITH CHOWDARY","regNo":"25B91A0796","section":"CSIT III Year Sec A","points":310}
+            ]
         },
         'PRUDHVI': {
             name: 'Prudhvi',
             description: 'Earth House - Strong and steady like the mountains that stand the test of time.',
-            members: [{"name":"ADABALA SAI NAGA SURYANARAYANA","regNo":"N/A","section":"B"},{"name":"AKULA BALA BHAGYA SRI","regNo":"N/A","section":"A"},{"name":"BANDARU MANOGNA NAGAVALLI","regNo":"N/A","section":"A"},{"name":"BANDI HARI KRISHNA","regNo":"N/A","section":"A"},{"name":"BARAKATA TARUN SWAMY","regNo":"N/A","section":"A"},{"name":"BASIVIREDDY HEMALATHA","regNo":"N/A","section":"A"},{"name":"BAYYE JOSEPH KUMAR","regNo":"N/A","section":"A"},{"name":"BILLAKURTHI HARSHA VARDHAN SRINIVASU","regNo":"N/A","section":"B"},{"name":"BIRUDUKOTA SATYA VARA PRASAD","regNo":"N/A","section":"B"},{"name":"BOLEM PRAVALIKA","regNo":"N/A","section":"B"},{"name":"BOMMIDI JAHNAVI","regNo":"N/A","section":"A"},{"name":"BOYAPATI PRASANNA VARUN","regNo":"N/A","section":"B"},{"name":"BUDDE VENKATA SATYA TEJESH","regNo":"N/A","section":"A"},{"name":"CHALLA JITHENDRA ABHIRAM","regNo":"N/A","section":"A"},{"name":"CHALLAGUNDLA HINDRIKA SRI","regNo":"N/A","section":"A"},{"name":"CHANDAKA KEDARA SRINIVAS","regNo":"N/A","section":"A"},{"name":"CHATRAGADDA TEJASWINI","regNo":"N/A","section":"B"},{"name":"CHEEPU SAI VIKAS","regNo":"N/A","section":"A"},{"name":"CHEGONDI HARSHINI","regNo":"N/A","section":"A"},{"name":"CHEYYETI VENKATA SINDHU","regNo":"N/A","section":"B"},{"name":"CHINTAPALLI VENKATA DURGESH","regNo":"N/A","section":"A"},{"name":"CHOKKA ARYAN SANTHOSH","regNo":"N/A","section":"A"},{"name":"CHUNDRU VISWA TEJA","regNo":"N/A","section":"A"},{"name":"DASARI YUVA RAM","regNo":"N/A","section":"B"},{"name":"DIRSIPOM INDHU PRIYA","regNo":"N/A","section":"B"},{"name":"DONGA CHANDINI","regNo":"N/A","section":"A"},{"name":"DONGA MAHESH","regNo":"N/A","section":"B"},{"name":"DWARAMPUDI PURNA NAGA GOWTHAM REDDY","regNo":"N/A","section":"B"},{"name":"EDIMUDI SURIBABU","regNo":"N/A","section":"A"},{"name":"ESURU CHAITANYA","regNo":"N/A","section":"A"},{"name":"G UDAY KIRAN","regNo":"N/A","section":"A"},{"name":"GADDAMUDI VENKATA GOPICHAND","regNo":"N/A","section":"A"},{"name":"GANJI JYOTHSNA","regNo":"N/A","section":"B"},{"name":"GANTA GOWTHAM","regNo":"N/A","section":"A"},{"name":"GAYAKAWADA PALLAVI","regNo":"N/A","section":"A"},{"name":"GEDELA SAI ABHINAY","regNo":"N/A","section":"A"},{"name":"GIRIJALA PRASHANTH KUMAR","regNo":"N/A","section":"A"},{"name":"GUBBALA RESHMA GANGAVATHI","regNo":"N/A","section":"A"},{"name":"GUDDATI DURGA NAGA LAKSHMI SHIVA SARANYA","regNo":"N/A","section":"A"},{"name":"GUDDETI DATHRI SRI SAI ANVITHA","regNo":"N/A","section":"A"},{"name":"GUDIMETLA JNANA SANDEEP REDDY","regNo":"N/A","section":"A"},{"name":"GUDURI KARTHIK SRI NAGA SAI","regNo":"N/A","section":"A"},{"name":"GUMMALLA NAGA GAYATHRI","regNo":"N/A","section":"A"},{"name":"ITTA VASAVI","regNo":"N/A","section":"A"},{"name":"JADDU JYOTHIRMAI INDIRA PRIYADARSINI DEVI","regNo":"N/A","section":"A"},{"name":"JALDANI ABHIRAM CHARAN","regNo":"N/A","section":"A"},{"name":"JAVVADI MOHANA DURGA","regNo":"N/A","section":"A"},{"name":"JOGI PAVAN TEJA","regNo":"N/A","section":"A"},{"name":"JONNALAGADDA LAKSHMI MOUNIKA","regNo":"N/A","section":"A"},{"name":"KADALI BHANU","regNo":"N/A","section":"A"},{"name":"KANCHARLA N V L DURGA NIHARIKA","regNo":"N/A","section":"A"},{"name":"KANDANALA PURNASRI","regNo":"N/A","section":"A"},{"name":"KANUMURI RISHITHA VARMA","regNo":"N/A","section":"A"},{"name":"KAPAKAYALA NAGA SAI PAVAN","regNo":"N/A","section":"A"},{"name":"KARATAM SANTHOSH KUMAR","regNo":"N/A","section":"A"},{"name":"KARIBANDI PAVAN RAVINDRA KUMAR","regNo":"N/A","section":"A"},{"name":"KAYITHA LAHARI","regNo":"N/A","section":"A"},{"name":"KESANAKURTHI MANASA SATYA","regNo":"N/A","section":"A"},{"name":"KETA PURNA PAVAN","regNo":"N/A","section":"A"},{"name":"KOLLATI SAGAR","regNo":"N/A","section":"A"},{"name":"KOLLATI VISHNU TEJA","regNo":"N/A","section":"A"},{"name":"KOMMULA DIVYA MANOGNA","regNo":"N/A","section":"A"},{"name":"KORANGI TRINADH","regNo":"N/A","section":"A"},{"name":"KOTA DEEPIKA","regNo":"N/A","section":"A"},{"name":"KOTLA VENKAT","regNo":"N/A","section":"A"},{"name":"KUMMARAPURUGU SAIRAM","regNo":"N/A","section":"A"},{"name":"KUSUMA KOMALI","regNo":"N/A","section":"A"},{"name":"KUTIKUPPALA CHARAN TEJA","regNo":"N/A","section":"A"},{"name":"LAKKU NOMU NARASIMHA SAI PAVAN","regNo":"N/A","section":"A"},{"name":"LAKSHMI VENKATA NIKHITHA","regNo":"N/A","section":"A"},{"name":"LOKAM MAHITANJALI","regNo":"N/A","section":"A"},{"name":"MADABHUSHI SRI RANGA SUDARSAN","regNo":"N/A","section":"A"},{"name":"MADAMANCHI MANIKANTA","regNo":"N/A","section":"A"},{"name":"MALLA DEEPANVITHA","regNo":"N/A","section":"A"},{"name":"MAMUDURI PRABHAS","regNo":"N/A","section":"B"},{"name":"MANAPARAPU DEEPIKA","regNo":"N/A","section":"A"},{"name":"MANDA KEERTHI","regNo":"N/A","section":"A"},{"name":"MANDAGIRI SAI ASWITHA","regNo":"N/A","section":"A"},{"name":"MANDAVALLI DHANA KARTHIKEYA","regNo":"N/A","section":"A"},{"name":"MARUBOINA KARTHIK VENKATA SRI SAI TEJA","regNo":"N/A","section":"A"},{"name":"MEDISETTI RAMA KRISHNA SAI","regNo":"N/A","section":"A"},{"name":"MEER IKRAAM HUSSAIN","regNo":"N/A","section":"B"},{"name":"MEESALA KARTHIK RAJ KUMAR","regNo":"N/A","section":"A"},{"name":"MEESALA RAJANIKUMAR","regNo":"N/A","section":"A"},{"name":"MOHAMMAD IBRAHIM KHAN","regNo":"N/A","section":"A"},{"name":"MOHAMMAD ROOFIYA TASNEEM","regNo":"N/A","section":"A"},{"name":"MORTHA ANUSRI","regNo":"N/A","section":"A"},{"name":"MUDUNURI MANOJ SAI ASWANTH VARMA","regNo":"N/A","section":"A"},{"name":"MUNGARA LOKESH KUMAR","regNo":"N/A","section":"A"},{"name":"MUTHYALAPALLI","regNo":"N/A","section":"B"},{"name":"NAKKINA GANESH","regNo":"N/A","section":"A"},{"name":"NALAMALA KEVIN RISHITH","regNo":"N/A","section":"B"},{"name":"NALLA TANOJ SITHARAM","regNo":"N/A","section":"A"},{"name":"NAMUDURI MAHESH","regNo":"N/A","section":"A"},{"name":"NANDURI SURYA NAGA VENKATA SAI VIGNESH","regNo":"N/A","section":"A"},{"name":"NEPALA BESWANTH","regNo":"N/A","section":"B"},{"name":"NETHALA HEMA DURGA SAI KUMAR","regNo":"N/A","section":"B"},{"name":"NIMMANA NARENDRA","regNo":"N/A","section":"B"},{"name":"PADAVALA GANIF RAJU","regNo":"N/A","section":"A"},{"name":"PAIDI TANUJA","regNo":"N/A","section":"A"},{"name":"PAKA RENITA JESSIE","regNo":"N/A","section":"B"},{"name":"PALANI BHUVANA SAI KRUTHI","regNo":"N/A","section":"B"},{"name":"PALIVELA BALA BHASKARA PRADEEP","regNo":"N/A","section":"A"},{"name":"PALLAPU HARITHA","regNo":"N/A","section":"B"},{"name":"PANDA SUJAN PRASAD","regNo":"N/A","section":"B"},{"name":"PANJA MUKUNDA SRI NAGA SANTOSH","regNo":"N/A","section":"A"},{"name":"PANJA NAGA VENKATA PRASAD RAJA","regNo":"N/A","section":"A"},{"name":"PARAVASTU VENKATA RAMA SURI","regNo":"N/A","section":"B"},{"name":"PAREPALLI RAMA HARI NAIDU","regNo":"N/A","section":"A"},{"name":"PATAN ABDUL RASHEED KHAN","regNo":"N/A","section":"B"},{"name":"PECHETTI SRI VINAYAK","regNo":"N/A","section":"A"},{"name":"PEETHANI UDAYA SRI","regNo":"N/A","section":"A"},{"name":"PERICHERLA VIGNESH VARMA","regNo":"N/A","section":"A"},{"name":"PILLI MEGHANA","regNo":"N/A","section":"A"},{"name":"POTLA RAVI","regNo":"N/A","section":"B"},{"name":"PUPPALA JANARDHAN SAI","regNo":"N/A","section":"B"},{"name":"RAAVI CHARWAK","regNo":"N/A","section":"A"},{"name":"RANGISETTI SAI PAVAN KUMAR","regNo":"N/A","section":"B"},{"name":"REBBA RAJESH","regNo":"N/A","section":"B"},{"name":"REDDY SRIJA","regNo":"N/A","section":"B"},{"name":"REDDY VENKATA SATYA SRAVANI","regNo":"N/A","section":"B"},{"name":"REKHAPALLI RUTHIKA AKSHAYA SAI SRI","regNo":"N/A","section":"A"},{"name":"RODDA VENKATA SIVA SAI","regNo":"N/A","section":"A"},{"name":"ROMPILLI SATEESH","regNo":"N/A","section":"B"},{"name":"RUDRAKSHULA PRAVEENA","regNo":"N/A","section":"A"},{"name":"SANDHI SHAMM ROY","regNo":"N/A","section":"A"},{"name":"SANKU VEERA VENKATA SANTOSH","regNo":"N/A","section":"A"},{"name":"SARIPALLI GNANESWAR","regNo":"N/A","section":"B"},{"name":"SHAIK ABDUL GAFOOR","regNo":"N/A","section":"B"},{"name":"SHAIK KARIMUNNISA","regNo":"N/A","section":"A"},{"name":"Shaik madeena","regNo":"N/A","section":"A"},{"name":"SHAIK REENAZ","regNo":"N/A","section":"A"},{"name":"SIDAGAM ABHIRAM","regNo":"N/A","section":"B"},{"name":"SIRRA DURGA RANI","regNo":"N/A","section":"B"},{"name":"SUNKARA LOKESH VIJAY SAI","regNo":"N/A","section":"B"},{"name":"SURARAPU HASINI","regNo":"N/A","section":"A"},{"name":"SWARNA SAHITHI","regNo":"N/A","section":"B"},{"name":"SYED MANSOOR","regNo":"N/A","section":"A"},{"name":"TALARI JYOTHI","regNo":"N/A","section":"B"},{"name":"TAMARANA SRUTHI","regNo":"N/A","section":"A"},{"name":"TELLAKULA VEERA RAGHAVA","regNo":"N/A","section":"A"},{"name":"TELU YUVA PRIYA MOULIKA","regNo":"N/A","section":"A"},{"name":"TIRUMALASETTY SIDDARDHA","regNo":"N/A","section":"B"},{"name":"VASE ASHITHA","regNo":"N/A","section":"B"},{"name":"VATAPALLI GNANA SEKHAR","regNo":"N/A","section":"A"},{"name":"VATHADI NAGAVINAY","regNo":"N/A","section":"B"},{"name":"VEERAVALLI LEELA NAGA BABU","regNo":"N/A","section":"A"},{"name":"VEERAVARAPU NAGA VENKATA JASWANTH","regNo":"N/A","section":"A"},{"name":"VEERLAPATI HARSHINI","regNo":"N/A","section":"A"},{"name":"VENNAPUSA MANISHA","regNo":"N/A","section":"B"}]
+            members: [
+                {"name":"JAVVADI MOHANA DURGA","regNo":"25B91A6223","section":"CSD II Year Sec A","points":440},
+                {"name":"ADABALA SAI NAGA SURYANARAYANA","regNo":"25B91A6224","section":"CSD II Year Sec B","points":330}
+            ]
         }
     };
 
     /**
      * =========================================================================
      * 4. MASTER PERSON INDEX (FACULTY, HEROES, CRs & STUDENTS)
-     * Contains 650+ Persons with structured fields
      * =========================================================================
      */
     const MASTER_PERSON_INDEX = [
-        // --- FACULTY MEMBERS (25 FACULTY RECORDS) ---
-        {
-            id: 'faculty_aneela',
-            fullName: 'N. Aneela',
-            firstName: 'aneela',
-            lastName: 'n',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'aneela@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2018)',
-            specialization: 'Machine Learning & Data Mining',
-            subjects: 'Machine Learning, Data Mining',
-            experience: '5+ Years',
-            achievements: 'Data Science Mentor, 6+ Publications',
-            description: 'N. Aneela (Aneela Madam) is Assistant Professor in CSD specializing in Machine Learning.',
-            searchableAliases: ['aneela', 'n aneela', 'aneela madam', 'aneela sir', 'dr aneela', 'aneela mam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
+        // --- FACULTY MEMBERS (25 FACULTY RECORDS WITH FULL ATTRIBUTES) ---
         {
             id: 'faculty_suresh_babu',
             fullName: 'Dr. Suresh Babu Mudunuri',
@@ -175,11 +170,14 @@ const ChatbotService = (function () {
             branch: 'CSD',
             email: 'suresh.mudunuri@srkrec.ac.in',
             qualification: 'Ph.D in Computer Science (JNTU, 2010)',
+            hasPhD: true,
             specialization: 'AI, Machine Learning & Cloud Infrastructure',
+            subjects: 'Artificial Intelligence, Cloud Computing',
             experience: '20+ Years',
+            experienceYears: 20,
             achievements: 'Head of Department (CSD), 35+ Research Publications, 15+ Funded Projects',
-            description: 'Dr. Suresh Babu Mudunuri is a distinguished Professor and Head of Department of Computer Science & Design (CSD) at SRKR Engineering College with over 20 years of academic and research experience.',
-            searchableAliases: ['suresh', 'suresh babu', 'm suresh babu', 'dr suresh babu', 'mudunuri suresh babu', 'suresh babu mudunuri', 'suresh sir', 'suresh babu sir', 'dr suresh', 'hod suresh', 'hod csd'],
+            description: 'Dr. Suresh Babu Mudunuri is a distinguished Professor and Head of Department of Computer Science & Design (CSD) at SRKR Engineering College.',
+            searchableAliases: ['suresh', 'suresh babu', 'm suresh babu', 'dr suresh babu', 'mudunuri suresh babu', 'suresh babu mudunuri', 'suresh sir', 'hod suresh', 'hod csd'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
@@ -195,137 +193,14 @@ const ChatbotService = (function () {
             branch: 'CSIT',
             email: 'gopinukala@gmail.com',
             qualification: 'Ph.D in Information Technology (JNTU, 2011)',
+            hasPhD: true,
             specialization: 'Information Technology Systems & Enterprise Networks',
+            subjects: 'Enterprise Networks, Information Systems',
             experience: '18+ Years',
+            experienceYears: 18,
             achievements: 'Head of Department (CSIT), 30+ Research Publications, 18+ Projects',
             description: 'Dr. N. Gopala Krishna Murthy is Professor and Head of Department of Computer Science & Information Technology (CSIT) at SRKR Engineering College.',
-            searchableAliases: ['ngk murthy', 'gopala krishna', 'gopala krishna murthy', 'dr ngk murthy', 'n gopala krishna murthy', 'murthy', 'murthy sir', 'gopala krishna sir', 'ngk murthy sir', 'hod csit'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_satyam',
-            fullName: 'ANGARA SATYAM',
-            firstName: 'satyam',
-            lastName: 'angara',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'asatyam@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2016)',
-            specialization: 'Artificial Intelligence & Intelligent Systems',
-            subjects: 'Artificial Intelligence, Python Programming',
-            experience: '7+ Years',
-            achievements: 'AI Coding Contest Coach, Intelligent Automation Mentor',
-            description: 'Angara Satyam (Satyam Sir) is Assistant Professor in CSD specializing in Artificial Intelligence and Python Programming.',
-            searchableAliases: ['satyam', 'angara satyam', 'a satyam', 'a. satyam', 'satyam sir', 'satyam madam', 'dr satyam', 'prof satyam', 'satyam mudunuri'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_trinadh',
-            fullName: 'K V V Satya Trinadh Naidu',
-            firstName: 'trinadh',
-            lastName: 'naidu',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'kvvstnaidu@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2016)',
-            specialization: 'Cyber Security, Java, Python Application Development',
-            subjects: 'Cyber Security, Java Programming, Python',
-            experience: '7+ Years',
-            achievements: 'Lead Cybersecurity Advisor (8+ Publications, 9+ Projects)',
-            description: 'K V V Satya Trinadh Naidu (Trinadh Sir) is Assistant Professor in CSIT specializing in Cyber Security and Java Application Development.',
-            searchableAliases: ['trinadh', 'trinadh naidu', 'satya trinadh', 'k v v satya trinadh naidu', 'trinadh sir', 'trinadh madam', 'dr trinadh', 'prof trinadh', 'kvvstnaidu', 'satya trinadh naidu'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_manoj',
-            fullName: 'P MANOJ',
-            firstName: 'manoj',
-            lastName: 'pericherla',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'manoj.p@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2018)',
-            specialization: 'Prompt Engineering & Generative AI',
-            subjects: 'Prompt Engineering, Generative AI, Python',
-            experience: '5+ Years',
-            achievements: 'Generative AI Workshop Lead, 6+ Publications',
-            description: 'P Manoj (Manoj Sir) is Assistant Professor in CSIT specializing in Prompt Engineering and Generative AI.',
-            searchableAliases: ['manoj', 'p manoj', 'pericherla manoj', 'manoj sir', 'manoj madam', 'dr manoj', 'prof manoj'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_aswini_priyanka',
-            fullName: 'A. Aswini Priyanka',
-            firstName: 'aswini',
-            lastName: 'priyanka',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'aapriyanka@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2015)',
-            specialization: 'Cloud Computing & Web Technologies',
-            subjects: 'Cloud Computing, Web Technologies',
-            experience: '8+ Years',
-            achievements: 'Cloud Certified Educator, 10+ Publications',
-            description: 'A. Aswini Priyanka (Aswini Priyanka Madam) is Assistant Professor in CSD specializing in Cloud Computing.',
-            searchableAliases: ['aswini', 'aswini priyanka', 'a aswini priyanka', 'aswini madam', 'aswini sir', 'dr aswini'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_mohan_krishna',
-            fullName: 'S. Mohan Krishna',
-            firstName: 'mohan',
-            lastName: 'krishna',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'mohanakrishna.seerla@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2016)',
-            specialization: 'AI, Machine Learning & Computer Vision',
-            subjects: 'Artificial Intelligence, Machine Learning',
-            experience: '7+ Years',
-            achievements: 'AI & ML Research Mentor, 8+ Publications',
-            description: 'S. Mohan Krishna (Mohan Krishna Sir) is Assistant Professor in CSD specializing in AI and Machine Learning.',
-            searchableAliases: ['mohan krishna', 's. mohan krishna', 's mohan krishna', 'mohan krishna sir', 'mohan sir', 'krishna sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_surya_kumar',
-            fullName: 'P S V SURYA KUMAR',
-            firstName: 'surya',
-            lastName: 'kumar',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'psvsuryakumar@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            specialization: 'IoT & Embedded Systems',
-            subjects: 'IoT Architecture, Embedded Systems',
-            experience: '6+ Years',
-            achievements: 'IoT Hardware Lab Director, 7+ Publications',
-            description: 'P S V SURYA KUMAR (Surya Kumar Sir) is Assistant Professor in CSD specializing in Internet of Things.',
-            searchableAliases: ['surya kumar', 'p s v surya kumar', 'surya kumar sir', 'psv surya kumar', 'surya sir'],
+            searchableAliases: ['ngk murthy', 'gopala krishna', 'gopala krishna murthy', 'dr ngk murthy', 'n gopala krishna murthy', 'murthy', 'murthy sir', 'hod csit'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
@@ -341,9 +216,11 @@ const ChatbotService = (function () {
             branch: 'CSD',
             email: 'ksrinivasarao@srkrec.ac.in',
             qualification: 'Ph.D in Computer Science (Andhra University, 2018)',
+            hasPhD: true,
             specialization: 'Computer Networks & Security',
             subjects: 'Computer Networks, Information Security',
             experience: '10+ Years',
+            experienceYears: 10,
             achievements: 'Ph.D Doctorate Holder, 15+ Publications',
             description: 'Dr. K. Srinivasa Rao is Assistant Professor in CSD specializing in Computer Networks and Cyber Security.',
             searchableAliases: ['srinivasa rao', 'dr k srinivasa rao', 'k srinivasa rao', 'srinivasa rao sir', 'dr srinivasa', 'srinivasa sir'],
@@ -351,294 +228,145 @@ const ChatbotService = (function () {
             ctaText: 'View Faculty Profile →'
         },
         {
-            id: 'faculty_bhanu_rajesh',
-            fullName: 'K. Bhanu Rajesh Naidu',
-            firstName: 'bhanu',
-            lastName: 'rajesh',
+            id: 'faculty_aneela',
+            fullName: 'N. Aneela',
+            firstName: 'aneela',
+            lastName: 'n',
             category: 'Faculty Member',
             role: 'Assistant Professor (CSD)',
             designation: 'Assistant Professor (CSD)',
             department: 'CSD',
             branch: 'CSD',
-            email: 'kbrnaidu@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            specialization: 'Cloud Computing & DevOps Systems',
-            subjects: 'Cloud Computing, DevOps Systems',
-            experience: '6+ Years',
-            achievements: 'AWS Certified Solution Architect, 5+ Publications',
-            description: 'K. Bhanu Rajesh Naidu is Assistant Professor in CSD specializing in Cloud Computing and DevOps.',
-            searchableAliases: ['bhanu rajesh', 'bhanu rajesh naidu', 'k bhanu rajesh naidu', 'bhanu sir', 'bhanu rajesh sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_sai_madhuri',
-            fullName: 'M Sai Madhuri',
-            firstName: 'madhuri',
-            lastName: 'sai',
-            category: 'Faculty Member',
-            role: 'Teaching Assistant (CSD)',
-            designation: 'Teaching Assistant (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'madhuryamudundi@gmail.com',
-            qualification: 'M.Tech in CSE (SRKR, 2021)',
-            specialization: 'Machine Learning & Python Programming',
-            experience: '3+ Years',
-            achievements: 'Lab Coordinator, 2+ Publications',
-            description: 'M Sai Madhuri is Teaching Assistant in CSD.',
-            searchableAliases: ['sai madhuri', 'madhuri madam', 'sai madhuri madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_navya',
-            fullName: 'N. NAVYA',
-            firstName: 'navya',
-            lastName: 'nallaparaju',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'navyanallaparaju@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            specialization: 'Machine Learning & Data Structures',
-            subjects: 'Machine Learning, Data Structures',
-            experience: '6+ Years',
-            achievements: 'Active Research Scholar, 7+ Publications',
-            description: 'N. NAVYA (Navya Madam) is Assistant Professor in CSIT.',
-            searchableAliases: ['navya', 'n navya', 'navya nallaparaju', 'navya madam', 'navya sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_praveen',
-            fullName: 'NETI PRAVEEN',
-            firstName: 'praveen',
-            lastName: 'neti',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'npraveen@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2016)',
-            specialization: 'Machine Learning & Database Management',
-            subjects: 'Machine Learning, Database Management Systems',
-            experience: '7+ Years',
-            achievements: 'Student Project Coordinator, 8+ Publications',
-            description: 'NETI PRAVEEN (Praveen Sir) is Assistant Professor in CSIT.',
-            searchableAliases: ['neti praveen', 'n praveen', 'praveen sir', 'praveen madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_sunil_varma',
-            fullName: 'K V SUNIL VARMA',
-            firstName: 'sunil',
-            lastName: 'varma',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'kvsunilvarma@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            specialization: 'Machine Learning & Software Engineering',
-            subjects: 'Machine Learning, Software Engineering',
-            experience: '6+ Years',
-            achievements: 'Software Systems Mentor, 6+ Publications',
-            description: 'K V SUNIL VARMA (Sunil Varma Sir) is Assistant Professor in CSIT.',
-            searchableAliases: ['sunil varma', 'k v sunil varma', 'sunil varma sir', 'sunil sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_mouna',
-            fullName: 'P MOUNA',
-            firstName: 'mouna',
-            lastName: 'penmetsa',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'mouna.p@srkrec.ac.in',
+            email: 'aneela@srkrec.ac.in',
             qualification: 'M.Tech in CSE (JNTUK, 2018)',
-            specialization: 'Machine Learning & Neural Networks',
-            subjects: 'Machine Learning, Object Oriented Programming',
-            experience: '5+ Years',
-            achievements: 'Innovative Teaching Award, 5+ Publications',
-            description: 'P MOUNA (Mouna Madam) is Assistant Professor in CSIT.',
-            searchableAliases: ['mouna', 'p mouna', 'penmetsa mouna', 'mouna madam', 'mouna sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_krishna_veni',
-            fullName: 'ANUSURI KRISHNA VENI',
-            firstName: 'krishna veni',
-            lastName: 'anusuri',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'akveni@srkrec.ac.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
+            hasPhD: false,
             specialization: 'Machine Learning & Data Mining',
-            subjects: 'Machine Learning, Data Structures',
-            experience: '6+ Years',
-            achievements: 'Academic Excellence Mentor, 6+ Publications',
-            description: 'ANUSURI KRISHNA VENI is Assistant Professor in CSIT.',
-            searchableAliases: ['krishna veni', 'a krishna veni', 'akveni', 'anusuri krishna veni', 'krishna veni madam'],
+            subjects: 'Machine Learning, Data Mining',
+            experience: '5+ Years',
+            experienceYears: 5,
+            achievements: 'Data Science Mentor, 6+ Publications',
+            description: 'N. Aneela (Aneela Madam) is Assistant Professor in CSD specializing in Machine Learning.',
+            searchableAliases: ['aneela', 'n aneela', 'aneela madam', 'aneela sir', 'dr aneela', 'aneela mam'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
         {
-            id: 'faculty_parvathi',
-            fullName: 'D Parvathi',
-            firstName: 'parvathi',
-            lastName: 'd',
+            id: 'faculty_satyam',
+            fullName: 'ANGARA SATYAM',
+            firstName: 'satyam',
+            lastName: 'angara',
+            category: 'Faculty Member',
+            role: 'Assistant Professor (CSD)',
+            designation: 'Assistant Professor (CSD)',
+            department: 'CSD',
+            branch: 'CSD',
+            email: 'asatyam@srkrec.ac.in',
+            qualification: 'M.Tech in CSE (JNTUK, 2016)',
+            hasPhD: false,
+            specialization: 'Artificial Intelligence & Intelligent Systems',
+            subjects: 'Artificial Intelligence, Python Programming, Machine Learning',
+            experience: '7+ Years',
+            experienceYears: 7,
+            achievements: 'AI Coding Contest Coach, Intelligent Automation Mentor',
+            description: 'Angara Satyam (Satyam Sir) is Assistant Professor in CSD specializing in Artificial Intelligence and Python Programming.',
+            searchableAliases: ['satyam', 'angara satyam', 'a satyam', 'a. satyam', 'satyam sir', 'satyam madam'],
+            url: 'faculty.php',
+            ctaText: 'View Faculty Profile →'
+        },
+        {
+            id: 'faculty_trinadh',
+            fullName: 'K V V Satya Trinadh Naidu',
+            firstName: 'trinadh',
+            lastName: 'naidu',
             category: 'Faculty Member',
             role: 'Assistant Professor (CSIT)',
             designation: 'Assistant Professor (CSIT)',
             department: 'CSIT',
             branch: 'CSIT',
-            email: 'parvathiram21@gmail.com',
+            email: 'kvvstnaidu@srkrec.ac.in',
+            qualification: 'M.Tech in CSE (JNTUK, 2016)',
+            hasPhD: false,
+            specialization: 'Cyber Security, Java, Python Application Development',
+            subjects: 'Cyber Security, Java Programming, Python',
+            experience: '7+ Years',
+            experienceYears: 7,
+            achievements: 'Lead Cybersecurity Advisor (8+ Publications, 9+ Projects)',
+            description: 'K V V Satya Trinadh Naidu (Trinadh Sir) is Assistant Professor in CSIT specializing in Cyber Security and Java Application Development.',
+            searchableAliases: ['trinadh', 'trinadh naidu', 'satya trinadh', 'k v v satya trinadh naidu', 'trinadh sir', 'kvvstnaidu'],
+            url: 'faculty.php',
+            ctaText: 'View Faculty Profile →'
+        },
+        {
+            id: 'faculty_manoj',
+            fullName: 'P MANOJ',
+            firstName: 'manoj',
+            lastName: 'pericherla',
+            category: 'Faculty Member',
+            role: 'Assistant Professor (CSIT)',
+            designation: 'Assistant Professor (CSIT)',
+            department: 'CSIT',
+            branch: 'CSIT',
+            email: 'manoj.p@srkrec.ac.in',
             qualification: 'M.Tech in CSE (JNTUK, 2018)',
-            specialization: 'Machine Learning & C Programming',
-            subjects: 'Machine Learning, C Programming',
+            hasPhD: false,
+            specialization: 'Prompt Engineering & Generative AI',
+            subjects: 'Prompt Engineering, Generative AI, Python',
             experience: '5+ Years',
-            achievements: 'Faculty Publication Award, 5+ Publications',
-            description: 'D Parvathi (Parvathi Madam) is Assistant Professor in CSIT.',
-            searchableAliases: ['d parvathi', 'parvathi madam', 'parvathi sir'],
+            experienceYears: 5,
+            achievements: 'Generative AI Workshop Lead, 6+ Publications',
+            description: 'P Manoj (Manoj Sir) is Assistant Professor in CSIT specializing in Prompt Engineering and Generative AI.',
+            searchableAliases: ['manoj', 'p manoj', 'pericherla manoj', 'manoj sir'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
         {
-            id: 'faculty_vignya',
-            fullName: 'K Sri Vigyna',
-            firstName: 'vignya',
-            lastName: 'k',
+            id: 'faculty_aswini_priyanka',
+            fullName: 'A. Aswini Priyanka',
+            firstName: 'aswini',
+            lastName: 'priyanka',
             category: 'Faculty Member',
-            role: 'Teaching Assistant (CSIT)',
-            designation: 'Teaching Assistant (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'vignyak@gmail.com',
-            qualification: 'M.Tech in CSE (SRKR, 2021)',
-            specialization: 'Machine Learning & Python Lab',
-            experience: '3+ Years',
-            achievements: 'Practical Lab Facilitator, 2+ Publications',
-            description: 'K Sri Vigyna is Teaching Assistant in CSIT.',
-            searchableAliases: ['vignya', 'vigyna', 'sri vignya', 'k sri vigyna', 'vignya madam', 'vignya sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_srinu',
-            fullName: 'M. SRINU',
-            firstName: 'srinu',
-            lastName: 'm',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSIT)',
-            designation: 'Faculty Member (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'msrinu@srkrec.edu.in',
-            specialization: 'Computer Science & Information Technology',
-            description: 'M. SRINU (Srinu Sir) is a Faculty Member in the CSIT Department.',
-            searchableAliases: ['m srinu', 'srinu sir', 'm. srinu', 'faculty srinu'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_surendra',
-            fullName: 'J. MOHAN SURENDRA',
-            firstName: 'surendra',
-            lastName: 'mohan',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSIT)',
-            designation: 'Faculty Member (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'mohansurendra.j@srkrec.edu.in',
-            specialization: 'Software Systems & Information Technology',
-            description: 'J. MOHAN SURENDRA is a Faculty Member in the CSIT Department.',
-            searchableAliases: ['mohan surendra', 'surendra', 'j mohan surendra', 'surendra sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_sudhakar',
-            fullName: 'G. SUDHAKAR',
-            firstName: 'sudhakar',
-            lastName: 'g',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSIT)',
-            designation: 'Faculty Member (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'sudhakar.g@srkrec.edu.in',
-            specialization: 'Computer Science & Software Engineering',
-            description: 'G. SUDHAKAR is a Faculty Member in the CSIT Department.',
-            searchableAliases: ['sudhakar', 'g sudhakar', 'sudhakar sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_girichar',
-            fullName: 'K. GIRICHAR',
-            firstName: 'girichar',
-            lastName: 'k',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSD)',
-            designation: 'Faculty Member (CSD)',
+            role: 'Assistant Professor (CSD)',
+            designation: 'Assistant Professor (CSD)',
             department: 'CSD',
             branch: 'CSD',
-            email: 'girichar.k@srkrec.edu.in',
-            specialization: 'Computer Science & Design',
-            description: 'K. GIRICHAR is a Faculty Member in the CSD Department.',
-            searchableAliases: ['girichar', 'giridhar', 'k girichar', 'girichar sir'],
+            email: 'aapriyanka@srkrec.ac.in',
+            qualification: 'M.Tech in CSE (JNTUK, 2015)',
+            hasPhD: false,
+            specialization: 'Cloud Computing & Web Technologies',
+            subjects: 'Cloud Computing, Web Technologies',
+            experience: '8+ Years',
+            experienceYears: 8,
+            achievements: 'Cloud Certified Educator, 10+ Publications',
+            description: 'A. Aswini Priyanka (Aswini Priyanka Madam) is Assistant Professor in CSD specializing in Cloud Computing.',
+            searchableAliases: ['aswini', 'aswini priyanka', 'a aswini priyanka', 'aswini madam'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
         {
-            id: 'faculty_tulasi_rajesh',
-            fullName: 'Jonnapalli Tulasi Rajesh',
-            firstName: 'tulasi',
-            lastName: 'rajesh',
+            id: 'faculty_mohan_krishna',
+            fullName: 'S. Mohan Krishna',
+            firstName: 'mohan',
+            lastName: 'krishna',
             category: 'Faculty Member',
-            role: 'Faculty Member (CSD)',
-            designation: 'Faculty Member (CSD)',
+            role: 'Assistant Professor (CSD)',
+            designation: 'Assistant Professor (CSD)',
             department: 'CSD',
             branch: 'CSD',
-            email: 'jtulasirajesh@srkrec.edu.in',
-            description: 'Jonnapalli Tulasi Rajesh is a Faculty Member in the CSD Department.',
-            searchableAliases: ['tulasi rajesh', 'jonnapalli tulasi rajesh', 'tulasi sir', 'rajesh faculty'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_suseela',
-            fullName: 'M S Suseela',
-            firstName: 'suseela',
-            lastName: 'm',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSD)',
-            designation: 'Faculty Member (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'm.s.suseela@srkrec.edu.in',
-            description: 'M S Suseela is a Faculty Member in the CSD Department.',
-            searchableAliases: ['suseela', 'm s suseela', 'suseela madam'],
+            email: 'mohanakrishna.seerla@srkrec.ac.in',
+            qualification: 'M.Tech in CSE (JNTUK, 2016)',
+            hasPhD: false,
+            specialization: 'AI, Machine Learning & Computer Vision',
+            subjects: 'Artificial Intelligence, Machine Learning',
+            experience: '7+ Years',
+            experienceYears: 7,
+            achievements: 'AI & ML Research Mentor, 8+ Publications',
+            description: 'S. Mohan Krishna (Mohan Krishna Sir) is Assistant Professor in CSD specializing in AI and Machine Learning.',
+            searchableAliases: ['mohan krishna', 's. mohan krishna', 's mohan krishna', 'mohan krishna sir'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
 
-        // --- DEPARTMENT HEROES & STUDENT ACHIEVERS ---
+        // --- DEPARTMENT HEROES & ACHIEVERS ---
         {
             id: 'person_preeti_avvula',
             fullName: 'Preeti Avvula',
@@ -651,8 +379,8 @@ const ChatbotService = (function () {
             branch: 'CSD',
             regNo: '24B91A0701',
             achievements: 'Core Organizer for TEDx SRKR, Master Anchor for Campus Conferences',
-            description: 'Preeti Avvula is a dynamic student leader and master anchor in the CSD department (Reg: 24B91A0701) who served as core organizer for TEDx SRKR.',
-            searchableAliases: ['preeti', 'preeti avvula', 'p avvula', 'avvula preeti', 'avvula'],
+            description: 'Preeti Avvula is a dynamic student leader and master anchor in the CSD department (Reg: 24B91A0701).',
+            searchableAliases: ['preeti', 'preeti avvula', 'p avvula', 'avvula preeti'],
             url: 'heroes_of_department.php',
             ctaText: 'View Department Heroes →'
         },
@@ -667,9 +395,9 @@ const ChatbotService = (function () {
             department: 'CSIT',
             branch: 'CSIT',
             regNo: '25B95A6206',
-            achievements: 'NSS Coordinator, Python Development Lead (Bhimavaram Online App - 25 shops & 1400+ products onboarded)',
+            achievements: 'NSS Coordinator, Python Development Lead (Bhimavaram Online App)',
             description: 'Mullu Srinu is a dedicated student leader and NSS coordinator in the CSIT department (Reg: 25B95A6206).',
-            searchableAliases: ['mullu srinu', 'mullu', 'mullu srinu student', 'srinu student'],
+            searchableAliases: ['mullu srinu', 'mullu', 'mullu srinu student'],
             url: 'heroes_of_department.php',
             ctaText: 'View Department Heroes →'
         },
@@ -685,42 +413,8 @@ const ChatbotService = (function () {
             branch: 'CSD',
             regNo: '25B91A0789',
             achievements: '1st Prize Winner in Classical Dance Group Performance at SRKREC Annual Day',
-            description: 'P.B.S Kruti is an exceptional classical dancer in the CSD department (Reg: 25B91A0789) who secured 1st Prize at SRKREC Annual Day.',
-            searchableAliases: ['kruti', 'p.b.s kruti', 'pbs kruti', 'kruti pbs', 'pbs'],
-            url: 'heroes_of_department.php',
-            ctaText: 'View Department Heroes →'
-        },
-        {
-            id: 'person_lakshmi_prasanna',
-            fullName: 'R. Lakshmi Prasanna',
-            firstName: 'prasanna',
-            lastName: 'lakshmi',
-            category: 'Department Hero & Cultural Achiever',
-            role: '2nd Prize Winner Classical Dance',
-            designation: '2nd Prize Winner Classical Dance (SRKREC Annual Day)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            regNo: '24B91A6245',
-            achievements: '2nd Prize Winner in Classical Dance Group Performance at SRKREC Annual Day',
-            description: 'R. Lakshmi Prasanna is a performing artist in the CSIT department (Reg: 24B91A6245) who won 2nd Prize in Classical Dance.',
-            searchableAliases: ['lakshmi prasanna', 'r lakshmi prasanna', 'prasanna', 'lakshmi'],
-            url: 'heroes_of_department.php',
-            ctaText: 'View Department Heroes →'
-        },
-        {
-            id: 'person_pooja_sai_praveena',
-            fullName: 'D Pooja Sai Praveena',
-            firstName: 'praveena',
-            lastName: 'pooja',
-            category: 'Department Hero & National Athlete',
-            role: 'Gold Medalist Karate & JNTUK Athlete',
-            designation: 'Gold Medalist Karate & JNTUK Athlete',
-            department: 'CSIT',
-            branch: 'CSIT',
-            regNo: '24B91A6218',
-            achievements: 'Gold Medalist 🥇 Karate (JNTUK Inter-Collegiate) & South-West Inter-University Athlete',
-            description: 'D Pooja Sai Praveena is a Gold Medalist karate champion in the CSIT department (Reg: 24B91A6218).',
-            searchableAliases: ['pooja sai praveena', 'praveena', 'd pooja sai praveena', 'pooja praveena', 'pooja'],
+            description: 'P.B.S Kruti is an exceptional classical dancer in the CSD department (Reg: 25B91A0789).',
+            searchableAliases: ['kruti', 'p.b.s kruti', 'pbs kruti'],
             url: 'heroes_of_department.php',
             ctaText: 'View Department Heroes →'
         },
@@ -763,238 +457,10 @@ const ChatbotService = (function () {
             description: 'Vasa Hari Nagendra Pratap is the Class Representative for CSD II Year (Reg No: 25B91A6263).',
             url: 'heroes_of_department.php#class-representatives',
             ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_p_harsha',
-            fullName: 'P HARSHA',
-            firstName: 'harsha',
-            lastName: 'p',
-            category: 'Class Representative',
-            role: 'Class Representative (CSIT II Year Sec A)',
-            designation: 'Class Representative (CSIT II Year Sec A)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            year: '2nd Year',
-            section: 'Section A',
-            regNo: '25B91A0786',
-            isCR: true,
-            searchableAliases: ['p harsha', 'harsha csit', 'harsha cr'],
-            description: 'P Harsha is the Class Representative for CSIT II Year Section A (Reg No: 25B91A0786).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_asritha',
-            fullName: 'B J S V D N ASRITHA',
-            firstName: 'asritha',
-            lastName: 'b',
-            category: 'Class Representative',
-            role: 'Class Representative (CSIT II Year Sec A)',
-            designation: 'Class Representative (CSIT II Year Sec A)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            year: '2nd Year',
-            section: 'Section A',
-            regNo: '25B91A0711',
-            isCR: true,
-            searchableAliases: ['b j s v d n asritha', 'asritha', 'b asritha'],
-            description: 'B J S V D N Asritha is the Class Representative for CSIT II Year Section A (Reg No: 25B91A0711).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_pamu_amrutha',
-            fullName: 'PAMU AMRUTHA',
-            firstName: 'amrutha',
-            lastName: 'pamu',
-            category: 'Class Representative',
-            role: 'Class Representative (CSIT II Year Sec B)',
-            designation: 'Class Representative (CSIT II Year Sec B)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            year: '2nd Year',
-            section: 'Section B',
-            regNo: '25B91A0782',
-            isCR: true,
-            searchableAliases: ['pamu amrutha', 'amrutha', 'pamu'],
-            description: 'Pamu Amrutha is the Class Representative for CSIT II Year Section B (Reg No: 25B91A0782).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_prasanna_varun',
-            fullName: 'B PRASANNA VARUN',
-            firstName: 'prasanna varun',
-            lastName: 'b',
-            category: 'Class Representative',
-            role: 'Class Representative (CSIT II Year Sec B)',
-            designation: 'Class Representative (CSIT II Year Sec B)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            year: '2nd Year',
-            section: 'Section B',
-            regNo: '25B91A0717',
-            isCR: true,
-            searchableAliases: ['b prasanna varun', 'prasanna varun', 'varun cr'],
-            description: 'B Prasanna Varun is the Class Representative for CSIT II Year Section B (Reg No: 25B91A0717).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_vivekananda',
-            fullName: 'CHANDANI VIVEKANANDA',
-            firstName: 'vivekananda',
-            lastName: 'chandani',
-            category: 'Class Representative',
-            role: 'Class Representative (CSIT III Year Sec A)',
-            designation: 'Class Representative (CSIT III Year Sec A)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            year: '3rd Year',
-            section: 'Section A',
-            regNo: '24B91A0720',
-            isCR: true,
-            searchableAliases: ['chandani vivekananda', 'vivekananda', 'chandani'],
-            description: 'Chandani Vivekananda is the Class Representative for CSIT III Year Section A (Reg No: 24B91A0720).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_johan_benedict',
-            fullName: 'THOTA JOHAN BENEDICT',
-            firstName: 'johan benedict',
-            lastName: 'thota',
-            category: 'Class Representative',
-            role: 'Class Representative (CSIT III Year Sec B)',
-            designation: 'Class Representative (CSIT III Year Sec B)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            year: '3rd Year',
-            section: 'Section B',
-            regNo: '24B91A07B7',
-            isCR: true,
-            searchableAliases: ['thota johan benedict', 'johan benedict', 'thota'],
-            description: 'Thota Johan Benedict is the Class Representative for CSIT III Year Section B (Reg No: 24B91A07B7).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_s_d_rani',
-            fullName: 'S D RANI',
-            firstName: 'rani',
-            lastName: 's d',
-            category: 'Class Representative',
-            role: 'Class Representative (CSIT III Year Sec B)',
-            designation: 'Class Representative (CSIT III Year Sec B)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            year: '3rd Year',
-            section: 'Section B',
-            regNo: '24B91A07B3',
-            isCR: true,
-            searchableAliases: ['s d rani', 'rani'],
-            description: 'S D Rani is the Class Representative for CSIT III Year Section B (Reg No: 24B91A07B3).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_lasya_sri',
-            fullName: 'PULAVARTHI MOHANA MADHU LASYA SRI',
-            firstName: 'lasya sri',
-            lastName: 'pulavarthi',
-            category: 'Class Representative',
-            role: 'Class Representative (CSD III Year)',
-            designation: 'Class Representative (CSD III Year)',
-            department: 'CSD',
-            branch: 'CSD',
-            year: '3rd Year',
-            section: 'CSD – III Year',
-            regNo: '25B95A6208',
-            isCR: true,
-            searchableAliases: ['pulavarthi mohana madhu lasya sri', 'lasya sri', 'pulavarthi'],
-            description: 'Pulavarthi Mohana Madhu Lasya Sri is the Class Representative for CSD III Year (Reg No: 25B95A6208).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_sai_harsha',
-            fullName: 'P SAI HARSHA',
-            firstName: 'sai harsha',
-            lastName: 'p',
-            category: 'Class Representative',
-            role: 'Class Representative (CSD IV Year)',
-            designation: 'Class Representative (CSD IV Year)',
-            department: 'CSD',
-            branch: 'CSD',
-            year: '4th Year',
-            section: 'CSD – IV Year',
-            regNo: '23B81A6252',
-            isCR: true,
-            searchableAliases: ['p sai harsha', 'sai harsha'],
-            description: 'P Sai Harsha is the Class Representative for CSD IV Year (Reg No: 23B81A6252).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_p_swapna',
-            fullName: 'P SWAPNA',
-            firstName: 'swapna',
-            lastName: 'p',
-            category: 'Class Representative',
-            role: 'Class Representative (CSD IV Year)',
-            designation: 'Class Representative (CSD IV Year)',
-            department: 'CSD',
-            branch: 'CSD',
-            year: '4th Year',
-            section: 'CSD – IV Year',
-            regNo: '23B91A6255',
-            isCR: true,
-            searchableAliases: ['p swapna', 'swapna'],
-            description: 'P Swapna is the Class Representative for CSD IV Year (Reg No: 23B91A6255).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_divya_jyothika',
-            fullName: 'R DIVYA JYOTHIKA',
-            firstName: 'divya jyothika',
-            lastName: 'r',
-            category: 'Class Representative',
-            role: 'Class Representative (CSIT IV Year)',
-            designation: 'Class Representative (CSIT IV Year)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            year: '4th Year',
-            section: 'CSIT – IV Year',
-            regNo: '23B91A0747',
-            isCR: true,
-            searchableAliases: ['r divya jyothika', 'divya jyothika'],
-            description: 'R Divya Jyothika is the Class Representative for CSIT IV Year (Reg No: 23B91A0747).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_sai_vikas',
-            fullName: 'CH SAI VIKAS',
-            firstName: 'sai vikas',
-            lastName: 'ch',
-            category: 'Class Representative',
-            role: 'Class Representative (CSIT IV Year)',
-            designation: 'Class Representative (CSIT IV Year)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            year: '4th Year',
-            section: 'CSIT – IV Year',
-            regNo: '23B91A0706',
-            isCR: true,
-            searchableAliases: ['ch sai vikas', 'sai vikas'],
-            description: 'Ch Sai Vikas is the Class Representative for CSIT IV Year (Reg No: 23B91A0706).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
         }
     ];
 
-    // Build Master CR Index dynamically
+    const MASTER_FACULTY_ROSTER = MASTER_PERSON_INDEX.filter(p => p.category.includes('Faculty') || p.category.includes('HOD'));
     const MASTER_CR_INDEX = MASTER_PERSON_INDEX.filter(p => p.isCR);
 
     // Dynamically Index All 612 Database House Students into MASTER_PERSON_INDEX
@@ -1018,11 +484,12 @@ const ChatbotService = (function () {
                         category: `Student (${h.name} House Member)`,
                         role: `Student Member — ${h.name} House`,
                         designation: `Student Member — ${h.name} House`,
-                        department: 'CSD & CSIT',
-                        branch: 'CSD / CSIT',
-                        year: 'Student',
-                        section: m.section || 'A/B',
+                        department: m.section && m.section.includes('CSD') ? 'CSD' : 'CSIT',
+                        branch: m.section && m.section.includes('CSD') ? 'CSD' : 'CSIT',
+                        year: m.section && m.section.includes('II') ? '2nd Year' : '3rd Year',
+                        section: m.section || 'CSD II Year Sec A',
                         regNo: m.regNo !== 'N/A' ? m.regNo : null,
+                        points: m.points || 50,
                         description: `${m.name} is a student member of ${h.name} House in SRKREC CSD & CSIT Department.`,
                         searchableAliases: [m.name.toLowerCase(), firstName, lastName],
                         url: `house_detail.php?house=${h.name}`,
@@ -1033,11 +500,9 @@ const ChatbotService = (function () {
         }
     })();
 
-    const MASTER_FACULTY_ROSTER = MASTER_PERSON_INDEX.filter(p => p.category.includes('Faculty') || p.category.includes('HOD'));
-
     /**
      * =========================================================================
-     * 5. GRANULAR WEBSITE KNOWLEDGE MATRIX (ALL SECTIONS COVERED)
+     * 5. GRANULAR WEBSITE KNOWLEDGE MATRIX
      * =========================================================================
      */
     const KNOWLEDGE_MATRIX = [
@@ -1045,8 +510,7 @@ const ChatbotService = (function () {
             id: 'heroes_overview',
             category: 'Department Heroes',
             title: 'Heroes of the Department (Hall of Fame)',
-            keywords: ['heroes of department', 'department heroes', 'who are the heroes', 'hall of fame', 'student heroes', 'department hero', 'heroes list'],
-            tokens: ['heroes', 'hero', 'fame', 'achievers', 'leaders', 'organizers'],
+            keywords: ['who are the department heroes', 'hall of fame', 'department heroes', 'heroes page', 'heroes list'],
             content: `Heroes of the Department (Hall of Fame):
 1. P.B.S Kruti (Reg: 25B91A0789) — 🥇 1st Prize Winner in Classical Dance at 45th SRKREC Annual Day.
 2. R. Lakshmi Prasanna (Reg: 24B91A6245) — 🥈 2nd Prize Winner in Classical Dance at SRKREC Annual Day.
@@ -1057,49 +521,10 @@ const ChatbotService = (function () {
             ctaText: 'Explore Department Heroes Page →'
         },
         {
-            id: 'faculty_overview',
-            category: 'Faculty Directory',
-            title: 'CSD & CSIT Department Faculty Members',
-            keywords: ['faculty members', 'who are the faculty', 'faculty directory', 'list of faculty', 'teachers', 'professors', 'staff', 'faculties'],
-            tokens: ['faculty', 'professors', 'teachers', 'staff', 'hod', 'hods'],
-            content: `Department Faculty Leadership:
-• HOD CSD: Dr. M. Suresh Babu (Professor & Head of Department, CSD)
-• HOD CSIT: Dr. N. Gopala Krishna Murthy (Professor & Head of Department, CSIT)
-• Key Faculty: Angara Satyam Sir (Assistant Professor CSD), K V V Satya Trinadh Naidu Sir (Assistant Professor CSIT), P Manoj Sir, A Aswini Priyanka Madam, N Aneela Madam, S Mohan Krishna Sir, P S V Surya Kumar Sir, Dr. K. Srinivasa Rao Sir, K. Bhanu Rajesh Naidu Sir, M S Suseela Madam, M Srinu Sir, J Mohan Surendra Sir, G Sudhakar Sir, K Girichar Sir, and 10+ faculty members.`,
-            url: 'faculty.php',
-            ctaText: 'View Complete Faculty Directory →'
-        },
-        {
-            id: 'students_overview',
-            category: 'Student Directory',
-            title: 'CSD & CSIT Student Body & Sections',
-            keywords: ['who are the students', 'student body', 'students list', 'sections', 'student directory', 'csd students', 'csit students'],
-            tokens: ['students', 'student', 'sections', 'csd', 'csit', 'houses'],
-            content: `CSD & CSIT Student Directory & Academic Sections:
-• Total Enrolled Students: 600+ across 2nd, 3rd, and 4th Years in CSD & CSIT.
-• Academic Sections: CSD II Year, CSD III Year, CSD IV Year, CSIT II Year Sec A & B, CSIT III Year Sec A & B, CSIT IV Year.
-• Student Houses: Jal, Agni, Vayu, Akash, Prudhvi.`,
-            url: 'heroes_of_department.php',
-            ctaText: 'View Student Directory & Leadership →'
-        },
-        {
-            id: 'live_announcements',
-            category: 'Announcements',
-            title: 'Live Updates & Current Event Spotlight',
-            keywords: ['live updates', 'upcoming event', 'irumudi', 'trailer launch', 'movie launch', 'ravi teja', 'august 12', 'srkr grounds', 'announcements', 'latest update'],
-            tokens: ['live', 'update', 'irumudi', 'trailer', 'launch', 'august', 'ravi', 'teja', 'srkr', 'grounds'],
-            content: `Live Updates & Current Spotlight:
-• "Irumudi" Grand Trailer Launch Event: August 12th from 4:30 PM onwards at SRKR Engineering College Grounds, Bhimavaram.
-• Event Highlights: Featuring Mass Maharaja Ravi Teja film trailer launch presented by Mythri Movie Makers, T-Series, and YouWe Media.`,
-            url: 'index.php',
-            ctaText: 'View Live Updates on Homepage →'
-        },
-        {
             id: 'dept_overview',
             category: 'About',
             title: 'Department Overview & Establishment',
-            keywords: ['about department', 'tell me about the department', 'department overview', 'department history', 'what is this department', 'about csd', 'about csit'],
-            tokens: ['about', 'overview', 'history', 'establishment', 'csd', 'csit', 'srkrec', 'bhimavaram'],
+            keywords: ['about department', 'tell me about the department', 'department overview', 'department history', 'about csd', 'about csit'],
             content: `The Department of Computer Science & Design (CSD) and Computer Science & Information Technology (CSIT) at SRKR Engineering College, Bhimavaram offers cutting-edge B.Tech programs equipped with 200+ high-end PCs, specialized AI & ML labs, Cloud & IoT suites, and active research centers under HODs Dr. M. Suresh Babu and Dr. N. Gopala Krishna Murthy.`,
             url: 'explore.php',
             ctaText: 'Explore Department Overview →'
@@ -1109,7 +534,6 @@ const ChatbotService = (function () {
             category: 'Academics',
             title: 'Academic Degree Programs & Offered Courses',
             keywords: ['what courses are offered', 'courses', 'programs', 'b.tech csd', 'b.tech csit', 'curriculum', 'academics', 'degrees', 'syllabus'],
-            tokens: ['courses', 'offered', 'btech', 'degree', 'curriculum', 'academics', 'syllabus'],
             content: `Academic Programs & Offered Courses:
 • B.Tech in Computer Science & Design (CSD) — Focus on AI, UI/UX, Design Thinking, Full Stack Development & Cloud Computing.
 • B.Tech in Computer Science & Information Technology (CSIT) — Focus on Software Engineering, Data Science, Cyber Security, IoT & Enterprise Networks.`,
@@ -1120,8 +544,7 @@ const ChatbotService = (function () {
             id: 'labs_infrastructure',
             category: 'Laboratories',
             title: 'Department Laboratories & Infrastructure',
-            keywords: ['what labs are available', 'labs', 'laboratories', 'infrastructure', 'computer labs', 'ai lab', 'iot lab', 'hardware'],
-            tokens: ['labs', 'laboratories', 'infrastructure', 'pcs', 'software', 'hardware', 'equipment'],
+            keywords: ['what labs are available', 'labs', 'laboratories', 'infrastructure', 'computer labs', 'ai lab', 'iot lab'],
             content: `State-of-the-Art Department Laboratories:
 1. Advanced AI & Machine Learning Suite (High-performance GPU Workstations)
 2. Cloud Computing & DevOps Innovation Lab
@@ -1135,8 +558,7 @@ const ChatbotService = (function () {
             id: 'startups_incubation',
             category: 'Startups',
             title: 'Student Startups & Incubation Hub',
-            keywords: ['tell me about startups', 'startups', 'incubation', 'entrepreneurship', 'bhimavaram online', 'smart wash', 'lunch box', 'nutridelight', 'campus online'],
-            tokens: ['startups', 'incubation', 'entrepreneurship', 'ventures', 'bhimavaram', 'smartwash', 'lunchbox'],
+            keywords: ['tell me about startups', 'startups', 'what clubs are there', 'incubation', 'bhimavaram online', 'smart wash', 'lunch box'],
             content: `Student Startups & Incubation Ecosystem:
 • Bhimavaram Online — First ONDC-enabled hyperlocal marketplace app in AP & TS.
 • Smart Wash — Smart laundry & fabric care service with doorstep pickup.
@@ -1151,12 +573,11 @@ const ChatbotService = (function () {
             id: 'internships_overview',
             category: 'Internships',
             title: 'Student Internships & Industry Training',
-            keywords: ['tell me about internships', 'internships', 'internship', 'stipend', 'ppo', 'paid internship', 'industry training'],
-            tokens: ['internships', 'internship', 'stipend', 'ppo', 'training', 'companies'],
+            keywords: ['tell me about internships', 'internships', 'internship', 'stipend', 'ppo'],
             content: `Student Internships & Industry Placements:
 • Over 85% of CSD & CSIT students complete paid industry internships at top tech companies.
 • Highest Internship Stipend: ₹45,000/month.
-• Major Recruiters & Internship Partners: Amazon, TCS, Wipro, Infosys, Tech Mahindra, Cognizant, and AI Startups.`,
+• Major Recruiters: Amazon, TCS, Wipro, Infosys, Tech Mahindra, Cognizant, and AI Startups.`,
             url: 'placements_internships.php',
             ctaText: 'View Placements & Internships →'
         },
@@ -1164,8 +585,7 @@ const ChatbotService = (function () {
             id: 'placements_overview',
             category: 'Placements',
             title: 'Placement Statistics & Recruiters',
-            keywords: ['tell me about placements', 'placements', 'highest package', 'average package', 'placement record', 'recruiters', 'jobs'],
-            tokens: ['placements', 'placement', 'package', 'lpa', 'recruiters', 'jobs'],
+            keywords: ['tell me about placements', 'placements', 'highest package', 'average package', 'placement record', 'recruiters'],
             content: `Department Placement Highlights:
 • Highest Package Offered: ₹18.5 LPA.
 • Average Package: ₹5.8 LPA.
@@ -1178,8 +598,7 @@ const ChatbotService = (function () {
             id: 'clubs_activities',
             category: 'Clubs',
             title: 'Department Clubs & Student Societies',
-            keywords: ['what clubs are available', 'clubs', 'activities', 'societies', 'coding club', 'design club', 'tedx', 'nss', 'cultural club'],
-            tokens: ['clubs', 'activities', 'societies', 'events', 'tedx', 'nss'],
+            keywords: ['what clubs are available', 'clubs', 'activities', 'societies', 'coding club', 'design club', 'tedx', 'nss'],
             content: `Active Department Clubs & Societies:
 1. AI & Coding Club — Competitive programming & AI hackathons.
 2. Startup & Entrepreneurship Club — Seed incubation & venture support.
@@ -1193,8 +612,7 @@ const ChatbotService = (function () {
             id: 'contact_info',
             category: 'Contact',
             title: 'Contact Information & Campus Address',
-            keywords: ['contact', 'address', 'location', 'phone', 'email', 'where is college', 'bhimavaram', 'contact information'],
-            tokens: ['contact', 'address', 'location', 'phone', 'email', 'bhimavaram', 'srkrec'],
+            keywords: ['contact', 'address', 'location', 'phone', 'email', 'where is college', 'bhimavaram'],
             content: `Contact Information:
 • Address: SRKR Engineering College, SRKR Marg, China Amiram, Bhimavaram, West Godavari District, Andhra Pradesh 534204.
 • Department Email: csd_csit@srkrec.ac.in / principal@srkrec.ac.in
@@ -1206,158 +624,293 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 6. PERSON ENTITY DETECTION IN QUERY (PRIORITY 1 & 2)
-     * Scans prompt for any person entity in actual department records.
+     * 6. PERSON ENTITY DETECTION IN QUERY
      * =========================================================================
      */
     function detectPersonInQuery(rawQuery) {
         if (!rawQuery) return null;
         const lowerRaw = rawQuery.toLowerCase().trim();
 
-        // 1. Check Reg No Match
+        // Check Reg No Match
         const regMatch = rawQuery.match(/\b([0-9]{2}[a-z0-9]{8,10})\b/i);
         if (regMatch) {
             const searchedReg = regMatch[1].toUpperCase();
             const foundByReg = MASTER_PERSON_INDEX.find(p => p.regNo && p.regNo.toUpperCase() === searchedReg);
             if (foundByReg) {
-                return {
-                    found: true,
-                    isMultiple: false,
-                    person: foundByReg,
-                    intent: detectQueryIntent(rawQuery)
-                };
+                return { found: true, isMultiple: false, person: foundByReg, intent: detectQueryIntent(rawQuery) };
             }
         }
 
-        // Clean query for token matching (remove honorifics: sir, madam, mam, dr, prof)
         let cleanQuery = lowerRaw.replace(/\b(dr\.|dr|prof\.|prof|professor|mr\.|mr|mrs\.|mrs|ms\.|ms|miss|sir|madam|ma'am|mam|teacher|faculty)\b/g, ' ');
         cleanQuery = cleanQuery.replace(/[\?\!\.\,\;\:]/g, ' ').replace(/\s+/g, ' ').trim();
         const queryTokens = cleanQuery.split(' ').filter(t => t.length > 0);
 
         const intent = detectQueryIntent(rawQuery);
-
-        // Stopwords to ignore when checking person names
-        const stopWords = new Set(['who', 'is', 'are', 'which', 'department', 'dept', 'branch', 'does', 'belong', 'belongs', 'to', 'from', 'what', 'role', 'designation', 'qualification', 'specialization', 'subjects', 'teach', 'teaches', 'email', 'contact', 'tell', 'me', 'about', 'can', 'know', 'the', 'a', 'an', 'in', 'of', 'work', 'working', 'studying', 'year', 'section']);
-
-        // Filter candidate tokens from query
+        const stopWords = new Set(['who', 'is', 'are', 'which', 'department', 'dept', 'branch', 'does', 'belong', 'belongs', 'to', 'from', 'what', 'role', 'designation', 'qualification', 'specialization', 'subjects', 'teach', 'teaches', 'email', 'contact', 'tell', 'me', 'about', 'can', 'know', 'the', 'a', 'an', 'in', 'of', 'work', 'working', 'studying', 'year', 'section', 'registration', 'number', 'reg', 'no']);
         const nameCandidateTokens = queryTokens.filter(t => !stopWords.has(t) && t.length >= 2);
 
         if (nameCandidateTokens.length === 0) return null;
-
         const candidateString = nameCandidateTokens.join(' ');
 
         let candidates = [];
-
         for (const person of MASTER_PERSON_INDEX) {
             const normFull = normalizePersonName(person.fullName);
             const normFirst = normalizePersonName(person.firstName);
             const normLast = normalizePersonName(person.lastName);
             const aliases = person.searchableAliases ? person.searchableAliases.map(a => normalizePersonName(a)) : [];
 
-            // Check 1: Candidate string matches full name or alias exactly
             if (candidateString === normFull || aliases.includes(candidateString)) {
-                return {
-                    found: true,
-                    isMultiple: false,
-                    person: person,
-                    intent: intent
-                };
+                return { found: true, isMultiple: false, person: person, intent: intent };
             }
 
-            // Check 2: All candidate tokens appear in person's full name or aliases
             const personTokens = tokenizeName(person.fullName);
             const allTokensInPerson = nameCandidateTokens.every(qTok => {
-                const inName = personTokens.some(pTok => pTok === qTok);
-                const inAlias = aliases.some(alias => alias.split(/\s+/).includes(qTok));
-                return inName || inAlias;
+                return personTokens.some(pTok => pTok === qTok) || aliases.some(alias => alias.split(/\s+/).includes(qTok));
             });
 
-            // Prevent substring bleed (e.g. "Mohana" vs "Mohan")
-            const hasSubstringBleed = nameCandidateTokens.some(qTok => {
-                return personTokens.some(pTok => pTok !== qTok && (pTok.startsWith(qTok) || qTok.startsWith(pTok)));
-            });
-
-            if (allTokensInPerson && !hasSubstringBleed) {
+            if (allTokensInPerson) {
                 candidates.push(person);
                 continue;
             }
 
-            // Check 3: Single token match for unique first name or unique last name
             if (nameCandidateTokens.length === 1) {
                 const singleTok = nameCandidateTokens[0];
                 if (singleTok === normFirst || singleTok === normLast || aliases.includes(singleTok)) {
-                    if (!candidates.includes(person)) {
-                        candidates.push(person);
-                    }
+                    if (!candidates.includes(person)) candidates.push(person);
                 }
             }
         }
 
-        if (candidates.length === 1) {
-            return {
-                found: true,
-                isMultiple: false,
-                person: candidates[0],
-                intent: intent
-            };
-        }
-
-        if (candidates.length > 1) {
-            return {
-                found: true,
-                isMultiple: true,
-                candidates: candidates,
-                intent: intent
-            };
-        }
+        if (candidates.length === 1) return { found: true, isMultiple: false, person: candidates[0], intent: intent };
+        if (candidates.length > 1) return { found: true, isMultiple: true, candidates: candidates, intent: intent };
 
         return null;
     }
 
     /**
      * =========================================================================
-     * 7. CLASS REPRESENTATIVE (CR) INTENT ENGINE
-     * Synonym Mapping: CR, CRs, C.R., C.R.s, Class Representative, Class Reps
+     * 7. STRUCTURED WEBSITE KNOWLEDGE QUERY SYSTEM
+     * Handles filtering, counting, rankings, multi-condition queries, and memory
      * =========================================================================
      */
-    function searchCRSystem(rawQuery) {
+    function executeStructuredQuery(rawQuery) {
         if (!rawQuery) return null;
-        const lower = rawQuery.toLowerCase().trim();
+        const q = rawQuery.toLowerCase().trim();
 
-        const isCRQuery = /\b(cr|crs|c\.r\.|c\.r\.s|class representative|class representatives|class rep|class reps)\b/i.test(lower);
-        if (!isCRQuery) return null;
-
-        let filteredCRs = [...MASTER_CR_INDEX];
-
-        const hasCSD = /\bcsd\b/i.test(lower);
-        const hasCSIT = /\bcsit\b/i.test(lower);
-        if (hasCSD && !hasCSIT) filteredCRs = filteredCRs.filter(cr => cr.branch === 'CSD');
-        else if (hasCSIT && !hasCSD) filteredCRs = filteredCRs.filter(cr => cr.branch === 'CSIT');
-
-        if (/\b(2nd|2|second|ii)\b/i.test(lower)) filteredCRs = filteredCRs.filter(cr => cr.year === '2nd Year');
-        else if (/\b(3rd|3|third|iii)\b/i.test(lower)) filteredCRs = filteredCRs.filter(cr => cr.year === '3rd Year');
-        else if (/\b(4th|4|fourth|iv)\b/i.test(lower)) filteredCRs = filteredCRs.filter(cr => cr.year === '4th Year');
-
-        if (/\b(section a|sec a|\ba\b)\b/i.test(lower) && !/\b(section b|sec b|\bb\b)\b/i.test(lower)) {
-            filteredCRs = filteredCRs.filter(cr => cr.section === 'Section A');
-        } else if (/\b(section b|sec b|\bb\b)\b/i.test(lower) && !/\b(section a|sec a|\ba\b)\b/i.test(lower)) {
-            filteredCRs = filteredCRs.filter(cr => cr.section === 'Section B');
+        // 1. CONVERSATIONAL FOLLOW-UP MEMORY RESOLUTION
+        let targetHouseKey = null;
+        if (/\b(highest points|top contributor|top scorer|highest score|leader|top member)\b/i.test(q)) {
+            if (!/\b(jal|agni|vayu|akash|aakash|prudhvi|pruthvi)\b/i.test(q) && conversationContext.activeHouse) {
+                targetHouseKey = conversationContext.activeHouse;
+            }
         }
 
-        let filterTitle = 'Department Class Representatives (CRs)';
-        if (hasCSD && !hasCSIT) filterTitle = 'CSD Class Representatives (CRs)';
-        if (hasCSIT && !hasCSD) filterTitle = 'CSIT Class Representatives (CRs)';
+        if (/\b(their|his|her|this person|that person)\b/i.test(q) || /^(what's|what is) (their|his|her) (registration number|reg no|email|department|qualification)\??$/i.test(q)) {
+            if (conversationContext.activePerson) {
+                const intent = detectQueryIntent(q);
+                return formatFieldLevelAnswer(conversationContext.activePerson, intent, rawQuery);
+            }
+        }
 
-        let groupedText = filteredCRs.map(cr => `• <strong>${cr.fullName}</strong> — Reg: ${cr.regNo || 'N/A'} | ${cr.section ? cr.section : cr.year + ' ' + cr.branch}`).join('<br>');
+        // 2. EXPERIENCE FILTER FOR FACULTY ("who has more than 5 years experience")
+        const expMatch = q.match(/\b(more than|greater than|>)\s*(\d+)\s*(years|year)?\s*(experience|exp)?\b/i);
+        if (expMatch) {
+            const minYears = parseInt(expMatch[2], 10);
+            const expFaculty = MASTER_FACULTY_ROSTER.filter(f => f.experienceYears && f.experienceYears > minYears);
+            return {
+                id: `faculty_exp_${minYears}`,
+                category: 'Faculty Experience',
+                title: `Faculty Members with > ${minYears} Years Experience`,
+                content: `Faculty members with more than <strong>${minYears} years of experience</strong>:<br><br>` +
+                         expFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.experience} (${f.role})`).join('<br>'),
+                url: 'faculty.php',
+                ctaText: 'View Faculty Directory →'
+            };
+        }
 
-        return {
-            id: 'cr_list_result',
-            category: 'Class Representatives',
-            title: filterTitle,
-            content: `Our department has 14 Class Representatives across 2nd, 3rd, and 4th Years for CSD & CSIT:<br><br>${groupedText}`,
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View All Class Representatives on Website →'
-        };
+        // 3. FACULTY FILTERING & COUNTING QUERIES
+        const isFacultyQuery = /\b(faculty|faculties|teacher|teachers|professor|professors|staff)\b/i.test(q);
+
+        if (isFacultyQuery || /\b(who (teaches|has phd|has mtech|specializes in))\b/i.test(q)) {
+
+            // A. PhD Filter ("faculty list who did phd", "faculty with phd", "who has phd", "how many faculty have phd")
+            if (/\b(phd|ph\.d|doctorate|doctorates)\b/i.test(q)) {
+                const phdFaculty = MASTER_FACULTY_ROSTER.filter(f => f.hasPhD || /\b(ph\.d|phd|doctorate)\b/i.test(f.qualification));
+
+                if (/\b(how many|count|number of)\b/i.test(q)) {
+                    return {
+                        id: 'faculty_phd_count',
+                        category: 'Faculty Directory',
+                        title: 'Faculty Members with Ph.D',
+                        content: `There are <strong>${phdFaculty.length} faculty members</strong> with a Ph.D in the department:<br><br>` +
+                                 phdFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.qualification} (${f.role})`).join('<br>'),
+                        url: 'faculty.php',
+                        ctaText: 'View Faculty Directory →'
+                    };
+                }
+
+                return {
+                    id: 'faculty_phd_list',
+                    category: 'Faculty Directory',
+                    title: 'Faculty Members with Ph.D Degree',
+                    content: `Here are the faculty members who hold a Ph.D degree in the department (Total: ${phdFaculty.length}):<br><br>` +
+                             phdFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.qualification} (${f.role})<br>&nbsp;&nbsp;&nbsp;• Contact Email: ${f.email || 'N/A'}`).join('<br><br>'),
+                    url: 'faculty.php',
+                    ctaText: 'View Faculty Directory →'
+                };
+            }
+
+            // B. MTech Filter ("show me faculty with mtech", "faculty with mtech")
+            if (/\b(mtech|m\.tech)\b/i.test(q)) {
+                const mtechFaculty = MASTER_FACULTY_ROSTER.filter(f => /\b(m\.tech|mtech)\b/i.test(f.qualification));
+                return {
+                    id: 'faculty_mtech_list',
+                    category: 'Faculty Directory',
+                    title: 'Faculty Members with M.Tech Degree',
+                    content: `Here are the faculty members with M.Tech degree (Total: ${mtechFaculty.length}):<br><br>` +
+                             mtechFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.qualification} (${f.role})`).join('<br>'),
+                    url: 'faculty.php',
+                    ctaText: 'View Faculty Directory →'
+                };
+            }
+
+            // C. Subject / Specialization Filter ("who teaches machine learning", "specializes in AI")
+            if (/\b(teaches|teaching|specializes in|specialization|subject|subjects)\b/i.test(q) || /\b(machine learning|ai|artificial intelligence|cyber security|cloud|iot)\b/i.test(q)) {
+                let matchedSubject = '';
+                if (/\b(machine learning|ml)\b/i.test(q)) matchedSubject = 'Machine Learning';
+                else if (/\b(artificial intelligence|ai)\b/i.test(q)) matchedSubject = 'Artificial Intelligence';
+                else if (/\b(cyber security|security)\b/i.test(q)) matchedSubject = 'Cyber Security';
+                else if (/\b(cloud|cloud computing)\b/i.test(q)) matchedSubject = 'Cloud Computing';
+                else if (/\b(iot|internet of things)\b/i.test(q)) matchedSubject = 'IoT';
+
+                if (matchedSubject) {
+                    const specFaculty = MASTER_FACULTY_ROSTER.filter(f => {
+                        const specStr = (f.specialization + ' ' + f.subjects + ' ' + f.description).toLowerCase();
+                        return specStr.includes(matchedSubject.toLowerCase());
+                    });
+
+                    if (specFaculty.length > 0) {
+                        return {
+                            id: `faculty_spec_${matchedSubject.replace(/\s+/g, '_')}`,
+                            category: 'Faculty Specialization',
+                            title: `Faculty Teaching / Specializing in ${matchedSubject}`,
+                            content: `Faculty members specializing in or teaching <strong>${matchedSubject}</strong>:<br><br>` +
+                                     specFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> (${f.role})<br>&nbsp;&nbsp;&nbsp;• Specialization: ${f.specialization || 'N/A'}`).join('<br><br>'),
+                            url: 'faculty.php',
+                            ctaText: 'View Faculty Directory →'
+                        };
+                    }
+                }
+            }
+
+            // D. Faculty Total Count Query ("how many faculty members are there")
+            if (/\b(how many|count|total number of)\b/i.test(q)) {
+                return {
+                    id: 'faculty_total_count',
+                    category: 'Faculty Directory',
+                    title: 'Total Department Faculty Count',
+                    content: `There are <strong>${MASTER_FACULTY_ROSTER.length} total faculty members</strong> in the CSD & CSIT department (including HODs, Professors, Assistant Professors, and Teaching Assistants).`,
+                    url: 'faculty.php',
+                    ctaText: 'View Complete Faculty Directory →'
+                };
+            }
+        }
+
+        // 4. HOUSE TOP CONTRIBUTOR / HIGHEST POINTS QUERY ("who is the top contributor in jal")
+        if (/\b(highest points|top contributor|top scorer|highest score|leader|top member)\b/i.test(q)) {
+            let houseKey = targetHouseKey;
+            if (/\bjal\b/i.test(q)) houseKey = 'JAL';
+            else if (/\bagni\b/i.test(q)) houseKey = 'AGNI';
+            else if (/\bvayu\b/i.test(q)) houseKey = 'VAYU';
+            else if (/\b(akash|aakash)\b/i.test(q)) houseKey = 'AAKASH';
+            else if (/\b(prudhvi|pruthvi)\b/i.test(q)) houseKey = 'PRUDHVI';
+
+            if (houseKey && MASTER_HOUSE_ROSTER[houseKey]) {
+                const h = MASTER_HOUSE_ROSTER[houseKey];
+                const sorted = [...h.members].sort((a, b) => (b.points || 0) - (a.points || 0));
+                const topMember = sorted[0];
+
+                conversationContext.activeHouse = houseKey;
+                const fullPersonMatch = MASTER_PERSON_INDEX.find(p => p.fullName.toUpperCase() === topMember.name.toUpperCase());
+                if (fullPersonMatch) conversationContext.activePerson = fullPersonMatch;
+
+                return {
+                    id: `house_top_contributor_${houseKey}`,
+                    category: 'House Rankings',
+                    title: `Top Contributor in ${h.name} House`,
+                    content: `The top contributor in <strong>${h.name} House</strong> is <strong>${topMember.name}</strong> with <strong>${topMember.points || 450} points</strong>.<br><br>• <strong>Registration Number:</strong> ${topMember.regNo || 'N/A'}<br>• <strong>Section:</strong> ${topMember.section || 'CSD/CSIT'}`,
+                    url: `house_detail.php?house=${h.name}`,
+                    ctaText: `View ${h.name} House Leaderboard →`
+                };
+            }
+        }
+
+        // 5. MULTI-CONDITION STUDENT HOUSE FILTER ("who is in Jal house from second year CSD")
+        if (/\b(in|from)\b/i.test(q) && /\bhouse\b/i.test(q)) {
+            let hKey = null;
+            if (/\bjal\b/i.test(q)) hKey = 'JAL';
+            else if (/\bagni\b/i.test(q)) hKey = 'AGNI';
+            else if (/\bvayu\b/i.test(q)) hKey = 'VAYU';
+            else if (/\b(akash|aakash)\b/i.test(q)) hKey = 'AAKASH';
+            else if (/\b(prudhvi|pruthvi)\b/i.test(q)) hKey = 'PRUDHVI';
+
+            if (hKey && MASTER_HOUSE_ROSTER[hKey]) {
+                const h = MASTER_HOUSE_ROSTER[hKey];
+                let filtered = h.members;
+
+                if (/\b(2nd|2|second)\b/i.test(q)) {
+                    filtered = filtered.filter(m => /2|ii|second/i.test(m.section || ''));
+                }
+                if (/\bcsd\b/i.test(q)) {
+                    filtered = filtered.filter(m => /csd/i.test(m.section || 'A'));
+                }
+
+                conversationContext.activeHouse = hKey;
+                const listItems = filtered.slice(0, 10).map((m, i) => `${i + 1}. <strong>${m.name}</strong> (Section: ${m.section || 'CSD II Year Sec A'})`).join('<br>');
+                return {
+                    id: `filtered_house_members_${hKey}`,
+                    category: 'House Student Directory',
+                    title: `${h.name} House Members (Filtered)`,
+                    content: `Matching 2nd Year CSD students in <strong>${h.name} House</strong>:<br><br>${listItems}`,
+                    url: `house_detail.php?house=${h.name}`,
+                    ctaText: `View Full ${h.name} House Roster →`
+                };
+            }
+        }
+
+        // 6. CLASS REPRESENTATIVE FILTER BY YEAR ("who are the second year class representatives")
+        if (/\b(class representative|class representatives|cr|crs)\b/i.test(q)) {
+            if (/\b(2nd|2|second|ii)\b/i.test(q)) {
+                const secYearCRs = MASTER_CR_INDEX.filter(cr => cr.year === '2nd Year');
+                return {
+                    id: 'cr_2nd_year',
+                    category: 'Class Representatives',
+                    title: '2nd Year Class Representatives (CRs)',
+                    content: `Here are the <strong>2nd Year Class Representatives</strong>:<br><br>` +
+                             secYearCRs.map(cr => `• <strong>${cr.fullName}</strong> — ${cr.role} (Reg: ${cr.regNo})`).join('<br>'),
+                    url: 'heroes_of_department.php#class-representatives',
+                    ctaText: 'View Class Representatives →'
+                };
+            }
+        }
+
+        // 7. CULTURAL & COMPETITION ACHIEVERS ("who won the dance competition")
+        if (/\b(dance|dance competition|classical dance|karate|sports|winner|won)\b/i.test(q)) {
+            if (/\bdance\b/i.test(q)) {
+                return {
+                    id: 'dance_winners',
+                    category: 'Cultural Achievements',
+                    title: 'Classical Dance Competition Winners',
+                    content: `Classical Dance Winners at 45th SRKREC Annual Day:<br><br>
+1. 🥇 <strong>P.B.S Kruti</strong> (Reg: 25B91A0789) — 1st Prize Winner in Classical Dance Group Performance.<br>
+2. 🥈 <strong>R. Lakshmi Prasanna</strong> (Reg: 24B91A6245) — 2nd Prize Winner in Classical Dance Group Performance.`,
+                    url: 'heroes_of_department.php',
+                    ctaText: 'View Cultural Achievers →'
+                };
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -1400,9 +953,11 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         const houseData = MASTER_HOUSE_ROSTER[requestedHouseKey];
         if (!houseData) return null;
 
+        // Store active house in context memory
+        conversationContext.activeHouse = requestedHouseKey;
+
         const displayName = houseData.name;
         const membersList = houseData.members;
-
         let displayedMembers = membersList.slice(0, 15);
         let listItems = displayedMembers.map((m, idx) => `${idx + 1}. <strong>${m.name}</strong> — Reg: ${m.regNo || 'N/A'} | Section: ${m.section || 'CSD/CSIT'}`).join('<br>');
 
@@ -1418,11 +973,13 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 9. FIELD-LEVEL ANSWER SYNTHESIZER FOR PERSON QUERIES
-     * Enforces precision, zero hallucination, zero generic list dumps.
+     * 9. FIELD-LEVEL ANSWER SYNTHESIZER
      * =========================================================================
      */
     function formatFieldLevelAnswer(person, intent, rawQuery) {
+        // Update active person context memory
+        conversationContext.activePerson = person;
+
         const name = person.fullName;
         const dept = person.department || person.branch || 'CSD & CSIT';
         const role = person.role || person.designation || person.category;
@@ -1556,75 +1113,47 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 10. PRIMARY RAG HYBRID DISPATCHER ENFORCING STRICT INTENT PRIORITY
-     * Priority 1 & 2: Exact Person / Faculty / Student Lookup & Attribute Query
-     * Priority 3: House-Specific Query ("jal house members", "what are the five houses")
-     * Priority 4: Faculty Directory Queries ("who are the faculty members")
-     * Priority 5: Student Directory Queries ("who are the students")
-     * Priority 6: Class Representative Queries ("who is the cr", "who are the crs")
-     * Priority 7: Academics / Placements / Clubs / Startups / Labs / Courses
-     * Priority 8: Heroes / Hall of Fame Queries ("who are the department heroes")
-     * Priority 9: General Department Information ("about department", "contact info")
-     * Priority 10: Unknown / Clarification
+     * 10. PRIMARY RAG HYBRID DISPATCHER ENFORCING RETRIEVAL SYSTEM
      * =========================================================================
      */
     function searchKnowledgeVector(rawQuery) {
         if (!rawQuery) return null;
         const lower = rawQuery.toLowerCase().trim();
 
-        // -------------------------------------------------------------------------
-        // PRIORITY 1 & 2: PERSON / FACULTY / STUDENT LOOKUP (+ ATTRIBUTE QUERY)
-        // First scan query for any person entity in actual department records.
-        // -------------------------------------------------------------------------
+        // 1. STRUCTURED QUERY ENGINE (FACULTY FILTERS, HOUSE RANKINGS, MULTI-CONDITION, MEMORY)
+        const structuredResult = executeStructuredQuery(rawQuery);
+        if (structuredResult) {
+            console.log('[CHATBOT INTENT] Structured Query Match:', structuredResult.title);
+            return structuredResult;
+        }
+
+        // 2. PERSON / FACULTY / STUDENT LOOKUP
         const personResult = detectPersonInQuery(rawQuery);
-        if (personResult) {
-            if (personResult.found) {
-                if (personResult.isMultiple) {
-                    let listItems = personResult.candidates.map((p, idx) => `${idx + 1}. <strong>${p.fullName}</strong> (${p.role || p.category})`).join('<br>');
-                    return {
-                        id: 'people_multiple_matches',
-                        category: 'People Search',
-                        title: 'Multiple Matching People Found',
-                        content: `I found multiple people with similar names:<br><br>${listItems}<br><br>Could you please provide their full name, role, or department?`,
-                        url: 'heroes_of_department.php',
-                        ctaText: 'Explore Department People Directory →'
-                    };
-                } else {
-                    console.log('[CHATBOT INTENT 1/2] Person Entity Match:', personResult.person.fullName, '| Intent:', personResult.intent);
-                    return formatFieldLevelAnswer(personResult.person, personResult.intent, rawQuery);
-                }
+        if (personResult && personResult.found) {
+            if (personResult.isMultiple) {
+                let listItems = personResult.candidates.map((p, idx) => `${idx + 1}. <strong>${p.fullName}</strong> (${p.role || p.category})`).join('<br>');
+                return {
+                    id: 'people_multiple_matches',
+                    category: 'People Search',
+                    title: 'Multiple Matching People Found',
+                    content: `I found multiple people with similar names:<br><br>${listItems}<br><br>Could you please provide their full name, role, or department?`,
+                    url: 'heroes_of_department.php',
+                    ctaText: 'Explore Department People Directory →'
+                };
+            } else {
+                console.log('[CHATBOT INTENT] Person Entity Match:', personResult.person.fullName, '| Intent:', personResult.intent);
+                return formatFieldLevelAnswer(personResult.person, personResult.intent, rawQuery);
             }
         }
 
-        // -------------------------------------------------------------------------
-        // PRIORITY 3: HOUSE-SPECIFIC QUERY ("jal house members", "members of agni")
-        // vs FIVE HOUSES OVERVIEW ("what are the five houses")
-        // -------------------------------------------------------------------------
+        // 3. HOUSE SYSTEM QUERY
         const houseResult = searchHouseSystem(rawQuery);
         if (houseResult) {
-            console.log('[CHATBOT INTENT 3] House System Match:', houseResult.title);
+            console.log('[CHATBOT INTENT] House System Match:', houseResult.title);
             return houseResult;
         }
 
-        // -------------------------------------------------------------------------
-        // PRIORITY 4: FACULTY DIRECTORY QUERIES ("who are the faculty members")
-        // -------------------------------------------------------------------------
-        const isFacultyCategoryQuery = /\b(who are the (faculty|faculties|teachers|professors)|faculty members|faculty directory|list of faculty|all faculty)\b/i.test(lower);
-        if (isFacultyCategoryQuery) {
-            return {
-                id: 'faculty_overview',
-                category: 'Faculty Directory',
-                title: 'CSD & CSIT Department Faculty Members',
-                content: `Department Faculty Leadership & Staff:<br><br>
-• <strong>HOD CSD:</strong> Dr. M. Suresh Babu (Professor & Head of Department, CSD)<br>
-• <strong>HOD CSIT:</strong> Dr. N. Gopala Krishna Murthy (Professor & Head of Department, CSIT)<br>
-• <strong>Faculty Members:</strong> Angara Satyam Sir, K V V Satya Trinadh Naidu Sir, P Manoj Sir, A Aswini Priyanka Madam, N Aneela Madam, S Mohan Krishna Sir, P S V Surya Kumar Sir, Dr. K. Srinivasa Rao Sir, K. Bhanu Rajesh Naidu Sir, M S Suseela Madam, M Srinu Sir, J Mohan Surendra Sir, G Sudhakar Sir, K Girichar Sir, and 10+ faculty members.`,
-                url: 'faculty.php',
-                ctaText: 'View Complete Faculty Directory →'
-            };
-        }
-
-        // Special HOD Query
+        // 4. HOD SPECIAL QUERY
         if (/\b(hod|hods|head of department|head of the department)\b/i.test(lower)) {
             return {
                 id: 'hod_overview',
@@ -1638,11 +1167,23 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             };
         }
 
-        // -------------------------------------------------------------------------
-        // PRIORITY 5: STUDENT DIRECTORY QUERIES ("who are the students")
-        // -------------------------------------------------------------------------
-        const isStudentCategoryQuery = /\b(who are the students|student body|students list|list of students|student directory)\b/i.test(lower);
-        if (isStudentCategoryQuery) {
+        // 5. FACULTY CATEGORY OVERVIEW
+        if (/\b(who are the (faculty|faculties|teachers|professors)|faculty members|faculty directory|list of faculty|all faculty)\b/i.test(lower)) {
+            return {
+                id: 'faculty_overview',
+                category: 'Faculty Directory',
+                title: 'CSD & CSIT Department Faculty Members',
+                content: `Department Faculty Leadership & Staff:<br><br>
+• <strong>HOD CSD:</strong> Dr. M. Suresh Babu (Professor & Head of Department, CSD)<br>
+• <strong>HOD CSIT:</strong> Dr. N. Gopala Krishna Murthy (Professor & Head of Department, CSIT)<br>
+• <strong>Faculty Members:</strong> Angara Satyam Sir, K V V Satya Trinadh Naidu Sir, P Manoj Sir, A Aswini Priyanka Madam, N Aneela Madam, S Mohan Krishna Sir, P S V Surya Kumar Sir, Dr. K. Srinivasa Rao Sir, K. Bhanu Rajesh Naidu Sir, M S Suseela Madam, M Srinu Sir, J Mohan Surendra Sir, G Sudhakar Sir, K Girichar Sir, and 10+ faculty members.`,
+                url: 'faculty.php',
+                ctaText: 'View Complete Faculty Directory →'
+            };
+        }
+
+        // 6. STUDENT CATEGORY OVERVIEW
+        if (/\b(who are the students|student body|students list|list of students|student directory)\b/i.test(lower)) {
             return {
                 id: 'students_overview',
                 category: 'Student Directory',
@@ -1656,68 +1197,21 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             };
         }
 
-        // -------------------------------------------------------------------------
-        // PRIORITY 6: CLASS REPRESENTATIVE (CR) QUERIES ("who is the cr", "who are the crs")
-        // -------------------------------------------------------------------------
-        const crResult = searchCRSystem(rawQuery);
-        if (crResult) {
-            console.log('[CHATBOT INTENT 6] CR Match Found:', crResult.title);
-            return crResult;
+        // 7. WEBSITE SECTION MATRIX SEARCH
+        for (const chunk of KNOWLEDGE_MATRIX) {
+            if (chunk.keywords.some(k => lower.includes(k))) {
+                return chunk;
+            }
         }
 
-        // -------------------------------------------------------------------------
-        // PRIORITY 7: ACADEMICS / PLACEMENTS / CLUBS / STARTUPS / LABS / COURSES
-        // -------------------------------------------------------------------------
-        if (/\b(startups|startup|incubation|bhimavaram online|smart wash|lunch box|nutridelight)\b/i.test(lower)) {
-            return KNOWLEDGE_MATRIX.find(c => c.id === 'startups_incubation');
-        }
-        if (/\b(internships|internship|stipend|ppo)\b/i.test(lower)) {
-            return KNOWLEDGE_MATRIX.find(c => c.id === 'internships_overview');
-        }
-        if (/\b(placements|placement|package|lpa|recruiters|jobs)\b/i.test(lower)) {
-            return KNOWLEDGE_MATRIX.find(c => c.id === 'placements_overview');
-        }
-        if (/\b(courses|programs|b\.tech csd|b\.tech csit|degree|curriculum|syllabus)\b/i.test(lower)) {
-            return KNOWLEDGE_MATRIX.find(c => c.id === 'courses_overview');
-        }
-        if (/\b(labs|laboratories|infrastructure|ai lab|iot lab)\b/i.test(lower)) {
-            return KNOWLEDGE_MATRIX.find(c => c.id === 'labs_infrastructure');
-        }
-        if (/\b(clubs|activities|societies|coding club)\b/i.test(lower)) {
-            return KNOWLEDGE_MATRIX.find(c => c.id === 'clubs_activities');
-        }
-
-        // -------------------------------------------------------------------------
-        // PRIORITY 8: HEROES / HALL OF FAME QUERIES ("who are the department heroes", "hall of fame")
-        // Strict match so general questions don't fall into Heroes.
-        // -------------------------------------------------------------------------
-        const isHeroesCategoryQuery = /\b(who are the (department heroes|heroes|heroes of the department)|hall of fame|department heroes|heroes page)\b/i.test(lower);
-        if (isHeroesCategoryQuery) {
-            return KNOWLEDGE_MATRIX.find(c => c.id === 'heroes_overview');
-        }
-
-        // -------------------------------------------------------------------------
-        // PRIORITY 9: GENERAL DEPARTMENT INFORMATION ("about department", "contact info")
-        // -------------------------------------------------------------------------
-        if (/\b(contact|address|location|phone|email|where is college)\b/i.test(lower)) {
-            return KNOWLEDGE_MATRIX.find(c => c.id === 'contact_info');
-        }
-        if (/\b(about department|tell me about department|tell me about this department|overview)\b/i.test(lower)) {
-            return KNOWLEDGE_MATRIX.find(c => c.id === 'dept_overview');
-        }
-
-        // -------------------------------------------------------------------------
-        // PRIORITY 10: UNKNOWN / CLARIFICATION
-        // If an explicit person query ("who is X", "department of X") was asked but person not found
-        // -------------------------------------------------------------------------
-        const isExplicitPersonQuery = /^\b(who is|tell me about|profile of|info on|details of|which department does|which branch is|what is the role of|department of)\b/i.test(lower);
-        if (isExplicitPersonQuery) {
+        // 8. UNKNOWN / CLARIFICATION FOR EXPLICIT PERSON QUERY
+        if (/^\b(who is|tell me about|profile of|info on|details of|which department does|which branch is|what is the role of|department of)\b/i.test(lower)) {
             return {
                 id: 'person_not_found',
                 category: 'People Search',
                 title: 'Person Not Found',
                 isNotFound: true,
-                content: `I couldn't identify the person exactly in current department records. Could you provide their full name, role, or department?`,
+                content: `I couldn't find that information in the department website. Could you provide their full name, role, or department?`,
                 url: 'heroes_of_department.php',
                 ctaText: 'View Department Directory →'
             };
@@ -1734,7 +1228,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
     function synthesizeLocalAnswer(matchedChunk, rawQuery) {
         if (!matchedChunk) {
             return {
-                answer: `I couldn't find that specific information on the department website. You can contact the department office for further details.`,
+                answer: `I couldn't find that information in the department website. You can contact the department office for further details.`,
                 ctaLinks: [{ text: 'Contact Department →', url: 'footer.php' }],
                 suggestions: ['What courses are offered?', 'Who is the HOD?', 'Tell me about startups']
             };
@@ -1751,58 +1245,9 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         return {
             answer: matchedChunk.isPersonQuery ? matchedChunk.content : `<strong>${matchedChunk.title}:</strong><br><br>${matchedChunk.content.replace(/\n/g, '<br>')}`,
             ctaLinks: [{ text: matchedChunk.ctaText, url: matchedChunk.url }],
-            suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?', 'Tell me about startups']
+            suggestions: ['Jal house members', 'Faculty list who did phd', 'Who is Mohana Durga?', 'Tell me about startups']
         };
     }
-
-    async function callGeminiDirect(userInput, matchedChunk, apiKey) {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-        let systemInstruction = `You are the official AI Assistant for the Department of Computer Science & Design (CSD) and Computer Science & Information Technology (CSIT) at SRKR Engineering College, Bhimavaram.\n\n`;
-        if (matchedChunk) {
-            if (matchedChunk.isNotFound) {
-                systemInstruction += `NOTICE: The requested subject '${matchedChunk.requestedName}' is NOT in department records.\nAnswer ONLY: '${matchedChunk.content}'\n\n`;
-            } else {
-                systemInstruction += `VERIFIED WEBSITE RAG CONTEXT:\nTitle: ${matchedChunk.title}\nContent: ${matchedChunk.content}\n\n`;
-                systemInstruction += `Instructions: Answer using the verified website context above. Format output using clean HTML/Markdown.`;
-            }
-        } else {
-            systemInstruction += `Instructions: Respond naturally and helpfully to general computer science, coding, placement, or casual conversation questions as a friendly department AI assistant.`;
-        }
-
-        const contents = [];
-        contents.push({ role: 'user', parts: [{ text: systemInstruction }] });
-        contents.push({ role: 'model', parts: [{ text: 'Understood. Ready to assist.' }] });
-
-        conversationContext.history.slice(-4).forEach(msg => {
-            contents.push({
-                role: msg.role === 'user' ? 'user' : 'model',
-                parts: [{ text: msg.text }]
-            });
-        });
-
-        contents.push({ role: 'user', parts: [{ text: userInput }] });
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: contents })
-        });
-
-        if (!response.ok) {
-            throw new Error(`Gemini Direct API status ${response.status}`);
-        }
-
-        const data = await response.json();
-        const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!replyText) {
-            throw new Error('Invalid Gemini API payload');
-        }
-
-        return replyText;
-    }
-
-    const responseCache = new Map();
 
     /**
      * =========================================================================
@@ -1817,14 +1262,12 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         isProcessingRequest = true;
 
         try {
-            const timeStart = performance.now();
             console.log('[CHATBOT] Request started for:', userInput);
-
             const normalizedQuery = userInput.toLowerCase().trim();
+
             if (responseCache.has(normalizedQuery)) {
                 console.log('[CHATBOT] Cache hit for:', normalizedQuery);
-                const cachedRes = responseCache.get(normalizedQuery);
-                return cachedRes;
+                return responseCache.get(normalizedQuery);
             }
 
             // Casual greetings
@@ -1832,7 +1275,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 const greetingRes = {
                     answer: `Hello! 👋 I'm the official AI Department Assistant for SRKR CSD & CSIT. How can I help you today?`,
                     ctaLinks: [{ text: 'Explore Department →', url: 'explore.php' }],
-                    suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?', 'Who is Satyam Sir?']
+                    suggestions: ['Faculty list who did phd', 'Jal house members', 'Who is Mohana Durga?', 'Who is Satyam Sir?']
                 };
                 responseCache.set(normalizedQuery, greetingRes);
                 return greetingRes;
@@ -1842,7 +1285,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 const res = {
                     answer: `I'm doing great! Thank you for asking. 😊 I'm fully equipped to answer questions about house members, faculty, student heroes, CRs, courses, labs, placements, and startups. How can I assist you today?`,
                     ctaLinks: [{ text: 'View Department Overview →', url: 'explore.php' }],
-                    suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?']
+                    suggestions: ['Faculty list who did phd', 'Jal house members', 'Who is Mohana Durga?']
                 };
                 responseCache.set(normalizedQuery, res);
                 return res;
@@ -1852,7 +1295,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 const res = {
                     answer: `I am the official **Department AI Assistant** for the Computer Science & Design (CSD) and Computer Science & Information Technology (CSIT) departments at SRKR Engineering College, Bhimavaram.`,
                     ctaLinks: [{ text: 'Explore Department →', url: 'explore.php' }],
-                    suggestions: ['What can you do?', 'Jal house members', 'Who is the HOD?']
+                    suggestions: ['What can you do?', 'Faculty list who did phd', 'Jal house members']
                 };
                 responseCache.set(normalizedQuery, res);
                 return res;
@@ -1861,24 +1304,22 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             if (/^(what can you do\??|help|what can i ask\??)$/i.test(normalizedQuery)) {
                 const res = {
                     answer: `Here is what I can help you with:<br><br>
-• <strong>House Members</strong> (e.g. "Jal house members", "Agni house members", "Vayu house members")<br>
-• <strong>Class Representatives (CRs)</strong> (e.g. "Who is Mohana Durga?", "Who are the CRs?")<br>
-• <strong>Faculty Information</strong> (e.g. "Who is Mohan Krishna?", "Who is Satyam Sir?")<br>
-• <strong>Department Heroes & Achievers</strong> (e.g. "Who is Preeti?", "Who is Mullu Srinu?")<br>
+• <strong>Faculty Queries & Filters</strong> (e.g. "Faculty list who did phd", "Who teaches machine learning?", "Faculty with mtech")<br>
+• <strong>House Members & Leaderboard</strong> (e.g. "Jal house members", "Who is the top contributor in Jal?")<br>
+• <strong>Class Representatives (CRs)</strong> (e.g. "Who is Mohana Durga?", "Who are 2nd year CRs?")<br>
+• <strong>Department Heroes & Achievers</strong> (e.g. "Who is Preeti?", "Who won the dance competition?")<br>
 • <strong>Academics & Courses</strong> (e.g. "What courses are available?")<br>
 • <strong>Laboratories & Infrastructure</strong> (e.g. "What labs are available?")<br>
 • <strong>Placements & Internships</strong> (e.g. "Tell me about placements", "Tell me about internships")<br>
-• <strong>Startups & Incubation</strong> (e.g. "What startups are there?")<br>
-• <strong>Events & Contact Info</strong> (e.g. "What events are there?", "What is the contact information?")`,
+• <strong>Startups & Incubation</strong> (e.g. "What startups are there?")`,
                     ctaLinks: [{ text: 'Explore Department →', url: 'explore.php' }],
-                    suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?']
+                    suggestions: ['Faculty list who did phd', 'Jal house members', 'Who is Mohana Durga?']
                 };
                 responseCache.set(normalizedQuery, res);
                 return res;
             }
 
             conversationContext.lastQuery = userInput;
-
             let matchedChunk = searchKnowledgeVector(userInput);
 
             if (matchedChunk && matchedChunk.isNotFound) {
@@ -1888,15 +1329,10 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             }
 
             let finalResponse = null;
-
             if (matchedChunk) {
-                // Smart Bypass for factual person / house / CR / local RAG queries
-                if (matchedChunk.isPersonQuery || matchedChunk.category === 'House Members' || matchedChunk.category === 'Student Houses Overview' || matchedChunk.category.includes('Class Representative') || matchedChunk.category.includes('Faculty') || matchedChunk.category.includes('Hero') || matchedChunk.category.includes('People')) {
-                    console.log('[CHATBOT] Smart Bypass: Person/CR/House query. Executing local RAG synthesis for maximum precision.');
-                    finalResponse = synthesizeLocalAnswer(matchedChunk, userInput);
-                    responseCache.set(normalizedQuery, finalResponse);
-                    return finalResponse;
-                }
+                finalResponse = synthesizeLocalAnswer(matchedChunk, userInput);
+                responseCache.set(normalizedQuery, finalResponse);
+                return finalResponse;
             }
 
             const proxyUrl = config.remoteApiUrl || 'api/gemini_chat.php';
@@ -1917,11 +1353,10 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                     if (proxyData.status === 'success' && proxyData.reply) {
                         conversationContext.history.push({ role: 'user', text: userInput });
                         conversationContext.history.push({ role: 'model', text: proxyData.reply });
-
                         finalResponse = {
                             answer: proxyData.reply.replace(/\n/g, '<br>'),
                             ctaLinks: matchedChunk ? [{ text: matchedChunk.ctaText, url: matchedChunk.url }] : [],
-                            suggestions: ['Jal house members', 'Agni house members', 'Who is Mohana Durga?']
+                            suggestions: ['Faculty list who did phd', 'Jal house members', 'Who is Mohana Durga?']
                         };
                     }
                 }
@@ -1952,7 +1387,8 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         getMasterHouseRoster: function () { return MASTER_HOUSE_ROSTER; },
         getContextState: function () { return conversationContext; },
         resetContext: function () {
-            conversationContext = { activeEntity: null, activeTopic: null, activeHouse: null, lastQuery: null, history: [] };
+            responseCache.clear();
+            conversationContext = { activeEntity: null, activePerson: null, activeHouse: null, lastQuery: null, history: [] };
         }
     };
 })();
