@@ -4,8 +4,8 @@
  *
  * COMPLETE WEBSITE KNOWLEDGE SYSTEM ARCHITECTURE:
  * Centralized searchable representation of the complete department website and database.
- * Dynamic Data Sources: 25 Faculty Records, 612 Student Records, 5 Elemental Houses,
- * 14 Class Representatives, 6 Incubation Startups, Placement Records, Labs & Academics.
+ * Dynamic Data Sources: Live MySQL `faculties`, `students`, `houses`, `classes` tables
+ * 25 Faculty Records, 612 Student Records, 5 Elemental Houses, 14 Class Representatives.
  */
 
 const ChatbotService = (function () {
@@ -13,6 +13,7 @@ const ChatbotService = (function () {
 
     let userApiKey = null;
     let isProcessingRequest = false;
+    let isDbSynced = false;
     const responseCache = new Map();
 
     // Multi-turn Conversation Memory State
@@ -799,7 +800,7 @@ const ChatbotService = (function () {
         }
     ];
 
-    const MASTER_FACULTY_ROSTER = MASTER_PERSON_INDEX.filter(p => {
+    let MASTER_FACULTY_ROSTER = MASTER_PERSON_INDEX.filter(p => {
         if (!p.category) return false;
         const cat = p.category.toLowerCase();
         const role = (p.role || '').toLowerCase();
@@ -810,6 +811,69 @@ const ChatbotService = (function () {
     });
 
     const MASTER_CR_INDEX = MASTER_PERSON_INDEX.filter(p => p.isCR);
+
+    // Dynamic Live Database Synchronization
+    async function syncWebsiteKnowledge() {
+        if (isDbSynced) return;
+        try {
+            const res = await fetch('api/get_website_knowledge.php');
+            if (res.ok) {
+                const data = await res.json();
+                if (data.status === 'success' && Array.isArray(data.faculties)) {
+                    for (const f of data.faculties) {
+                        const normName = normalizePersonName(f.fullName);
+                        let existing = MASTER_PERSON_INDEX.find(p => normalizePersonName(p.fullName) === normName);
+                        if (existing) {
+                            existing.qualification = f.qualification || existing.qualification;
+                            existing.hasPhD = f.hasPhD !== undefined ? f.hasPhD : existing.hasPhD;
+                            existing.email = f.email || existing.email;
+                            existing.department = f.department || existing.department;
+                            existing.role = f.role || existing.role;
+                        } else {
+                            const tokens = tokenizeName(f.fullName);
+                            const newFac = {
+                                id: f.id || `faculty_${f.faculty_id}`,
+                                fullName: f.fullName,
+                                firstName: tokens[0] || normName,
+                                lastName: tokens[tokens.length - 1] || normName,
+                                category: f.category || 'Faculty Member',
+                                role: f.role || 'Assistant Professor',
+                                designation: f.role || 'Assistant Professor',
+                                department: f.department || 'CSD',
+                                branch: f.department || 'CSD',
+                                email: f.email || '',
+                                qualification: f.qualification || 'M.Tech in CSE',
+                                hasPhD: !!f.hasPhD,
+                                specialization: f.hasPhD ? 'Computer Science & Research' : 'Computer Science & Software Systems',
+                                searchableAliases: [f.fullName.toLowerCase(), tokens[0], tokens[tokens.length - 1]],
+                                url: 'faculty.php',
+                                ctaText: 'View Faculty Profile →'
+                            };
+                            MASTER_PERSON_INDEX.push(newFac);
+                        }
+                    }
+                    // Refresh Master Faculty Roster from updated MASTER_PERSON_INDEX
+                    MASTER_FACULTY_ROSTER = MASTER_PERSON_INDEX.filter(p => {
+                        if (!p.category) return false;
+                        const cat = p.category.toLowerCase();
+                        const role = (p.role || '').toLowerCase();
+                        const desig = (p.designation || '').toLowerCase();
+                        return cat.includes('faculty') || cat.includes('hod') || cat.includes('professor') || cat.includes('head of department') ||
+                               role.includes('faculty') || role.includes('hod') || role.includes('professor') || role.includes('head of department') ||
+                               desig.includes('faculty') || desig.includes('hod') || desig.includes('professor');
+                    });
+                    isDbSynced = true;
+                }
+            }
+        } catch (err) {
+            console.warn('Live MySQL knowledge sync skipped (offline mode):', err);
+        }
+    }
+
+    // Trigger sync on module load
+    if (typeof fetch === 'function') {
+        syncWebsiteKnowledge();
+    }
 
     // Dynamically Index All 612 Database House Students into MASTER_PERSON_INDEX
     (function indexHouseStudents() {
@@ -1314,8 +1378,8 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
         let requestedHouseKey = null;
         if (/\b(jal|water)\b/i.test(lower)) requestedHouseKey = 'JAL';
-        else if (/\b(agni|fire)\b/i.test(lower)) requestedHouseKey = 'AGNI';
-        else if (/\b(vayu|wind)\b/i.test(lower)) requestedHouseKey = 'VAYU';
+        else if (/\bagni|fire\b/i.test(lower)) requestedHouseKey = 'AGNI';
+        else if (/\bvayu|wind\b/i.test(lower)) requestedHouseKey = 'VAYU';
         else if (/\b(akash|aakash|sky)\b/i.test(lower)) requestedHouseKey = 'AAKASH';
         else if (/\b(prudhvi|pruthvi|earth)\b/i.test(lower)) requestedHouseKey = 'PRUDHVI';
 
@@ -1632,6 +1696,9 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         try {
             console.log('[CHATBOT] Request started for:', userInput);
             const normalizedQuery = userInput.toLowerCase().trim();
+
+            // Ensure live MySQL DB knowledge is synced if browser fetch is available
+            await syncWebsiteKnowledge();
 
             if (responseCache.has(normalizedQuery)) {
                 console.log('[CHATBOT] Cache hit for:', normalizedQuery);
