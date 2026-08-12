@@ -53,3 +53,4 @@ access_log
 .env.local
 .env.*
 assets/videos/
+scratch/
