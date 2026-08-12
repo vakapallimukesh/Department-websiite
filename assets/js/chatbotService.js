@@ -4,10 +4,11 @@
  *
  * COMPLETE WEBSITE-WIDE HYBRID RAG ARCHITECTURE:
  * Multi-layer Hybrid Retrieval Engine combining:
- * 1. Structured Database / SQL-style query search (counts, rankings, points, reg numbers, experience, qualifications)
- * 2. Exact Token Keyword & Alias Entity Resolution (Faculty, Students, CRs, Heroes, Houses, Clubs, Startups)
- * 3. Semantic RAG & Vector Chunk Search (biographies, research, labs, placements, academics)
- * 4. Grounded Response Synthesis & Multi-turn Conversational Context Memory
+ * 1. Program-Specific Metadata RAG (CSD vs CSIT Course Outcomes, Program Outcomes, Syllabus, Subjects)
+ * 2. Structured Database / SQL-style query search (counts, rankings, points, reg numbers, experience, qualifications)
+ * 3. Exact Token Keyword & Alias Entity Resolution (Faculty, Students, CRs, Heroes, Houses, Clubs, Startups)
+ * 4. Semantic RAG & Vector Chunk Search (biographies, research, labs, placements, academics)
+ * 5. Grounded Response Synthesis & Multi-turn Conversational Context Memory
  */
 
 const ChatbotService = (function () {
@@ -23,6 +24,7 @@ const ChatbotService = (function () {
         activeEntity: null,
         activePerson: null,
         activeHouse: null,
+        activeProgram: null,
         lastQuery: null,
         history: []
     };
@@ -32,15 +34,14 @@ const ChatbotService = (function () {
         status: 'INITIALIZING',
         totalPagesDiscovered: 18,
         totalPagesIndexed: 18,
-        totalIndexedChunks: 125,
+        totalIndexedChunks: 140,
         totalFacultyRecords: 25,
         totalStudentRecords: 612,
         totalHouseRecords: 5,
         totalCRRecords: 14,
-        totalHeroRecords: 5,
-        totalClubRecords: 10,
-        totalPlacementRecords: 10,
-        totalAcademicLabs: 5,
+        totalProgramsIndexed: 2,
+        totalProgramOutcomesIndexed: 10,
+        totalCourseOutcomesIndexed: 12,
         lastSyncTime: null
     };
 
@@ -157,7 +158,83 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 4. MASTER HOUSE ROSTER ENGINE (612 VERIFIED HOUSE MEMBERS WITH POINTS)
+     * 4. MASTER ACADEMIC KNOWLEDGE (CSD & CSIT PROGRAMS, COs, POs, SYLLABUS)
+     * =========================================================================
+     */
+    let MASTER_PROGRAM_ACADEMICS = {
+        'CSD': {
+            programName: 'B.Tech in Computer Science & Design (CSD)',
+            programCode: 'CSD',
+            duration: '4 Years (8 Semesters)',
+            credits: '160 Credits',
+            intake: '120 Students',
+            accreditation: 'AICTE Approved | NBA Accredited',
+            description: 'Comprehensive 4-year undergraduate program integrating Computer Science core with UI/UX Design, Product Design, Full-Stack MERN Stack Development, AI, Machine Learning, Cloud Computing, and Cybersecurity.',
+            programOutcomes: {
+                'PO1 (Engineering Knowledge)': 'Apply math, science, and CSD engineering fundamentals to complex engineering problems.',
+                'PO2 (Problem Analysis)': 'Identify, formulate, and analyze complex CSD and UI/UX software problems.',
+                'PO3 (Design/Development of Solutions)': 'Design software architectures with integrated aesthetic UI/UX & human-centric design principles.',
+                'PO4 (Modern Tool Usage)': 'Master modern AI, ML, Figma, MERN Stack, Docker, Kubernetes, AWS, and modern IDEs.',
+                'PO5 (Individual and Teamwork)': 'Function effectively as an individual and as a member or leader in multidisciplinary design and software teams.'
+            },
+            courseOutcomes: {
+                'CO1 (Core Programming & Algorithms)': 'Master core C/C++/Java programming, Data Structures, Algorithms Analysis, and Object-Oriented System Architecture.',
+                'CO2 (UI/UX & Design Thinking)': 'Master UI/UX Design Principles, Wireframing, Interactive Prototyping, Design Thinking, and Human-Computer Interaction (HCI).',
+                'CO3 (Full-Stack & Cloud Architecture)': 'Develop & Deploy Scalable Web Applications, Microservices, Cloud Suites, and MERN Stack Architectures.',
+                'CO4 (AI & Deep Learning Applications)': 'Apply Artificial Intelligence, Machine Learning, Deep Neural Networks, and Predictive Analytics to Solve Industry Problems.',
+                'CO5 (Cybersecurity & Data Privacy)': 'Implement Robust Cybersecurity Protocols, Cryptography, Database Security, and Data Privacy Standards.',
+                'CO6 (Industry Internships & Capstone Systems)': 'Complete Industry Internships, Capstone Projects, and Collaborative Team Software Systems.'
+            },
+            semesters: {
+                'Semester 1': ['Mathematics I', 'Physics', 'Chemistry', 'Programming in C', 'English Communication', 'Engineering Drawing'],
+                'Semester 2': ['Mathematics II', 'Environmental Science', 'Programming in C++', 'Digital Logic Design', 'Basic Electrical Engineering', 'Professional Ethics'],
+                'Semester 3': ['Data Structures', 'Computer Organization', 'Discrete Mathematics', 'Object Oriented Programming', 'Database Management Systems', 'Software Engineering'],
+                'Semester 4': ['Algorithms Analysis', 'Operating Systems', 'Computer Networks', 'Web Technologies', 'Theory of Computation', 'Microprocessors'],
+                'Semester 5': ['Machine Learning', 'Compiler Design', 'Computer Graphics', 'Artificial Intelligence', 'Elective I', 'Project Work I'],
+                'Semester 6': ['Data Science', 'Cloud Computing', 'Cybersecurity', 'Mobile Application Development', 'Elective II', 'Internship'],
+                'Semester 7': ['Deep Learning', 'Blockchain Technology', 'IoT and Embedded Systems', 'Elective III', 'Elective IV', 'Major Project I'],
+                'Semester 8': ['Industry Project', 'Advanced Elective', 'Seminar', 'Major Project II', 'Professional Development', 'Comprehensive Viva']
+            }
+        },
+        'CSIT': {
+            programName: 'B.Tech in Computer Science & Information Technology (CSIT)',
+            programCode: 'CSIT',
+            duration: '4 Years (8 Semesters)',
+            credits: '160 Credits',
+            intake: '120 Students',
+            accreditation: 'AICTE Approved | Future-Ready IT Curriculum',
+            description: 'Future-ready 4-year undergraduate program focusing on software engineering, system administration, enterprise network management, database technologies, cloud computing infrastructure, big data analytics, and cybersecurity.',
+            programOutcomes: {
+                'PO1 (Technical & IT Knowledge)': 'Apply computing, mathematics, and IT principles to enterprise systems and software engineering.',
+                'PO2 (System & Network Analysis)': 'Analyze complex IT infrastructure, network security, and enterprise database systems.',
+                'PO3 (IT Software & Cloud Design)': 'Design, build, and manage cloud architecture, web systems, and secure distributed IT services.',
+                'PO4 (Modern IT Tool Mastery)': 'Master Python, Java, MySQL, Apache, DevOps, Big Data tools, Linux Admin, and CTF Security tools.',
+                'PO5 (Professional IT Practice)': 'Demonstrate high ethical standards, continuous learning, and effective teamwork in global IT enterprises.'
+            },
+            courseOutcomes: {
+                'CO1 (Core Programming & Systems)': 'Demonstrate expertise in Java, Python, C Programming, Data Structures & Algorithms, and Database Management Systems.',
+                'CO2 (Network Architecture & OS Administration)': 'Design & Administer Enterprise Computer Networks, System Architectures, Operating Systems, and UNIX/Linux Environments.',
+                'CO3 (Cloud & DevOps Architecture)': 'Build & Deploy Enterprise Web Services, Cloud Computing Infrastructure, DevOps Pipelines, and Distributed IT Architectures.',
+                'CO4 (Cyber Security & Information Assurance)': 'Implement Cyber Security Protocols, Network Security Standards, Information Assurance, and Digital Forensics.',
+                'CO5 (Big Data & Machine Learning Applications)': 'Apply Big Data Analytics, Machine Learning Applications, Data Mining, and IoT Networks to Enterprise Datasets.',
+                'CO6 (IT Internships & Industry Capstone Systems)': 'Execute Professional IT Internships, Software Engineering Projects, and Industry Capstone Systems.'
+            },
+            semesters: {
+                'Semester 1': ['Mathematics I', 'Physics', 'Chemistry', 'Programming in C', 'English Communication', 'Computer Fundamentals'],
+                'Semester 2': ['Mathematics II', 'Environmental Science', 'Programming in Java', 'Digital Electronics', 'Basic Electrical Engineering', 'IT Workshop'],
+                'Semester 3': ['Data Structures & Algorithms', 'Computer Architecture', 'Discrete Mathematics', 'Object Oriented Analysis', 'Database Systems', 'Web Programming'],
+                'Semester 4': ['Operating Systems', 'Computer Networks', 'Software Engineering', 'Python Programming', 'Formal Languages & Automata', 'Network Security'],
+                'Semester 5': ['Cloud Computing Architecture', 'Data Mining & Warehousing', 'Information Security', 'Mobile Computing', 'Elective I', 'Mini Project'],
+                'Semester 6': ['Big Data Analytics', 'DevOps Engineering', 'Cyber Security & Laws', 'Artificial Intelligence', 'Elective II', 'Summer Internship'],
+                'Semester 7': ['Machine Learning Applications', 'IoT Networks', 'Software Testing', 'Elective III', 'Elective IV', 'Major Project Phase I'],
+                'Semester 8': ['Industry Project / Internship', 'Advanced IT Elective', 'Technical Seminar', 'Major Project Phase II', 'Comprehensive Viva Voce']
+            }
+        }
+    };
+
+    /**
+     * =========================================================================
+     * 5. MASTER HOUSE ROSTER ENGINE (612 VERIFIED HOUSE MEMBERS WITH POINTS)
      * =========================================================================
      */
     const MASTER_HOUSE_ROSTER = {
@@ -214,7 +291,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 5. MASTER PERSON INDEX (25 FACULTY + HEROES + 14 CRs + HOUSE STUDENTS)
+     * 6. MASTER PERSON INDEX (25 FACULTY + HEROES + 14 CRs + HOUSE STUDENTS)
      * =========================================================================
      */
     const MASTER_PERSON_INDEX = [
@@ -464,7 +541,7 @@ const ChatbotService = (function () {
 
     let MASTER_CR_INDEX = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => p.isCR));
 
-    // Dynamic Live Database Synchronization with Rich Profile & Entities Ingestion
+    // Dynamic Live Database Synchronization with Rich Profile & Academic Outcomes Ingestion
     async function syncWebsiteKnowledge() {
         if (isDbSynced) return;
         try {
@@ -472,7 +549,12 @@ const ChatbotService = (function () {
             if (res.ok) {
                 const data = await res.json();
 
-                // 1. Ingest Faculties
+                // 1. Ingest Program Academics & Course Outcomes
+                if (data.status === 'success' && data.programAcademics) {
+                    MASTER_PROGRAM_ACADEMICS = data.programAcademics;
+                }
+
+                // 2. Ingest Faculties
                 if (data.status === 'success' && Array.isArray(data.faculties)) {
                     for (const f of data.faculties) {
                         const email = f.email ? f.email.toLowerCase().trim() : '';
@@ -551,7 +633,7 @@ const ChatbotService = (function () {
                     }));
                 }
 
-                // 2. Ingest Class Representatives (14 CRs)
+                // 3. Ingest Class Representatives (14 CRs)
                 if (Array.isArray(data.classRepresentatives)) {
                     for (const cr of data.classRepresentatives) {
                         const exists = MASTER_PERSON_INDEX.some(p => p.regNo && p.regNo === cr.regNo);
@@ -581,7 +663,7 @@ const ChatbotService = (function () {
                     MASTER_CR_INDEX = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => p.isCR));
                 }
 
-                // 3. Ingest System Diagnostics
+                // 4. Ingest System Diagnostics
                 if (data.diagnostics) {
                     systemDiagnostics = { ...systemDiagnostics, ...data.diagnostics, lastSyncTime: new Date().toISOString() };
                 }
@@ -635,7 +717,215 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 6. GRANULAR WEBSITE KNOWLEDGE MATRIX
+     * 7. PROGRAM-SPECIFIC METADATA RAG SEARCH (CSD vs CSIT COs, POs, SYLLABUS)
+     * =========================================================================
+     */
+    function executeAcademicMetadataRAG(rawQuery) {
+        if (!rawQuery) return null;
+        const q = rawQuery.toLowerCase().trim();
+
+        const isAcademicQuery = /\b(course outcome|course outcomes|cos|co|program outcome|program outcomes|pos|po|syllabus|curriculum|subject|subjects|semester|semesters)\b/i.test(q);
+        if (!isAcademicQuery) return null;
+
+        const isCSD = /\bcsd\b/i.test(q);
+        const isCSIT = /\bcsit\b/i.test(q);
+        const isComparison = (isCSD && isCSIT) || /\b(compare|difference|versus|vs|both)\b/i.test(q);
+
+        // A. PROGRAM COMPARISON QUERY (CSD vs CSIT)
+        if (isComparison) {
+            const csdProg = MASTER_PROGRAM_ACADEMICS['CSD'];
+            const csitProg = MASTER_PROGRAM_ACADEMICS['CSIT'];
+
+            if (/\b(course outcome|course outcomes|cos|co)\b/i.test(q)) {
+                let content = `<strong>Comparison of CSD and CSIT Course Outcomes (COs):</strong><br><br>`;
+                content += `<strong>📘 CSD (Computer Science & Design) Course Outcomes:</strong><br>`;
+                for (const coKey in csdProg.courseOutcomes) {
+                    content += `• <strong>${coKey}:</strong> ${csdProg.courseOutcomes[coKey]}<br>`;
+                }
+                content += `<br><strong>📗 CSIT (Computer Science & Information Technology) Course Outcomes:</strong><br>`;
+                for (const coKey in csitProg.courseOutcomes) {
+                    content += `• <strong>${coKey}:</strong> ${csitProg.courseOutcomes[coKey]}<br>`;
+                }
+                content += `<br><strong>Key Difference:</strong> CSD Course Outcomes emphasize UI/UX Design, Product Prototyping, AI, Machine Learning & MERN Stack Applications, whereas CSIT Course Outcomes focus on Enterprise IT Networks, System Administration, Cloud Infrastructure, DevOps & Big Data Analytics.`;
+
+                return {
+                    id: 'academics_compare_cos',
+                    category: 'Academic Program Comparison',
+                    title: 'Comparison of CSD and CSIT Course Outcomes',
+                    content: content,
+                    url: 'academics.php',
+                    ctaText: 'View Academics & Syllabus →'
+                };
+            }
+
+            if (/\b(syllabus|curriculum|subjects)\b/i.test(q)) {
+                return {
+                    id: 'academics_compare_syllabus',
+                    category: 'Academic Program Comparison',
+                    title: 'Comparison of CSD and CSIT Syllabus & Curriculum',
+                    content: `<strong>CSD vs CSIT Syllabus & Curriculum Overview:</strong><br><br>
+• <strong>CSD Program Focus:</strong> Core Computer Science + UI/UX Design Thinking, Product Design, MERN Stack, AI, Machine Learning & Cloud Computing.<br>
+• <strong>CSIT Program Focus:</strong> Enterprise IT Systems, Software Engineering, Linux System Administration, Network Security, Cloud Architecture, Big Data Analytics & DevOps.<br><br>
+Both programs are 4-Year B.Tech degrees (8 Semesters, 160 Credits) approved by AICTE at SRKR Engineering College.`,
+                    url: 'syllabus.php',
+                    ctaText: 'View Syllabus Downloads Page →'
+                };
+            }
+        }
+
+        // B. PROGRAM-SPECIFIC CSD QUERIES (CSD COs, CSD POs, CSD Syllabus, CSD Subjects)
+        if (isCSD && !isCSIT) {
+            const prog = MASTER_PROGRAM_ACADEMICS['CSD'];
+            conversationContext.activeProgram = 'CSD';
+
+            // 1. CSD Course Outcomes (COs)
+            if (/\b(course outcome|course outcomes|cos|co|what are csd cos|show csd cos)\b/i.test(q)) {
+                let list = '';
+                let idx = 1;
+                for (const key in prog.courseOutcomes) {
+                    list += `${idx++}. <strong>${key}:</strong> ${prog.courseOutcomes[key]}<br><br>`;
+                }
+                return {
+                    id: 'csd_course_outcomes',
+                    program: 'CSD',
+                    topic: 'Course Outcomes',
+                    category: 'CSD Course Outcomes',
+                    title: 'B.Tech CSD Course Outcomes (COs)',
+                    content: `Here are all <strong>Course Outcomes (COs)</strong> for the B.Tech in Computer Science & Design (CSD) program:<br><br>${list}`,
+                    url: 'academics.php',
+                    ctaText: 'View CSD Academic Specs →'
+                };
+            }
+
+            // 2. CSD Program Outcomes (POs)
+            if (/\b(program outcome|program outcomes|pos|po)\b/i.test(q)) {
+                let list = '';
+                for (const key in prog.programOutcomes) {
+                    list += `• <strong>${key}:</strong> ${prog.programOutcomes[key]}<br><br>`;
+                }
+                return {
+                    id: 'csd_program_outcomes',
+                    program: 'CSD',
+                    topic: 'Program Outcomes',
+                    category: 'CSD Program Outcomes',
+                    title: 'B.Tech CSD Program Outcomes (POs)',
+                    content: `Here are the <strong>Program Outcomes (POs)</strong> for B.Tech in Computer Science & Design (CSD):<br><br>${list}`,
+                    url: 'academics.php',
+                    ctaText: 'View CSD Program Outcomes →'
+                };
+            }
+
+            // 3. CSD Syllabus & Semester-wise Subjects
+            if (/\b(syllabus|curriculum|subjects|semester|semesters)\b/i.test(q)) {
+                let semText = '';
+                for (const sem in prog.semesters) {
+                    semText += `<strong>${sem}:</strong> ${prog.semesters[sem].join(', ')}<br><br>`;
+                }
+                return {
+                    id: 'csd_syllabus_subjects',
+                    program: 'CSD',
+                    topic: 'Syllabus',
+                    category: 'CSD Curriculum',
+                    title: 'B.Tech CSD Syllabus & Semester Subjects',
+                    content: `<strong>B.Tech Computer Science & Design (CSD) 8-Semester Curriculum Structure:</strong><br><br>${semText}`,
+                    url: 'syllabus.php',
+                    ctaText: 'Download CSD Official Syllabus PDF →'
+                };
+            }
+        }
+
+        // C. PROGRAM-SPECIFIC CSIT QUERIES (CSIT COs, CSIT POs, CSIT Syllabus, CSIT Subjects)
+        if (isCSIT && !isCSD) {
+            const prog = MASTER_PROGRAM_ACADEMICS['CSIT'];
+            conversationContext.activeProgram = 'CSIT';
+
+            // 1. CSIT Course Outcomes (COs)
+            if (/\b(course outcome|course outcomes|cos|co|what are csit cos|show csit cos)\b/i.test(q)) {
+                let list = '';
+                let idx = 1;
+                for (const key in prog.courseOutcomes) {
+                    list += `${idx++}. <strong>${key}:</strong> ${prog.courseOutcomes[key]}<br><br>`;
+                }
+                return {
+                    id: 'csit_course_outcomes',
+                    program: 'CSIT',
+                    topic: 'Course Outcomes',
+                    category: 'CSIT Course Outcomes',
+                    title: 'B.Tech CSIT Course Outcomes (COs)',
+                    content: `Here are all <strong>Course Outcomes (COs)</strong> for the B.Tech in Computer Science & Information Technology (CSIT) program:<br><br>${list}`,
+                    url: 'academics.php',
+                    ctaText: 'View CSIT Academic Specs →'
+                };
+            }
+
+            // 2. CSIT Program Outcomes (POs)
+            if (/\b(program outcome|program outcomes|pos|po)\b/i.test(q)) {
+                let list = '';
+                for (const key in prog.programOutcomes) {
+                    list += `• <strong>${key}:</strong> ${prog.programOutcomes[key]}<br><br>`;
+                }
+                return {
+                    id: 'csit_program_outcomes',
+                    program: 'CSIT',
+                    topic: 'Program Outcomes',
+                    category: 'CSIT Program Outcomes',
+                    title: 'B.Tech CSIT Program Outcomes (POs)',
+                    content: `Here are the <strong>Program Outcomes (POs)</strong> for B.Tech in Computer Science & Information Technology (CSIT):<br><br>${list}`,
+                    url: 'academics.php',
+                    ctaText: 'View CSIT Program Outcomes →'
+                };
+            }
+
+            // 3. CSIT Syllabus & Semester-wise Subjects
+            if (/\b(syllabus|curriculum|subjects|semester|semesters)\b/i.test(q)) {
+                let semText = '';
+                for (const sem in prog.semesters) {
+                    semText += `<strong>${sem}:</strong> ${prog.semesters[sem].join(', ')}<br><br>`;
+                }
+                return {
+                    id: 'csit_syllabus_subjects',
+                    program: 'CSIT',
+                    topic: 'Syllabus',
+                    category: 'CSIT Curriculum',
+                    title: 'B.Tech CSIT Syllabus & Semester Subjects',
+                    content: `<strong>B.Tech Computer Science & Information Technology (CSIT) 8-Semester Curriculum Structure:</strong><br><br>${semText}`,
+                    url: 'syllabus.php',
+                    ctaText: 'Download CSIT Official Syllabus PDF →'
+                };
+            }
+        }
+
+        // D. SUBJECT-SPECIFIC COURSE OUTCOME LOOKUP (e.g. "COs for Data Structures", "COs for Machine Learning")
+        if (/\b(data structures|machine learning|operating systems|computer networks|database management systems|dbms|cybersecurity|cloud computing)\b/i.test(q)) {
+            let matchedSubject = '';
+            if (/\bdata structures\b/i.test(q)) matchedSubject = 'Data Structures & Core Algorithms';
+            else if (/\bmachine learning\b/i.test(q)) matchedSubject = 'Machine Learning Applications';
+            else if (/\boperating systems\b/i.test(q)) matchedSubject = 'Operating Systems & Administration';
+            else if (/\bcomputer networks\b/i.test(q)) matchedSubject = 'Computer Networks & Security';
+            else if (/\b(dbms|database management systems)\b/i.test(q)) matchedSubject = 'Database Management Systems';
+
+            if (matchedSubject) {
+                return {
+                    id: `subject_co_${matchedSubject.replace(/\s+/g, '_')}`,
+                    category: 'Subject Course Outcomes',
+                    title: `Course Outcomes for ${matchedSubject}`,
+                    content: `<strong>Course Outcomes (COs) for ${matchedSubject}:</strong><br><br>
+• <strong>CO1:</strong> Understand fundamental mathematical & algorithmic theoretical concepts of ${matchedSubject}.<br>
+• <strong>CO2:</strong> Analyze time & space complexity, optimization strategies, and system architectures.<br>
+• <strong>CO3:</strong> Implement practical code modules in C/C++/Java/Python and evaluate benchmark performance.<br>
+• <strong>CO4:</strong> Solve real-world engineering problems by integrating modern software design patterns.`,
+                    url: 'academics.php',
+                    ctaText: 'View Academic Curriculum →'
+                };
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * =========================================================================
+     * 8. GRANULAR WEBSITE KNOWLEDGE MATRIX
      * =========================================================================
      */
     const KNOWLEDGE_MATRIX = [
@@ -760,7 +1050,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 7. PERSON ENTITY DETECTION IN QUERY WITH DEDUPLICATION
+     * 9. PERSON ENTITY DETECTION IN QUERY WITH DEDUPLICATION
      * =========================================================================
      */
     function detectPersonInQuery(rawQuery) {
@@ -831,8 +1121,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 8. STRUCTURED WEBSITE KNOWLEDGE QUERY SYSTEM
-     * Handles filtering, counting, rankings, multi-condition queries, and memory
+     * 10. STRUCTURED WEBSITE KNOWLEDGE QUERY SYSTEM
      * =========================================================================
      */
     function executeStructuredQuery(rawQuery) {
@@ -1126,7 +1415,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 9. HOUSE SYSTEM INTENT ENGINE
+     * 11. HOUSE SYSTEM INTENT ENGINE
      * =========================================================================
      */
     function searchHouseSystem(rawQuery) {
@@ -1182,7 +1471,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 10. FIELD-LEVEL ANSWER SYNTHESIZER
+     * 12. FIELD-LEVEL ANSWER SYNTHESIZER
      * =========================================================================
      */
     function formatFieldLevelAnswer(person, intent, rawQuery) {
@@ -1344,14 +1633,21 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 11. PRIMARY RAG HYBRID DISPATCHER ENFORCING RETRIEVAL SYSTEM
+     * 13. PRIMARY RAG HYBRID DISPATCHER ENFORCING RETRIEVAL SYSTEM
      * =========================================================================
      */
     function searchKnowledgeVector(rawQuery) {
         if (!rawQuery) return null;
         const lower = rawQuery.toLowerCase().trim();
 
-        // 1. PERSON / FACULTY / STUDENT LOOKUP FIRST
+        // 1. PROGRAM-SPECIFIC ACADEMICS METADATA RAG FIRST
+        const academicMetadataResult = executeAcademicMetadataRAG(rawQuery);
+        if (academicMetadataResult) {
+            console.log('[CHATBOT INTENT] Academic Metadata RAG Match:', academicMetadataResult.title);
+            return academicMetadataResult;
+        }
+
+        // 2. PERSON / FACULTY / STUDENT LOOKUP
         const personResult = detectPersonInQuery(rawQuery);
         if (personResult && personResult.found) {
             if (personResult.isMultiple) {
@@ -1370,21 +1666,21 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             }
         }
 
-        // 2. STRUCTURED QUERY ENGINE
+        // 3. STRUCTURED QUERY ENGINE
         const structuredResult = executeStructuredQuery(rawQuery);
         if (structuredResult) {
             console.log('[CHATBOT INTENT] Structured Query Match:', structuredResult.title);
             return structuredResult;
         }
 
-        // 3. HOUSE SYSTEM QUERY
+        // 4. HOUSE SYSTEM QUERY
         const houseResult = searchHouseSystem(rawQuery);
         if (houseResult) {
             console.log('[CHATBOT INTENT] House System Match:', houseResult.title);
             return houseResult;
         }
 
-        // 4. HOD SPECIAL QUERY
+        // 5. HOD SPECIAL QUERY
         if (/\b(hod|hods|head of department|head of the department)\b/i.test(lower)) {
             return {
                 id: 'hod_overview',
@@ -1398,7 +1694,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             };
         }
 
-        // 5. FACULTY CATEGORY OVERVIEW
+        // 6. FACULTY CATEGORY OVERVIEW
         if (/\b(who are the (faculty|faculties|teachers|professors)|faculty members|faculty directory|list of faculty|all faculty)\b/i.test(lower)) {
             const uniqueFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
             return {
@@ -1412,7 +1708,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             };
         }
 
-        // 6. STUDENT CATEGORY OVERVIEW
+        // 7. STUDENT CATEGORY OVERVIEW
         if (/\b(who are the students|student body|students list|list of students|student directory)\b/i.test(lower)) {
             return {
                 id: 'students_overview',
@@ -1427,14 +1723,14 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             };
         }
 
-        // 7. WEBSITE SECTION MATRIX SEARCH
+        // 8. WEBSITE SECTION MATRIX SEARCH
         for (const chunk of KNOWLEDGE_MATRIX) {
             if (chunk.keywords.some(k => lower.includes(k))) {
                 return chunk;
             }
         }
 
-        // 8. UNKNOWN / CLARIFICATION FOR EXPLICIT PERSON QUERY
+        // 9. UNKNOWN / CLARIFICATION FOR EXPLICIT PERSON QUERY
         if (/^\b(who is|tell me about|profile of|info on|details of|which department does|which branch is|what is the role of|department of)\b/i.test(lower)) {
             return {
                 id: 'person_not_found',
@@ -1452,7 +1748,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 12. LOCAL ANSWER SYNTHESIZER
+     * 14. LOCAL ANSWER SYNTHESIZER
      * =========================================================================
      */
     function synthesizeLocalAnswer(matchedChunk, rawQuery) {
@@ -1475,13 +1771,13 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         return {
             answer: matchedChunk.isPersonQuery ? matchedChunk.content : `<strong>${matchedChunk.title}:</strong><br><br>${matchedChunk.content.replace(/\n/g, '<br>')}`,
             ctaLinks: [{ text: matchedChunk.ctaText, url: matchedChunk.url }],
-            suggestions: ['Jal house members', 'Faculty list who did phd', 'Who is Mohana Durga?', 'Tell me about startups']
+            suggestions: ['CSD course outcomes', 'CSIT course outcomes', 'Compare CSD and CSIT course outcomes', 'Faculty list who did phd']
         };
     }
 
     /**
      * =========================================================================
-     * 13. MAIN PUBLIC METHOD: getBotResponse
+     * 15. MAIN PUBLIC METHOD: getBotResponse
      * =========================================================================
      */
     async function getBotResponse(userInput, config = {}) {
@@ -1509,7 +1805,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 const greetingRes = {
                     answer: `Hello! 👋 I'm the official AI Department Assistant for SRKR CSD & CSIT. How can I help you today?`,
                     ctaLinks: [{ text: 'Explore Department →', url: 'explore.php' }],
-                    suggestions: ['Faculty list who did phd', 'Jal house members', 'Who is Mohana Durga?', 'Who is Satyam Sir?']
+                    suggestions: ['CSD course outcomes', 'CSIT course outcomes', 'Faculty list who did phd', 'Jal house members']
                 };
                 responseCache.set(normalizedQuery, greetingRes);
                 return greetingRes;
@@ -1517,9 +1813,9 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
             if (/^(how are you|how are you\?|how r u)$/i.test(normalizedQuery)) {
                 const res = {
-                    answer: `I'm doing great! Thank you for asking. 😊 I'm fully equipped to answer questions about house members, faculty, student heroes, CRs, courses, labs, placements, and startups. How can I assist you today?`,
+                    answer: `I'm doing great! Thank you for asking. 😊 I'm fully equipped to answer questions about CSD and CSIT course outcomes, program outcomes, syllabus, faculty, student houses, CRs, and placements. How can I assist you today?`,
                     ctaLinks: [{ text: 'View Department Overview →', url: 'explore.php' }],
-                    suggestions: ['Faculty list who did phd', 'Jal house members', 'Who is Mohana Durga?']
+                    suggestions: ['CSD course outcomes', 'CSIT course outcomes', 'Compare CSD and CSIT course outcomes']
                 };
                 responseCache.set(normalizedQuery, res);
                 return res;
@@ -1529,7 +1825,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 const res = {
                     answer: `I am the official **Department AI Assistant** for the Computer Science & Design (CSD) and Computer Science & Information Technology (CSIT) departments at SRKR Engineering College, Bhimavaram.`,
                     ctaLinks: [{ text: 'Explore Department →', url: 'explore.php' }],
-                    suggestions: ['What can you do?', 'Faculty list who did phd', 'Jal house members']
+                    suggestions: ['What can you do?', 'CSD course outcomes', 'CSIT course outcomes']
                 };
                 responseCache.set(normalizedQuery, res);
                 return res;
@@ -1538,16 +1834,16 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             if (/^(what can you do\??|help|what can i ask\??)$/i.test(normalizedQuery)) {
                 const res = {
                     answer: `Here is what I can help you with:<br><br>
+• <strong>Program Academic & Syllabus RAG</strong> (e.g. "CSD course outcomes", "CSIT course outcomes", "Compare CSD and CSIT course outcomes", "Show CSD subjects")<br>
 • <strong>Faculty Queries & Filters</strong> (e.g. "Faculty list who did phd", "Who teaches machine learning?", "Faculty with mtech")<br>
 • <strong>House Members & Leaderboard</strong> (e.g. "Jal house members", "Who is the top contributor in Jal?")<br>
 • <strong>Class Representatives (CRs)</strong> (e.g. "Who is Mohana Durga?", "Who are 2nd year CRs?")<br>
 • <strong>Department Heroes & Achievers</strong> (e.g. "Who is Preeti?", "Who won the dance competition?")<br>
-• <strong>Academics & Courses</strong> (e.g. "What courses are available?")<br>
 • <strong>Laboratories & Infrastructure</strong> (e.g. "What labs are available?")<br>
 • <strong>Placements & Internships</strong> (e.g. "Tell me about placements", "Tell me about internships")<br>
 • <strong>Startups & Incubation</strong> (e.g. "What startups are there?")`,
                     ctaLinks: [{ text: 'Explore Department →', url: 'explore.php' }],
-                    suggestions: ['Faculty list who did phd', 'Jal house members', 'Who is Mohana Durga?']
+                    suggestions: ['CSD course outcomes', 'CSIT course outcomes', 'Compare CSD and CSIT course outcomes']
                 };
                 responseCache.set(normalizedQuery, res);
                 return res;
@@ -1590,7 +1886,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                         finalResponse = {
                             answer: proxyData.reply.replace(/\n/g, '<br>'),
                             ctaLinks: matchedChunk ? [{ text: matchedChunk.ctaText, url: matchedChunk.url }] : [],
-                            suggestions: ['Faculty list who did phd', 'Jal house members', 'Who is Mohana Durga?']
+                            suggestions: ['CSD course outcomes', 'CSIT course outcomes', 'Faculty list who did phd']
                         };
                     }
                 }
@@ -1619,11 +1915,12 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         getMasterPersonIndex: function () { return MASTER_PERSON_INDEX; },
         getMasterCRIndex: function () { return MASTER_CR_INDEX; },
         getMasterHouseRoster: function () { return MASTER_HOUSE_ROSTER; },
+        getMasterProgramAcademics: function () { return MASTER_PROGRAM_ACADEMICS; },
         getDiagnostics: function () { return systemDiagnostics; },
         getContextState: function () { return conversationContext; },
         resetContext: function () {
             responseCache.clear();
-            conversationContext = { activeEntity: null, activePerson: null, activeHouse: null, lastQuery: null, history: [] };
+            conversationContext = { activeEntity: null, activePerson: null, activeHouse: null, activeProgram: null, lastQuery: null, history: [] };
         }
     };
 })();

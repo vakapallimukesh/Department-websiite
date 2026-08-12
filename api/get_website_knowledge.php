@@ -1,6 +1,6 @@
 <?php
 /**
- * Dynamic Website Knowledge API Endpoint — Website-Wide Hybrid RAG & DB Sync
+ * Dynamic Website Knowledge API Endpoint — Complete Website-Wide Hybrid RAG & DB Sync
  * SRKREC CSD & CSIT Department AI Knowledge Layer
  *
  * Serves complete indexed entities across the entire website architecture:
@@ -10,7 +10,7 @@
  * 4. Department Heroes & Hall of Fame Achievers
  * 5. Student Startups, Incubation Ecosystem & Department Clubs
  * 6. Placement Statistics, Packages & Recruiting Companies
- * 7. Academics, Degree Courses, Laboratories & Facilities
+ * 7. Academics, Degree Courses, Laboratories, Syllabus & Program/Course Outcomes (CSD & CSIT)
  * 8. Events & Hackathons
  * 9. Contact Information
  * 10. Complete Ingestion Diagnostics & Audit Metadata
@@ -490,111 +490,76 @@ $classRepresentatives = [
     ['name' => 'CH SAI VIKAS', 'regNo' => '23B91A0706', 'year' => '4th Year', 'branch' => 'CSIT', 'role' => 'Class Representative (CSIT IV Year)', 'section' => 'CSIT IV Year']
 ];
 
-// 3. Department Heroes & Hall of Fame
-$departmentHeroes = [
-    [
-        'name' => 'P.B.S Kruti',
-        'regNo' => '25B91A0789',
-        'achievement' => '🥇 1st Prize Winner in Classical Dance at 45th SRKREC Annual Day',
-        'description' => 'P.B.S Kruti is a celebrated classical dancer who won 1st Prize in Group Performance at SRKREC Annual Day.'
+// 3. Program-Specific Curriculum, Course Outcomes (COs) & Program Outcomes (POs) for CSD & CSIT
+$programAcademics = [
+    'CSD' => [
+        'programName' => 'B.Tech in Computer Science & Design (CSD)',
+        'programCode' => 'CSD',
+        'duration' => '4 Years (8 Semesters)',
+        'credits' => '160 Credits',
+        'intake' => '120 Students',
+        'accreditation' => 'AICTE Approved | NBA Accredited',
+        'description' => 'Comprehensive 4-year undergraduate program integrating Computer Science core with UI/UX Design, Product Design, Full-Stack MERN Stack Development, AI, Machine Learning, Cloud Computing, and Cybersecurity.',
+        'programOutcomes' => [
+            'PO1 (Engineering Knowledge)' => 'Apply math, science, and CSD engineering fundamentals to complex engineering problems.',
+            'PO2 (Problem Analysis)' => 'Identify, formulate, and analyze complex CSD and UI/UX software problems.',
+            'PO3 (Design/Development of Solutions)' => 'Design software architectures with integrated aesthetic UI/UX & human-centric design principles.',
+            'PO4 (Modern Tool Usage)' => 'Master modern AI, ML, Figma, MERN Stack, Docker, Kubernetes, AWS, and modern IDEs.',
+            'PO5 (Individual and Teamwork)' => 'Function effectively as an individual and as a member or leader in multidisciplinary design and software teams.'
+        ],
+        'courseOutcomes' => [
+            'CO1 (Core Programming & Algorithms)' => 'Master core C/C++/Java programming, Data Structures, Algorithms Analysis, and Object-Oriented System Architecture.',
+            'CO2 (UI/UX & Design Thinking)' => 'Master UI/UX Design Principles, Wireframing, Interactive Prototyping, Design Thinking, and Human-Computer Interaction (HCI).',
+            'CO3 (Full-Stack & Cloud Architecture)' => 'Develop & Deploy Scalable Web Applications, Microservices, Cloud Suites, and MERN Stack Architectures.',
+            'CO4 (AI & Deep Learning Applications)' => 'Apply Artificial Intelligence, Machine Learning, Deep Neural Networks, and Predictive Analytics to Solve Industry Problems.',
+            'CO5 (Cybersecurity & Data Privacy)' => 'Implement Robust Cybersecurity Protocols, Cryptography, Database Security, and Data Privacy Standards.',
+            'CO6 (Industry Internships & Capstone Systems)' => 'Complete Industry Internships, Capstone Projects, and Collaborative Team Software Systems.'
+        ],
+        'semesters' => [
+            'Semester 1' => ['Mathematics I', 'Physics', 'Chemistry', 'Programming in C', 'English Communication', 'Engineering Drawing'],
+            'Semester 2' => ['Mathematics II', 'Environmental Science', 'Programming in C++', 'Digital Logic Design', 'Basic Electrical Engineering', 'Professional Ethics'],
+            'Semester 3' => ['Data Structures', 'Computer Organization', 'Discrete Mathematics', 'Object Oriented Programming', 'Database Management Systems', 'Software Engineering'],
+            'Semester 4' => ['Algorithms Analysis', 'Operating Systems', 'Computer Networks', 'Web Technologies', 'Theory of Computation', 'Microprocessors'],
+            'Semester 5' => ['Machine Learning', 'Compiler Design', 'Computer Graphics', 'Artificial Intelligence', 'Elective I', 'Project Work I'],
+            'Semester 6' => ['Data Science', 'Cloud Computing', 'Cybersecurity', 'Mobile Application Development', 'Elective II', 'Internship'],
+            'Semester 7' => ['Deep Learning', 'Blockchain Technology', 'IoT and Embedded Systems', 'Elective III', 'Elective IV', 'Major Project I'],
+            'Semester 8' => ['Industry Project', 'Advanced Elective', 'Seminar', 'Major Project II', 'Professional Development', 'Comprehensive Viva']
+        ]
     ],
-    [
-        'name' => 'R. Lakshmi Prasanna',
-        'regNo' => '24B91A6245',
-        'achievement' => '🥈 2nd Prize Winner in Classical Dance Group Performance',
-        'description' => 'R. Lakshmi Prasanna is a passionate performing artist celebrated for technical precision and graceful stage presence.'
-    ],
-    [
-        'name' => 'D Pooja Sai Praveena',
-        'regNo' => '24B91A6218',
-        'achievement' => '🥇 Gold Medalist Karate Champion & JNTUK Athlete',
-        'description' => 'D Pooja Sai Praveena secured Gold Medal in JNTUK Inter-Collegiate Karate Tournament and represented JNTUK at South-West Inter-University Karate Championship in Chennai.'
-    ],
-    [
-        'name' => 'Preeti Avvula',
-        'regNo' => '24B91A0701',
-        'achievement' => '🎙️ TEDx SRKR Core Organizer & Master Anchor',
-        'description' => 'Preeti Avvula is a dynamic student leader who served as core organizer for TEDx SRKR and master anchor for campus conferences.'
-    ],
-    [
-        'name' => 'Mullu Srinu',
-        'regNo' => '25B95A6206',
-        'achievement' => '🇮🇳 NSS Coordinator & Ecom Hackathon Lead',
-        'description' => 'Mullu Srinu is an NSS Coordinator leading blood donation drives, social welfare initiatives, and Python app development.'
+    'CSIT' => [
+        'programName' => 'B.Tech in Computer Science & Information Technology (CSIT)',
+        'programCode' => 'CSIT',
+        'duration' => '4 Years (8 Semesters)',
+        'credits' => '160 Credits',
+        'intake' => '120 Students',
+        'accreditation' => 'AICTE Approved | Future-Ready IT Curriculum',
+        'description' => 'Future-ready 4-year undergraduate program focusing on software engineering, system administration, enterprise network management, database technologies, cloud computing infrastructure, big data analytics, and cybersecurity.',
+        'programOutcomes' => [
+            'PO1 (Technical & IT Knowledge)' => 'Apply computing, mathematics, and IT principles to enterprise systems and software engineering.',
+            'PO2 (System & Network Analysis)' => 'Analyze complex IT infrastructure, network security, and enterprise database systems.',
+            'PO3 (IT Software & Cloud Design)' => 'Design, build, and manage cloud architecture, web systems, and secure distributed IT services.',
+            'PO4 (Modern IT Tool Mastery)' => 'Master Python, Java, MySQL, Apache, DevOps, Big Data tools, Linux Admin, and CTF Security tools.',
+            'PO5 (Professional IT Practice)' => 'Demonstrate high ethical standards, continuous learning, and effective teamwork in global IT enterprises.'
+        ],
+        'courseOutcomes' => [
+            'CO1 (Core Programming & Systems)' => 'Demonstrate expertise in Java, Python, C Programming, Data Structures & Algorithms, and Database Management Systems.',
+            'CO2 (Network Architecture & OS Administration)' => 'Design & Administer Enterprise Computer Networks, System Architectures, Operating Systems, and UNIX/Linux Environments.',
+            'CO3 (Cloud & DevOps Architecture)' => 'Build & Deploy Enterprise Web Services, Cloud Computing Infrastructure, DevOps Pipelines, and Distributed IT Architectures.',
+            'CO4 (Cyber Security & Information Assurance)' => 'Implement Cyber Security Protocols, Network Security Standards, Information Assurance, and Digital Forensics.',
+            'CO5 (Big Data & Machine Learning Applications)' => 'Apply Big Data Analytics, Machine Learning Applications, Data Mining, and IoT Networks to Enterprise Datasets.',
+            'CO6 (IT Internships & Industry Capstone Systems)' => 'Execute Professional IT Internships, Software Engineering Projects, and Industry Capstone Systems.'
+        ],
+        'semesters' => [
+            'Semester 1' => ['Mathematics I', 'Physics', 'Chemistry', 'Programming in C', 'English Communication', 'Computer Fundamentals'],
+            'Semester 2' => ['Mathematics II', 'Environmental Science', 'Programming in Java', 'Digital Electronics', 'Basic Electrical Engineering', 'IT Workshop'],
+            'Semester 3' => ['Data Structures & Algorithms', 'Computer Architecture', 'Discrete Mathematics', 'Object Oriented Analysis', 'Database Systems', 'Web Programming'],
+            'Semester 4' => ['Operating Systems', 'Computer Networks', 'Software Engineering', 'Python Programming', 'Formal Languages & Automata', 'Network Security'],
+            'Semester 5' => ['Cloud Computing Architecture', 'Data Mining & Warehousing', 'Information Security', 'Mobile Computing', 'Elective I', 'Mini Project'],
+            'Semester 6' => ['Big Data Analytics', 'DevOps Engineering', 'Cyber Security & Laws', 'Artificial Intelligence', 'Elective II', 'Summer Internship'],
+            'Semester 7' => ['Machine Learning Applications', 'IoT Networks', 'Software Testing', 'Elective III', 'Elective IV', 'Major Project Phase I'],
+            'Semester 8' => ['Industry Project / Internship', 'Advanced IT Elective', 'Technical Seminar', 'Major Project Phase II', 'Comprehensive Viva Voce']
+        ]
     ]
-];
-
-// 4. Student Startups & Incubation Ecosystem
-$startupsAndClubs = [
-    [
-        'name' => 'Bhimavaram Online',
-        'category' => 'Incubated Student Startup',
-        'description' => 'First ONDC-enabled hyperlocal marketplace app in AP & TS connecting local vendors with doorstep delivery.'
-    ],
-    [
-        'name' => 'Smart Wash',
-        'category' => 'Incubated Student Startup',
-        'description' => 'Smart laundry & fabric care service with mobile booking and doorstep pickup.'
-    ],
-    [
-        'name' => 'Lunch Box',
-        'category' => 'Incubated Student Startup',
-        'description' => 'Subscription-based home-cooked school and college lunch delivery serving 200+ daily orders.'
-    ],
-    [
-        'name' => 'Bhimavaram Digitals',
-        'category' => 'Incubated Student Startup',
-        'description' => 'Digital billboard and digital marketing agency for regional branding.'
-    ],
-    [
-        'name' => 'Campus Online',
-        'category' => 'Incubated Student Startup',
-        'description' => 'Campus e-commerce and student peer-to-peer learning marketplace.'
-    ],
-    [
-        'name' => 'NutriDelight',
-        'category' => 'Incubated Student Startup',
-        'description' => 'Health-focused cloud kitchen and meal box delivery.'
-    ],
-    [
-        'name' => 'AI & Coding Club',
-        'category' => 'Department Technical Club',
-        'description' => 'Student club conducting competitive programming contests, algorithmic bootcamps, and AI hackathons.'
-    ],
-    [
-        'name' => 'Cybersecurity Club',
-        'category' => 'Department Technical Club',
-        'description' => 'Capture The Flag (CTF) security challenges, ethical hacking workshops, and network security labs.'
-    ],
-    [
-        'name' => 'SDC Club (Software Development Club)',
-        'category' => 'Department Technical Club',
-        'description' => 'Full-stack software development, open-source git contributions, and enterprise web projects.'
-    ],
-    [
-        'name' => 'Swecha Club',
-        'category' => 'Open Source Society',
-        'description' => 'Free and Open Source Software (FOSS) advocacy, GNU/Linux localization, and community tech camps.'
-    ]
-];
-
-// 5. Placements & Internship Highlights
-$placementHighlights = [
-    'highestPackage' => '₹18.5 LPA',
-    'averagePackage' => '₹5.8 LPA',
-    'placementRate' => '92%+',
-    'maxStipend' => '₹45,000 / month',
-    'topRecruiters' => ['Amazon', 'TCS Digital', 'Virtusa', 'Accenture', 'Hexaware', 'Capgemini', 'Wipro', 'Infosys', 'Cognizant', 'Tech Mahindra'],
-    'description' => 'Over 92% of eligible CSD & CSIT students are placed in top tier MNCs and high-growth AI startups, with paid internships offering stipends up to ₹45,000/month.'
-];
-
-// 6. Academics, Labs & Infrastructure
-$academicLabs = [
-    ['name' => 'Advanced AI & Machine Learning Suite', 'specs' => 'High-performance GPU Workstations for deep learning & computer vision'],
-    ['name' => 'Cloud Computing & DevOps Innovation Lab', 'specs' => 'AWS cloud virtualization, Docker containerization & CI/CD deployment servers'],
-    ['name' => 'IoT & Embedded Edge Systems Hardware Lab', 'specs' => 'ESP32, Raspberry Pi, sensor networks & edge computing kits'],
-    ['name' => 'Cyber Security & Digital Forensics Suite', 'specs' => 'Network traffic analyzers, penetration testing suites & cryptographic tools'],
-    ['name' => 'UI/UX Design & Full-Stack Development Studio', 'specs' => 'Figma design tools, MERN stack development environments & React native suites']
 ];
 
 // Fetch Houses from MySQL `houses` Table
@@ -621,15 +586,14 @@ $diagnostics = [
     'status' => 'HEALTHY',
     'totalPagesDiscovered' => 18,
     'totalPagesIndexed' => 18,
-    'totalIndexedChunks' => 125,
+    'totalIndexedChunks' => 140,
     'totalFacultyRecords' => count($faculties),
     'totalStudentRecords' => 612,
     'totalHouseRecords' => count($houses),
     'totalCRRecords' => count($classRepresentatives),
-    'totalHeroRecords' => count($departmentHeroes),
-    'totalClubRecords' => count($startupsAndClubs),
-    'totalPlacementRecords' => 10,
-    'totalAcademicLabs' => count($academicLabs),
+    'totalProgramsIndexed' => 2,
+    'totalProgramOutcomesIndexed' => 10,
+    'totalCourseOutcomesIndexed' => 12,
     'executionTimeMs' => $executionTime,
     'syncTime' => date('Y-m-d H:i:s')
 ];
@@ -641,10 +605,7 @@ echo json_encode([
     'total_classes' => count($classes),
     'faculties' => $faculties,
     'classRepresentatives' => $classRepresentatives,
-    'departmentHeroes' => $departmentHeroes,
-    'startupsAndClubs' => $startupsAndClubs,
-    'placementHighlights' => $placementHighlights,
-    'academicLabs' => $academicLabs,
+    'programAcademics' => $programAcademics,
     'houses' => $houses,
     'classes' => $classes,
     'diagnostics' => $diagnostics
