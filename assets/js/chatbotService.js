@@ -2,11 +2,12 @@
  * AI Department Assistant — Google Gemini API & Scalable Hybrid RAG Engine
  * SRKREC CSD & CSIT Departments
  *
- * DEDUPLICATED COMPLETE WEBSITE KNOWLEDGE ARCHITECTURE:
- * Centralized searchable representation of the complete department website and database.
- * Dynamic Data Sources: Live MySQL `faculties`, `students`, `houses`, `classes` tables
- * 25 Unique Faculty Records, 612 Student Records, 5 Elemental Houses, 14 Class Representatives.
- * Enforces Institutional Identity Deduplication (Email, Faculty ID, Reg No, Normalized Aliases).
+ * COMPLETE PROFILE KNOWLEDGE & DEDUPLICATED RETRIEVAL ARCHITECTURE:
+ * Centralized searchable representation of the complete department website, database,
+ * and ALL rich information behind every "More Details" / faculty profile page.
+ * Indexed Fields: Full Name, Faculty ID, Designation, Department, Qualification, Ph.D,
+ * University, Specialization, Grants, Funded Projects, Awards, SCI Publications, Experience,
+ * Subjects Taught, Email, Phone, LinkedIn, Profile Overview text.
  */
 
 const ChatbotService = (function () {
@@ -82,7 +83,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 3. INTENT CLASSIFICATION ENGINE
+     * 3. INTENT CLASSIFICATION ENGINE (EXPANDED FOR RICH PROFILE FIELDS)
      * =========================================================================
      */
     function detectQueryIntent(rawQuery) {
@@ -107,10 +108,10 @@ const ChatbotService = (function () {
         if (/\b(registration number|reg no|registration no|reg number|hallticket|pin number)\b/i.test(q)) {
             return 'REGISTRATION_NUMBER';
         }
-        if (/\b(qualification|educational qualification|degree|highest degree)\b/i.test(q)) {
+        if (/\b(qualification|educational qualification|degree|highest degree|university|where did|vidwan)\b/i.test(q)) {
             return 'QUALIFICATION';
         }
-        if (/\b(specialization|area of interest|research area|expertise)\b/i.test(q)) {
+        if (/\b(specialization|area of interest|research area|expertise|research interests)\b/i.test(q)) {
             return 'SPECIALIZATION';
         }
         if (/\b(subjects|subjects taught|courses taught|teaches|teaching)\b/i.test(q)) {
@@ -119,8 +120,14 @@ const ChatbotService = (function () {
         if (/\b(experience|how many years|years of experience)\b/i.test(q)) {
             return 'EXPERIENCE';
         }
-        if (/\b(achievements|awards|prizes|honors|won|secured)\b/i.test(q)) {
-            return 'ACHIEVEMENTS';
+        if (/\b(grants|funded projects|research projects|project funding|dbt|dst|aictes|idealab)\b/i.test(q)) {
+            return 'GRANTS';
+        }
+        if (/\b(awards|recognition|honors|stanford|best faculty|best teacher|hackathon winner)\b/i.test(q)) {
+            return 'AWARDS';
+        }
+        if (/\b(publications|papers|journal|sci|scopus|nature|oxford|ieee|research papers)\b/i.test(q)) {
+            return 'PUBLICATIONS';
         }
         if (/\b(email|email id|mail|mail id|contact email)\b/i.test(q)) {
             return 'EMAIL';
@@ -190,11 +197,10 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 5. MASTER PERSON INDEX (COMPLETE 25 FACULTY + HEROES + CRs + STUDENTS)
+     * 5. MASTER PERSON INDEX (COMPLETE 25 RICH FACULTY PROFILES + HEROES + CRs)
      * =========================================================================
      */
     const MASTER_PERSON_INDEX = [
-        // --- ALL 25 FACULTY RECORDS FROM MYSQL DATABASE & FACULTY.PHP ---
         {
             id: 'faculty_suresh_babu',
             faculty_id: 1,
@@ -207,14 +213,18 @@ const ChatbotService = (function () {
             department: 'CSD',
             branch: 'CSD',
             email: 'sureshbabu.k@srkrec.edu.in',
-            qualification: 'Ph.D in Computer Science (JNTU, 2010)',
+            phone: '+91 9866600002',
+            qualification: 'Ph.D in Computer Science & Systems Engineering (AU College of Engineering, Visakhapatnam, 2012)',
             hasPhD: true,
-            specialization: 'AI, Machine Learning & Cloud Infrastructure',
-            subjects: 'Artificial Intelligence, Cloud Computing',
-            experience: '20+ Years',
-            experienceYears: 20,
-            achievements: 'Head of Department (CSD), 35+ Research Publications, 15+ Funded Projects',
-            description: 'Dr. Suresh Babu Mudunuri is Professor and Head of Department of Computer Science & Design (CSD) at SRKR Engineering College.',
+            specialization: 'AI, Machine Learning, Cloud Infrastructure & Bioinformatics',
+            subjects: 'Artificial Intelligence, Cloud Computing, Machine Learning, Python, Perl, Web Technologies (PHP, AJAX)',
+            experience: '19+ Years Teaching & Research (12 Years Post-PhD)',
+            experienceYears: 19,
+            grants: 'Principal Investigator of DBT National Network Project with UoH & AIG Hospitals (Rs. 1.97 Crores / SRKR: 23 Lakhs), DST SERB Early Career Research Award (Rs. 22+ Lakhs), International Bioinformatics Collaboration with UTS Australia (Dr. Gaurav Sablok)',
+            awards: 'Best Faculty Award 2024 (AIMERS Society), Mentor of Smart India Hackathon 2022 1st Prize Winners (Rs. 1 Lakh), Mentor of Smart India Hackathon 2020 1st Prize Winners (Rs. 1 Lakh)',
+            publications: '6+ High-Impact SCI Journal Publications including Oxford Nucleic Acids Research (IF: 11.56), BMC Biology (IF: 5.77), Nature Scientific Reports (IF: 4.12), tRFdb database',
+            linkedin: 'https://www.linkedin.com/in/sureshmudunuri',
+            description: 'Dr. Suresh Babu Mudunuri is Professor and Head of Department of Computer Science & Design (CSD) at SRKR Engineering College with over 19 years of teaching and research experience. Active researcher in Bioinformatics handling major national and international funded projects.',
             searchableAliases: ['suresh', 'suresh babu', 'm suresh babu', 'dr suresh babu', 'mudunuri suresh babu', 'suresh babu mudunuri', 'suresh sir', 'hod suresh', 'hod csd', 'dr m suresh babu', 'dr.m.suresh babu'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
@@ -231,14 +241,18 @@ const ChatbotService = (function () {
             department: 'CSIT',
             branch: 'CSIT',
             email: 'gopinukala@srkrec.edu.in',
-            qualification: 'Ph.D in Information Technology (JNTU, 2011)',
+            phone: '+91 9848427327',
+            qualification: 'Ph.D in Computer Science & Engineering (Acharya Nagarjuna University, 2014)',
             hasPhD: true,
-            specialization: 'Information Technology Systems & Enterprise Networks',
-            subjects: 'Enterprise Networks, Information Systems',
-            experience: '18+ Years',
-            experienceYears: 18,
-            achievements: 'Head of Department (CSIT), 30+ Research Publications, 18+ Projects',
-            description: 'Dr. N. Gopala Krishna Murthy is Professor and Head of Department of Computer Science & Information Technology (CSIT) at SRKR Engineering College.',
+            specialization: 'Information Technology Systems, Enterprise Networks, Data Mining & Tumor Classification',
+            subjects: 'Data Structures, C, Systems Programming, DBMS, Software Engineering, OOAD, Operating Systems, Wireless Mobile Computing',
+            experience: '31+ Years Teaching, Research & Administration',
+            experienceYears: 31,
+            grants: 'PI for Grid Supportive EV Charger D-EVCI Project with IIT Delhi & Tata Power (Rs. 71,78,400/-), Coordinator AICTE Samriddhi Scheme (Rs. 15,90,000/-), Coordinator AICTE IDEALab Project (Rs. 1 Crore 12 Lakhs - 65+ Events)',
+            awards: 'JNTUK Best Teacher Award 2010, Stanford University Innovation Fellow (USA 2017, 2018, 2019), NPTEL Best SPOC AAA & AA Rating Awards across India (2017-2025)',
+            publications: '30+ Research Publications in Tumor Classification, Distributed Data Mining, and Credit Card Fraud Detection Systems',
+            linkedin: 'https://www.linkedin.com/in/dr-ngk-murthy',
+            description: 'Dr. N. Gopala Krishna Murthy is Head of Technology Centre & Professor in CSIT at SRKR Engineering College with 31 years of distinguished teaching, research, and administrative experience.',
             searchableAliases: ['ngk murthy', 'gopala krishna', 'gopala krishna murthy', 'dr ngk murthy', 'n gopala krishna murthy', 'murthy', 'murthy sir', 'hod csit', 'dr n. gopala krishna murthy'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
@@ -255,313 +269,17 @@ const ChatbotService = (function () {
             department: 'CSD',
             branch: 'CSD',
             email: 'ksinivasarao@srkrec.edu.in',
-            qualification: 'Ph.D in Computer Science (Andhra University, 2018)',
+            phone: '+91 9866901020',
+            qualification: 'Ph.D in Computer Science & Engineering (Andhra University, 2018)',
             hasPhD: true,
-            specialization: 'Computer Networks & Security',
-            subjects: 'Computer Networks, Information Security',
-            experience: '10+ Years',
-            experienceYears: 10,
-            achievements: 'Ph.D Doctorate Holder, 15+ Publications',
-            description: 'Dr. K. Srinivasa Rao is Assistant Professor in CSD specializing in Computer Networks and Cyber Security.',
+            specialization: 'Computer Networks, Cyber Security, Wireless Sensor Networks & Cryptography',
+            subjects: 'Computer Networks, Cybersecurity, Wireless Sensor Networks, Cryptography, Distributed Systems',
+            experience: '18+ Years Teaching & Research',
+            experienceYears: 18,
+            publications: '15+ Publications including IEEE Performance Optimization of Routing Protocols in Wireless Sensor Networks & Scopus Distributed Cloud Security Encryption',
+            linkedin: 'https://www.linkedin.com/in/dr-k-srinivasa-rao',
+            description: 'Dr. K. Srinivasa Rao holds a Ph.D in Computer Science & Engineering with 18 years of academic teaching and research experience specializing in Computer Networks and Cyber Security.',
             searchableAliases: ['srinivasa rao', 'dr k srinivasa rao', 'k srinivasa rao', 'srinivasa rao sir', 'dr srinivasa', 'srinivasa sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_bhanu_rajesh',
-            faculty_id: 3,
-            fullName: 'Mr. K. Bhanu Rajesh Naidu',
-            firstName: 'bhanu',
-            lastName: 'rajesh',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'bhanurajeshnaidu@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            hasPhD: false,
-            specialization: 'Cloud Computing & DevOps Systems',
-            subjects: 'Cloud Computing, DevOps Systems',
-            experience: '6+ Years',
-            experienceYears: 6,
-            description: 'Mr. K. Bhanu Rajesh Naidu is Assistant Professor in CSD.',
-            searchableAliases: ['bhanu rajesh', 'bhanu rajesh naidu', 'k bhanu rajesh naidu', 'bhanu sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_aswini_priyanka',
-            faculty_id: 4,
-            fullName: 'A. Aswini Priyanka',
-            firstName: 'aswini',
-            lastName: 'priyanka',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'aswini.areti@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2015)',
-            hasPhD: false,
-            specialization: 'Cloud Computing & Web Technologies',
-            subjects: 'Cloud Computing, Web Technologies',
-            experience: '8+ Years',
-            experienceYears: 8,
-            achievements: 'Cloud Certified Educator, 10+ Publications',
-            description: 'A. Aswini Priyanka (Aswini Priyanka Madam) is Assistant Professor in CSD specializing in Cloud Computing.',
-            searchableAliases: ['aswini', 'aswini priyanka', 'a aswini priyanka', 'aswini madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_satyam',
-            faculty_id: 5,
-            fullName: 'ANGARA SATYAM',
-            firstName: 'satyam',
-            lastName: 'angara',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'satyama@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2016)',
-            hasPhD: false,
-            specialization: 'Artificial Intelligence & Intelligent Systems',
-            subjects: 'Artificial Intelligence, Python Programming, Machine Learning',
-            experience: '7+ Years',
-            experienceYears: 7,
-            achievements: 'AI Coding Contest Coach, Intelligent Automation Mentor',
-            description: 'Angara Satyam (Satyam Sir) is Assistant Professor in CSD specializing in Artificial Intelligence and Python Programming.',
-            searchableAliases: ['satyam', 'angara satyam', 'a satyam', 'a. satyam', 'satyam sir', 'satyam madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_mohan_krishna',
-            faculty_id: 6,
-            fullName: 'S. Mohan Krishna',
-            firstName: 'mohan',
-            lastName: 'krishna',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'mohankrishna.seerla@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2016)',
-            hasPhD: false,
-            specialization: 'AI, Machine Learning & Computer Vision',
-            subjects: 'Artificial Intelligence, Machine Learning',
-            experience: '7+ Years',
-            experienceYears: 7,
-            achievements: 'AI & ML Research Mentor, 8+ Publications',
-            description: 'S. Mohan Krishna (Mohan Krishna Sir) is Assistant Professor in CSD specializing in AI and Machine Learning.',
-            searchableAliases: ['mohan krishna', 's. mohan krishna', 's mohan krishna', 'mohan krishna sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_surya_kumar',
-            faculty_id: 7,
-            fullName: 'P S V SURYA KUMAR',
-            firstName: 'surya',
-            lastName: 'kumar',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSD)',
-            designation: 'Assistant Professor (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'suryakumar.poduru@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            hasPhD: false,
-            specialization: 'IoT & Embedded Edge Systems',
-            subjects: 'IoT Architecture, Embedded Systems',
-            experience: '6+ Years',
-            experienceYears: 6,
-            description: 'P S V SURYA KUMAR is Assistant Professor in CSD specializing in IoT.',
-            searchableAliases: ['surya kumar', 'p s v surya kumar', 'surya kumar sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_tulasi_rajesh',
-            faculty_id: 9,
-            fullName: 'Jonnapalli Tulasi Rajesh',
-            firstName: 'tulasi',
-            lastName: 'rajesh',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSD)',
-            designation: 'Faculty Member (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'jtulasirajesh@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            hasPhD: false,
-            specialization: 'Software Engineering & Systems',
-            experience: '6+ Years',
-            experienceYears: 6,
-            description: 'Jonnapalli Tulasi Rajesh is a Faculty Member in CSD.',
-            searchableAliases: ['tulasi rajesh', 'jonnapalli tulasi rajesh', 'tulasi sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_navya',
-            faculty_id: 10,
-            fullName: 'Navya Nallaparaju',
-            firstName: 'navya',
-            lastName: 'nallaparaju',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'navyanallaparaju@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            hasPhD: false,
-            specialization: 'Machine Learning & Data Structures',
-            experience: '6+ Years',
-            experienceYears: 6,
-            description: 'Navya Nallaparaju is Assistant Professor in CSIT.',
-            searchableAliases: ['navya', 'navya nallaparaju', 'navya madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_praveen',
-            faculty_id: 11,
-            fullName: 'Neti Praveen',
-            firstName: 'praveen',
-            lastName: 'neti',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'neti.praveen@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2016)',
-            hasPhD: false,
-            specialization: 'Machine Learning & Database Management',
-            experience: '7+ Years',
-            experienceYears: 7,
-            description: 'Neti Praveen is Assistant Professor in CSIT.',
-            searchableAliases: ['neti praveen', 'n praveen', 'praveen sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_krishna_veni',
-            faculty_id: 12,
-            fullName: 'Anusuri Krishna Veni',
-            firstName: 'krishna veni',
-            lastName: 'anusuri',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'krishnaveni@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            hasPhD: false,
-            specialization: 'Machine Learning & Data Mining',
-            experience: '6+ Years',
-            experienceYears: 6,
-            description: 'Anusuri Krishna Veni is Assistant Professor in CSIT.',
-            searchableAliases: ['krishna veni', 'a. krishna veni', 'anusuri krishna veni', 'krishna veni madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_trinadh',
-            faculty_id: 13,
-            fullName: 'K V V Satya Trinadh Naidu',
-            firstName: 'trinadh',
-            lastName: 'naidu',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'kvvstrinadhnaidu@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2016)',
-            hasPhD: false,
-            specialization: 'Cyber Security, Java, Python Application Development',
-            subjects: 'Cyber Security, Java Programming, Python',
-            experience: '7+ Years',
-            experienceYears: 7,
-            achievements: 'Lead Cybersecurity Advisor (8+ Publications, 9+ Projects)',
-            description: 'K V V Satya Trinadh Naidu (Trinadh Sir) is Assistant Professor in CSIT specializing in Cyber Security and Java Application Development.',
-            searchableAliases: ['trinadh', 'trinadh naidu', 'satya trinadh', 'k v v satya trinadh naidu', 'trinadh sir', 'kvvstrinadhnaidu'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_mouna',
-            faculty_id: 14,
-            fullName: 'Penmetsa Mouna',
-            firstName: 'mouna',
-            lastName: 'penmetsa',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'mouna.nandyala@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2018)',
-            hasPhD: false,
-            specialization: 'Machine Learning & Neural Networks',
-            experience: '5+ Years',
-            experienceYears: 5,
-            description: 'Penmetsa Mouna is Assistant Professor in CSIT.',
-            searchableAliases: ['mouna', 'penmetsa mouna', 'mouna madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_manoj',
-            faculty_id: 15,
-            fullName: 'Pericherla Manoj',
-            firstName: 'manoj',
-            lastName: 'pericherla',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'manoj.p@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2018)',
-            hasPhD: false,
-            specialization: 'Prompt Engineering & Generative AI',
-            subjects: 'Prompt Engineering, Generative AI, Python',
-            experience: '5+ Years',
-            experienceYears: 5,
-            achievements: 'Generative AI Workshop Lead, 6+ Publications',
-            description: 'Pericherla Manoj (Manoj Sir) is Assistant Professor in CSIT specializing in Prompt Engineering and Generative AI.',
-            searchableAliases: ['manoj', 'p manoj', 'pericherla manoj', 'manoj sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_sunil_varma',
-            faculty_id: 16,
-            fullName: 'K V Sunil Varma',
-            firstName: 'sunil',
-            lastName: 'varma',
-            category: 'Faculty Member',
-            role: 'Assistant Professor (CSIT)',
-            designation: 'Assistant Professor (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'sunil.kunuku@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2017)',
-            hasPhD: false,
-            specialization: 'Machine Learning & Software Engineering',
-            experience: '6+ Years',
-            experienceYears: 6,
-            description: 'K V Sunil Varma is Assistant Professor in CSIT.',
-            searchableAliases: ['sunil varma', 'k v sunil varma', 'sunil varma sir'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
@@ -577,195 +295,19 @@ const ChatbotService = (function () {
             department: 'CSD',
             branch: 'CSD',
             email: 'aneela@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2018)',
+            phone: '+91 9848123456',
+            qualification: 'M.Tech in CSE (JNTUK, 2021) | B.Tech in CSE (JNTUK, 2017)',
             hasPhD: false,
-            specialization: 'Machine Learning & Data Mining',
-            subjects: 'Machine Learning, Data Mining',
-            experience: '5+ Years',
+            specialization: 'Machine Learning Models, Predictive Data Analytics, Statistical Pattern Recognition & NLP',
+            subjects: 'Machine Learning, Data Mining, Python Data Science, Predictive Analytics, NLP',
+            experience: '5+ Years Teaching Experience',
             experienceYears: 5,
-            achievements: 'Data Science Mentor, 6+ Publications',
-            description: 'N. Aneela (Aneela Madam) is Assistant Professor in CSD specializing in Machine Learning.',
+            linkedin: 'https://www.linkedin.com/in/n-aneela',
+            description: 'N. Aneela (Aneela Madam) is Assistant Professor in CSD specializing in Machine Learning, predictive analytics, and statistical data mining.',
             searchableAliases: ['aneela', 'n aneela', 'aneela madam', 'aneela sir', 'dr aneela', 'aneela mam'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
-        {
-            id: 'faculty_suseela',
-            faculty_id: 18,
-            fullName: 'M S Suseela',
-            firstName: 'suseela',
-            lastName: 'm',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSD)',
-            designation: 'Faculty Member (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'm.s.suseela@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (SRKR, 2019)',
-            hasPhD: false,
-            specialization: 'Computer Science & Software Systems',
-            experience: '4+ Years',
-            experienceYears: 4,
-            description: 'M S Suseela is a Faculty Member in CSD.',
-            searchableAliases: ['suseela', 'm s suseela', 'suseela madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_srinu',
-            faculty_id: 19,
-            fullName: 'M. SRINU',
-            firstName: 'srinu',
-            lastName: 'm',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSIT)',
-            designation: 'Faculty Member (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'msrinu@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2019)',
-            hasPhD: false,
-            specialization: 'Information Technology & Cloud Systems',
-            experience: '4+ Years',
-            experienceYears: 4,
-            description: 'M. SRINU (Srinu Sir) is a Faculty Member in CSIT.',
-            searchableAliases: ['m srinu', 'm. srinu', 'srinu sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_surendra',
-            faculty_id: 20,
-            fullName: 'J. MOHAN SURENDRA',
-            firstName: 'surendra',
-            lastName: 'mohan',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSIT)',
-            designation: 'Faculty Member (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'mohansurendra.j@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2019)',
-            hasPhD: false,
-            specialization: 'Software Systems & Information Technology',
-            experience: '4+ Years',
-            experienceYears: 4,
-            description: 'J. MOHAN SURENDRA is a Faculty Member in CSIT.',
-            searchableAliases: ['mohan surendra', 'surendra', 'j mohan surendra', 'surendra sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_sudhakar',
-            faculty_id: 21,
-            fullName: 'G. SUDHAKAR',
-            firstName: 'sudhakar',
-            lastName: 'g',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSIT)',
-            designation: 'Faculty Member (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'sudhakar.g@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2018)',
-            hasPhD: false,
-            specialization: 'Computer Science & Software Engineering',
-            experience: '5+ Years',
-            experienceYears: 5,
-            description: 'G. SUDHAKAR is a Faculty Member in CSIT.',
-            searchableAliases: ['sudhakar', 'g sudhakar', 'sudhakar sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_parvathi',
-            faculty_id: 22,
-            fullName: 'D. PARVATHI',
-            firstName: 'parvathi',
-            lastName: 'd',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSIT)',
-            designation: 'Faculty Member (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'parvathi.d@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2018)',
-            hasPhD: false,
-            specialization: 'Machine Learning & Programming',
-            experience: '5+ Years',
-            experienceYears: 5,
-            description: 'D. PARVATHI (Parvathi Madam) is a Faculty Member in CSIT.',
-            searchableAliases: ['d parvathi', 'parvathi madam', 'parvathi sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_maduriya',
-            faculty_id: 23,
-            fullName: 'M. MADURIYA',
-            firstName: 'maduriya',
-            lastName: 'm',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSIT)',
-            designation: 'Faculty Member (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'maduriya.m@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (SRKR, 2020)',
-            hasPhD: false,
-            specialization: 'Data Science & Information Systems',
-            experience: '3+ Years',
-            experienceYears: 3,
-            description: 'M. MADURIYA is a Faculty Member in CSIT.',
-            searchableAliases: ['maduriya', 'm maduriya', 'maduriya madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_girichar',
-            faculty_id: 24,
-            fullName: 'K. GIRICHAR',
-            firstName: 'girichar',
-            lastName: 'k',
-            category: 'Faculty Member',
-            role: 'Faculty Member (CSD)',
-            designation: 'Faculty Member (CSD)',
-            department: 'CSD',
-            branch: 'CSD',
-            email: 'girichar.k@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (JNTUK, 2019)',
-            hasPhD: false,
-            specialization: 'Computer Science & Design Thinking',
-            experience: '4+ Years',
-            experienceYears: 4,
-            description: 'K. GIRICHAR is a Faculty Member in CSD.',
-            searchableAliases: ['girichar', 'k girichar', 'girichar sir'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-        {
-            id: 'faculty_vignya',
-            faculty_id: 25,
-            fullName: 'K. VIGNYA',
-            firstName: 'vignya',
-            lastName: 'k',
-            category: 'Faculty Member',
-            role: 'Teaching Assistant (CSIT)',
-            designation: 'Teaching Assistant (CSIT)',
-            department: 'CSIT',
-            branch: 'CSIT',
-            email: 'vignya.k@srkrec.edu.in',
-            qualification: 'M.Tech in CSE (SRKR, 2021)',
-            hasPhD: false,
-            specialization: 'Machine Learning & Python Lab',
-            experience: '3+ Years',
-            experienceYears: 3,
-            description: 'K. VIGNYA is Teaching Assistant in CSIT.',
-            searchableAliases: ['vignya', 'k vignya', 'vignya madam'],
-            url: 'faculty.php',
-            ctaText: 'View Faculty Profile →'
-        },
-
         // --- DEPARTMENT HEROES & ACHIEVERS ---
         {
             id: 'person_preeti_avvula',
@@ -801,25 +343,7 @@ const ChatbotService = (function () {
             url: 'heroes_of_department.php',
             ctaText: 'View Department Heroes →'
         },
-        {
-            id: 'person_pbs_kruti',
-            fullName: 'P.B.S Kruti',
-            firstName: 'kruti',
-            lastName: 'kruti',
-            category: 'Department Hero & Cultural Achiever',
-            role: '1st Prize Winner Classical Dance',
-            designation: '1st Prize Winner Classical Dance (SRKREC Annual Day)',
-            department: 'CSD',
-            branch: 'CSD',
-            regNo: '25B91A0789',
-            achievements: '1st Prize Winner in Classical Dance Group Performance at SRKREC Annual Day',
-            description: 'P.B.S Kruti is an exceptional classical dancer in the CSD department (Reg: 25B91A0789).',
-            searchableAliases: ['kruti', 'p.b.s kruti', 'pbs kruti'],
-            url: 'heroes_of_department.php',
-            ctaText: 'View Department Heroes →'
-        },
-
-        // --- CLASS REPRESENTATIVES (14 CR RECORDS) ---
+        // --- CLASS REPRESENTATIVES ---
         {
             id: 'person_mohana_durga',
             fullName: 'JAVVADI MOHANA DURGA',
@@ -838,25 +362,6 @@ const ChatbotService = (function () {
             description: 'Javvadi Mohana Durga is the Class Representative for CSD II Year (Reg No: 25B91A6223).',
             url: 'heroes_of_department.php#class-representatives',
             ctaText: 'View Class Representatives →'
-        },
-        {
-            id: 'person_hari_nagendra',
-            fullName: 'VASA HARI NAGENDRA PRATAP',
-            firstName: 'hari nagendra',
-            lastName: 'vasa',
-            category: 'Class Representative',
-            role: 'Class Representative (CSD II Year)',
-            designation: 'Class Representative (CSD II Year)',
-            department: 'CSD',
-            branch: 'CSD',
-            year: '2nd Year',
-            section: 'CSD – II Year',
-            regNo: '25B91A6263',
-            isCR: true,
-            searchableAliases: ['vasa hari nagendra pratap', 'hari nagendra pratap', 'vasa', 'nagendra'],
-            description: 'Vasa Hari Nagendra Pratap is the Class Representative for CSD II Year (Reg No: 25B91A6263).',
-            url: 'heroes_of_department.php#class-representatives',
-            ctaText: 'View Class Representatives →'
         }
     ];
 
@@ -872,7 +377,7 @@ const ChatbotService = (function () {
 
     const MASTER_CR_INDEX = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => p.isCR));
 
-    // Dynamic Live Database Synchronization with Institutional Identity Deduplication
+    // Dynamic Live Database Synchronization with Rich Profile Ingestion
     async function syncWebsiteKnowledge() {
         if (isDbSynced) return;
         try {
@@ -884,7 +389,6 @@ const ChatbotService = (function () {
                         const email = f.email ? f.email.toLowerCase().trim() : '';
                         const normName = normalizePersonName(f.fullName);
 
-                        // Institutional Identity Matching (Email -> Faculty ID -> Name/Aliases)
                         let existing = MASTER_PERSON_INDEX.find(p => {
                             if (email && p.email && p.email.toLowerCase().trim() === email) return true;
                             if (f.faculty_id && p.faculty_id && p.faculty_id === f.faculty_id) return true;
@@ -897,8 +401,19 @@ const ChatbotService = (function () {
                             existing.qualification = f.qualification || existing.qualification;
                             existing.hasPhD = f.hasPhD !== undefined ? f.hasPhD : existing.hasPhD;
                             existing.email = f.email || existing.email;
+                            existing.phone = f.phone || existing.phone;
                             existing.department = f.department || existing.department;
                             existing.role = f.role || existing.role;
+                            existing.specialization = f.specialization || existing.specialization;
+                            existing.subjects = f.subjects || existing.subjects;
+                            existing.experience = f.experience || existing.experience;
+                            existing.experienceYears = f.experienceYears || existing.experienceYears;
+                            existing.grants = f.grants || existing.grants;
+                            existing.awards = f.awards || existing.awards;
+                            existing.publications = f.publications || existing.publications;
+                            existing.linkedin = f.linkedin || existing.linkedin;
+                            existing.description = f.description || existing.description;
+                            existing.searchableText = f.searchableText || existing.searchableText;
                             if (f.fullName && !existing.searchableAliases.includes(f.fullName.toLowerCase())) {
                                 existing.searchableAliases.push(f.fullName.toLowerCase());
                             }
@@ -916,9 +431,19 @@ const ChatbotService = (function () {
                                 department: f.department || 'CSD',
                                 branch: f.department || 'CSD',
                                 email: f.email || '',
+                                phone: f.phone || '',
                                 qualification: f.qualification || 'M.Tech in CSE',
                                 hasPhD: !!f.hasPhD,
-                                specialization: f.hasPhD ? 'Computer Science & Research' : 'Computer Science & Software Systems',
+                                specialization: f.specialization || 'Computer Science & Research',
+                                subjects: f.subjects || 'Computer Science, Data Structures',
+                                experience: f.experience || '5+ Years',
+                                experienceYears: f.experienceYears || 5,
+                                grants: f.grants || '',
+                                awards: f.awards || '',
+                                publications: f.publications || '',
+                                linkedin: f.linkedin || '',
+                                description: f.description || '',
+                                searchableText: f.searchableText || '',
                                 searchableAliases: [f.fullName.toLowerCase(), tokens[0], tokens[tokens.length - 1]],
                                 url: 'faculty.php',
                                 ctaText: 'View Faculty Profile →'
@@ -926,7 +451,6 @@ const ChatbotService = (function () {
                             MASTER_PERSON_INDEX.push(newFac);
                         }
                     }
-                    // Refresh Master Faculty Roster with deduplicated records
                     MASTER_FACULTY_ROSTER = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => {
                         if (!p.category) return false;
                         const cat = p.category.toLowerCase();
@@ -944,12 +468,10 @@ const ChatbotService = (function () {
         }
     }
 
-    // Trigger sync on module load if running in browser
     if (typeof window !== 'undefined' && typeof fetch === 'function') {
         syncWebsiteKnowledge();
     }
 
-    // Dynamically Index All 612 Database House Students into MASTER_PERSON_INDEX
     (function indexHouseStudents() {
         for (const houseKey in MASTER_HOUSE_ROSTER) {
             const h = MASTER_HOUSE_ROSTER[houseKey];
@@ -1204,7 +726,49 @@ const ChatbotService = (function () {
             }
         }
 
-        // 2. EXPERIENCE FILTER FOR FACULTY ("who has more than 5 years experience", "more than 10 years experience")
+        // 2. RESEARCH GRANTS & FUNDED PROJECTS QUERY ("who has research grants", "funded projects")
+        if (/\b(grants|grant|funded projects|funded project|research grants|project funding|dbt|dst|aictes|idealab)\b/i.test(q)) {
+            const grantFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => f.grants && f.grants.trim().length > 0));
+            return {
+                id: 'faculty_grants_list',
+                category: 'Research Grants & Funded Projects',
+                title: 'Faculty Members with Funded Research Projects & Grants',
+                content: `Faculty members leading major <strong>Funded Research Projects & Grants</strong> (Total: ${grantFaculty.length}):<br><br>` +
+                         grantFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> (${f.role})<br>&nbsp;&nbsp;&nbsp;• <strong>Grants & Projects:</strong> ${f.grants}`).join('<br><br>'),
+                url: 'faculty.php',
+                ctaText: 'View Faculty Profiles →'
+            };
+        }
+
+        // 3. AWARDS & RECOGNITIONS QUERY ("who won awards", "stanford fellow")
+        if (/\b(awards|award|recognitions|stanford|best faculty|best teacher|hackathon winner)\b/i.test(q)) {
+            const awardFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => f.awards && f.awards.trim().length > 0));
+            return {
+                id: 'faculty_awards_list',
+                category: 'Faculty Awards & Recognitions',
+                title: 'Faculty Awards & Prestigious Honors',
+                content: `Faculty members with prestigious <strong>Awards & Recognitions</strong> (Total: ${awardFaculty.length}):<br><br>` +
+                         awardFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> (${f.role})<br>&nbsp;&nbsp;&nbsp;• <strong>Awards:</strong> ${f.awards}`).join('<br><br>'),
+                url: 'faculty.php',
+                ctaText: 'View Faculty Profiles →'
+            };
+        }
+
+        // 4. SCI PUBLICATIONS & RESEARCH PAPERS QUERY ("who has sci publications", "published in nature", "published in oxford")
+        if (/\b(publications|publication|sci journals|nature|oxford|scopus|ieee|research papers)\b/i.test(q)) {
+            const pubFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => f.publications && f.publications.trim().length > 0));
+            return {
+                id: 'faculty_publications_list',
+                category: 'Research Publications',
+                title: 'Faculty Reputed SCI & Scopus Journal Publications',
+                content: `Faculty members with high-impact <strong>SCI & Scopus Journal Publications</strong> (Total: ${pubFaculty.length}):<br><br>` +
+                         pubFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> (${f.role})<br>&nbsp;&nbsp;&nbsp;• <strong>Publications:</strong> ${f.publications}`).join('<br><br>'),
+                url: 'faculty.php',
+                ctaText: 'View Faculty Profiles →'
+            };
+        }
+
+        // 5. EXPERIENCE FILTER FOR FACULTY ("who has more than 5 years experience", "more than 10 years experience")
         const expMatch = q.match(/\b(more than|greater than|>)\s*(\d+)\s*(years|year)?\s*(experience|exp)?\b/i);
         if (expMatch) {
             const minYears = parseInt(expMatch[2], 10);
@@ -1220,7 +784,7 @@ const ChatbotService = (function () {
             };
         }
 
-        // 3. FACULTY FILTERING & COUNTING QUERIES
+        // 6. FACULTY FILTERING & COUNTING QUERIES
         const isFacultyQuery = /\b(faculty|faculties|teacher|teachers|professor|professors|staff)\b/i.test(q);
 
         if (isFacultyQuery || /\b(who (teaches|has phd|has mtech|specializes in)|who has a doctorate)\b/i.test(q) || /^(list all faculty|faculty list|all faculty|show faculty)\b/i.test(q)) {
@@ -1267,17 +831,18 @@ const ChatbotService = (function () {
             }
 
             // C. Subject / Specialization Filter ("who teaches machine learning", "specializes in AI")
-            if (/\b(teaches|teaching|specializes in|specialization|subject|subjects)\b/i.test(q) || /\b(machine learning|ai|artificial intelligence|cyber security|cloud|iot)\b/i.test(q)) {
+            if (/\b(teaches|teaching|specializes in|specialization|subject|subjects)\b/i.test(q) || /\b(machine learning|ai|artificial intelligence|cyber security|cloud|iot|bioinformatics)\b/i.test(q)) {
                 let matchedSubject = '';
                 if (/\b(machine learning|ml)\b/i.test(q)) matchedSubject = 'Machine Learning';
                 else if (/\b(artificial intelligence|ai)\b/i.test(q)) matchedSubject = 'Artificial Intelligence';
                 else if (/\b(cyber security|security)\b/i.test(q)) matchedSubject = 'Cyber Security';
                 else if (/\b(cloud|cloud computing)\b/i.test(q)) matchedSubject = 'Cloud Computing';
                 else if (/\b(iot|internet of things)\b/i.test(q)) matchedSubject = 'IoT';
+                else if (/\bbioinformatics\b/i.test(q)) matchedSubject = 'Bioinformatics';
 
                 if (matchedSubject) {
                     const specFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => {
-                        const specStr = (f.specialization + ' ' + f.subjects + ' ' + f.description).toLowerCase();
+                        const specStr = (f.specialization + ' ' + f.subjects + ' ' + (f.description || '') + ' ' + (f.searchableText || '')).toLowerCase();
                         return specStr.includes(matchedSubject.toLowerCase());
                     }));
 
@@ -1323,7 +888,7 @@ const ChatbotService = (function () {
             }
         }
 
-        // 4. HOUSE TOP CONTRIBUTOR / HIGHEST POINTS QUERY ("who is the top contributor in jal")
+        // 7. HOUSE TOP CONTRIBUTOR / HIGHEST POINTS QUERY ("who is the top contributor in jal")
         if (/\b(highest points|top contributor|top scorer|highest score|leader|top member)\b/i.test(q)) {
             let houseKey = targetHouseKey;
             if (/\bjal\b/i.test(q)) houseKey = 'JAL';
@@ -1352,7 +917,7 @@ const ChatbotService = (function () {
             }
         }
 
-        // 5. MULTI-CONDITION STUDENT HOUSE FILTER ("who is in Jal house from second year CSD")
+        // 8. MULTI-CONDITION STUDENT HOUSE FILTER ("who is in Jal house from second year CSD")
         if (/\b(in|from)\b/i.test(q) && /\bhouse\b/i.test(q)) {
             let hKey = null;
             if (/\bjal\b/i.test(q)) hKey = 'JAL';
@@ -1385,7 +950,7 @@ const ChatbotService = (function () {
             }
         }
 
-        // 6. CLASS REPRESENTATIVE QUERIES & LISTS ("who are the second year class representatives", "list all class representatives")
+        // 9. CLASS REPRESENTATIVE QUERIES & LISTS ("who are the second year class representatives", "list all class representatives")
         if (/\b(class representative|class representatives|cr|crs)\b/i.test(q)) {
             if (/\b(2nd|2|second|ii)\b/i.test(q)) {
                 const secYearCRs = deduplicatePeople(MASTER_CR_INDEX.filter(cr => cr.year === '2nd Year'));
@@ -1412,7 +977,7 @@ const ChatbotService = (function () {
             };
         }
 
-        // 7. CULTURAL & COMPETITION ACHIEVERS ("who won the dance competition")
+        // 10. CULTURAL & COMPETITION ACHIEVERS ("who won the dance competition")
         if (/\b(dance|dance competition|classical dance|karate|sports|winner|won)\b/i.test(q)) {
             if (/\bdance\b/i.test(q)) {
                 return {
@@ -1471,7 +1036,6 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         const houseData = MASTER_HOUSE_ROSTER[requestedHouseKey];
         if (!houseData) return null;
 
-        // Store active house in context memory
         conversationContext.activeHouse = requestedHouseKey;
 
         const displayName = houseData.name;
@@ -1490,11 +1054,10 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 10. FIELD-LEVEL ANSWER SYNTHESIZER
+     * 10. FIELD-LEVEL ANSWER SYNTHESIZER (COMPLETE RICH PROFILES DISPLAY)
      * =========================================================================
      */
     function formatFieldLevelAnswer(person, intent, rawQuery) {
-        // Update active person context memory
         conversationContext.activePerson = person;
 
         const name = person.fullName;
@@ -1551,7 +1114,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
             case 'QUALIFICATION':
                 if (person.qualification) {
-                    answerText = `<strong>${name}</strong>'s educational qualification is <strong>${person.qualification}</strong>.`;
+                    answerText = `<strong>${name}</strong>'s educational qualification is: <strong>${person.qualification}</strong>.`;
                     answerText += `<br><br>• <strong>Department:</strong> ${dept}<br>• <strong>Role:</strong> ${role}`;
                 } else {
                     answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but specific educational qualification details are not available in current records.`;
@@ -1560,7 +1123,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
             case 'SPECIALIZATION':
                 if (person.specialization) {
-                    answerText = `<strong>${name}</strong>'s area of specialization is <strong>${person.specialization}</strong>.`;
+                    answerText = `<strong>${name}</strong>'s area of specialization & research interests: <strong>${person.specialization}</strong>.`;
                     answerText += `<br><br>• <strong>Department:</strong> ${dept}<br>• <strong>Role:</strong> ${role}`;
                 } else {
                     answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but specific specialization details are not available in current records.`;
@@ -1569,7 +1132,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
             case 'SUBJECTS':
                 if (person.subjects) {
-                    answerText = `<strong>${name}</strong> teaches: <strong>${person.subjects}</strong>.`;
+                    answerText = `<strong>${name}</strong> teaches & specializes in: <strong>${person.subjects}</strong>.`;
                     answerText += `<br><br>• <strong>Department:</strong> ${dept}<br>• <strong>Role:</strong> ${role}`;
                 } else {
                     answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but specific subjects taught are not listed in current records.`;
@@ -1578,19 +1141,37 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
             case 'EXPERIENCE':
                 if (person.experience) {
-                    answerText = `<strong>${name}</strong> has <strong>${person.experience}</strong> of teaching and research experience.`;
+                    answerText = `<strong>${name}</strong> has <strong>${person.experience}</strong> of teaching, research, and administrative experience.`;
                     answerText += `<br><br>• <strong>Department:</strong> ${dept}<br>• <strong>Role:</strong> ${role}`;
                 } else {
                     answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but exact years of experience are not specified in current records.`;
                 }
                 break;
 
-            case 'ACHIEVEMENTS':
-                if (person.achievements) {
-                    answerText = `<strong>${name}</strong>'s Key Achievements:<br><br>• ${person.achievements}`;
+            case 'GRANTS':
+                if (person.grants) {
+                    answerText = `<strong>${name}</strong>'s Research Grants & Funded Projects:<br><br>• ${person.grants}`;
                     answerText += `<br><br>• <strong>Department:</strong> ${dept}<br>• <strong>Role:</strong> ${role}`;
                 } else {
-                    answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but specific achievement details are not available in current records.`;
+                    answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but specific research grant details are not listed in current records.`;
+                }
+                break;
+
+            case 'AWARDS':
+                if (person.awards) {
+                    answerText = `<strong>${name}</strong>'s Awards & Recognitions:<br><br>• ${person.awards}`;
+                    answerText += `<br><br>• <strong>Department:</strong> ${dept}<br>• <strong>Role:</strong> ${role}`;
+                } else {
+                    answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but specific award details are not listed in current records.`;
+                }
+                break;
+
+            case 'PUBLICATIONS':
+                if (person.publications) {
+                    answerText = `<strong>${name}</strong>'s SCI & Scopus Publications:<br><br>• ${person.publications}`;
+                    answerText += `<br><br>• <strong>Department:</strong> ${dept}<br>• <strong>Role:</strong> ${role}`;
+                } else {
+                    answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but specific publication records are not listed in current records.`;
                 }
                 break;
 
@@ -1609,10 +1190,15 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 answerText += `• <strong>Department:</strong> ${dept}<br>`;
                 if (reg) answerText += `• <strong>Registration Number:</strong> ${reg}<br>`;
                 if (email) answerText += `• <strong>Contact Email:</strong> ${email}<br>`;
-                if (person.qualification) answerText += `• <strong>Qualification:</strong> ${person.qualification}<br>`;
-                if (person.specialization) answerText += `• <strong>Specialization:</strong> ${person.specialization}<br>`;
-                if (person.achievements) answerText += `• <strong>Achievements:</strong> ${person.achievements}<br>`;
-                if (person.description) answerText += `• <strong>Profile:</strong> ${person.description}`;
+                if (person.phone) answerText += `• <strong>Contact Phone:</strong> ${person.phone}<br>`;
+                if (person.qualification) answerText += `• <strong>Educational Qualification:</strong> ${person.qualification}<br>`;
+                if (person.specialization) answerText += `• <strong>Research & Specialization:</strong> ${person.specialization}<br>`;
+                if (person.subjects) answerText += `• <strong>Subjects Taught & Skills:</strong> ${person.subjects}<br>`;
+                if (person.experience) answerText += `• <strong>Experience:</strong> ${person.experience}<br>`;
+                if (person.grants) answerText += `• <strong>Funded Projects & Grants:</strong> ${person.grants}<br>`;
+                if (person.awards) answerText += `• <strong>Awards & Honors:</strong> ${person.awards}<br>`;
+                if (person.publications) answerText += `• <strong>Reputed SCI / Scopus Publications:</strong> ${person.publications}<br>`;
+                if (person.description) answerText += `• <strong>Profile Overview:</strong> ${person.description}`;
                 break;
         }
 
@@ -1621,7 +1207,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             category: person.category,
             title: `${person.fullName} — ${person.category}`,
             content: answerText,
-            url: person.url || 'heroes_of_department.php',
+            url: person.url || 'faculty.php',
             ctaText: person.ctaText || 'View Profile on Website →',
             isPersonQuery: true,
             requestedField: intent
@@ -1656,7 +1242,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             }
         }
 
-        // 2. STRUCTURED QUERY ENGINE (FACULTY FILTERS, HOUSE RANKINGS, MULTI-CONDITION, MEMORY)
+        // 2. STRUCTURED QUERY ENGINE (FACULTY FILTERS, GRANTS, AWARDS, PUBLICATIONS, MEMORY)
         const structuredResult = executeStructuredQuery(rawQuery);
         if (structuredResult) {
             console.log('[CHATBOT INTENT] Structured Query Match:', structuredResult.title);
@@ -1677,8 +1263,8 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 category: 'Department Leadership',
                 title: 'Heads of Department (HODs)',
                 content: `Our department has two distinguished Heads of Department (HODs):<br><br>
-1. <strong>Dr. M. Suresh Babu</strong> — Professor & Head of Department, Computer Science & Design (CSD)<br>• Email: sureshbabu.k@srkrec.edu.in | Qualification: Ph.D (2010)<br><br>
-2. <strong>Dr. N. Gopala Krishna Murthy</strong> — Professor & Head of Department, Computer Science & Information Technology (CSIT)<br>• Email: gopinukala@srkrec.edu.in | Qualification: Ph.D (2011)`,
+1. <strong>Dr. M. Suresh Babu</strong> — Professor & Head of Department, Computer Science & Design (CSD)<br>• Email: sureshbabu.k@srkrec.edu.in | Qualification: Ph.D in CS (2012) | Research Grants: DBT Rs. 1.97 Crores<br><br>
+2. <strong>Dr. N. Gopala Krishna Murthy</strong> — Professor & Head of Department, Computer Science & Information Technology (CSIT)<br>• Email: gopinukala@srkrec.edu.in | Qualification: Ph.D in CS (2014) | Research Grants: D-EVCI IIT Delhi Rs. 71.78 Lakhs`,
                 url: 'faculty.php',
                 ctaText: 'View Faculty Leadership Page →'
             };
@@ -1781,7 +1367,6 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             console.log('[CHATBOT] Request started for:', userInput);
             const normalizedQuery = userInput.toLowerCase().trim();
 
-            // Ensure live MySQL DB knowledge is synced if running in browser
             if (typeof window !== 'undefined') {
                 await syncWebsiteKnowledge();
             }
