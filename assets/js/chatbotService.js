@@ -1227,12 +1227,12 @@ const ChatbotService = (function () {
                 }
 
                 conversationContext.activeHouse = hKey;
-                const listItems = filtered.slice(0, 10).map((m, i) => `${i + 1}. <strong>${m.name}</strong> (Section: ${m.section || 'CSD II Year Sec A'})`).join('<br>');
+                const listItems = filtered.map((m, i) => `${i + 1}. <strong>${m.name}</strong> (Section: ${m.section || 'CSD II Year Sec A'})`).join('<br>');
                 return {
                     id: `filtered_house_members_${hKey}`,
                     category: 'House Student Directory',
                     title: `${h.name} House Members (Filtered)`,
-                    content: `Matching 2nd Year CSD students in <strong>${h.name} House</strong>:<br><br>${listItems}`,
+                    content: `Matching 2nd Year CSD students in <strong>${h.name} House</strong> (Total: ${filtered.length}):<br><br>${listItems}`,
                     url: `house_detail.php?house=${h.name}`,
                     ctaText: `View Full ${h.name} House Roster →`
                 };
@@ -1314,8 +1314,8 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
         let requestedHouseKey = null;
         if (/\b(jal|water)\b/i.test(lower)) requestedHouseKey = 'JAL';
-        else if (/\bagni|fire\b/i.test(lower)) requestedHouseKey = 'AGNI';
-        else if (/\bvayu|wind\b/i.test(lower)) requestedHouseKey = 'VAYU';
+        else if (/\b(agni|fire)\b/i.test(lower)) requestedHouseKey = 'AGNI';
+        else if (/\b(vayu|wind)\b/i.test(lower)) requestedHouseKey = 'VAYU';
         else if (/\b(akash|aakash|sky)\b/i.test(lower)) requestedHouseKey = 'AAKASH';
         else if (/\b(prudhvi|pruthvi|earth)\b/i.test(lower)) requestedHouseKey = 'PRUDHVI';
 
@@ -1329,14 +1329,13 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
         const displayName = houseData.name;
         const membersList = houseData.members;
-        let displayedMembers = membersList.slice(0, 15);
-        let listItems = displayedMembers.map((m, idx) => `${idx + 1}. <strong>${m.name}</strong> — Reg: ${m.regNo || 'N/A'} | Section: ${m.section || 'CSD/CSIT'}`).join('<br>');
+        let listItems = membersList.map((m, idx) => `${idx + 1}. <strong>${m.name}</strong> — Reg: ${m.regNo || 'N/A'} | Section: ${m.section || 'CSD/CSIT'}`).join('<br>');
 
         return {
             id: `house_members_${requestedHouseKey}`,
             category: 'House Members',
             title: `${displayName} House Members`,
-            content: `Here are all members of <strong>${displayName} House</strong> (Total: ${membersList.length} students):<br><br>${listItems}<br><br><em>Showing top 15 of ${membersList.length} members. View full roster on house page.</em>`,
+            content: `Here are all members of <strong>${displayName} House</strong> (Total: ${membersList.length} students):<br><br>${listItems}`,
             url: `house_detail.php?house=${displayName}`,
             ctaText: `View Full ${displayName} House Roster →`
         };
