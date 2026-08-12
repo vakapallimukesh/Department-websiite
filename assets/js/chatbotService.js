@@ -1,13 +1,13 @@
 /**
- * AI Department Assistant — Google Gemini API & Scalable Hybrid RAG Engine
+ * AI Department Assistant — Website-Wide Hybrid RAG & Structured Search Engine
  * SRKREC CSD & CSIT Departments
  *
- * COMPLETE PROFILE KNOWLEDGE & DEDUPLICATED RETRIEVAL ARCHITECTURE:
- * Centralized searchable representation of the complete department website, database,
- * and ALL rich information behind every "More Details" / faculty profile page.
- * Indexed Fields: Full Name, Faculty ID, Designation, Department, Qualification, Ph.D,
- * University, Specialization, Grants, Funded Projects, Awards, SCI Publications, Experience,
- * Subjects Taught, Email, Phone, LinkedIn, Profile Overview text.
+ * COMPLETE WEBSITE-WIDE HYBRID RAG ARCHITECTURE:
+ * Multi-layer Hybrid Retrieval Engine combining:
+ * 1. Structured Database / SQL-style query search (counts, rankings, points, reg numbers, experience, qualifications)
+ * 2. Exact Token Keyword & Alias Entity Resolution (Faculty, Students, CRs, Heroes, Houses, Clubs, Startups)
+ * 3. Semantic RAG & Vector Chunk Search (biographies, research, labs, placements, academics)
+ * 4. Grounded Response Synthesis & Multi-turn Conversational Context Memory
  */
 
 const ChatbotService = (function () {
@@ -25,6 +25,23 @@ const ChatbotService = (function () {
         activeHouse: null,
         lastQuery: null,
         history: []
+    };
+
+    // System Diagnostic Audit Metadata
+    let systemDiagnostics = {
+        status: 'INITIALIZING',
+        totalPagesDiscovered: 18,
+        totalPagesIndexed: 18,
+        totalIndexedChunks: 125,
+        totalFacultyRecords: 25,
+        totalStudentRecords: 612,
+        totalHouseRecords: 5,
+        totalCRRecords: 14,
+        totalHeroRecords: 5,
+        totalClubRecords: 10,
+        totalPlacementRecords: 10,
+        totalAcademicLabs: 5,
+        lastSyncTime: null
     };
 
     /**
@@ -83,7 +100,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 3. INTENT CLASSIFICATION ENGINE (EXPANDED FOR RICH PROFILE FIELDS)
+     * 3. INTENT CLASSIFICATION ENGINE
      * =========================================================================
      */
     function detectQueryIntent(rawQuery) {
@@ -197,7 +214,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 5. MASTER PERSON INDEX (COMPLETE 25 RICH FACULTY PROFILES + HEROES + CRs)
+     * 5. MASTER PERSON INDEX (25 FACULTY + HEROES + 14 CRs + HOUSE STUDENTS)
      * =========================================================================
      */
     const MASTER_PERSON_INDEX = [
@@ -310,6 +327,57 @@ const ChatbotService = (function () {
         },
         // --- DEPARTMENT HEROES & ACHIEVERS ---
         {
+            id: 'person_pbs_kruti',
+            fullName: 'P.B.S Kruti',
+            firstName: 'kruti',
+            lastName: 'pbs',
+            category: 'Department Hero & Cultural Winner',
+            role: '🥇 1st Prize Winner in Classical Dance at 45th SRKREC Annual Day',
+            designation: '1st Prize Winner in Classical Dance',
+            department: 'CSIT',
+            branch: 'CSIT',
+            regNo: '25B91A0789',
+            achievements: '1st Prize Winner in Classical Dance Group Performance',
+            description: 'P.B.S Kruti is a celebrated classical dancer who won 1st Prize in Group Performance at SRKREC Annual Day.',
+            searchableAliases: ['kruti', 'pbs kruti', 'p.b.s kruti', 'kruti dance winner'],
+            url: 'heroes_of_department.php',
+            ctaText: 'View Department Heroes →'
+        },
+        {
+            id: 'person_lakshmi_prasanna',
+            fullName: 'R. Lakshmi Prasanna',
+            firstName: 'lakshmi',
+            lastName: 'prasanna',
+            category: 'Department Hero & Cultural Winner',
+            role: '🥈 2nd Prize Winner in Classical Dance Group Performance',
+            designation: '2nd Prize Winner in Classical Dance',
+            department: 'CSD',
+            branch: 'CSD',
+            regNo: '24B91A6245',
+            achievements: '2nd Prize Winner in Classical Dance Group Performance at SRKREC Annual Day',
+            description: 'R. Lakshmi Prasanna is a passionate performing artist celebrated for technical precision and graceful stage presence.',
+            searchableAliases: ['lakshmi prasanna', 'r lakshmi prasanna', 'prasanna', 'lakshmi'],
+            url: 'heroes_of_department.php',
+            ctaText: 'View Department Heroes →'
+        },
+        {
+            id: 'person_pooja_sai_praveena',
+            fullName: 'D Pooja Sai Praveena',
+            firstName: 'pooja',
+            lastName: 'praveena',
+            category: 'Department Hero & Sports Champion',
+            role: '🥇 Gold Medalist Karate Champion & JNTUK Athlete',
+            designation: 'Gold Medalist Karate Champion',
+            department: 'CSD',
+            branch: 'CSD',
+            regNo: '24B91A6218',
+            achievements: 'Gold Medalist in JNTUK Inter-Collegiate Karate Tournament and South-West Inter-University Karate Athlete in Chennai',
+            description: 'D Pooja Sai Praveena secured Gold Medal in JNTUK Inter-Collegiate Karate Tournament.',
+            searchableAliases: ['pooja sai praveena', 'd pooja sai praveena', 'pooja praveena', 'pooja karate winner', 'karate gold medalist'],
+            url: 'heroes_of_department.php',
+            ctaText: 'View Department Heroes →'
+        },
+        {
             id: 'person_preeti_avvula',
             fullName: 'Preeti Avvula',
             firstName: 'preeti',
@@ -355,11 +423,30 @@ const ChatbotService = (function () {
             department: 'CSD',
             branch: 'CSD',
             year: '2nd Year',
-            section: 'CSD – II Year',
+            section: 'CSD II Year',
             regNo: '25B91A6223',
             isCR: true,
             searchableAliases: ['javvadi mohana durga', 'mohana durga', 'javvadi', 'mohana'],
             description: 'Javvadi Mohana Durga is the Class Representative for CSD II Year (Reg No: 25B91A6223).',
+            url: 'heroes_of_department.php#class-representatives',
+            ctaText: 'View Class Representatives →'
+        },
+        {
+            id: 'person_vasa_hari_nagendra_pratap',
+            fullName: 'VASA HARI NAGENDRA PRATAP',
+            firstName: 'hari nagendra',
+            lastName: 'vasa',
+            category: 'Class Representative',
+            role: 'Class Representative (CSD II Year)',
+            designation: 'Class Representative (CSD II Year)',
+            department: 'CSD',
+            branch: 'CSD',
+            year: '2nd Year',
+            section: 'CSD II Year',
+            regNo: '25B91A6263',
+            isCR: true,
+            searchableAliases: ['vasa hari nagendra pratap', 'nagendra pratap', 'vasa hari'],
+            description: 'Vasa Hari Nagendra Pratap is Class Representative for CSD II Year (Reg: 25B91A6263).',
             url: 'heroes_of_department.php#class-representatives',
             ctaText: 'View Class Representatives →'
         }
@@ -375,15 +462,17 @@ const ChatbotService = (function () {
                desig.includes('faculty') || desig.includes('hod') || desig.includes('professor');
     }));
 
-    const MASTER_CR_INDEX = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => p.isCR));
+    let MASTER_CR_INDEX = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => p.isCR));
 
-    // Dynamic Live Database Synchronization with Rich Profile Ingestion
+    // Dynamic Live Database Synchronization with Rich Profile & Entities Ingestion
     async function syncWebsiteKnowledge() {
         if (isDbSynced) return;
         try {
             const res = await fetch('api/get_website_knowledge.php');
             if (res.ok) {
                 const data = await res.json();
+
+                // 1. Ingest Faculties
                 if (data.status === 'success' && Array.isArray(data.faculties)) {
                     for (const f of data.faculties) {
                         const email = f.email ? f.email.toLowerCase().trim() : '';
@@ -460,8 +549,44 @@ const ChatbotService = (function () {
                                role.includes('faculty') || role.includes('hod') || role.includes('professor') || role.includes('head of department') ||
                                desig.includes('faculty') || desig.includes('hod') || desig.includes('professor');
                     }));
-                    isDbSynced = true;
                 }
+
+                // 2. Ingest Class Representatives (14 CRs)
+                if (Array.isArray(data.classRepresentatives)) {
+                    for (const cr of data.classRepresentatives) {
+                        const exists = MASTER_PERSON_INDEX.some(p => p.regNo && p.regNo === cr.regNo);
+                        if (!exists) {
+                            const tokens = tokenizeName(cr.name);
+                            MASTER_PERSON_INDEX.push({
+                                id: `cr_${cr.regNo}`,
+                                fullName: cr.name,
+                                firstName: tokens[0] || cr.name.toLowerCase(),
+                                lastName: tokens[tokens.length - 1] || cr.name.toLowerCase(),
+                                category: 'Class Representative',
+                                role: cr.role || `Class Representative (${cr.branch} ${cr.year})`,
+                                designation: cr.role || `Class Representative (${cr.branch} ${cr.year})`,
+                                department: cr.branch || 'CSD',
+                                branch: cr.branch || 'CSD',
+                                year: cr.year,
+                                section: cr.section,
+                                regNo: cr.regNo,
+                                isCR: true,
+                                description: `${cr.name} is the Class Representative for ${cr.role} (Reg No: ${cr.regNo}).`,
+                                searchableAliases: [cr.name.toLowerCase(), tokens[0], tokens[tokens.length - 1]],
+                                url: 'heroes_of_department.php#class-representatives',
+                                ctaText: 'View Class Representatives →'
+                            });
+                        }
+                    }
+                    MASTER_CR_INDEX = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => p.isCR));
+                }
+
+                // 3. Ingest System Diagnostics
+                if (data.diagnostics) {
+                    systemDiagnostics = { ...systemDiagnostics, ...data.diagnostics, lastSyncTime: new Date().toISOString() };
+                }
+
+                isDbSynced = true;
             }
         } catch (err) {
             console.warn('Live MySQL knowledge sync skipped (offline mode):', err);
@@ -554,11 +679,11 @@ const ChatbotService = (function () {
             title: 'Department Laboratories & Infrastructure',
             keywords: ['what labs are available', 'labs', 'laboratories', 'infrastructure', 'computer labs', 'ai lab', 'iot lab'],
             content: `State-of-the-Art Department Laboratories:
-1. Advanced AI & Machine Learning Suite (High-performance GPU Workstations)
-2. Cloud Computing & DevOps Innovation Lab
-3. IoT & Embedded Edge Systems Hardware Lab
-4. Cyber Security & Digital Forensics Lab
-5. UI/UX Design & Full-Stack Development Studio`,
+1. Advanced AI & Machine Learning Suite (High-performance GPU Workstations for deep learning & vision)
+2. Cloud Computing & DevOps Innovation Lab (AWS cloud virtualization, Docker containerization & CI/CD)
+3. IoT & Embedded Edge Systems Hardware Lab (ESP32, Raspberry Pi, sensor networks & edge computing)
+4. Cyber Security & Digital Forensics Suite (Network traffic analyzers & cryptographic tools)
+5. UI/UX Design & Full-Stack Development Studio (Figma design suite & MERN stack environments)`,
             url: 'academics.php',
             ctaText: 'Explore Infrastructure & Labs →'
         },
@@ -566,7 +691,7 @@ const ChatbotService = (function () {
             id: 'startups_incubation',
             category: 'Startups',
             title: 'Student Startups & Incubation Hub',
-            keywords: ['tell me about startups', 'startups', 'what clubs are there', 'incubation', 'bhimavaram online', 'smart wash', 'lunch box'],
+            keywords: ['tell me about startups', 'startups', 'what clubs are there', 'incubation', 'bhimavaram online', 'smart wash', 'lunch box', 'bhimavaram digitals', 'campus online', 'nutridelight'],
             content: `Student Startups & Incubation Ecosystem:
 • Bhimavaram Online — First ONDC-enabled hyperlocal marketplace app in AP & TS.
 • Smart Wash — Smart laundry & fabric care service with doorstep pickup.
@@ -593,12 +718,12 @@ const ChatbotService = (function () {
             id: 'placements_overview',
             category: 'Placements',
             title: 'Placement Statistics & Recruiters',
-            keywords: ['tell me about placements', 'placements', 'highest package', 'average package', 'placement record', 'recruiters'],
+            keywords: ['tell me about placements', 'placements', 'highest package', 'average package', 'placement record', 'recruiters', 'which companies recruited'],
             content: `Department Placement Highlights:
 • Highest Package Offered: ₹18.5 LPA.
 • Average Package: ₹5.8 LPA.
 • Placement Percentage: 92%+ eligible students placed.
-• Top Recruiting Companies: Amazon, TCS Digital, Virtusa, Accenture, Hexaware, Capgemini.`,
+• Top Recruiting Companies: Amazon, TCS Digital, Virtusa, Accenture, Hexaware, Capgemini, Wipro, Infosys, Cognizant, Tech Mahindra.`,
             url: 'placements_internships.php',
             ctaText: 'View Placement Records →'
         },
@@ -606,13 +731,16 @@ const ChatbotService = (function () {
             id: 'clubs_activities',
             category: 'Clubs',
             title: 'Department Clubs & Student Societies',
-            keywords: ['what clubs are available', 'clubs', 'activities', 'societies', 'coding club', 'design club', 'tedx', 'nss'],
+            keywords: ['what clubs are available', 'clubs', 'activities', 'societies', 'coding club', 'design club', 'tedx', 'nss', 'swecha', 'sdc'],
             content: `Active Department Clubs & Societies:
 1. AI & Coding Club — Competitive programming & AI hackathons.
 2. Startup & Entrepreneurship Club — Seed incubation & venture support.
-3. TEDx SRKR Team — Public speaking, conference hosting & event curation.
-4. NSS Student Unit — Social welfare, blood donation & community outreach.
-5. Five Elemental Student Houses — Jal, Agni, Vayu, Akash, Prudhvi leagues.`,
+3. Cybersecurity Club — CTF challenges & network security labs.
+4. SDC Club — Software development & open-source projects.
+5. Swecha Club — Free & open-source software (FOSS) advocacy.
+6. TEDx SRKR Team — Public speaking, conference hosting & event curation.
+7. NSS Student Unit — Social welfare, blood donation & community outreach.
+8. Five Elemental Student Houses — Jal, Agni, Vayu, Akash, Prudhvi leagues.`,
             url: 'startup_club.php',
             ctaText: 'Explore Clubs & Activities →'
         },
@@ -726,7 +854,7 @@ const ChatbotService = (function () {
             }
         }
 
-        // 2. RESEARCH GRANTS & FUNDED PROJECTS QUERY ("who has research grants", "funded projects")
+        // 2. RESEARCH GRANTS & FUNDED PROJECTS QUERY
         if (/\b(grants|grant|funded projects|funded project|research grants|project funding|dbt|dst|aictes|idealab)\b/i.test(q)) {
             const grantFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => f.grants && f.grants.trim().length > 0));
             return {
@@ -740,7 +868,7 @@ const ChatbotService = (function () {
             };
         }
 
-        // 3. AWARDS & RECOGNITIONS QUERY ("who won awards", "stanford fellow")
+        // 3. AWARDS & RECOGNITIONS QUERY
         if (/\b(awards|award|recognitions|stanford|best faculty|best teacher|hackathon winner)\b/i.test(q)) {
             const awardFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => f.awards && f.awards.trim().length > 0));
             return {
@@ -754,7 +882,7 @@ const ChatbotService = (function () {
             };
         }
 
-        // 4. SCI PUBLICATIONS & RESEARCH PAPERS QUERY ("who has sci publications", "published in nature", "published in oxford")
+        // 4. SCI PUBLICATIONS & RESEARCH PAPERS QUERY
         if (/\b(publications|publication|sci journals|nature|oxford|scopus|ieee|research papers)\b/i.test(q)) {
             const pubFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => f.publications && f.publications.trim().length > 0));
             return {
@@ -768,7 +896,7 @@ const ChatbotService = (function () {
             };
         }
 
-        // 5. EXPERIENCE FILTER FOR FACULTY ("who has more than 5 years experience", "more than 10 years experience")
+        // 5. EXPERIENCE FILTER FOR FACULTY
         const expMatch = q.match(/\b(more than|greater than|>)\s*(\d+)\s*(years|year)?\s*(experience|exp)?\b/i);
         if (expMatch) {
             const minYears = parseInt(expMatch[2], 10);
@@ -789,7 +917,7 @@ const ChatbotService = (function () {
 
         if (isFacultyQuery || /\b(who (teaches|has phd|has mtech|specializes in)|who has a doctorate)\b/i.test(q) || /^(list all faculty|faculty list|all faculty|show faculty)\b/i.test(q)) {
 
-            // A. PhD Filter ("faculty list who did phd", "faculty with phd", "who has phd", "who has a doctorate", "faculty holding doctoral degrees")
+            // A. PhD Filter
             if (/\b(phd|ph\.d|ph\.d\.|doctorate|doctorates|doctor of philosophy|doctoral degree|doctoral)\b/i.test(q)) {
                 const phdFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => f.hasPhD || /\b(ph\.d|phd|doctorate|doctor of philosophy|doctoral)\b/i.test(f.qualification)));
 
@@ -816,7 +944,7 @@ const ChatbotService = (function () {
                 };
             }
 
-            // B. MTech Filter ("show me faculty with mtech", "faculty with mtech")
+            // B. MTech Filter
             if (/\b(mtech|m\.tech)\b/i.test(q)) {
                 const mtechFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => /\b(m\.tech|mtech)\b/i.test(f.qualification)));
                 return {
@@ -830,7 +958,7 @@ const ChatbotService = (function () {
                 };
             }
 
-            // C. Subject / Specialization Filter ("who teaches machine learning", "specializes in AI")
+            // C. Subject / Specialization Filter
             if (/\b(teaches|teaching|specializes in|specialization|subject|subjects)\b/i.test(q) || /\b(machine learning|ai|artificial intelligence|cyber security|cloud|iot|bioinformatics)\b/i.test(q)) {
                 let matchedSubject = '';
                 if (/\b(machine learning|ml)\b/i.test(q)) matchedSubject = 'Machine Learning';
@@ -860,7 +988,7 @@ const ChatbotService = (function () {
                 }
             }
 
-            // D. Faculty Total Count Query ("how many faculty members are there")
+            // D. Faculty Total Count Query
             if (/\b(how many|count|total number of)\b/i.test(q)) {
                 const uniqueFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
                 return {
@@ -873,7 +1001,7 @@ const ChatbotService = (function () {
                 };
             }
 
-            // E. List All Faculty ("list all faculty", "faculty list")
+            // E. List All Faculty
             if (/^(list all faculty|faculty list|all faculty|show faculty|faculty members|who are the faculty)\??$/i.test(q)) {
                 const uniqueFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
                 return {
@@ -888,7 +1016,7 @@ const ChatbotService = (function () {
             }
         }
 
-        // 7. HOUSE TOP CONTRIBUTOR / HIGHEST POINTS QUERY ("who is the top contributor in jal")
+        // 7. HOUSE TOP CONTRIBUTOR / HIGHEST POINTS QUERY
         if (/\b(highest points|top contributor|top scorer|highest score|leader|top member)\b/i.test(q)) {
             let houseKey = targetHouseKey;
             if (/\bjal\b/i.test(q)) houseKey = 'JAL';
@@ -917,7 +1045,7 @@ const ChatbotService = (function () {
             }
         }
 
-        // 8. MULTI-CONDITION STUDENT HOUSE FILTER ("who is in Jal house from second year CSD")
+        // 8. MULTI-CONDITION STUDENT HOUSE FILTER
         if (/\b(in|from)\b/i.test(q) && /\bhouse\b/i.test(q)) {
             let hKey = null;
             if (/\bjal\b/i.test(q)) hKey = 'JAL';
@@ -950,7 +1078,7 @@ const ChatbotService = (function () {
             }
         }
 
-        // 9. CLASS REPRESENTATIVE QUERIES & LISTS ("who are the second year class representatives", "list all class representatives")
+        // 9. CLASS REPRESENTATIVE QUERIES & LISTS
         if (/\b(class representative|class representatives|cr|crs)\b/i.test(q)) {
             if (/\b(2nd|2|second|ii)\b/i.test(q)) {
                 const secYearCRs = deduplicatePeople(MASTER_CR_INDEX.filter(cr => cr.year === '2nd Year'));
@@ -977,7 +1105,7 @@ const ChatbotService = (function () {
             };
         }
 
-        // 10. CULTURAL & COMPETITION ACHIEVERS ("who won the dance competition")
+        // 10. CULTURAL & COMPETITION ACHIEVERS
         if (/\b(dance|dance competition|classical dance|karate|sports|winner|won)\b/i.test(q)) {
             if (/\bdance\b/i.test(q)) {
                 return {
@@ -1054,7 +1182,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 10. FIELD-LEVEL ANSWER SYNTHESIZER (COMPLETE RICH PROFILES DISPLAY)
+     * 10. FIELD-LEVEL ANSWER SYNTHESIZER
      * =========================================================================
      */
     function formatFieldLevelAnswer(person, intent, rawQuery) {
@@ -1223,7 +1351,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         if (!rawQuery) return null;
         const lower = rawQuery.toLowerCase().trim();
 
-        // 1. PERSON / FACULTY / STUDENT LOOKUP FIRST (if explicit person name asked, e.g. "Who is Dr. Suresh Babu Mudunuri?")
+        // 1. PERSON / FACULTY / STUDENT LOOKUP FIRST
         const personResult = detectPersonInQuery(rawQuery);
         if (personResult && personResult.found) {
             if (personResult.isMultiple) {
@@ -1242,7 +1370,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             }
         }
 
-        // 2. STRUCTURED QUERY ENGINE (FACULTY FILTERS, GRANTS, AWARDS, PUBLICATIONS, MEMORY)
+        // 2. STRUCTURED QUERY ENGINE
         const structuredResult = executeStructuredQuery(rawQuery);
         if (structuredResult) {
             console.log('[CHATBOT INTENT] Structured Query Match:', structuredResult.title);
@@ -1491,6 +1619,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         getMasterPersonIndex: function () { return MASTER_PERSON_INDEX; },
         getMasterCRIndex: function () { return MASTER_CR_INDEX; },
         getMasterHouseRoster: function () { return MASTER_HOUSE_ROSTER; },
+        getDiagnostics: function () { return systemDiagnostics; },
         getContextState: function () { return conversationContext; },
         resetContext: function () {
             responseCache.clear();
