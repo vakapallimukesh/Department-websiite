@@ -164,7 +164,7 @@ const ChatbotService = (function () {
             fullName: 'Dr. Suresh Babu Mudunuri',
             firstName: 'suresh',
             lastName: 'mudunuri',
-            category: 'Professor & Head of Department (CSD)',
+            category: 'Faculty & Head of Department (CSD)',
             role: 'Professor & Head of Department (CSD)',
             designation: 'Professor & HOD (CSD)',
             department: 'CSD',
@@ -187,7 +187,7 @@ const ChatbotService = (function () {
             fullName: 'Dr. N. Gopala Krishna Murthy',
             firstName: 'murthy',
             lastName: 'gopala krishna',
-            category: 'Professor & Head of Department (CSIT)',
+            category: 'Faculty & Head of Department (CSIT)',
             role: 'Professor & Head of Department (CSIT)',
             designation: 'Professor & HOD (CSIT)',
             department: 'CSIT',
@@ -799,7 +799,16 @@ const ChatbotService = (function () {
         }
     ];
 
-    const MASTER_FACULTY_ROSTER = MASTER_PERSON_INDEX.filter(p => p.category.includes('Faculty') || p.category.includes('HOD'));
+    const MASTER_FACULTY_ROSTER = MASTER_PERSON_INDEX.filter(p => {
+        if (!p.category) return false;
+        const cat = p.category.toLowerCase();
+        const role = (p.role || '').toLowerCase();
+        const desig = (p.designation || '').toLowerCase();
+        return cat.includes('faculty') || cat.includes('hod') || cat.includes('professor') || cat.includes('head of department') ||
+               role.includes('faculty') || role.includes('hod') || role.includes('professor') || role.includes('head of department') ||
+               desig.includes('faculty') || desig.includes('hod') || desig.includes('professor');
+    });
+
     const MASTER_CR_INDEX = MASTER_PERSON_INDEX.filter(p => p.isCR);
 
     // Dynamically Index All 612 Database House Students into MASTER_PERSON_INDEX
@@ -1070,11 +1079,11 @@ const ChatbotService = (function () {
         // 3. FACULTY FILTERING & COUNTING QUERIES
         const isFacultyQuery = /\b(faculty|faculties|teacher|teachers|professor|professors|staff)\b/i.test(q);
 
-        if (isFacultyQuery || /\b(who (teaches|has phd|has mtech|specializes in))\b/i.test(q) || /^(list all faculty|faculty list|all faculty|show faculty)\b/i.test(q)) {
+        if (isFacultyQuery || /\b(who (teaches|has phd|has mtech|specializes in)|who has a doctorate)\b/i.test(q) || /^(list all faculty|faculty list|all faculty|show faculty)\b/i.test(q)) {
 
-            // A. PhD Filter ("faculty list who did phd", "list all faculty with phd", "who has phd", "how many faculty have phd")
-            if (/\b(phd|ph\.d|ph\.d\.|doctorate|doctorates|doctor of philosophy|doctoral degree|dr|dr\.)\b/i.test(q)) {
-                const phdFaculty = MASTER_FACULTY_ROSTER.filter(f => f.hasPhD || /\b(ph\.d|phd|doctorate|doctor of philosophy|doctoral degree|dr)\b/i.test(f.qualification + ' ' + f.fullName));
+            // A. PhD Filter ("faculty list who did phd", "faculty with phd", "who has phd", "who has a doctorate", "faculty holding doctoral degrees")
+            if (/\b(phd|ph\.d|ph\.d\.|doctorate|doctorates|doctor of philosophy|doctoral degree|doctoral)\b/i.test(q)) {
+                const phdFaculty = MASTER_FACULTY_ROSTER.filter(f => f.hasPhD || /\b(ph\.d|phd|doctorate|doctor of philosophy|doctoral)\b/i.test(f.qualification));
 
                 if (/\b(how many|count|number of)\b/i.test(q)) {
                     return {
@@ -1305,8 +1314,8 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
         let requestedHouseKey = null;
         if (/\b(jal|water)\b/i.test(lower)) requestedHouseKey = 'JAL';
-        else if (/\b(agni|fire)\b/i.test(lower)) requestedHouseKey = 'AGNI';
-        else if (/\b(vayu|wind)\b/i.test(lower)) requestedHouseKey = 'VAYU';
+        else if (/\bagni|fire\b/i.test(lower)) requestedHouseKey = 'AGNI';
+        else if (/\bvayu|wind\b/i.test(lower)) requestedHouseKey = 'VAYU';
         else if (/\b(akash|aakash|sky)\b/i.test(lower)) requestedHouseKey = 'AAKASH';
         else if (/\b(prudhvi|pruthvi|earth)\b/i.test(lower)) requestedHouseKey = 'PRUDHVI';
 
@@ -1482,14 +1491,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         if (!rawQuery) return null;
         const lower = rawQuery.toLowerCase().trim();
 
-        // 1. STRUCTURED QUERY ENGINE (FACULTY FILTERS, HOUSE RANKINGS, MULTI-CONDITION, MEMORY)
-        const structuredResult = executeStructuredQuery(rawQuery);
-        if (structuredResult) {
-            console.log('[CHATBOT INTENT] Structured Query Match:', structuredResult.title);
-            return structuredResult;
-        }
-
-        // 2. PERSON / FACULTY / STUDENT LOOKUP
+        // 1. PERSON / FACULTY / STUDENT LOOKUP FIRST (if explicit person name asked, e.g. "Who is Dr. Suresh Babu Mudunuri?")
         const personResult = detectPersonInQuery(rawQuery);
         if (personResult && personResult.found) {
             if (personResult.isMultiple) {
@@ -1506,6 +1508,13 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 console.log('[CHATBOT INTENT] Person Entity Match:', personResult.person.fullName, '| Intent:', personResult.intent);
                 return formatFieldLevelAnswer(personResult.person, personResult.intent, rawQuery);
             }
+        }
+
+        // 2. STRUCTURED QUERY ENGINE (FACULTY FILTERS, HOUSE RANKINGS, MULTI-CONDITION, MEMORY)
+        const structuredResult = executeStructuredQuery(rawQuery);
+        if (structuredResult) {
+            console.log('[CHATBOT INTENT] Structured Query Match:', structuredResult.title);
+            return structuredResult;
         }
 
         // 3. HOUSE SYSTEM QUERY
