@@ -2,10 +2,11 @@
  * AI Department Assistant — Google Gemini API & Scalable Hybrid RAG Engine
  * SRKREC CSD & CSIT Departments
  *
- * COMPLETE WEBSITE KNOWLEDGE SYSTEM ARCHITECTURE:
+ * DEDUPLICATED COMPLETE WEBSITE KNOWLEDGE ARCHITECTURE:
  * Centralized searchable representation of the complete department website and database.
  * Dynamic Data Sources: Live MySQL `faculties`, `students`, `houses`, `classes` tables
- * 25 Faculty Records, 612 Student Records, 5 Elemental Houses, 14 Class Representatives.
+ * 25 Unique Faculty Records, 612 Student Records, 5 Elemental Houses, 14 Class Representatives.
+ * Enforces Institutional Identity Deduplication (Email, Faculty ID, Reg No, Normalized Aliases).
  */
 
 const ChatbotService = (function () {
@@ -47,7 +48,41 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 2. INTENT CLASSIFICATION ENGINE
+     * 2. INSTITUTIONAL IDENTITY DEDUPLICATION ENGINE
+     * =========================================================================
+     */
+    function getPersonUniqueKey(p) {
+        if (!p) return null;
+        if (p.email && p.email.trim().length > 3) {
+            return 'email:' + p.email.toLowerCase().trim();
+        }
+        if (p.regNo && p.regNo.trim().length > 3) {
+            return 'reg:' + p.regNo.toUpperCase().trim();
+        }
+        if (p.faculty_id) {
+            return 'fac_id:' + p.faculty_id;
+        }
+        return 'name:' + normalizePersonName(p.fullName);
+    }
+
+    function deduplicatePeople(peopleList) {
+        if (!Array.isArray(peopleList)) return [];
+        const seenKeys = new Set();
+        const result = [];
+        for (const p of peopleList) {
+            if (!p) continue;
+            const key = getPersonUniqueKey(p);
+            if (key && !seenKeys.has(key)) {
+                seenKeys.add(key);
+                result.push(p);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * =========================================================================
+     * 3. INTENT CLASSIFICATION ENGINE
      * =========================================================================
      */
     function detectQueryIntent(rawQuery) {
@@ -98,7 +133,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 3. MASTER HOUSE ROSTER ENGINE (612 VERIFIED HOUSE MEMBERS WITH POINTS)
+     * 4. MASTER HOUSE ROSTER ENGINE (612 VERIFIED HOUSE MEMBERS WITH POINTS)
      * =========================================================================
      */
     const MASTER_HOUSE_ROSTER = {
@@ -155,13 +190,14 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 4. MASTER PERSON INDEX (COMPLETE 25 FACULTY + HEROES + CRs + STUDENTS)
+     * 5. MASTER PERSON INDEX (COMPLETE 25 FACULTY + HEROES + CRs + STUDENTS)
      * =========================================================================
      */
     const MASTER_PERSON_INDEX = [
         // --- ALL 25 FACULTY RECORDS FROM MYSQL DATABASE & FACULTY.PHP ---
         {
             id: 'faculty_suresh_babu',
+            faculty_id: 1,
             fullName: 'Dr. Suresh Babu Mudunuri',
             firstName: 'suresh',
             lastName: 'mudunuri',
@@ -179,12 +215,13 @@ const ChatbotService = (function () {
             experienceYears: 20,
             achievements: 'Head of Department (CSD), 35+ Research Publications, 15+ Funded Projects',
             description: 'Dr. Suresh Babu Mudunuri is Professor and Head of Department of Computer Science & Design (CSD) at SRKR Engineering College.',
-            searchableAliases: ['suresh', 'suresh babu', 'm suresh babu', 'dr suresh babu', 'mudunuri suresh babu', 'suresh babu mudunuri', 'suresh sir', 'hod suresh', 'hod csd'],
+            searchableAliases: ['suresh', 'suresh babu', 'm suresh babu', 'dr suresh babu', 'mudunuri suresh babu', 'suresh babu mudunuri', 'suresh sir', 'hod suresh', 'hod csd', 'dr m suresh babu', 'dr.m.suresh babu'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
         {
             id: 'faculty_ngk_murthy',
+            faculty_id: 8,
             fullName: 'Dr. N. Gopala Krishna Murthy',
             firstName: 'murthy',
             lastName: 'gopala krishna',
@@ -202,12 +239,13 @@ const ChatbotService = (function () {
             experienceYears: 18,
             achievements: 'Head of Department (CSIT), 30+ Research Publications, 18+ Projects',
             description: 'Dr. N. Gopala Krishna Murthy is Professor and Head of Department of Computer Science & Information Technology (CSIT) at SRKR Engineering College.',
-            searchableAliases: ['ngk murthy', 'gopala krishna', 'gopala krishna murthy', 'dr ngk murthy', 'n gopala krishna murthy', 'murthy', 'murthy sir', 'hod csit'],
+            searchableAliases: ['ngk murthy', 'gopala krishna', 'gopala krishna murthy', 'dr ngk murthy', 'n gopala krishna murthy', 'murthy', 'murthy sir', 'hod csit', 'dr n. gopala krishna murthy'],
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },
         {
             id: 'faculty_srinivasa_rao',
+            faculty_id: 2,
             fullName: 'Dr. K. Srinivasa Rao',
             firstName: 'srinivasa',
             lastName: 'rao',
@@ -231,6 +269,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_bhanu_rajesh',
+            faculty_id: 3,
             fullName: 'Mr. K. Bhanu Rajesh Naidu',
             firstName: 'bhanu',
             lastName: 'rajesh',
@@ -253,6 +292,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_aswini_priyanka',
+            faculty_id: 4,
             fullName: 'A. Aswini Priyanka',
             firstName: 'aswini',
             lastName: 'priyanka',
@@ -276,6 +316,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_satyam',
+            faculty_id: 5,
             fullName: 'ANGARA SATYAM',
             firstName: 'satyam',
             lastName: 'angara',
@@ -299,6 +340,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_mohan_krishna',
+            faculty_id: 6,
             fullName: 'S. Mohan Krishna',
             firstName: 'mohan',
             lastName: 'krishna',
@@ -322,6 +364,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_surya_kumar',
+            faculty_id: 7,
             fullName: 'P S V SURYA KUMAR',
             firstName: 'surya',
             lastName: 'kumar',
@@ -344,6 +387,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_tulasi_rajesh',
+            faculty_id: 9,
             fullName: 'Jonnapalli Tulasi Rajesh',
             firstName: 'tulasi',
             lastName: 'rajesh',
@@ -365,6 +409,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_navya',
+            faculty_id: 10,
             fullName: 'Navya Nallaparaju',
             firstName: 'navya',
             lastName: 'nallaparaju',
@@ -386,6 +431,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_praveen',
+            faculty_id: 11,
             fullName: 'Neti Praveen',
             firstName: 'praveen',
             lastName: 'neti',
@@ -407,6 +453,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_krishna_veni',
+            faculty_id: 12,
             fullName: 'Anusuri Krishna Veni',
             firstName: 'krishna veni',
             lastName: 'anusuri',
@@ -428,6 +475,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_trinadh',
+            faculty_id: 13,
             fullName: 'K V V Satya Trinadh Naidu',
             firstName: 'trinadh',
             lastName: 'naidu',
@@ -451,6 +499,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_mouna',
+            faculty_id: 14,
             fullName: 'Penmetsa Mouna',
             firstName: 'mouna',
             lastName: 'penmetsa',
@@ -472,6 +521,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_manoj',
+            faculty_id: 15,
             fullName: 'Pericherla Manoj',
             firstName: 'manoj',
             lastName: 'pericherla',
@@ -495,6 +545,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_sunil_varma',
+            faculty_id: 16,
             fullName: 'K V Sunil Varma',
             firstName: 'sunil',
             lastName: 'varma',
@@ -516,6 +567,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_aneela',
+            faculty_id: 17,
             fullName: 'N. Aneela',
             firstName: 'aneela',
             lastName: 'n',
@@ -539,6 +591,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_suseela',
+            faculty_id: 18,
             fullName: 'M S Suseela',
             firstName: 'suseela',
             lastName: 'm',
@@ -560,6 +613,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_srinu',
+            faculty_id: 19,
             fullName: 'M. SRINU',
             firstName: 'srinu',
             lastName: 'm',
@@ -581,6 +635,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_surendra',
+            faculty_id: 20,
             fullName: 'J. MOHAN SURENDRA',
             firstName: 'surendra',
             lastName: 'mohan',
@@ -602,6 +657,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_sudhakar',
+            faculty_id: 21,
             fullName: 'G. SUDHAKAR',
             firstName: 'sudhakar',
             lastName: 'g',
@@ -623,6 +679,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_parvathi',
+            faculty_id: 22,
             fullName: 'D. PARVATHI',
             firstName: 'parvathi',
             lastName: 'd',
@@ -644,6 +701,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_maduriya',
+            faculty_id: 23,
             fullName: 'M. MADURIYA',
             firstName: 'maduriya',
             lastName: 'm',
@@ -665,6 +723,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_girichar',
+            faculty_id: 24,
             fullName: 'K. GIRICHAR',
             firstName: 'girichar',
             lastName: 'k',
@@ -686,6 +745,7 @@ const ChatbotService = (function () {
         },
         {
             id: 'faculty_vignya',
+            faculty_id: 25,
             fullName: 'K. VIGNYA',
             firstName: 'vignya',
             lastName: 'k',
@@ -800,7 +860,7 @@ const ChatbotService = (function () {
         }
     ];
 
-    let MASTER_FACULTY_ROSTER = MASTER_PERSON_INDEX.filter(p => {
+    let MASTER_FACULTY_ROSTER = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => {
         if (!p.category) return false;
         const cat = p.category.toLowerCase();
         const role = (p.role || '').toLowerCase();
@@ -808,11 +868,11 @@ const ChatbotService = (function () {
         return cat.includes('faculty') || cat.includes('hod') || cat.includes('professor') || cat.includes('head of department') ||
                role.includes('faculty') || role.includes('hod') || role.includes('professor') || role.includes('head of department') ||
                desig.includes('faculty') || desig.includes('hod') || desig.includes('professor');
-    });
+    }));
 
-    const MASTER_CR_INDEX = MASTER_PERSON_INDEX.filter(p => p.isCR);
+    const MASTER_CR_INDEX = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => p.isCR));
 
-    // Dynamic Live Database Synchronization
+    // Dynamic Live Database Synchronization with Institutional Identity Deduplication
     async function syncWebsiteKnowledge() {
         if (isDbSynced) return;
         try {
@@ -821,18 +881,32 @@ const ChatbotService = (function () {
                 const data = await res.json();
                 if (data.status === 'success' && Array.isArray(data.faculties)) {
                     for (const f of data.faculties) {
+                        const email = f.email ? f.email.toLowerCase().trim() : '';
                         const normName = normalizePersonName(f.fullName);
-                        let existing = MASTER_PERSON_INDEX.find(p => normalizePersonName(p.fullName) === normName);
+
+                        // Institutional Identity Matching (Email -> Faculty ID -> Name/Aliases)
+                        let existing = MASTER_PERSON_INDEX.find(p => {
+                            if (email && p.email && p.email.toLowerCase().trim() === email) return true;
+                            if (f.faculty_id && p.faculty_id && p.faculty_id === f.faculty_id) return true;
+                            if (normalizePersonName(p.fullName) === normName) return true;
+                            if (p.searchableAliases && p.searchableAliases.some(a => normalizePersonName(a) === normName)) return true;
+                            return false;
+                        });
+
                         if (existing) {
                             existing.qualification = f.qualification || existing.qualification;
                             existing.hasPhD = f.hasPhD !== undefined ? f.hasPhD : existing.hasPhD;
                             existing.email = f.email || existing.email;
                             existing.department = f.department || existing.department;
                             existing.role = f.role || existing.role;
+                            if (f.fullName && !existing.searchableAliases.includes(f.fullName.toLowerCase())) {
+                                existing.searchableAliases.push(f.fullName.toLowerCase());
+                            }
                         } else {
                             const tokens = tokenizeName(f.fullName);
                             const newFac = {
                                 id: f.id || `faculty_${f.faculty_id}`,
+                                faculty_id: f.faculty_id,
                                 fullName: f.fullName,
                                 firstName: tokens[0] || normName,
                                 lastName: tokens[tokens.length - 1] || normName,
@@ -852,8 +926,8 @@ const ChatbotService = (function () {
                             MASTER_PERSON_INDEX.push(newFac);
                         }
                     }
-                    // Refresh Master Faculty Roster from updated MASTER_PERSON_INDEX
-                    MASTER_FACULTY_ROSTER = MASTER_PERSON_INDEX.filter(p => {
+                    // Refresh Master Faculty Roster with deduplicated records
+                    MASTER_FACULTY_ROSTER = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => {
                         if (!p.category) return false;
                         const cat = p.category.toLowerCase();
                         const role = (p.role || '').toLowerCase();
@@ -861,7 +935,7 @@ const ChatbotService = (function () {
                         return cat.includes('faculty') || cat.includes('hod') || cat.includes('professor') || cat.includes('head of department') ||
                                role.includes('faculty') || role.includes('hod') || role.includes('professor') || role.includes('head of department') ||
                                desig.includes('faculty') || desig.includes('hod') || desig.includes('professor');
-                    });
+                    }));
                     isDbSynced = true;
                 }
             }
@@ -870,8 +944,8 @@ const ChatbotService = (function () {
         }
     }
 
-    // Trigger sync on module load
-    if (typeof fetch === 'function') {
+    // Trigger sync on module load if running in browser
+    if (typeof window !== 'undefined' && typeof fetch === 'function') {
         syncWebsiteKnowledge();
     }
 
@@ -886,7 +960,7 @@ const ChatbotService = (function () {
                 const firstName = tokens[0] || normName;
                 const lastName = tokens[tokens.length - 1] || normName;
 
-                const exists = MASTER_PERSON_INDEX.some(p => normalizePersonName(p.fullName) === normName);
+                const exists = MASTER_PERSON_INDEX.some(p => normalizePersonName(p.fullName) === normName || (m.regNo && p.regNo === m.regNo));
                 if (!exists) {
                     MASTER_PERSON_INDEX.push({
                         id: `house_student_${m.name.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}`,
@@ -914,7 +988,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 5. GRANULAR WEBSITE KNOWLEDGE MATRIX
+     * 6. GRANULAR WEBSITE KNOWLEDGE MATRIX
      * =========================================================================
      */
     const KNOWLEDGE_MATRIX = [
@@ -1036,7 +1110,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 6. PERSON ENTITY DETECTION IN QUERY
+     * 7. PERSON ENTITY DETECTION IN QUERY WITH DEDUPLICATION
      * =========================================================================
      */
     function detectPersonInQuery(rawQuery) {
@@ -1094,14 +1168,20 @@ const ChatbotService = (function () {
         }
 
         if (candidates.length === 1) return { found: true, isMultiple: false, person: candidates[0], intent: intent };
-        if (candidates.length > 1) return { found: true, isMultiple: true, candidates: candidates, intent: intent };
+        if (candidates.length > 1) {
+            const dedupedCandidates = deduplicatePeople(candidates);
+            if (dedupedCandidates.length === 1) {
+                return { found: true, isMultiple: false, person: dedupedCandidates[0], intent: intent };
+            }
+            return { found: true, isMultiple: true, candidates: dedupedCandidates, intent: intent };
+        }
 
         return null;
     }
 
     /**
      * =========================================================================
-     * 7. STRUCTURED WEBSITE KNOWLEDGE QUERY SYSTEM
+     * 8. STRUCTURED WEBSITE KNOWLEDGE QUERY SYSTEM
      * Handles filtering, counting, rankings, multi-condition queries, and memory
      * =========================================================================
      */
@@ -1128,7 +1208,7 @@ const ChatbotService = (function () {
         const expMatch = q.match(/\b(more than|greater than|>)\s*(\d+)\s*(years|year)?\s*(experience|exp)?\b/i);
         if (expMatch) {
             const minYears = parseInt(expMatch[2], 10);
-            const expFaculty = MASTER_FACULTY_ROSTER.filter(f => f.experienceYears && f.experienceYears > minYears);
+            const expFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => f.experienceYears && f.experienceYears > minYears));
             return {
                 id: `faculty_exp_${minYears}`,
                 category: 'Faculty Experience',
@@ -1147,7 +1227,7 @@ const ChatbotService = (function () {
 
             // A. PhD Filter ("faculty list who did phd", "faculty with phd", "who has phd", "who has a doctorate", "faculty holding doctoral degrees")
             if (/\b(phd|ph\.d|ph\.d\.|doctorate|doctorates|doctor of philosophy|doctoral degree|doctoral)\b/i.test(q)) {
-                const phdFaculty = MASTER_FACULTY_ROSTER.filter(f => f.hasPhD || /\b(ph\.d|phd|doctorate|doctor of philosophy|doctoral)\b/i.test(f.qualification));
+                const phdFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => f.hasPhD || /\b(ph\.d|phd|doctorate|doctor of philosophy|doctoral)\b/i.test(f.qualification)));
 
                 if (/\b(how many|count|number of)\b/i.test(q)) {
                     return {
@@ -1174,7 +1254,7 @@ const ChatbotService = (function () {
 
             // B. MTech Filter ("show me faculty with mtech", "faculty with mtech")
             if (/\b(mtech|m\.tech)\b/i.test(q)) {
-                const mtechFaculty = MASTER_FACULTY_ROSTER.filter(f => /\b(m\.tech|mtech)\b/i.test(f.qualification));
+                const mtechFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => /\b(m\.tech|mtech)\b/i.test(f.qualification)));
                 return {
                     id: 'faculty_mtech_list',
                     category: 'Faculty Directory',
@@ -1196,10 +1276,10 @@ const ChatbotService = (function () {
                 else if (/\b(iot|internet of things)\b/i.test(q)) matchedSubject = 'IoT';
 
                 if (matchedSubject) {
-                    const specFaculty = MASTER_FACULTY_ROSTER.filter(f => {
+                    const specFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER.filter(f => {
                         const specStr = (f.specialization + ' ' + f.subjects + ' ' + f.description).toLowerCase();
                         return specStr.includes(matchedSubject.toLowerCase());
-                    });
+                    }));
 
                     if (specFaculty.length > 0) {
                         return {
@@ -1217,11 +1297,12 @@ const ChatbotService = (function () {
 
             // D. Faculty Total Count Query ("how many faculty members are there")
             if (/\b(how many|count|total number of)\b/i.test(q)) {
+                const uniqueFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
                 return {
                     id: 'faculty_total_count',
                     category: 'Faculty Directory',
                     title: 'Total Department Faculty Count',
-                    content: `There are <strong>${MASTER_FACULTY_ROSTER.length} total faculty members</strong> in the CSD & CSIT department (including HODs, Professors, Assistant Professors, and Teaching Assistants).`,
+                    content: `There are <strong>${uniqueFaculty.length} total faculty members</strong> in the CSD & CSIT department (including HODs, Professors, Assistant Professors, and Teaching Assistants).`,
                     url: 'faculty.php',
                     ctaText: 'View Complete Faculty Directory →'
                 };
@@ -1229,12 +1310,13 @@ const ChatbotService = (function () {
 
             // E. List All Faculty ("list all faculty", "faculty list")
             if (/^(list all faculty|faculty list|all faculty|show faculty|faculty members|who are the faculty)\??$/i.test(q)) {
+                const uniqueFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
                 return {
                     id: 'faculty_all_list',
                     category: 'Faculty Directory',
                     title: 'All Department Faculty Members',
-                    content: `Here are all <strong>${MASTER_FACULTY_ROSTER.length} Faculty Members</strong> of CSD & CSIT Departments:<br><br>` +
-                             MASTER_FACULTY_ROSTER.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.designation || f.role} (${f.department})`).join('<br>'),
+                    content: `Here are all <strong>${uniqueFaculty.length} Faculty Members</strong> of CSD & CSIT Departments:<br><br>` +
+                             uniqueFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.designation || f.role} (${f.department})`).join('<br>'),
                     url: 'faculty.php',
                     ctaText: 'View Complete Faculty Directory →'
                 };
@@ -1306,7 +1388,7 @@ const ChatbotService = (function () {
         // 6. CLASS REPRESENTATIVE QUERIES & LISTS ("who are the second year class representatives", "list all class representatives")
         if (/\b(class representative|class representatives|cr|crs)\b/i.test(q)) {
             if (/\b(2nd|2|second|ii)\b/i.test(q)) {
-                const secYearCRs = MASTER_CR_INDEX.filter(cr => cr.year === '2nd Year');
+                const secYearCRs = deduplicatePeople(MASTER_CR_INDEX.filter(cr => cr.year === '2nd Year'));
                 return {
                     id: 'cr_2nd_year',
                     category: 'Class Representatives',
@@ -1318,12 +1400,13 @@ const ChatbotService = (function () {
                 };
             }
 
+            const uniqueCRs = deduplicatePeople(MASTER_CR_INDEX);
             return {
                 id: 'cr_all_list',
                 category: 'Class Representatives',
                 title: 'All Department Class Representatives (CRs)',
                 content: `Here are all <strong>14 Class Representatives (CRs)</strong> across 2nd, 3rd, and 4th Years for CSD & CSIT:<br><br>` +
-                         MASTER_CR_INDEX.map((cr, i) => `${i + 1}. <strong>${cr.fullName}</strong> — ${cr.role} (Reg: ${cr.regNo || 'N/A'})`).join('<br>'),
+                         uniqueCRs.map((cr, i) => `${i + 1}. <strong>${cr.fullName}</strong> — ${cr.role} (Reg: ${cr.regNo || 'N/A'})`).join('<br>'),
                 url: 'heroes_of_department.php#class-representatives',
                 ctaText: 'View Class Representatives →'
             };
@@ -1350,7 +1433,7 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 8. HOUSE SYSTEM INTENT ENGINE
+     * 9. HOUSE SYSTEM INTENT ENGINE
      * =========================================================================
      */
     function searchHouseSystem(rawQuery) {
@@ -1378,8 +1461,8 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
         let requestedHouseKey = null;
         if (/\b(jal|water)\b/i.test(lower)) requestedHouseKey = 'JAL';
-        else if (/\bagni|fire\b/i.test(lower)) requestedHouseKey = 'AGNI';
-        else if (/\bvayu|wind\b/i.test(lower)) requestedHouseKey = 'VAYU';
+        else if (/\b(agni|fire)\b/i.test(lower)) requestedHouseKey = 'AGNI';
+        else if (/\b(vayu|wind)\b/i.test(lower)) requestedHouseKey = 'VAYU';
         else if (/\b(akash|aakash|sky)\b/i.test(lower)) requestedHouseKey = 'AAKASH';
         else if (/\b(prudhvi|pruthvi|earth)\b/i.test(lower)) requestedHouseKey = 'PRUDHVI';
 
@@ -1407,7 +1490,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 9. FIELD-LEVEL ANSWER SYNTHESIZER
+     * 10. FIELD-LEVEL ANSWER SYNTHESIZER
      * =========================================================================
      */
     function formatFieldLevelAnswer(person, intent, rawQuery) {
@@ -1547,7 +1630,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 10. PRIMARY RAG HYBRID DISPATCHER ENFORCING RETRIEVAL SYSTEM
+     * 11. PRIMARY RAG HYBRID DISPATCHER ENFORCING RETRIEVAL SYSTEM
      * =========================================================================
      */
     function searchKnowledgeVector(rawQuery) {
@@ -1603,12 +1686,13 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
         // 5. FACULTY CATEGORY OVERVIEW
         if (/\b(who are the (faculty|faculties|teachers|professors)|faculty members|faculty directory|list of faculty|all faculty)\b/i.test(lower)) {
+            const uniqueFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
             return {
                 id: 'faculty_overview',
                 category: 'Faculty Directory',
                 title: 'CSD & CSIT Department Faculty Members',
-                content: `Here are all <strong>${MASTER_FACULTY_ROSTER.length} Faculty Members</strong> of CSD & CSIT Departments:<br><br>` +
-                         MASTER_FACULTY_ROSTER.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.designation || f.role} (${f.department})`).join('<br>'),
+                content: `Here are all <strong>${uniqueFaculty.length} Faculty Members</strong> of CSD & CSIT Departments:<br><br>` +
+                         uniqueFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.designation || f.role} (${f.department})`).join('<br>'),
                 url: 'faculty.php',
                 ctaText: 'View Complete Faculty Directory →'
             };
@@ -1654,7 +1738,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 11. LOCAL ANSWER SYNTHESIZER
+     * 12. LOCAL ANSWER SYNTHESIZER
      * =========================================================================
      */
     function synthesizeLocalAnswer(matchedChunk, rawQuery) {
@@ -1683,7 +1767,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
-     * 12. MAIN PUBLIC METHOD: getBotResponse
+     * 13. MAIN PUBLIC METHOD: getBotResponse
      * =========================================================================
      */
     async function getBotResponse(userInput, config = {}) {
@@ -1697,8 +1781,10 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             console.log('[CHATBOT] Request started for:', userInput);
             const normalizedQuery = userInput.toLowerCase().trim();
 
-            // Ensure live MySQL DB knowledge is synced if browser fetch is available
-            await syncWebsiteKnowledge();
+            // Ensure live MySQL DB knowledge is synced if running in browser
+            if (typeof window !== 'undefined') {
+                await syncWebsiteKnowledge();
+            }
 
             if (responseCache.has(normalizedQuery)) {
                 console.log('[CHATBOT] Cache hit for:', normalizedQuery);
@@ -1827,3 +1913,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         }
     };
 })();
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ChatbotService;
+}
