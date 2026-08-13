@@ -161,6 +161,11 @@ include "./head.php";
         transition: all 0.3s ease;
         animation: houseItemCounterRotate 20s linear infinite;
         transform-origin: center center;
+        text-decoration: none !important;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .house-button {
@@ -171,6 +176,9 @@ include "./head.php";
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .house-button:hover {
@@ -3005,40 +3013,40 @@ include "./head.php";
                     </div>
 
                     <!-- House items -->
-                    <div class="house-item house-agni" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Agni'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Agni'">
+                    <a href="house_detail.php?house=Agni" class="house-item house-agni" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
                             <img src="./assets/logos/3.jpg" alt="Agni">
-                        </button>
+                        </div>
                         <div class="house-name">Agni</div>
-                    </div>
+                    </a>
 
-                    <div class="house-item house-vayu" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Vayu'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Vayu'">
+                    <a href="house_detail.php?house=Vayu" class="house-item house-vayu" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
                             <img src="./assets/logos/2.jpg" alt="Vayu">
-                        </button>
+                        </div>
                         <div class="house-name">Vayu</div>
-                    </div>
+                    </a>
 
-                    <div class="house-item house-prudhvi" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Prudhvi'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Prudhvi'">
+                    <a href="house_detail.php?house=Prudhvi" class="house-item house-prudhvi" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
                             <img src="./assets/logos/4.jpg" alt="Prudhvi">
-                        </button>
+                        </div>
                         <div class="house-name">Prudhvi</div>
-                    </div>
+                    </a>
 
-                    <div class="house-item house-jal" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Jal'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Jal'">
+                    <a href="house_detail.php?house=Jal" class="house-item house-jal" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
                             <img src="./assets/logos/1.jpg" alt="Jal">
-                        </button>
+                        </div>
                         <div class="house-name">Jal</div>
-                    </div>
+                    </a>
 
-                    <div class="house-item house-aakash" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Aakash'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Aakash'">
+                    <a href="house_detail.php?house=Aakash" class="house-item house-aakash" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
                             <img src="./assets/logos/5.jpg" alt="Aakash">
-                        </button>
+                        </div>
                         <div class="house-name">Aakash</div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -4081,6 +4089,9 @@ include "./head.php";
     <script src="assets/js/depth-carousel.js"></script>
     <!-- Interactive ReactBits ScrollStack Component Engine -->
     <script src="assets/js/scroll-stack.js"></script>
+
+    <!-- AI Department Assistant Chatbot Component -->
+    <?php include_once __DIR__ . '/includes/chatbot.php'; ?>
 </body>
 
 </html>

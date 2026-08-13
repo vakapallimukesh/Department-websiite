@@ -580,6 +580,167 @@ if ($classRes) {
     }
 }
 
+// 4. Featured Active Internships from internships.php
+$featuredInternships = [
+    [
+        'id' => 'intern_1',
+        'student_id' => '23B91A0738',
+        'regNo' => '23B91A0738',
+        'name' => 'N. LEELA MADHAV RAO',
+        'branch' => 'CSIT',
+        'department' => 'CSIT',
+        'year' => '3rd Year (3/4)',
+        'section' => 'Sec A',
+        'company' => 'Zennith Digital Tech LLP',
+        'role' => 'Software Engineering Intern',
+        'record_type' => 'internship',
+        'status' => 'Selected / Active',
+        'stipend' => 'Paid Corporate Stipend',
+        'profile_photo' => 'assets/images/internships/student_leela_madhav.jpg',
+        'source_url' => 'internships.php'
+    ],
+    [
+        'id' => 'intern_2',
+        'student_id' => '23B91A0727',
+        'regNo' => '23B91A0727',
+        'name' => 'K. S. SRIRAM CHARAN TEJA',
+        'branch' => 'CSIT',
+        'department' => 'CSIT',
+        'year' => '3rd Year (3/4)',
+        'section' => 'Sec A',
+        'company' => 'Zennith Digital Tech LLP',
+        'role' => 'Software Engineering Intern',
+        'record_type' => 'internship',
+        'status' => 'Selected / Active',
+        'stipend' => 'Paid Corporate Stipend',
+        'profile_photo' => 'assets/images/internships/student_sriram_charan.jpg',
+        'source_url' => 'internships.php'
+    ],
+    [
+        'id' => 'intern_3',
+        'student_id' => '23B91A0714',
+        'regNo' => '23B91A0714',
+        'name' => 'G. NIKHILA VALLI',
+        'branch' => 'CSIT',
+        'department' => 'CSIT',
+        'year' => '3rd Year (3/4)',
+        'section' => 'Sec A',
+        'company' => 'Zennith Digital Tech LLP',
+        'role' => 'Software Engineering Intern',
+        'record_type' => 'internship',
+        'status' => 'Selected / Active',
+        'stipend' => 'Paid Corporate Stipend',
+        'profile_photo' => 'assets/images/internships/student_nikhila_valli.jpg',
+        'source_url' => 'internships.php'
+    ],
+    [
+        'id' => 'intern_4',
+        'student_id' => '23B91A6219',
+        'regNo' => '23B91A6219',
+        'name' => 'G. MANOJ KUMAR',
+        'branch' => 'CSD',
+        'department' => 'CSD',
+        'year' => '3rd Year (3/4)',
+        'section' => 'Sec A',
+        'company' => 'Zennith Digital Tech LLP',
+        'role' => 'Software Engineering Intern',
+        'record_type' => 'internship',
+        'status' => 'Selected / Active',
+        'stipend' => 'Paid Corporate Stipend',
+        'profile_photo' => 'assets/images/internships/student_manoj_kumar.jpg',
+        'source_url' => 'internships.php'
+    ],
+    [
+        'id' => 'intern_5',
+        'student_id' => '24B95A6207',
+        'regNo' => '24B95A6207',
+        'name' => 'T. UMA SAI PAVAN',
+        'branch' => 'CSD',
+        'department' => 'CSD',
+        'year' => '3rd Year (3/4)',
+        'section' => 'Sec A',
+        'company' => 'Zennith Digital Tech LLP',
+        'role' => 'Software Engineering Intern',
+        'record_type' => 'internship',
+        'status' => 'Selected / Active',
+        'stipend' => 'Paid Corporate Stipend',
+        'profile_photo' => 'assets/images/internships/student_uma_sai_pavan.jpg',
+        'source_url' => 'internships.php'
+    ]
+];
+
+// Placement Overview Statistics from placements.php
+$placementStats = [
+    'highestPackage' => '₹12.0 LPA (Microsoft India)',
+    'averagePackage' => '₹5.1 LPA',
+    'placementRate' => '66% Students Placed',
+    'topRecruiters' => ['Microsoft India', 'TCS', 'Infosys', 'Wipro', 'Cognizant', 'Accenture', 'Amazon', 'Capgemini', 'Tech Mahindra', 'Zennith Digital Tech LLP', 'EduSkills'],
+    'batchGalleries' => ['2021-25 Batch Gallery', '2022-26 Batch Gallery']
+];
+
+// Query DB Appreciations table for ALL Internship & Placement Records
+$dbInternships = [];
+$dbPlacements = [];
+$seenInternRegs = [];
+
+foreach ($featuredInternships as $fi) {
+    $dbInternships[] = $fi;
+    $seenInternRegs[$fi['regNo'] . '_' . strtolower($fi['company'])] = true;
+}
+
+$appQuery = "SELECT a.*, s.name, s.branch, s.class_id, c.year, c.section 
+            FROM appreciations a 
+            LEFT JOIN students s ON a.student_id = s.student_id 
+            LEFT JOIN classes c ON s.class_id = c.class_id 
+            WHERE a.reason LIKE '%internship%' OR a.reason LIKE '%placement%' OR a.reason LIKE '%select%' OR a.reason LIKE '%hired%' OR a.reason LIKE '%job%' 
+            ORDER BY a.appreciation_id DESC";
+
+$appRes = mysqli_query($conn, $appQuery);
+if ($appRes) {
+    while ($row = mysqli_fetch_assoc($appRes)) {
+        $regNo = trim($row['student_id']);
+        $name = !empty($row['name']) ? trim($row['name']) : $regNo;
+        $branch = !empty($row['branch']) ? strtoupper(trim($row['branch'])) : 'CSIT';
+        $reason = trim($row['reason']);
+        $year = isset($row['year']) ? $row['year'] . 'th Year' : '3rd Year';
+        $sec = isset($row['section']) ? 'Sec ' . $row['section'] : 'Sec A';
+
+        $company = 'Corporate Partner';
+        if (preg_match('/(amazon|tcs|infosys|wipro|cognizant|accenture|zennith|eduskills|future interns|track 3d|idea lab|ideaLab|90 heal|dms|bluconn|blucon|rhythmiqcx|aunix|aws|cognifyz|saiket|tech nirmaan|unified mentor)/i', $reason, $m)) {
+            $company = ucwords(strtolower($m[1]));
+        }
+
+        $recordType = (stripos($reason, 'placement') !== false || stripos($reason, 'hired') !== false) ? 'placement' : 'internship';
+        $key = $regNo . '_' . strtolower($company);
+
+        if (!isset($seenInternRegs[$key])) {
+            $seenInternRegs[$key] = true;
+            $rec = [
+                'id' => 'db_intern_' . $row['appreciation_id'],
+                'student_id' => $regNo,
+                'regNo' => $regNo,
+                'name' => $name,
+                'branch' => $branch,
+                'department' => $branch,
+                'year' => $year,
+                'section' => $sec,
+                'company' => $company,
+                'role' => $reason,
+                'record_type' => $recordType,
+                'status' => 'Completed / Certified',
+                'stipend' => 'Industry Stipend',
+                'source_url' => 'internships.php'
+            ];
+
+            if ($recordType === 'placement') {
+                $dbPlacements[] = $rec;
+            } else {
+                $dbInternships[] = $rec;
+            }
+        }
+    }
+}
+
 $executionTime = round((microtime(true) - $startTime) * 1000, 2);
 
 $diagnostics = [
@@ -588,9 +749,11 @@ $diagnostics = [
     'totalPagesIndexed' => 18,
     'totalIndexedChunks' => 140,
     'totalFacultyRecords' => count($faculties),
-    'totalStudentRecords' => 612,
+    'totalStudentRecords' => 625,
     'totalHouseRecords' => count($houses),
     'totalCRRecords' => count($classRepresentatives),
+    'totalInternshipRecords' => count($dbInternships),
+    'totalPlacementRecords' => count($dbPlacements),
     'totalProgramsIndexed' => 2,
     'totalProgramOutcomesIndexed' => 10,
     'totalCourseOutcomesIndexed' => 12,
@@ -603,11 +766,16 @@ echo json_encode([
     'total_faculties' => count($faculties),
     'total_houses' => count($houses),
     'total_classes' => count($classes),
+    'total_internships' => count($dbInternships),
+    'total_placements' => count($dbPlacements),
     'faculties' => $faculties,
     'classRepresentatives' => $classRepresentatives,
     'programAcademics' => $programAcademics,
     'houses' => $houses,
     'classes' => $classes,
+    'internships' => $dbInternships,
+    'placements' => $dbPlacements,
+    'placementStats' => $placementStats,
     'diagnostics' => $diagnostics
 ]);
 exit();
