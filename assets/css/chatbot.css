@@ -118,6 +118,21 @@
     background: radial-gradient(circle, rgba(0, 245, 255, 0.45) 0%, rgba(247, 37, 133, 0.35) 40%, rgba(255, 183, 3, 0.3) 70%, transparent 75%);
 }
 
+/* Scaled Logo Inner Container - Scaled to 70% of current size, perfectly centered */
+.chatbot-logo-inner {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.70);
+    transform-origin: center center;
+    pointer-events: none;
+    z-index: 2;
+}
+
 /* Orbit SVG Container (Colorful Planet Rings Outside) */
 .orbit-animation-container {
     position: absolute;
