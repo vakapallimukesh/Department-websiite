@@ -332,37 +332,7 @@ body {
     </div>
 </section>
 
-<!-- Stats Highlight -->
-<section class="py-5">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-number">5+</div>
-                    <div class="stat-label">NPTEL Star Awards</div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-number">120+</div>
-                    <div class="stat-label">Journal Papers</div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-number">₹85L+</div>
-                    <div class="stat-label">Research Grants</div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-number">12+</div>
-                    <div class="stat-label">Patents Granted</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <!-- NPTEL Stars Feature Showcase Section -->
 <section class="py-5" style="background: #ffffff; border-top: 1px solid #f1e5d8; border-bottom: 1px solid #f1e5d8;">
