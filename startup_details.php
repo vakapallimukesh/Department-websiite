@@ -2787,6 +2787,12 @@ body {
             <?php endif; ?>
 
             <?php 
+            // Hide Instagram Live Feed & Reels for Bhimavaram Online Foods and Campus Online
+            $hideInstagramFeed = in_array($startupId, ['bhimavaram-foods', 'bhimavaram-online-foods', 'campus-online']);
+            if (!$hideInstagramFeed): 
+            ?>
+
+            <?php 
             // Extract Instagram Handle for API Sync
             $instaHandle = 'nutri__delight';
             if (!empty($startup['instagram'])) {
@@ -2798,6 +2804,13 @@ body {
                     }
                 }
             }
+
+            // Dynamic fallback image based on current startup
+            $instaFallbackImage = $startup['primaryImage'] ?? 'public/startups/nutridelight/hero.png';
+            // Dynamic startup name for captions
+            $instaStartupName = htmlspecialchars($startup['name'] ?? 'Startup');
+            // Dynamic initials for modal avatar (first 2 chars of name)
+            $instaInitials = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $startup['name'] ?? 'ST'), 0, 2));
             ?>
 
             <!-- ==================================================
@@ -2967,9 +2980,10 @@ body {
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label fw-bold small text-dark">Image / Thumbnail URL (Optional)</label>
-                                        <input type="text" name="media_url" class="form-control rounded-3" placeholder="public/startups/nutridelight/hero.png">
+                                        <input type="text" name="media_url" class="form-control rounded-3" placeholder="<?= $instaFallbackImage ?>">
                                     </div>
                                     <input type="hidden" name="account_name" value="<?= htmlspecialchars($instaHandle); ?>">
+                                    <input type="hidden" name="startup_id" value="<?= htmlspecialchars($startupId); ?>">
                                 </div>
                                 <div class="modal-footer border-0 bg-light p-3">
                                     <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
@@ -3003,7 +3017,7 @@ body {
                                     <div class="col-md-5 p-4 bg-white d-flex flex-column justify-content-between">
                                         <div>
                                             <div class="d-flex align-items-center gap-2 mb-3">
-                                                <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center fw-bold" style="width: 38px; height: 38px;">ND</div>
+                                                <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center fw-bold" style="width: 38px; height: 38px;"><?= $instaInitials ?></div>
                                                 <div>
                                                     <div class="fw-bold font-outfit text-dark line-height-1">@<?= htmlspecialchars($instaHandle); ?></div>
                                                     <small class="text-muted" id="instaModalBadge">Official Post</small>
@@ -3031,6 +3045,8 @@ body {
             <script>
             var allInstaPosts = [];
             var currentFilter = 'all';
+            var startupFallbackImage = "<?= addslashes($instaFallbackImage) ?>";
+            var startupName = "<?= addslashes($instaStartupName) ?>";
 
             function loadInstagramFeed(forceRefresh) {
                 var handle = "<?= urlencode($instaHandle); ?>";
@@ -3099,7 +3115,7 @@ body {
 
                 if (forceRefresh) {
                     // Trigger sync endpoint first, then fetch updated MySQL cache
-                    fetch('api/instagram/sync.php')
+                    fetch('api/instagram/sync.php?username=' + handle)
                         .then(function() { fetchFeed(true); })
                         .catch(function() { fetchFeed(false); });
                 } else {
@@ -3141,7 +3157,7 @@ body {
 
                 // Helper: route Instagram CDN URLs through our server-side proxy
                 function proxyUrl(originalUrl) {
-                    if (!originalUrl) return 'public/startups/nutridelight/hero.png';
+                    if (!originalUrl) return startupFallbackImage;
                     if (originalUrl.indexOf('cdninstagram.com') !== -1 || originalUrl.indexOf('fbcdn.net') !== -1) {
                         return 'api/instagram/media_proxy.php?url=' + encodeURIComponent(originalUrl);
                     }
@@ -3164,7 +3180,7 @@ body {
                         // Container with thumbnail as background so it's ALWAYS visible (no black)
                         html += '    <div class="insta-img-wrap" style="aspect-ratio: 1/1; overflow: hidden; position: relative; background: url(\'' + imgUrl + '\') center center / cover no-repeat #f0f0f0;">';
                         // Thumbnail image layer — centered, always shows
-                        html += '      <img src="' + imgUrl + '" alt="Reel" loading="lazy" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src=\'public/startups/nutridelight/hero.png\';">';
+                        html += '      <img src="' + imgUrl + '" alt="Reel" loading="lazy" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src=\'' + startupFallbackImage + '\';">';
                         if (videoUrl) {
                             // Video layer on top — plays over the thumbnail when ready
                             html += '      <video autoplay loop muted playsinline preload="auto" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: 100%; object-fit: cover; z-index: 1;">';
@@ -3189,7 +3205,7 @@ body {
                         html += '<div class="col-6 col-md-3 mb-4">';
                         html += '  <div class="insta-post-card shadow-sm border rounded-3 overflow-hidden position-relative h-100" style="cursor: pointer;" onclick="openInstaMediaModal(\'' + post.post_id + '\')">'; 
                         html += '    <div class="insta-img-wrap" style="aspect-ratio: 1/1; overflow: hidden; position: relative;">';
-                        html += '      <img src="' + imgUrl + '" alt="Instagram Post" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src=\'public/startups/nutridelight/hero.png\';">';
+                        html += '      <img src="' + imgUrl + '" alt="Instagram Post" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src=\'' + startupFallbackImage + '\';">';
                         html += '      <div class="insta-overlay p-3 d-flex flex-column justify-content-end text-white" style="position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(0,0,0,0.7)); opacity: 0; transition: opacity 0.25s ease;">';
                         html += '        <div class="insta-caption small mb-2" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' + (post.caption || 'Instagram Post') + '</div>';
                         html += '        <div class="text-white-50 small fw-bold">';
@@ -3223,8 +3239,8 @@ body {
 
                 allInstaPosts.forEach(function(post) {
                     var isReel = (post.media_type === 'REEL' || post.media_type === 'VIDEO');
-                    var imgUrl = post.media_url || 'public/startups/nutridelight/hero.png';
-                    var rawCap = post.caption || 'NutriDelight Instagram Media';
+                    var imgUrl = post.media_url || startupFallbackImage;
+                    var rawCap = post.caption || startupName + ' Instagram Media';
                     var shortCap = rawCap.substring(0, 32) + (rawCap.length > 32 ? '...' : '');
                     
                     var isFreshUpload = post.post_id.indexOf('CUSTOM_') === 0 || post.post_id.indexOf('IG_') === 0;
@@ -3233,7 +3249,7 @@ body {
 
                     var cardHtml = `
                         <div class="nd-ticker-card merged-insta-card shadow-sm border rounded-3 overflow-hidden position-relative" style="cursor: pointer;" onclick="openInstaMediaModal('${post.post_id}')">
-                            <img src="${imgUrl}" alt="Instagram Media" loading="lazy" onerror="this.onerror=null; this.src='public/startups/nutridelight/hero.png';">
+                            <img src="${imgUrl}" alt="Instagram Media" loading="lazy" onerror="this.onerror=null; this.src='${startupFallbackImage}';">
                             <div class="nd-ticker-overlay">
                                 <span class="nd-ticker-badge ${badgeBg} border-0 fw-bold shadow-sm">${badgeLabel}</span>
                                 <div class="nd-ticker-caption">
@@ -3306,6 +3322,8 @@ body {
                 setInterval(function() { loadInstagramFeed(true); }, 120000);
             });
             </script>
+
+            <?php endif; // end !$hideInstagramFeed ?>
 
             <!-- BACK BUTTON BOTTOM -->
             <div class="mt-5 text-center text-md-start">

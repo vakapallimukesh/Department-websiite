@@ -52,6 +52,7 @@ access_log
 .env
 .env.local
 .env.*
+
 # Instagram media cache
 cache/
 scratch/

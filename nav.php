@@ -206,7 +206,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     
     /* Dropdown menu styles */
     .navbar .dropdown-menu {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.75) 100%) !important;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%) !important;
         backdrop-filter: blur(20px) !important;
         -webkit-backdrop-filter: blur(20px) !important;
         border: 1px solid rgba(255, 255, 255, 0.45) !important;
@@ -216,8 +216,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
         padding: 8px 0 !important;
         margin-top: 12px !important;
         min-width: 220px !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        z-index: 10001 !important;
     }
     
     .navbar .dropdown-item {
@@ -247,6 +248,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     
     .navbar .dropdown-item:hover i {
+        color: #2563eb !important;
+    }
+    
+    .navbar .dropdown-item.active {
+        background: rgba(37, 99, 235, 0.12) !important;
+        color: #2563eb !important;
+        font-weight: 700 !important;
+    }
+    
+    .navbar .dropdown-item.active i {
         color: #2563eb !important;
     }
     
