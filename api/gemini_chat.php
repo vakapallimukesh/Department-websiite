@@ -63,6 +63,16 @@ if (empty($apiKey)) {
     exit();
 }
 
+if ($ragContext && !empty($ragContext['isNotFound'])) {
+    $requested = isset($ragContext['requestedName']) ? $ragContext['requestedName'] : 'the requested person';
+    echo json_encode([
+        'status' => 'success',
+        'reply' => "I couldn't find a person named {$requested} in the current department records.",
+        'source' => 'local_enforcement'
+    ]);
+    exit();
+}
+
 // Build System Prompt
 $systemInstruction = "You are the official AI Assistant for the Department of Computer Science & Design (CSD) and Computer Science & Information Technology (CSIT) at SRKR Engineering College, Bhimavaram.\n\n";
 
@@ -70,7 +80,14 @@ if ($ragContext && !empty($ragContext['content'])) {
     $systemInstruction .= "VERIFIED WEBSITE CONTEXT:\n";
     $systemInstruction .= "Title: " . $ragContext['title'] . "\n";
     $systemInstruction .= "Content: " . $ragContext['content'] . "\n\n";
-    $systemInstruction .= "Instructions: Answer the user question using the verified website context above. Do not invent fake faculty names, fees, or dates. If the detail is missing, state politely that it could not be found on the website.\n";
+    
+    if (!empty($ragContext['isPersonQuery'])) {
+        $field = isset($ragContext['requestedField']) ? $ragContext['requestedField'] : 'profile';
+        $systemInstruction .= "IMPORTANT INSTRUCTION FOR PERSON QUERY:\n";
+        $systemInstruction .= "The user is asking specifically about a person. Use ONLY the verified person record above. Answer the requested field ('{$field}') directly and concisely. DO NOT list unrelated people or substitute another person.\n";
+    } else {
+        $systemInstruction .= "Instructions: Answer the user question using the verified website context above. Do not invent fake names, fees, or dates.\n";
+    }
 } else {
     $systemInstruction .= "Instructions: Answer general computer science, programming, placement, or casual conversation questions naturally, politely, and accurately as a helpful department assistant.\n";
 }
@@ -109,7 +126,7 @@ $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lat
 $payload = [
     "contents" => $contents,
     "generationConfig" => [
-        "temperature" => 0.7,
+        "temperature" => 0.4,
         "maxOutputTokens" => 800
     ]
 ];
