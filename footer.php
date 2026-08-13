@@ -355,4 +355,6 @@
     });
 </script>
 
+<?php include "includes/chatbot.php"; ?>
+
 
