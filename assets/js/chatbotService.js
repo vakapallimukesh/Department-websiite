@@ -175,7 +175,10 @@ const ChatbotService = (function () {
         if (!rawQuery) return 'PROFILE';
         const q = rawQuery.toLowerCase();
 
-        if (/\b(which department|what department|belong to|belongs to|department of|which dept|what dept|dept is|dept of|department)\b/i.test(q)) {
+        if (/\b(house|house points|elemental league)\b/i.test(q)) {
+            return 'HOUSE';
+        }
+        if (/\b(which department|what department|department of|which dept|what dept|dept is|dept of|department)\b/i.test(q) || (/\b(belong to|belongs to)\b/i.test(q) && !/\b(house|league)\b/i.test(q))) {
             return 'DEPARTMENT';
         }
         if (/\b(which branch|what branch|branch is|branch of|branch from|branch)\b/i.test(q)) {
@@ -328,6 +331,8 @@ const ChatbotService = (function () {
             description: 'Water House - Flowing with wisdom and adaptability like the eternal river.',
             members: [
                 {"name":"VAKAPALLI PHANI SAI MUKESH","regNo":"25B91A6258","section":"CSD II Year Sec A","points":450},
+                {"name":"MOTUPALLI MEENA PHANI SRI","regNo":"25B91A0770","section":"CSIT Sec B","points":150},
+                {"name":"GUDAPATI LALITHA DEVI SRI","regNo":"25B91A6220","section":"CSD II Year Sec A","points":100},
                 {"name":"POTHAMSETTI KODANDA RAMA NAGA GANESH","regNo":"25B91A0790","section":"CSD II Year Sec A","points":380},
                 {"name":"ABDUL SHARIFUNNISA","regNo":"25B91A6201","section":"CSD II Year Sec A","points":120},
                 {"name":"ARETI JAYA CHARAN KRISHNA","regNo":"25B91A6205","section":"CSD II Year Sec B","points":110},
@@ -376,7 +381,86 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 6. MASTER PERSON INDEX (25 FACULTY + HEROES + 14 CRs + HOUSE STUDENTS)
+     * 6. FACULTY TEACHING ASSIGNMENTS (FROM MYSQL faculties.class_id + classes)
+     *    Built from live database: faculty_id → year/branch/section assignments
+     * =========================================================================
+     * Key: faculty_id (integer from DB)
+     * years: normalized year labels matching student year metadata
+     * branches: 'CSD' or 'CSIT'
+     * classes: human-readable class descriptions
+     */
+    const FACULTY_TEACHING_ASSIGNMENTS = {
+        1:  { name: 'Dr. Suresh Babu Mudunuri',   years: ['4th Year', '2nd Year'], branches: ['CSD'],         classes: ['4 Year CSD Sec A', '2 Year CSD Sec A'] },
+        2:  { name: 'Dr. K. Srinivasa Rao',        years: ['4th Year'],             branches: ['CSD'],         classes: ['4 Year CSD Sec A'] },
+        3:  { name: 'Mr. K. Bhanu Rajesh Naidu',   years: ['4th Year', '3rd Year', '2nd Year'], branches: ['CSIT', 'CSD'], classes: ['4 Year CSIT Sec A', '3 Year CSIT Sec B', '2 Year CSIT Sec A', '2 Year CSIT Sec B'] },
+        4:  { name: 'A. Aswini Priyanka',          years: ['4th Year', '2nd Year'], branches: ['CSD', 'CSIT'], classes: ['4 Year CSD Sec A', '4 Year CSIT Sec A', '2 Year CSIT Sec A', '2 Year CSIT Sec B', '2 Year CSD Sec A'] },
+        5:  { name: 'Angara Satyam',               years: ['4th Year', '3rd Year', '2nd Year'], branches: ['CSD', 'CSIT'], classes: ['4 Year CSD Sec A', '3 Year CSD Sec A', '2 Year CSIT Sec A', '2 Year CSD Sec A'] },
+        6:  { name: 'S. Mohan Krishna',            years: ['5th Year', '4th Year', '3rd Year'], branches: ['CSD', 'CSIT'], classes: ['5 Year CSD Sec A', '4 Year CSD Sec A', '4 Year CSIT Sec A', '3 Year CSD Sec A', '3 Year CSIT Sec A', '3 Year CSIT Sec B'] },
+        7:  { name: 'P S V Surya Kumar',           years: ['4th Year'],             branches: ['CSIT'],        classes: ['4 Year CSIT Sec A'] },
+        8:  { name: 'Dr. N. Gopala Krishna Murthy',years: ['4th Year', '2nd Year'], branches: ['CSIT'],        classes: ['4 Year CSIT Sec A', '2 Year CSIT Sec A', '2 Year CSIT Sec B'] },
+        10: { name: 'Navya Nallaparaju',            years: ['3rd Year'],             branches: ['CSD'],         classes: ['3 Year CSD Sec A'] },
+        11: { name: 'N. Praveen',                  years: ['4th Year'],             branches: ['CSD'],         classes: ['4 Year CSD Sec A'] },
+        12: { name: 'A. Krishna Veni',             years: ['3rd Year'],             branches: ['CSIT'],        classes: ['3 Year CSIT Sec A'] },
+        13: { name: 'Mr. K.V.V.S. Trinadh Naidu', years: ['5th Year', '4th Year', '3rd Year', '2nd Year'], branches: ['CSD', 'CSIT'], classes: ['5 Year CSD Sec A', '4 Year CSD Sec A', '4 Year CSIT Sec A', '3 Year CSD Sec A', '3 Year CSIT Sec A', '3 Year CSIT Sec B', '2 Year CSIT Sec B'] },
+        14: { name: 'Penmetsa Mouna',              years: ['5th Year', '4th Year', '3rd Year'], branches: ['CSD', 'CSIT'], classes: ['5 Year CSD Sec A', '4 Year CSD Sec A', '4 Year CSIT Sec A', '3 Year CSD Sec A', '3 Year CSIT Sec A', '3 Year CSIT Sec B'] },
+        15: { name: 'Pericherla Manoj',            years: ['4th Year'],             branches: ['CSIT'],        classes: ['4 Year CSIT Sec A'] },
+        16: { name: 'K. V. Sunil Varma',           years: ['5th Year', '4th Year', '3rd Year'], branches: ['CSD', 'CSIT'], classes: ['5 Year CSD Sec A', '4 Year CSD Sec A', '4 Year CSIT Sec A', '3 Year CSD Sec A', '3 Year CSIT Sec A', '3 Year CSIT Sec B'] },
+        17: { name: 'N. Aneela',                   years: ['5th Year', '4th Year', '3rd Year', '2nd Year'], branches: ['CSD', 'CSIT'], classes: ['5 Year CSD Sec A', '4 Year CSD Sec A', '4 Year CSIT Sec A', '3 Year CSD Sec A', '3 Year CSIT Sec A', '3 Year CSIT Sec B', '2 Year CSIT Sec A', '2 Year CSIT Sec B'] },
+        18: { name: 'M. S. Suseela',              years: ['3rd Year'],             branches: ['CSD'],         classes: ['3 Year CSD Sec A'] },
+        19: { name: 'M. Srinu',                   years: ['2nd Year'],             branches: ['CSIT', 'CSD'], classes: ['2 Year CSIT Sec A', '2 Year CSD Sec A'] },
+        20: { name: 'J. Mohan Surendra',          years: ['2nd Year'],             branches: ['CSIT'],        classes: ['2 Year CSIT Sec A'] },
+        21: { name: 'G. Sudhakar',                years: ['2nd Year'],             branches: ['CSIT'],        classes: ['2 Year CSIT Sec B'] },
+        22: { name: 'D. Parvathi',                years: ['2nd Year'],             branches: ['CSIT', 'CSD'], classes: ['2 Year CSIT Sec A', '2 Year CSIT Sec B', '2 Year CSD Sec A'] },
+        23: { name: 'M. Maduriya',               years: ['2nd Year'],             branches: ['CSIT'],        classes: ['2 Year CSIT Sec B'] },
+        24: { name: 'K. Girichar',               years: ['2nd Year'],             branches: ['CSD'],         classes: ['2 Year CSD Sec A'] },
+        25: { name: 'K. Vignya',                 years: ['2nd Year'],             branches: ['CSD'],         classes: ['2 Year CSD Sec A'] }
+    };
+
+    /**
+     * =========================================================================
+     * 7. STUDENT YEAR-DEPARTMENT ANALYTICS (from MySQL classes + students tables)
+     *    Source: classes table joined with students table
+     *    Format: year label → branch → count of students
+     * =========================================================================
+     */
+    const STUDENT_YEAR_DEPT_ANALYTICS = {
+        '2nd Year': {
+            'CSD':  { sections: ['Sec A'], totalStudents: null, classIds: [9] },
+            'CSIT': { sections: ['Sec A', 'Sec B'], totalStudents: null, classIds: [7, 8] }
+        },
+        '3rd Year': {
+            'CSD':  { sections: ['Sec A'], totalStudents: null, classIds: [4] },
+            'CSIT': { sections: ['Sec A', 'Sec B'], totalStudents: null, classIds: [5, 6] }
+        },
+        '4th Year': {
+            'CSD':  { sections: ['Sec A'], totalStudents: null, classIds: [2] },
+            'CSIT': { sections: ['Sec A'], totalStudents: null, classIds: [3] }
+        }
+    };
+
+    // Helper: normalize year string to canonical label
+    function normalizeYearLabel(raw) {
+        if (!raw) return null;
+        const r = raw.toLowerCase().trim();
+        if (/^(1st|first|i|1)\s*(year|yr)?$/.test(r)) return '1st Year';
+        if (/^(2nd|second|ii|2)\s*(year|yr)?$/.test(r)) return '2nd Year';
+        if (/^(3rd|third|iii|3)\s*(year|yr)?$/.test(r)) return '3rd Year';
+        if (/^(4th|fourth|iv|4)\s*(year|yr)?$/.test(r)) return '4th Year';
+        return null;
+    }
+
+    // Helper: extract year + branch from a query string
+    function parseYearAndBranchFromQuery(q) {
+        const lower = q.toLowerCase();
+        const yearMatch = lower.match(/\b(1st|first|2nd|second|3rd|third|4th|fourth|i|ii|iii|iv)\s*(year|yr)?\b/i);
+        const year = yearMatch ? normalizeYearLabel(yearMatch[1]) : null;
+        const branch = /\bcsd\b/i.test(lower) ? 'CSD' : (/\bcsit\b/i.test(lower) ? 'CSIT' : null);
+        return { year, branch };
+    }
+
+    /**
+     * =========================================================================
+     * 8. MASTER PERSON INDEX (25 FACULTY + HEROES + 14 CRs + HOUSE STUDENTS)
      * =========================================================================
      */
     const MASTER_PERSON_INDEX = [
@@ -559,16 +643,17 @@ const ChatbotService = (function () {
         {
             id: 'person_mullu_srinu',
             fullName: 'Mullu Srinu',
+            person_type: 'student',
             firstName: 'srinu',
             lastName: 'mullu',
-            category: 'Department Hero & Student Achiever',
-            role: 'NSS Coordinator & Ecom Hackathon Lead',
-            designation: 'NSS Coordinator & Ecom Hackathon Lead',
-            department: 'CSIT',
-            branch: 'CSIT',
+            category: 'Department Hero & Student Achiever (CSD)',
+            role: 'NSS Coordinator & Ecom Hackathon Lead (CSD)',
+            designation: 'NSS Coordinator & Ecom Hackathon Lead (CSD)',
+            department: 'CSD',
+            branch: 'CSD',
             regNo: '25B95A6206',
             achievements: 'NSS Coordinator, Python Development Lead (Bhimavaram Online App)',
-            description: 'Mullu Srinu is a dedicated student leader and NSS coordinator in the CSIT department (Reg: 25B95A6206).',
+            description: 'Mullu Srinu is a dedicated student leader and NSS coordinator in the CSD department (Reg: 25B95A6206).',
             searchableAliases: ['mullu srinu', 'mullu', 'mullu srinu student'],
             url: 'heroes_of_department.php',
             ctaText: 'View Department Heroes →'
@@ -594,21 +679,174 @@ const ChatbotService = (function () {
             ctaText: 'View Class Representatives →'
         },
         {
-            id: 'person_vasa_hari_nagendra_pratap',
-            fullName: 'VASA HARI NAGENDRA PRATAP',
-            firstName: 'hari nagendra',
-            lastName: 'vasa',
+            id: 'student_25B91A0770',
+            fullName: 'MOTUPALLI MEENA PHANI SRI',
+            person_type: 'student',
+            firstName: 'motupalli',
+            lastName: 'sri',
+            category: 'Student (CSIT Department, Jal House Member)',
+            role: 'Student Member — Jal House (CSIT)',
+            designation: 'Student Member — Jal House (CSIT)',
+            department: 'CSIT',
+            branch: 'CSIT',
+            year: '3rd Year',
+            section: 'CSIT Sec B',
+            regNo: '25B91A0770',
+            house: 'Jal',
+            searchableAliases: ['motupalli meena phani sri', 'motupalli meena', 'meena phani sri', 'motupalli', 'meena', 'phani sri', '25b91a0770'],
+            description: 'MOTUPALLI MEENA PHANI SRI is an enrolled student in CSIT Department (Jal House, Reg: 25B91A0770).',
+            url: 'heroes_of_department.php',
+            ctaText: 'View Student Directory →'
+        },
+        {
+            id: 'person_chandani_vivekananda',
+            fullName: 'CHANDANI VIVEKANANDA',
+            firstName: 'chandani',
+            lastName: 'vivekananda',
             category: 'Class Representative',
-            role: 'Class Representative (CSD II Year)',
-            designation: 'Class Representative (CSD II Year)',
+            role: 'Class Representative (CSIT III Year Sec A)',
+            designation: 'Class Representative (CSIT III Year Sec A)',
+            department: 'CSIT',
+            branch: 'CSIT',
+            year: '3rd Year',
+            section: 'CSIT III Year Sec A',
+            regNo: '24B91A0720',
+            isCR: true,
+            searchableAliases: ['chandani vivekananda', 'vivekananda', 'chandani', 'c vivekananda'],
+            description: 'Chandani Vivekananda is Class Representative for CSIT III Year Sec A (Reg: 24B91A0720).',
+            url: 'heroes_of_department.php#class-representatives',
+            ctaText: 'View Class Representatives →'
+        },
+        {
+            id: 'person_thota_johan_benedict',
+            fullName: 'THOTA JOHAN BENEDICT',
+            firstName: 'johan benedict',
+            lastName: 'thota',
+            category: 'Class Representative',
+            role: 'Class Representative (CSIT III Year Sec B)',
+            designation: 'Class Representative (CSIT III Year Sec B)',
+            department: 'CSIT',
+            branch: 'CSIT',
+            year: '3rd Year',
+            section: 'CSIT III Year Sec B',
+            regNo: '24B91A07B7',
+            isCR: true,
+            searchableAliases: ['thota johan benedict', 'johan benedict', 'johan', 'thota johan'],
+            description: 'Thota Johan Benedict is Class Representative for CSIT III Year Sec B (Reg: 24B91A07B7).',
+            url: 'heroes_of_department.php#class-representatives',
+            ctaText: 'View Class Representatives →'
+        },
+        {
+            id: 'person_s_d_rani',
+            fullName: 'S D RANI',
+            firstName: 'rani',
+            lastName: 's d',
+            category: 'Class Representative',
+            role: 'Class Representative (CSIT III Year Sec B)',
+            designation: 'Class Representative (CSIT III Year Sec B)',
+            department: 'CSIT',
+            branch: 'CSIT',
+            year: '3rd Year',
+            section: 'CSIT III Year Sec B',
+            regNo: '24B91A07B3',
+            isCR: true,
+            searchableAliases: ['s d rani', 'sd rani', 'rani'],
+            description: 'S D Rani is Class Representative for CSIT III Year Sec B (Reg: 24B91A07B3).',
+            url: 'heroes_of_department.php#class-representatives',
+            ctaText: 'View Class Representatives →'
+        },
+        {
+            id: 'person_pulavarthi_mohana_madhu_lasya_sri',
+            fullName: 'PULAVARTHI MOHANA MADHU LASYA SRI',
+            firstName: 'lasya sri',
+            lastName: 'pulavarthi',
+            category: 'Class Representative',
+            role: 'Class Representative (CSD III Year)',
+            designation: 'Class Representative (CSD III Year)',
             department: 'CSD',
             branch: 'CSD',
-            year: '2nd Year',
-            section: 'CSD II Year',
-            regNo: '25B91A6263',
+            year: '3rd Year',
+            section: 'CSD III Year',
+            regNo: '25B95A6208',
             isCR: true,
-            searchableAliases: ['vasa hari nagendra pratap', 'nagendra pratap', 'vasa hari'],
-            description: 'Vasa Hari Nagendra Pratap is Class Representative for CSD II Year (Reg: 25B91A6263).',
+            searchableAliases: ['pulavarthi mohana madhu lasya sri', 'lasya sri', 'mohana lasya sri', 'lasya'],
+            description: 'Pulavarthi Mohana Madhu Lasya Sri is Class Representative for CSD III Year (Reg: 25B95A6208).',
+            url: 'heroes_of_department.php#class-representatives',
+            ctaText: 'View Class Representatives →'
+        },
+        {
+            id: 'person_p_sai_harsha',
+            fullName: 'P SAI HARSHA',
+            firstName: 'sai harsha',
+            lastName: 'p',
+            category: 'Class Representative',
+            role: 'Class Representative (CSD IV Year)',
+            designation: 'Class Representative (CSD IV Year)',
+            department: 'CSD',
+            branch: 'CSD',
+            year: '4th Year',
+            section: 'CSD IV Year',
+            regNo: '23B81A6252',
+            isCR: true,
+            searchableAliases: ['p sai harsha', 'sai harsha', 'harsha'],
+            description: 'P Sai Harsha is Class Representative for CSD IV Year (Reg: 23B81A6252).',
+            url: 'heroes_of_department.php#class-representatives',
+            ctaText: 'View Class Representatives →'
+        },
+        {
+            id: 'person_p_swapna',
+            fullName: 'P SWAPNA',
+            firstName: 'swapna',
+            lastName: 'p',
+            category: 'Class Representative',
+            role: 'Class Representative (CSD IV Year)',
+            designation: 'Class Representative (CSD IV Year)',
+            department: 'CSD',
+            branch: 'CSD',
+            year: '4th Year',
+            section: 'CSD IV Year',
+            regNo: '23B91A6255',
+            isCR: true,
+            searchableAliases: ['p swapna', 'swapna'],
+            description: 'P Swapna is Class Representative for CSD IV Year (Reg: 23B91A6255).',
+            url: 'heroes_of_department.php#class-representatives',
+            ctaText: 'View Class Representatives →'
+        },
+        {
+            id: 'person_r_divya_jyothika',
+            fullName: 'R DIVYA JYOTHIKA',
+            firstName: 'divya jyothika',
+            lastName: 'r',
+            category: 'Class Representative',
+            role: 'Class Representative (CSIT IV Year)',
+            designation: 'Class Representative (CSIT IV Year)',
+            department: 'CSIT',
+            branch: 'CSIT',
+            year: '4th Year',
+            section: 'CSIT IV Year',
+            regNo: '23B91A0747',
+            isCR: true,
+            searchableAliases: ['r divya jyothika', 'divya jyothika', 'divya'],
+            description: 'R Divya Jyothika is Class Representative for CSIT IV Year (Reg: 23B91A0747).',
+            url: 'heroes_of_department.php#class-representatives',
+            ctaText: 'View Class Representatives →'
+        },
+        {
+            id: 'person_ch_sai_vikas',
+            fullName: 'CH SAI VIKAS',
+            firstName: 'sai vikas',
+            lastName: 'ch',
+            category: 'Class Representative',
+            role: 'Class Representative (CSIT IV Year)',
+            designation: 'Class Representative (CSIT IV Year)',
+            department: 'CSIT',
+            branch: 'CSIT',
+            year: '4th Year',
+            section: 'CSIT IV Year',
+            regNo: '23B91A0706',
+            isCR: true,
+            searchableAliases: ['ch sai vikas', 'sai vikas', 'vikas'],
+            description: 'CH Sai Vikas is Class Representative for CSIT IV Year (Reg: 23B91A0706).',
             url: 'heroes_of_department.php#class-representatives',
             ctaText: 'View Class Representatives →'
         }
@@ -919,6 +1157,51 @@ const ChatbotService = (function () {
                     }
                 }
 
+                // 5. Ingest Enrolled Students (from MySQL students table)
+                if (Array.isArray(data.allStudents)) {
+                    for (const stu of data.allStudents) {
+                        if (stu.name && stu.regNo) {
+                            const personExists = MASTER_PERSON_INDEX.some(p => p.regNo === stu.regNo || normalizePersonName(p.fullName) === normalizePersonName(stu.name));
+                            if (!personExists) {
+                                const tokens = tokenizeName(stu.name);
+                                const sDept = stu.department || stu.branch || (stu.regNo.includes('62') ? 'CSD' : 'CSIT');
+
+                                // Normalize year: MySQL year field may be "2", "3", "4" (number) or "2nd Year" etc.
+                                let sYear = stu.year || '';
+                                if (sYear === '1' || sYear === 1) sYear = '1st Year';
+                                else if (sYear === '2' || sYear === 2) sYear = '2nd Year';
+                                else if (sYear === '3' || sYear === 3) sYear = '3rd Year';
+                                else if (sYear === '4' || sYear === 4) sYear = '4th Year';
+                                else if (!sYear) sYear = '3rd Year'; // default fallback
+
+                                // Normalize section: "A" → "Sec A", already "Sec A" stays
+                                let sSection = stu.section || 'Sec A';
+                                if (sSection.length === 1) sSection = `Sec ${sSection}`;
+
+                                MASTER_PERSON_INDEX.push({
+                                    id: `student_${stu.regNo}`,
+                                    fullName: stu.name,
+                                    person_type: 'student',
+                                    firstName: tokens[0] || stu.name.toLowerCase(),
+                                    lastName: tokens[tokens.length - 1] || stu.name.toLowerCase(),
+                                    category: `Student (${sDept} ${sYear})`,
+                                    role: `Student (${sDept})`,
+                                    designation: `Student (${sDept})`,
+                                    department: sDept,
+                                    branch: sDept,
+                                    year: sYear,
+                                    section: `${sDept} ${sYear} ${sSection}`,
+                                    regNo: stu.regNo,
+                                    description: `${stu.name} is an enrolled student in ${sDept} Department, ${sYear} (Reg: ${stu.regNo}).`,
+                                    searchableAliases: [stu.name.toLowerCase(), tokens[0], tokens[tokens.length - 1], stu.regNo.toLowerCase()],
+                                    url: 'heroes_of_department.php',
+                                    ctaText: 'View Student Directory →'
+                                });
+                            }
+                        }
+                    }
+                }
+
                 // 5. Ingest System Diagnostics
                 if (data.diagnostics) {
                     systemDiagnostics = { ...systemDiagnostics, ...data.diagnostics, lastSyncTime: new Date().toISOString() };
@@ -945,6 +1228,19 @@ const ChatbotService = (function () {
                 const firstName = tokens[0] || normName;
                 const lastName = tokens[tokens.length - 1] || normName;
 
+                let studentDept = 'CSD';
+                if (m.regNo && m.regNo !== 'N/A') {
+                    const regUpper = m.regNo.toUpperCase();
+                    if (regUpper.includes('62')) {
+                        studentDept = 'CSD';
+                    } else if (regUpper.includes('07')) {
+                        studentDept = 'CSIT';
+                    }
+                } else if (m.section) {
+                    if (m.section.includes('CSD')) studentDept = 'CSD';
+                    else if (m.section.includes('CSIT')) studentDept = 'CSIT';
+                }
+
                 const exists = MASTER_PERSON_INDEX.some(p => normalizePersonName(p.fullName) === normName || (m.regNo && p.regNo === m.regNo));
                 if (!exists) {
                     MASTER_PERSON_INDEX.push({
@@ -952,16 +1248,16 @@ const ChatbotService = (function () {
                         fullName: m.name,
                         firstName: firstName,
                         lastName: lastName,
-                        category: `Student (${h.name} House Member)`,
-                        role: `Student Member — ${h.name} House`,
-                        designation: `Student Member — ${h.name} House`,
-                        department: m.section && m.section.includes('CSD') ? 'CSD' : 'CSIT',
-                        branch: m.section && m.section.includes('CSD') ? 'CSD' : 'CSIT',
+                        category: `Student (${studentDept} Department, ${h.name} House Member)`,
+                        role: `Student Member — ${h.name} House (${studentDept})`,
+                        designation: `Student Member — ${h.name} House (${studentDept})`,
+                        department: studentDept,
+                        branch: studentDept,
                         year: m.section && m.section.includes('II') ? '2nd Year' : '3rd Year',
-                        section: m.section || 'CSD II Year Sec A',
+                        section: m.section || `${studentDept} II Year Sec A`,
                         regNo: m.regNo !== 'N/A' ? m.regNo : null,
                         points: m.points || 50,
-                        description: `${m.name} is a student member of ${h.name} House in SRKREC CSD & CSIT Department.`,
+                        description: `${m.name} is a student in ${studentDept} Department (${h.name} House).`,
                         searchableAliases: [m.name.toLowerCase(), firstName, lastName],
                         url: `house_detail.php?house=${h.name}`,
                         ctaText: `View ${h.name} House Roster →`
@@ -1352,13 +1648,21 @@ Both programs are 4-Year B.Tech degrees (8 Semesters, 160 Credits) approved by A
 
         const intent = detectQueryIntent(rawQuery);
 
-        // Check for pronouns/follow-up query referencing activePerson
-        const isFollowupPronoun = /\b(she|he|her|his|their|this person|that person)\b/i.test(rawQuery) || /^(which department|what department|which branch|what branch|what registration number|reg no|where did (she|he) get|what house)\b/i.test(lowerRaw);
-        if (isFollowupPronoun && conversationContext.activePerson) {
-            return { found: true, isMultiple: false, person: conversationContext.activePerson, intent: intent, score: 1.0 };
-        }
         const stopWords = new Set(['who', 'is', 'are', 'which', 'department', 'dept', 'branch', 'does', 'belong', 'belongs', 'to', 'from', 'what', 'role', 'designation', 'qualification', 'qualifications', 'educational', 'degree', 'degrees', 'specialization', 'specializations', 'subjects', 'teach', 'teaches', 'teaching', 'email', 'contact', 'tell', 'me', 'about', 'can', 'know', 'the', 'a', 'an', 'in', 'of', 'work', 'working', 'studying', 'year', 'section', 'registration', 'number', 'reg', 'no', 'internship', 'internships', 'placements', 'placement', 'house', 'where', 'did', 'she', 'he', 'get', 'got', 'her', 'his', 'their', 'research', 'experience', 'projects', 'project', 'grants', 'grant', 'publications', 'publication', 'papers', 'paper', 'awards', 'award', 'phone', 'mobile', 'details', 'detail', 'info', 'information', 'profile', 'overview']);
         const nameCandidateTokens = queryTokens.filter(t => !stopWords.has(t) && t.length >= 2);
+
+        // Check for pronouns/follow-up query referencing activePerson ONLY if no explicit name candidate token is present
+        const isExplicitPronoun = /\b(she|he|her|his|their|this person|that person)\b/i.test(rawQuery);
+        const isGenericFollowup = /^(which department|what department|which branch|what branch|what registration number|reg no|where did (she|he) get|what house)\b/i.test(lowerRaw);
+
+        if ((nameCandidateTokens.length === 0 || isExplicitPronoun) && conversationContext.activePerson) {
+            // If explicit name candidates exist and don't match activePerson, prioritize candidate search
+            if (nameCandidateTokens.length > 0 && !isExplicitPronoun) {
+                // Proceed to candidate search below
+            } else {
+                return { found: true, isMultiple: false, person: conversationContext.activePerson, intent: intent, score: 1.0 };
+            }
+        }
 
         if (nameCandidateTokens.length === 0) return null;
         const candidateString = nameCandidateTokens.join(' ');
@@ -1644,15 +1948,20 @@ Both programs are 4-Year B.Tech degrees (8 Semesters, 160 Credits) approved by A
                 };
             }
 
-            // E. List All Faculty
+            // E. Department-Filtered Faculty List (CSIT faculty / CSD faculty)
+            const deptFilter = /\bcsit\b/i.test(q) ? 'CSIT' : (/\bcsd\b/i.test(q) ? 'CSD' : null);
             if (isFacultyQuery || /\b(faculty list|all faculty|show faculty|faculty members|who are the faculty|tell me about faculty|about faculty|faculty directory)\b/i.test(q)) {
-                const uniqueFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
+                let filteredFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
+                if (deptFilter) {
+                    filteredFaculty = filteredFaculty.filter(f => (f.department || '').toUpperCase() === deptFilter);
+                }
+                const deptLabel = deptFilter ? deptFilter : 'CSD & CSIT';
                 return {
-                    id: 'faculty_all_list',
+                    id: deptFilter ? `faculty_dept_${deptFilter}` : 'faculty_all_list',
                     category: 'Faculty Directory',
-                    title: 'All Department Faculty Members',
-                    content: `Here are all <strong>${uniqueFaculty.length} Faculty Members</strong> of CSD & CSIT Departments:<br><br>` +
-                             uniqueFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.designation || f.role} (${f.department})`).join('<br>'),
+                    title: `${deptLabel} Department Faculty Members`,
+                    content: `Here are all <strong>${filteredFaculty.length} Faculty Members</strong> of the ${deptLabel} Department:<br><br>` +
+                             filteredFaculty.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.designation || f.role} (${f.department})`).join('<br>'),
                     url: 'faculty.php',
                     ctaText: 'View Complete Faculty Directory →'
                 };
@@ -1832,10 +2141,23 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         conversationContext.activePerson = person;
 
         const name = person.fullName;
-        const dept = person.department || person.branch || 'CSD & CSIT';
-        const role = person.role || person.designation || person.category;
         const reg = person.regNo;
         const email = person.email;
+
+        let dept = 'CSD & CSIT';
+        if (reg) {
+            const cleanReg = reg.toUpperCase();
+            if (cleanReg.includes('62')) dept = 'CSD';
+            else if (cleanReg.includes('07')) dept = 'CSIT';
+        }
+        if (dept === 'CSD & CSIT') {
+            if (person.department === 'CSD' || person.department === 'CSIT') dept = person.department;
+            else if (person.branch === 'CSD' || person.branch === 'CSIT') dept = person.branch;
+            else if (person.section && person.section.includes('CSD')) dept = 'CSD';
+            else if (person.section && person.section.includes('CSIT')) dept = 'CSIT';
+        }
+
+        const role = person.role || person.designation || person.category;
 
         let answerText = '';
 
@@ -2247,8 +2569,15 @@ Ask "Show placement overview" or "Who got placed at Microsoft" to view details!`
         if (!rawQuery) return null;
         const lower = rawQuery.toLowerCase().trim();
 
-        // 1. PERSON / FACULTY / STUDENT LOOKUP FIRST
-        const personResult = detectPersonInQuery(rawQuery);
+        // Detect if query is a list/overview query (year+dept faculty/students) — skip person detection
+        const isListQuery = (
+            /\b(faculty|faculties|teachers|professors)\b/i.test(lower) && (/\b(all|list|directory|who are|members|2nd|3rd|4th|1st|second|third|fourth|first|year|csit|csd)\b/i.test(lower))
+        ) || (
+            /\b(students?)\b/i.test(lower) && /\b(all|list|directory|who are|2nd|3rd|4th|1st|second|third|fourth|first|year)\b/i.test(lower)
+        ) || /\bhow many\b/i.test(lower);
+
+        // 1. PERSON / FACULTY / STUDENT LOOKUP FIRST (skipped for list queries)
+        const personResult = !isListQuery ? detectPersonInQuery(rawQuery) : null;
         if (personResult && personResult.found) {
             if (personResult.isMultiple) {
                 let listItems = personResult.candidates.map((p, idx) => `${idx + 1}. <strong>${p.fullName}</strong> (${p.role || p.category})`).join('<br>');
@@ -2308,8 +2637,61 @@ Ask "Show placement overview" or "Who got placed at Microsoft" to view details!`
             };
         }
 
-        // 6. FACULTY CATEGORY OVERVIEW
-        if (/\b(who are the (faculty|faculties|teachers|professors)|faculty members|faculty directory|list of faculty|all faculty)\b/i.test(lower)) {
+        // 6. YEAR + DEPARTMENT SPECIFIC FACULTY QUERY HANDLER
+        const isFacultyQuery = /\b(faculty|faculties|teachers|professors|teacher|professor|teaches|teaching|who teaches)\b/i.test(lower);
+        const reqYearMatch = lower.match(/\b(1st|first|i|2nd|second|ii|3rd|third|iii|4th|fourth|iv)\s*(year|yr)?\b/i);
+        const reqBranchCSD = /\bcsd\b/i.test(lower);
+        const reqBranchCSIT = /\bcsit\b/i.test(lower);
+
+        if (isFacultyQuery && reqYearMatch) {
+            let parsedYear = '2nd Year';
+            const yrStr = reqYearMatch[1].toLowerCase();
+            if (['1st', 'first', 'i'].includes(yrStr)) parsedYear = '1st Year';
+            else if (['2nd', 'second', 'ii'].includes(yrStr)) parsedYear = '2nd Year';
+            else if (['3rd', 'third', 'iii'].includes(yrStr)) parsedYear = '3rd Year';
+            else if (['4th', 'fourth', 'iv'].includes(yrStr)) parsedYear = '4th Year';
+
+            let targetBranch = reqBranchCSD ? 'CSD' : (reqBranchCSIT ? 'CSIT' : 'CSIT');
+
+            const verifiedFaculty = MASTER_FACULTY_ROSTER.filter(f => {
+                const fid = f.faculty_id || f.id;
+                const assign = FACULTY_TEACHING_ASSIGNMENTS[fid] || FACULTY_TEACHING_ASSIGNMENTS[parseInt(fid)];
+                if (assign) {
+                    const yearMatch = assign.years.includes(parsedYear);
+                    const branchMatch = assign.branches.includes(targetBranch);
+                    return yearMatch && branchMatch;
+                }
+                // Fallback check on subjects / designation / department string
+                const roleStr = (f.role + ' ' + f.department + ' ' + f.subjects).toLowerCase();
+                return roleStr.includes(targetBranch.toLowerCase()) && roleStr.includes(parsedYear.toLowerCase());
+            });
+
+            const uniqueVerified = deduplicatePeople(verifiedFaculty);
+
+            if (uniqueVerified.length > 0) {
+                let listHTML = uniqueVerified.map((f, i) => `${i + 1}. <strong>${f.fullName}</strong> — ${f.role} (${f.department})`).join('<br>');
+                return {
+                    id: `faculty_year_${parsedYear.replace(/\s+/g, '_')}_${targetBranch}`,
+                    category: 'Faculty Teaching Assignments',
+                    title: `Verified ${parsedYear} ${targetBranch} Teaching Faculty Members`,
+                    content: `Here are the verified faculty members teaching <strong>${parsedYear} ${targetBranch}</strong> classes (Total: ${uniqueVerified.length}):<br><br>${listHTML}`,
+                    url: 'faculty.php',
+                    ctaText: 'View Complete Faculty Directory →'
+                };
+            } else {
+                return {
+                    id: `faculty_year_unverified_${parsedYear.replace(/\s+/g, '_')}_${targetBranch}`,
+                    category: 'Faculty Teaching Assignments',
+                    title: `${parsedYear} ${targetBranch} Faculty Assignments`,
+                    content: `I can find the <strong>${parsedYear} ${targetBranch}</strong> student information and the general ${targetBranch} faculty profiles, but I couldn't verify an explicit ${parsedYear} faculty teaching assignment from current department records.`,
+                    url: 'faculty.php',
+                    ctaText: 'View Complete Faculty Directory →'
+                };
+            }
+        }
+
+        // 6. GENERAL FACULTY CATEGORY OVERVIEW
+        if (isFacultyQuery && /\b(who are the|all|list of|directory|members)\b/i.test(lower)) {
             const uniqueFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
             return {
                 id: 'faculty_overview',
@@ -2322,20 +2704,114 @@ Ask "Show placement overview" or "Who got placed at Microsoft" to view details!`
             };
         }
 
-        // 7. STUDENT CATEGORY OVERVIEW
-        if (/\b(who are the students|student body|students list|list of students|student directory)\b/i.test(lower)) {
+        // 7. YEAR + DEPARTMENT SPECIFIC STUDENT QUERY HANDLER
+        const isStudentQuery = /\b(students?|learners?|enrolled|batch|class)\b/i.test(lower);
+        const { year: qYear, branch: qBranch } = parseYearAndBranchFromQuery(lower);
+
+        if (isStudentQuery && (qYear || qBranch)) {
+            let pool = MASTER_PERSON_INDEX.filter(p => p.person_type === 'student' || (p.category && p.category.toLowerCase().includes('student')));
+
+            // Filter by branch if specified
+            if (qBranch) pool = pool.filter(p => (p.department || p.branch) === qBranch);
+
+            // Filter by year if specified — match 'year' field or class_id-derived year
+            if (qYear) {
+                const yearNum = qYear.charAt(0); // e.g. '2' from '2nd Year'
+                pool = pool.filter(p => {
+                    const py = (p.year || '').toLowerCase();
+                    const ps = (p.section || '').toLowerCase();
+                    return py.includes(yearNum) || ps.includes(yearNum + 'nd') || ps.includes(yearNum + 'rd') || ps.includes(yearNum + 'th') || ps.includes('year ' + yearNum) || py === (qYear || '').toLowerCase();
+                });
+            }
+
+            pool = deduplicatePeople(pool);
+            const label = [qYear, qBranch].filter(Boolean).join(' ');
+
+            // Check analytics for total count
+            const analyticsData = qYear && qBranch ? (STUDENT_YEAR_DEPT_ANALYTICS[qYear] || {})[qBranch] : null;
+
+            if (pool.length > 0) {
+                const limit = pool.length > 60 ? 60 : pool.length;
+                const shown = pool.slice(0, limit);
+                let listHTML = shown.map((s, i) => `${i + 1}. <strong>${s.fullName}</strong> (${s.regNo || 'Reg N/A'}) — ${s.section || s.role || s.category}`).join('<br>');
+                const totalNote = analyticsData ? '' : (pool.length > limit ? `<br><br><em>Showing ${limit} of ${pool.length}+ indexed students.</em>` : '');
+                return {
+                    id: `students_year_dept_${(label).replace(/\s+/g, '_').toLowerCase()}`,
+                    category: 'Student Directory',
+                    title: `${label} Students — Verified Records`,
+                    content: `Here are verified <strong>${label} Students</strong> from department records (Total indexed: ${pool.length}):<br><br>${listHTML}${totalNote}`,
+                    url: 'heroes_of_department.php',
+                    ctaText: 'View Student Directory →'
+                };
+            } else {
+                const sections = analyticsData ? analyticsData.sections.join(', ') : 'Available';
+                return {
+                    id: `students_year_dept_nodata_${(label).replace(/\s+/g, '_').toLowerCase()}`,
+                    category: 'Student Directory',
+                    title: `${label} Students`,
+                    content: `<strong>${label}</strong> student section exists in the department (Sections: ${sections}), but detailed individual student records for this year have not yet been synced into the knowledge base. Please try the Student Dashboard or visit <strong>heroes_of_department.php</strong> for the full roster.`,
+                    url: 'heroes_of_department.php',
+                    ctaText: 'View Student Directory →'
+                };
+            }
+        }
+
+        // HOW MANY / COUNT QUERY FOR STUDENTS
+        if (/\b(how many|count of|number of|total)\s+(students?|learners?)\b/i.test(lower)) {
+            const { year: cy, branch: cb } = parseYearAndBranchFromQuery(lower);
+            let pool = MASTER_PERSON_INDEX.filter(p => p.person_type === 'student');
+            if (cb) pool = pool.filter(p => (p.department || p.branch) === cb);
+            if (cy) pool = pool.filter(p => (p.year || '').includes(cy.charAt(0)));
+            pool = deduplicatePeople(pool);
+            const labelStr = [cy, cb, 'students'].filter(Boolean).join(' ');
+            return {
+                id: `count_students_${(labelStr).replace(/\s+/g, '_').toLowerCase()}`,
+                category: 'Student Analytics',
+                title: `${labelStr} Count`,
+                content: `Based on indexed department records, there are <strong>${pool.length}</strong> <strong>${labelStr}</strong> in the system. (For official enrollment figures, please check the Student Dashboard or contact the department office.)`,
+                url: 'heroes_of_department.php',
+                ctaText: 'View Student Directory →'
+            };
+        }
+
+        // 7b. GENERAL STUDENT CATEGORY OVERVIEW (no year/branch filter)
+        if (/\b(who are the students|student body|students list|list of students|student directory|which students belong to|students in|students of|csd students|csit students)\b/i.test(lower)) {
+            const isCSD = /\bcsd\b/i.test(lower);
+            const isCSIT = /\bcsit\b/i.test(lower);
+
+            let allStudentsPool = MASTER_PERSON_INDEX.filter(p => p.category && p.category.toLowerCase().includes('student'));
+            if (isCSD) allStudentsPool = allStudentsPool.filter(p => (p.department || p.branch) === 'CSD');
+            if (isCSIT) allStudentsPool = allStudentsPool.filter(p => (p.department || p.branch) === 'CSIT');
+
+            allStudentsPool = deduplicatePeople(allStudentsPool);
+            const filterLabel = isCSD ? 'CSD' : (isCSIT ? 'CSIT' : 'CSD & CSIT');
+
+            if (allStudentsPool.length > 0) {
+                const limit = Math.min(allStudentsPool.length, 80);
+                let listHTML = allStudentsPool.slice(0, limit).map((s, i) => `${i + 1}. <strong>${s.fullName}</strong> (${s.regNo || 'Reg N/A'}) — ${s.role || s.category}`).join('<br>');
+                return {
+                    id: `students_overview_${filterLabel.toLowerCase()}`,
+                    category: 'Student Directory',
+                    title: `${filterLabel} Student Roster & Members`,
+                    content: `Here are enrolled <strong>${filterLabel} Students</strong> in current department records:<br><br>${listHTML}`,
+                    url: 'heroes_of_department.php',
+                    ctaText: 'View Student Directory & Leadership →'
+                };
+            }
+
             return {
                 id: 'students_overview',
                 category: 'Student Directory',
-                title: 'CSD & CSIT Student Body & Sections',
-                content: `CSD & CSIT Student Directory & Academic Sections:<br><br>
-• <strong>Total Enrolled Students:</strong> 600+ across 2nd, 3rd, and 4th Years in CSD & CSIT.<br>
+                title: `${filterLabel} Student Body & Sections`,
+                content: `${filterLabel} Student Directory & Academic Sections:<br><br>
+• <strong>Total Enrolled Students:</strong> 600+ across 2nd, 3rd, and 4th Years in ${filterLabel}.<br>
 • <strong>Academic Sections:</strong> CSD II Year, CSD III Year, CSD IV Year, CSIT II Year Sec A & B, CSIT III Year Sec A & B, CSIT IV Year.<br>
 • <strong>Student Houses:</strong> Jal, Agni, Vayu, Akash, Prudhvi.`,
                 url: 'heroes_of_department.php',
                 ctaText: 'View Student Directory & Leadership →'
             };
         }
+
 
         // 8. WEBSITE SECTION MATRIX SEARCH
         for (const chunk of KNOWLEDGE_MATRIX) {
@@ -2345,13 +2821,16 @@ Ask "Show placement overview" or "Who got placed at Microsoft" to view details!`
         }
 
         // 9. UNKNOWN / CLARIFICATION FOR EXPLICIT PERSON QUERY
-        if (/^\b(who is|tell me about|profile of|info on|details of|which department does|which branch is|what is the role of|department of)\b/i.test(lower)) {
+        const queryTokens = lower.replace(/[\?\!\.\,\;\:\-]/g, ' ').split(/\s+/).filter(t => t.length > 2);
+        const hasPersonKeywords = /^\b(who is|about|tell me about|profile of|info on|details of|which department does|which branch is|what is the role of|department of|motupalli|meena|student|faculty)\b/i.test(lower) || queryTokens.length >= 2;
+
+        if (hasPersonKeywords) {
             return {
                 id: 'person_not_found',
                 category: 'People Search',
                 title: 'Person Not Found',
                 isNotFound: true,
-                content: `I couldn't find that information in the department website. Could you provide their full name, role, or department?`,
+                content: `I couldn't find any student, faculty, or staff record matching "${rawQuery}" in the official department website records.`,
                 url: 'heroes_of_department.php',
                 ctaText: 'View Department Directory →'
             };
