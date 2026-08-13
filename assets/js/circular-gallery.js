@@ -146,18 +146,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (container) {
     new CircularGalleryEngine('topRecruitersCircularGallery', {
       items: [
+        { image: 'assets/company_logos/logos/3.png', text: 'Infosys' },
+        { image: 'assets/company_logos/logos/2.png', text: 'Cognizant' },
+        { image: 'assets/company_logos/logos/1.png', text: 'BLUCONN' },
         { image: 'assets/company_logos/logos/4.png', text: 'TCS' },
         { image: 'assets/company_logos/logos/6.png', text: 'Akrivia HCM' },
         { image: 'assets/company_logos/logos/7.png', text: 'Boson' },
-        { image: 'assets/company_logos/logos/1.png', text: 'BLUCONN' },
         { image: 'assets/company_logos/logos/12.png', text: 'Meeami' },
         { image: 'assets/company_logos/logos/9.png', text: 'intelliPaat' },
         { image: 'assets/company_logos/logos/8.png', text: 'SmartED' },
         { image: 'assets/company_logos/logos/11.png', text: 'Quanteon' },
         { image: 'assets/company_logos/logos/10.png', text: 'AteliaHealth' },
-        { image: 'assets/company_logos/logos/15.png', text: 'Achala' },
-        { image: 'assets/company_logos/logos/2.png', text: 'Cognizant' },
-        { image: 'assets/company_logos/logos/3.png', text: 'Infosys' }
+        { image: 'assets/company_logos/logos/15.png', text: 'Achala' }
       ],
       bend: 1.2,
       scrollSpeed: 2.2
@@ -168,18 +168,18 @@ document.addEventListener('DOMContentLoaded', () => {
   if (internshipContainer) {
     new CircularGalleryEngine('internshipCompaniesCircularGallery', {
       items: [
-        { image: 'assets/company_logos/logos/4.png', text: 'TCS Innovation' },
+        { image: 'assets/company_logos/logos/3.png', text: 'Infosys' },
+        { image: 'assets/company_logos/logos/2.png', text: 'Cognizant' },
+        { image: 'assets/company_logos/logos/1.png', text: 'BLUCONN' },
+        { image: 'assets/company_logos/logos/4.png', text: 'TCS' },
         { image: 'assets/company_logos/logos/6.png', text: 'Akrivia HCM' },
         { image: 'assets/company_logos/logos/7.png', text: 'Boson Tech' },
-        { image: 'assets/company_logos/logos/1.png', text: 'BLUCONN' },
         { image: 'assets/company_logos/logos/12.png', text: 'Meeami Tech' },
         { image: 'assets/company_logos/logos/9.png', text: 'intelliPaat' },
         { image: 'assets/company_logos/logos/8.png', text: 'SmartED' },
         { image: 'assets/company_logos/logos/11.png', text: 'Quanteon Labs' },
         { image: 'assets/company_logos/logos/10.png', text: 'AteliaHealth' },
-        { image: 'assets/company_logos/logos/15.png', text: 'Achala IT' },
-        { image: 'assets/company_logos/logos/2.png', text: 'Cognizant' },
-        { image: 'assets/company_logos/logos/3.png', text: 'Infosys Operations' }
+        { image: 'assets/company_logos/logos/15.png', text: 'Achala IT' }
       ],
       bend: 1.2,
       scrollSpeed: 2.2

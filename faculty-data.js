@@ -6,7 +6,7 @@ const facultyData = [
     {
         id: 1,
         name: "Dr. Suresh Babu Mudunuri",
-        designation: "Professor & Head of Department",
+        designation: "Professor & Program Coordinator",
         department: "CSD",
         category: ["hod", "csd", "professor"],
         photo: "assets/faculty_official/csd_780.jpeg",
@@ -17,7 +17,7 @@ const facultyData = [
         experience: "20+ Years",
         qualification: "Ph.D in Computer Science",
         specialization: "AI, Machine Learning & Cloud",
-        about: "Dr. Suresh Babu Mudunuri is Professor and Head of Department of Computer Science & Design (CSD) at SRKR Engineering College. With over two decades of research and academic excellence, he leads strategic initiatives in AI, ML, and Cloud Infrastructure.",
+        about: "Dr. Suresh Babu Mudunuri is Professor and Program Coordinator of Computer Science & Design (CSD) at SRKR Engineering College. With over two decades of research and academic excellence, he leads strategic initiatives in AI, ML, and Cloud Infrastructure.",
         education: [
             { degree: "Ph.D in Computer Science", institution: "JNTU", year: "2010" },
             { degree: "M.Tech in CSE", institution: "JNTU", year: "2002" }
@@ -28,7 +28,7 @@ const facultyData = [
         ],
         subjects: ["Machine Learning", "Cloud Computing", "Artificial Intelligence"],
         achievements: [
-            { icon: "🏆", text: "Head of Department - CSD" },
+            { icon: "🏆", text: "Program Coordinator - CSD" },
             { icon: "📚", text: "35+ Research Publications" }
         ],
         stats: { experience: "20+", publications: "35+", projects: "15+", students: "450+" }
@@ -214,7 +214,7 @@ const facultyData = [
     {
         id: 10,
         name: "DR NGK MURTHY",
-        designation: "Professor & Head of Department",
+        designation: "Professor & Program Coordinator",
         department: "CSIT",
         category: ["hod", "csit", "professor"],
         photo: "assets/faculty_official/csit_781.jpeg",
@@ -225,7 +225,7 @@ const facultyData = [
         experience: "18+ Years",
         qualification: "Ph.D in Information Technology",
         specialization: "Information Technology & Systems",
-        about: "DR NGK MURTHY is Professor and Head of Department of CSIT at SRKR Engineering College. With over 18 years of academic leadership, he drives advanced research in enterprise IT architectures and data networks.",
+        about: "DR NGK MURTHY is Professor and Program Coordinator of CSIT at SRKR Engineering College. With over 18 years of academic leadership, he drives advanced research in enterprise IT architectures and data networks.",
         education: [
             { degree: "Ph.D in IT", institution: "JNTU", year: "2011" },
             { degree: "M.Tech in IT", institution: "JNTU", year: "2003" }
@@ -234,7 +234,7 @@ const facultyData = [
         publications: [{ title: "Enterprise IT Security Architecture", journal: "Springer", year: "2022" }],
         subjects: ["Information Technology", "Network Security"],
         achievements: [
-            { icon: "🏆", text: "Head of Department - CSIT" },
+            { icon: "🏆", text: "Program Coordinator - CSIT" },
             { icon: "📚", text: "30+ Research Publications" }
         ],
         stats: { experience: "18+", publications: "30+", projects: "18+", students: "420+" }

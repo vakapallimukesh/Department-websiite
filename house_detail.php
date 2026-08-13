@@ -52,17 +52,40 @@ $houses = [
 ];
 
 // Get selected house from URL parameter with case-insensitive matching
-$raw_house = isset($_GET['house']) ? trim($_GET['house']) : '';
+$raw_house = '';
+foreach (['house', 'name', 'house_name', 'id', 'hid'] as $param) {
+    if (isset($_GET[$param]) && trim($_GET[$param]) !== '') {
+        $raw_house = trim($_GET[$param]);
+        break;
+    }
+}
+
 $selected_house = '';
 
 if ($raw_house) {
-    if (array_key_exists($raw_house, $houses)) {
-        $selected_house = $raw_house;
-    } else {
-        foreach ($houses as $k => $v) {
-            if (strcasecmp($k, $raw_house) === 0) {
-                $selected_house = $k;
-                break;
+    // Check numeric house ID
+    if (is_numeric($raw_house)) {
+        $id_map = [
+            1 => 'PRUDHVI',
+            2 => 'Vayu',
+            3 => 'Agni',
+            4 => 'Aakash',
+            5 => 'Jal'
+        ];
+        if (isset($id_map[(int)$raw_house])) {
+            $selected_house = $id_map[(int)$raw_house];
+        }
+    }
+
+    if (!$selected_house) {
+        if (array_key_exists($raw_house, $houses)) {
+            $selected_house = $raw_house;
+        } else {
+            foreach ($houses as $k => $v) {
+                if (strcasecmp($k, $raw_house) === 0) {
+                    $selected_house = $k;
+                    break;
+                }
             }
         }
     }
@@ -71,15 +94,15 @@ if ($raw_house) {
 // Fallback alias lookup
 if (!$selected_house && $raw_house) {
     $raw_upper = strtoupper($raw_house);
-    if (in_array($raw_upper, ['PRUDHVI', 'PRUTHVI', 'EARTH', 'DELTA', 'PRUTHVI HOUSE', 'PRUDHVI HOUSE'])) {
+    if (in_array($raw_upper, ['PRUDHVI', 'PRUTHVI', 'EARTH', 'DELTA', 'PRUTHVI HOUSE', 'PRUDHVI HOUSE', '1'])) {
         $selected_house = 'PRUDHVI';
-    } elseif (in_array($raw_upper, ['AGNI', 'FIRE', 'EPSILON', 'AGNI HOUSE', 'FIRE HOUSE'])) {
+    } elseif (in_array($raw_upper, ['AGNI', 'FIRE', 'EPSILON', 'AGNI HOUSE', 'FIRE HOUSE', '3'])) {
         $selected_house = 'Agni';
-    } elseif (in_array($raw_upper, ['AAKASH', 'AKASH', 'SKY', 'ALPHA', 'AAKASH HOUSE', 'AKASH HOUSE'])) {
+    } elseif (in_array($raw_upper, ['AAKASH', 'AKASH', 'SKY', 'ALPHA', 'AAKASH HOUSE', 'AKASH HOUSE', '4'])) {
         $selected_house = 'Aakash';
-    } elseif (in_array($raw_upper, ['JAL', 'WATER', 'BETA', 'JAL HOUSE', 'WATER HOUSE'])) {
+    } elseif (in_array($raw_upper, ['JAL', 'WATER', 'BETA', 'JAL HOUSE', 'WATER HOUSE', '5'])) {
         $selected_house = 'Jal';
-    } elseif (in_array($raw_upper, ['VAYU', 'WIND', 'GAMMA', 'VAYU HOUSE', 'WIND HOUSE'])) {
+    } elseif (in_array($raw_upper, ['VAYU', 'WIND', 'GAMMA', 'VAYU HOUSE', 'WIND HOUSE', '2'])) {
         $selected_house = 'Vayu';
     }
 }
@@ -251,7 +274,7 @@ $all_house_totals = [];
 foreach ($houses as $hk => $hv) {
     $hname_esc = mysqli_real_escape_string($conn, $hv['name']);
     $h_id = null;
-    $res_h = mysqli_query($conn, "SELECT hid FROM houses WHERE name = '$hname_esc'");
+    $res_h = mysqli_query($conn, "SELECT hid FROM houses WHERE UPPER(name) = UPPER('$hname_esc')");
     if ($res_h && mysqli_num_rows($res_h) > 0) {
         $row_h = mysqli_fetch_assoc($res_h);
         $h_id = $row_h['hid'];
@@ -1964,7 +1987,7 @@ $house_stats = [
     <?php endif; ?>
 
     <!-- Stats Section -->
-    <div id="aakash-details-section" class="container" style="margin-top: <?php echo $selected_house === 'Aakash' ? '40px' : '-40px'; ?>; position: relative; z-index: 2;">
+    <div id="aakash-details-section" class="container" style="margin-top: 40px; position: relative; z-index: 2;">
         <div class="row g-3 mb-4">
             <div class="col-md-2 col-sm-4">
                 <div class="stats-card text-center p-3 h-100 shadow-sm border-0" style="border-top: 4px solid <?php echo $house_info['color']; ?> !important;">

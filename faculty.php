@@ -604,10 +604,10 @@ if (session_status() === PHP_SESSION_NONE) session_start();
     <div class="controls-wrapper">
         <div class="controls-card">
             <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterDepartment('all')">All Faculty (19)</button>
-                <button class="filter-btn" onclick="filterDepartment('hod')">Heads of Department (2)</button>
-                <button class="filter-btn" onclick="filterDepartment('csd')">CSD Department (9)</button>
-                <button class="filter-btn" onclick="filterDepartment('csit')">CSIT Department (10)</button>
+                <button class="filter-btn active" onclick="filterDepartment('all', this)">All Faculty (19)</button>
+                <button class="filter-btn" onclick="filterDepartment('hod', this)">Program Coordinators (2)</button>
+                <button class="filter-btn" onclick="filterDepartment('csd', this)">CSD Department (9)</button>
+                <button class="filter-btn" onclick="filterDepartment('csit', this)">CSIT Department (10)</button>
             </div>
             <div class="search-box">
                 <i class="fas fa-search"></i>
@@ -637,12 +637,12 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                     <div class="card-inner-flex">
                         <div class="faculty-details-left">
                             <div class="header-meta">
-                                <span class="hod-badge"><i class="fas fa-crown"></i> Head of Department</span>
+                                <span class="hod-badge"><i class="fas fa-crown"></i> Program Coordinator</span>
                                 <span class="dept-pill tag-csd">CSD</span>
                             </div>
                             <h3 class="faculty-name">Dr. Suresh Babu Mudunuri</h3>
                             <div class="faculty-designation">Professor</div>
-                            <p class="faculty-about-text">Dr. Suresh Babu Mudunuri is Professor and Head of Department of Computer Science & Design (CSD) at SRKR Engineering College. With over two decades of research and academic leadership, he leads strategic initiatives in Artificial Intelligence, Machine Learning, and Cloud Computing architectures.</p>
+                            <p class="faculty-about-text">Dr. Suresh Babu Mudunuri is Professor and Program Coordinator of Computer Science & Design (CSD) at SRKR Engineering College. With over two decades of research and academic leadership, he leads strategic initiatives in Artificial Intelligence, Machine Learning, and Cloud Computing architectures.</p>
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-microchip"></i> AI, ML & Cloud</span>
                                 <a href="mailto:suresh.mudunuri@srkrec.ac.in" class="email-btn"><i class="fas fa-envelope"></i> suresh.mudunuri@srkrec.ac.in</a>
@@ -897,12 +897,12 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                     <div class="card-inner-flex">
                         <div class="faculty-details-left">
                             <div class="header-meta">
-                                <span class="hod-badge"><i class="fas fa-crown"></i> Head of Department</span>
+                                <span class="hod-badge"><i class="fas fa-crown"></i> Program Coordinator</span>
                                 <span class="dept-pill tag-csit">CSIT</span>
                             </div>
                             <h3 class="faculty-name">DR NGK MURTHY</h3>
-                            <div class="faculty-designation">Professor & Head Technology Centre</div>
-                            <p class="faculty-about-text">DR NGK MURTHY is Head of Technology Centre & Professor in CSIT at SRKR Engineering College with 31 years of teaching excellence, driving research in Data Mining, Bioinformatics & Machine Learning.</p>
+                            <div class="faculty-designation">Professor</div>
+                            <p class="faculty-about-text">DR NGK MURTHY is Professor in CSIT at SRKR Engineering College with 31 years of teaching excellence, driving research in Data Mining, Bioinformatics & Machine Learning.</p>
                             <div class="actions-group">
                                 <span class="area-badge"><i class="fas fa-server"></i> Information Technology</span>
                                 <a href="mailto:gopinukala@gmail.com" class="email-btn"><i class="fas fa-envelope"></i> gopinukala@gmail.com</a>
@@ -1209,38 +1209,71 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
     <!-- Client-side Search, Filter & Resume Modal JavaScript -->
     <script>
-        function filterDepartment(filter) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        function filterDepartment(filter, targetBtn) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            let activeBtn = targetBtn || Array.from(buttons).find(btn => {
+                const onclickAttr = btn.getAttribute('onclick') || '';
+                return onclickAttr.includes("'" + filter + "'");
+            });
+            if (activeBtn) activeBtn.classList.add('active');
 
             const csdBlock = document.getElementById('csdSection');
             const csitBlock = document.getElementById('csitSection');
             const cards = document.querySelectorAll('.faculty-line-card');
 
             if (filter === 'all') {
-                csdBlock.style.display = 'block';
-                csitBlock.style.display = 'block';
+                if (csdBlock) csdBlock.style.display = 'block';
+                if (csitBlock) csitBlock.style.display = 'block';
                 cards.forEach(card => card.style.display = 'block');
             } else if (filter === 'csd') {
-                csdBlock.style.display = 'block';
-                csitBlock.style.display = 'none';
+                if (csdBlock) csdBlock.style.display = 'block';
+                if (csitBlock) csitBlock.style.display = 'none';
                 cards.forEach(card => {
                     card.style.display = card.getAttribute('data-dept') === 'csd' ? 'block' : 'none';
                 });
             } else if (filter === 'csit') {
-                csdBlock.style.display = 'none';
-                csitBlock.style.display = 'block';
+                if (csdBlock) csdBlock.style.display = 'none';
+                if (csitBlock) csitBlock.style.display = 'block';
                 cards.forEach(card => {
                     card.style.display = card.getAttribute('data-dept') === 'csit' ? 'block' : 'none';
                 });
             } else if (filter === 'hod') {
-                csdBlock.style.display = 'block';
-                csitBlock.style.display = 'block';
+                if (csdBlock) csdBlock.style.display = 'block';
+                if (csitBlock) csitBlock.style.display = 'block';
                 cards.forEach(card => {
                     card.style.display = card.getAttribute('data-role') === 'hod' ? 'block' : 'none';
                 });
             }
         }
+
+        function applyUrlFilter() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let filter = urlParams.get('filter') || urlParams.get('dept');
+            
+            if (!filter && window.location.hash) {
+                const hash = window.location.hash.replace('#', '').toLowerCase();
+                if (['hod', 'csd', 'csit', 'all'].includes(hash)) {
+                    filter = hash;
+                }
+            }
+            
+            if (filter) {
+                filterDepartment(filter);
+                const scrollTarget = document.getElementById(filter + 'Section') || document.getElementById(filter) || document.querySelector('.controls-wrapper');
+                if (scrollTarget) {
+                    setTimeout(() => {
+                        scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            applyUrlFilter();
+        });
+        window.addEventListener('hashchange', applyUrlFilter);
 
         function searchFaculty() {
             const query = document.getElementById('facultySearchInput').value.toLowerCase().trim();
@@ -1261,7 +1294,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                 name: "Dr. Suresh Babu Mudunuri",
                 title: "Professor & Incharge - Computer Science & Design (CSD)",
                 dept: "CSD",
-                badge: "HEAD OF DEPARTMENT",
+                badge: "PROGRAM COORDINATOR",
                 photo: "assets/faculty_official/csd_780.jpeg",
                 email: "suresh.mudunuri@srkrec.ac.in",
                 linkedin: "https://www.linkedin.com/in/sureshmudunuri",
@@ -1517,14 +1550,14 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
             gopala_krishna_murthy: {
                 name: "Dr. N. Gopala Krishna Murthy",
-                title: "Head, Technology Centre & Professor - Department of IT / CSIT",
+                title: "Professor - Department of CSIT",
                 dept: "CSIT",
-                badge: "HEAD OF TECHNOLOGY CENTRE",
+                badge: "PROGRAM COORDINATOR",
                 photo: "assets/faculty_official/csit_781.jpeg",
                 email: "gopinukala@gmail.com",
                 linkedin: "https://www.linkedin.com/in/dr-ngk-murthy",
                 phone: "+91 9848427327",
-                profile: "Professor and Head of Technology Centre & I-Hub Incubation Centre with over 31 YEARS of distinguished teaching & research experience. Drives groundbreaking research in Bioinformatics, Machine Learning, Data Mining, and Enterprise IT Systems. Principal Investigator for major national projects worth over Rs. 2 Crores.",
+                profile: "Professor & Program Coordinator with over 31 YEARS of distinguished teaching & research experience. Drives groundbreaking research in Bioinformatics, Machine Learning, Data Mining, and Enterprise IT Systems. Principal Investigator for major national projects worth over Rs. 2 Crores.",
                 education: [
                     { degree: "Ph.D in Computer Science & Engineering", year: "2014", univ: "Acharya Nagarjuna University, Guntur", note: "Thesis: Machine Learning and Data Mining Approaches for Computational Analysis of Tumor Classification" },
                     { degree: "M.Tech in Information Technology", year: "2008", univ: "S.R.K.R Engineering College (Andhra University)", note: "Thesis: Distributed Data Mining for Credit Card Fraud Detection" },
@@ -1542,13 +1575,13 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                     { award: "NPTEL Best SPOC AAA & AA Rating Awards", body: "Recognized as Best SPOC by NPTEL IIT Madras across India (2017, 2018, 2019, 2022, 2023, 2024, 2025)." }
                 ],
                 experience: [
-                    { role: "Head, Technology Centre & Professor", period: "Jul 2015 - Present", place: "S.R.K.R Engineering College, Bhimavaram (10 yrs)" },
+                    { role: "Professor", period: "Jul 2015 - Present", place: "S.R.K.R Engineering College, Bhimavaram (10 yrs)" },
                     { role: "Professor & Principal", period: "May 2012 - Jun 2015", place: "G.V.V.R. Institute of Technology, Bhimavaram" },
-                    { role: "Head of the Department", period: "Jun 1994 - Jul 2008", place: "K.G.R.L. College, Bhimavaram (14 yrs)" }
+                    { role: "Program Coordinator", period: "Jun 1994 - Jul 2008", place: "K.G.R.L. College, Bhimavaram (14 yrs)" }
                 ],
                 skills: [
                     "Subjects Taught: Data Structures, C, Systems Programming, DBMS, Software Engineering, OOAD, Operating Systems, Wireless Mobile Computing",
-                    "Job Roles: Head Technology Centre, Program Coordinator CSIT, In-charge I-Hub Incubation, Coordinator MSME Centre, AICTE IDEALab Coordinator"
+                    "Job Roles: Program Coordinator CSIT, In-charge I-Hub Incubation, Coordinator MSME Centre, AICTE IDEALab Coordinator"
                 ]
             },
 

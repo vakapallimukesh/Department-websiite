@@ -81,7 +81,7 @@ foreach ($houses as $house_key => $house_info) {
 
     // Find house ID (hid)
     $hid = null;
-    $house_sql = "SELECT hid FROM houses WHERE name = '$house_name'";
+    $house_sql = "SELECT hid FROM houses WHERE UPPER(name) = UPPER('$house_name')";
     $house_result = mysqli_query($conn, $house_sql);
     if ($house_result && mysqli_num_rows($house_result) > 0) {
         $house_row = mysqli_fetch_assoc($house_result);

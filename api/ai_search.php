@@ -175,9 +175,9 @@ if (!$response && preg_match('/(hod|head|head of department|faculty|professor|pr
             $email = cleanStr($row['email']);
             $phone = cleanStr($row['phone_number']);
 
-            $html = "<p><strong>Retrieved Record:</strong> $name is Head of Department (HOD) for CSD & CSIT at SRKR Engineering College.</p>";
+            $html = "<p><strong>Retrieved Record:</strong> $name is Program Coordinator for CSD & CSIT at SRKR Engineering College.</p>";
             $html .= "<ul>";
-            $html .= "<li><strong>Name:</strong> $name – <strong>Designation:</strong> Professor & HOD</li>";
+            $html .= "<li><strong>Name:</strong> $name – <strong>Designation:</strong> Professor & Program Coordinator</li>";
             $html .= "<li><strong>Email:</strong> $email</li>";
             if (!empty($phone)) $html .= "<li><strong>Phone:</strong> $phone</li>";
             $html .= "</ul>";

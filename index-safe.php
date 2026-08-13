@@ -951,14 +951,14 @@ include "./head.php";
 
                         <!-- Leadership Members Side by Side -->
                         <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
-                            <!-- HOD Section -->
+                            <!-- Leadership Section -->
                             <div class="leadership-member" style="text-align: center; flex: 1;">
                                 <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 15px;">
-                                    <img src="./assets/logos/sureshsir.png" alt="Head of Department"
+                                    <img src="./assets/logos/sureshsir.png" alt="Program Coordinator"
                                         style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.3); object-fit: cover;">
                                 </div>
                                 <h6 style="color: #1e293b; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem;">Dr. M Suresh Babu</h6>
-                                <p style="color: #64748b; font-size: 0.75rem; margin-bottom: 10px;">Head of Department - CSD
+                                <p style="color: #64748b; font-size: 0.75rem; margin-bottom: 10px;">Program Coordinator - CSD
 
                                 </p>
                             </div>
@@ -970,7 +970,7 @@ include "./head.php";
                                         style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.3); object-fit: cover;">
                                 </div>
                                 <h6 style="color: #1e293b; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem;">Dr. N. Gopala Krishna Murthy</h6>
-                                <p style="color: #64748b; font-size: 0.75rem; margin-bottom: 10px;">Head of Department - CSIT</p>
+                                <p style="color: #64748b; font-size: 0.75rem; margin-bottom: 10px;">Program Coordinator - CSIT</p>
                             </div>
                         </div>
 

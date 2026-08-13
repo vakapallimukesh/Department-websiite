@@ -280,6 +280,18 @@ const ChatbotService = (function () {
                 'Semester 7': ['Deep Learning', 'Blockchain Technology', 'IoT and Embedded Systems', 'Elective III', 'Elective IV', 'Major Project I'],
                 'Semester 8': ['Industry Project', 'Advanced Elective', 'Seminar', 'Major Project II', 'Professional Development', 'Comprehensive Viva']
             }
+=======
+    const KNOWLEDGE_MATRIX = [
+        {
+            id: 'dept_overview',
+            category: 'About',
+            title: 'Department Overview & Establishment',
+            keywords: ['about department', 'tell me about the department', 'department overview', 'department history', 'what is this department', 'about csd', 'about csit'],
+            tokens: ['about', 'overview', 'history', 'establishment', 'csd', 'csit', 'srkrec', 'bhimavaram'],
+            content: `The Department of Computer Science & Design (CSD) and Computer Science & Information Technology (CSIT) at SRKR Engineering College, Bhimavaram offers cutting-edge B.Tech programs equipped with 200+ high-end PCs, specialized AI & ML labs, Cloud & IoT suites, and active research centers under Program Coordinators Dr. M. Suresh Babu and Dr. N. Gopala Krishna Murthy.`,
+            url: 'explore.php',
+            ctaText: 'Explore Department Overview →'
+>>>>>>> Stashed changes
         },
         'CSIT': {
             programName: 'B.Tech in Computer Science & Information Technology (CSIT)',
@@ -381,6 +393,7 @@ const ChatbotService = (function () {
      */
     const MASTER_PERSON_INDEX = [
         {
+<<<<<<< Updated upstream
             id: 'faculty_suresh_babu',
             faculty_id: 1,
             fullName: 'Dr. Suresh Babu Mudunuri',
@@ -404,7 +417,8 @@ const ChatbotService = (function () {
             publications: '6+ High-Impact SCI Journal Publications including Oxford Nucleic Acids Research (IF: 11.56), BMC Biology (IF: 5.77), Nature Scientific Reports (IF: 4.12), tRFdb database',
             linkedin: 'https://www.linkedin.com/in/sureshmudunuri',
             description: 'Dr. Suresh Babu Mudunuri is Professor and Head of Department of Computer Science & Design (CSD) at SRKR Engineering College with over 19 years of teaching and research experience. Active researcher in Bioinformatics handling major national and international funded projects.',
-            searchableAliases: ['suresh', 'suresh babu', 'm suresh babu', 'dr suresh babu', 'mudunuri suresh babu', 'suresh babu mudunuri', 'suresh sir', 'hod suresh', 'hod csd', 'dr m suresh babu', 'dr.m.suresh babu'],
+            searchableAliases: ['suresh', 'suresh babu', 'm suresh babu', 'dr suresh babu', 'mudunuri suresh babu', 'suresh babu mudunuri', 'suresh sir', 'hod suresh', 'hod csd', 'dr m suresh babu', 'dr.m.suresh babu']
+        },
             url: 'faculty.php',
             ctaText: 'View Faculty Profile →'
         },

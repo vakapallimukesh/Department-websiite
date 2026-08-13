@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Route /esteemed-leaders to esteemed-leaders.php
+    RewriteRule ^esteemed-leaders/?$ esteemed-leaders.php [L,QSA]
+</IfModule>

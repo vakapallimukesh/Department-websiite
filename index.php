@@ -124,6 +124,7 @@ include "./head.php";
         inset: 0;
         border: 1px dashed rgba(124, 58, 237, 0.3);
         border-radius: 50%;
+        pointer-events: none;
     }
 
     .center-logo {
@@ -166,6 +167,7 @@ include "./head.php";
         display: flex;
         flex-direction: column;
         align-items: center;
+        pointer-events: auto;
     }
 
     .house-button {
@@ -1826,6 +1828,35 @@ include "./head.php";
 
     <section id="faculty-section" class="combined-overview-section">
         <div class="container">
+
+            <!-- Founder & SRKR Heritage Section (Placed Above Timeline & Leadership) -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div style="background: linear-gradient(135deg, #ffffff 0%, #fdfbf7 100%); border: 1.5px solid #f3eae1; border-radius: 18px; padding: 18px 24px; box-shadow: 0 6px 24px rgba(180, 83, 9, 0.05); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: linear-gradient(180deg, #d97706 0%, #b45309 100%);"></div>
+                        <div class="row align-items-center g-3">
+                            <div class="col-md-3 text-center">
+                                <div style="position: relative; display: inline-block;">
+                                    <img src="./assets/logos/srkr_founder.jpg" alt="Sri Sagi Ramakrishnam Raju - Founder SRKREC" style="width: 140px; height: 170px; object-fit: cover; border-radius: 14px; border: 3px solid #ffffff; box-shadow: 0 8px 20px rgba(26, 13, 6, 0.15), 0 0 0 2px #d97706;">
+                                    <span style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #1a0d06 0%, #361a0c 100%); color: #f59e0b; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.64rem; font-weight: 800; letter-spacing: 0.8px; padding: 3px 12px; border-radius: 999px; border: 1px solid #d97706; white-space: nowrap; box-shadow: 0 3px 8px rgba(0,0,0,0.2);">
+                                        SRI SAGI RAMAKRISHNAM RAJU
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.72rem; font-weight: 800; letter-spacing: 2px; color: #b45309; text-transform: uppercase; display: block; margin-bottom: 4px;">FOUNDER &amp; LEGACY</span>
+                                <h3 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.45rem; color: #1a0d06; margin-bottom: 8px; line-height: 1.2;">
+                                    S.R.K.R. Engineering <span style="color: #d97706;">College</span>
+                                </h3>
+                                <p style="font-size: 0.88rem; color: #475569; line-height: 1.55; margin: 0;">
+                                    Founded in 1980 by visionary philanthropist <strong style="color: #1a0d06;">Sri Sagi Ramakrishnam Raju</strong>, S.R.K.R. Engineering College (SRKREC) stands as a premier NAAC 'A+' autonomous institution in Bhimavaram. Spanning a lush 30-acre campus with advanced AI laboratories and research centers, the institution is dedicated to academic excellence, innovation, and global student success.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row align-items-stretch g-4">
                 <!-- Timeline - 60% Width (col-md-7) -->
                 <div class="col-md-7">
@@ -1852,8 +1883,8 @@ include "./head.php";
                                     <div class="compact-node"></div>
                                     <div class="timeline-box">
                                         <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #d97706; display: block; margin-bottom: 2px;">2023</span>
-                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a0d06; margin-bottom: 4px;">CSIT Intake Doubled</h5>
-                                        <p style="font-size: 0.9rem; color: #6f5f54; margin: 0; line-height: 1.5;">Growing industry demand led to a second CSIT section, expanding intake to 120 seats.</p>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a0d06; margin-bottom: 4px;">CSIT Program Launched</h5>
+                                        <p style="font-size: 0.9rem; color: #6f5f54; margin: 0; line-height: 1.5;">SRKR introduced Computer Science & Information Technology (CSIT) program.</p>
                                     </div>
                                 </div>
 
@@ -1862,8 +1893,8 @@ include "./head.php";
                                     <div class="compact-node"></div>
                                     <div class="timeline-box">
                                         <span style="font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; color: #d97706; display: block; margin-bottom: 2px;">2024</span>
-                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a0d06; margin-bottom: 4px;">Student House System Introduced</h5>
-                                        <p style="font-size: 0.9rem; color: #6f5f54; margin: 0; line-height: 1.5;">Prudhvi, Vayu, Agni, Aakash, and Jal launched to drive mentorship, events, and healthy competition.</p>
+                                        <h5 style="font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 700; color: #1a0d06; margin-bottom: 4px;">CSIT Intake Doubled & Student House System Introduced</h5>
+                                        <p style="font-size: 0.9rem; color: #6f5f54; margin: 0; line-height: 1.5;">Growing industry demand led to a second CSIT section expanding intake to 120 seats, while Prudhvi, Vayu, Agni, Aakash, and Jal launched to drive mentorship and events.</p>
                                     </div>
                                 </div>
 
@@ -1903,14 +1934,14 @@ include "./head.php";
 
                             <!-- Leadership Members Side by Side -->
                             <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 16px;">
-                                <!-- HOD Section -->
+                                <!-- Leadership Section -->
                                 <div class="leadership-member" style="text-align: center; flex: 1;">
                                     <div class="member-image-container" style="position: relative; display: inline-block; margin-bottom: 10px;">
-                                        <img src="./assets/logos/sureshsir.png" alt="Head of Department"
+                                        <img src="./assets/logos/sureshsir.png" alt="Program Coordinator"
                                             style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #d97706; object-fit: cover; box-shadow: 0 6px 16px rgba(217, 119, 6, 0.2);">
                                     </div>
                                     <h6 style="color: #1a0d06; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. M Suresh Babu</h6>
-                                    <p style="color: #6f5f54; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSD</p>
+                                    <p style="color: #6f5f54; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Program Coordinator - CSD</p>
                                 </div>
 
                                 <!-- Second Leadership Member -->
@@ -1920,7 +1951,7 @@ include "./head.php";
                                             style="width: 95px; height: 95px; border-radius: 50%; border: 3.5px solid #b45309; object-fit: cover; box-shadow: 0 6px 16px rgba(180, 83, 9, 0.2);">
                                     </div>
                                     <h6 style="color: #1a0d06; margin-bottom: 3px; font-weight: 700; font-size: 0.9rem;">Dr. N. Gopala Krishna Murthy</h6>
-                                    <p style="color: #6f5f54; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Head of Department - CSIT</p>
+                                    <p style="color: #6f5f54; font-size: 0.78rem; font-weight: 600; margin-bottom: 0;">Program Coordinator - CSIT</p>
                                 </div>
                             </div>
                         </div>
@@ -1934,38 +1965,34 @@ include "./head.php";
                     </div>
 
                     <!-- Live Updates Box -->
-                    <div class="live-updates-card" style="flex: 1; margin-top: 16px; padding: 24px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%); border: 1.5px solid #fde68a; box-shadow: 0 10px 25px rgba(217, 119, 6, 0.07); position: relative; overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div class="live-updates-card" style="flex: 1; margin-top: 16px; padding: 24px 26px; border-radius: 20px; background: linear-gradient(135deg, #ffffff 0%, #fdfbf7 100%); border: 1.5px solid #f3eae1; box-shadow: 0 10px 25px rgba(26, 13, 6, 0.05); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;">
                         <div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
                                 <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span class="live-pulse-dot" style="background: #e11d48; box-shadow: 0 0 10px rgba(225, 29, 72, 0.8);"></span>
-                                    <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #be123c; text-transform: uppercase;">LIVE UPDATES</span>
+                                    <span class="live-pulse-dot" style="background: #94a3b8; box-shadow: 0 0 8px rgba(148, 163, 184, 0.5);"></span>
+                                    <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #64748b; text-transform: uppercase;">LIVE UPDATES</span>
                                 </div>
-                                <span style="background: rgba(225, 29, 72, 0.10); color: #be123c; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 12px; font-family: 'Outfit', sans-serif; border: 1px solid rgba(225, 29, 72, 0.25);">UPCOMING</span>
+                                <span style="background: #f1f5f9; color: #64748b; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 12px; font-family: 'Outfit', sans-serif; border: 1px solid #e2e8f0;">SCHEDULE</span>
                             </div>
 
-                            <!-- Glassy Reddish Title & Poster Box -->
-                            <div style="background: linear-gradient(135deg, rgba(255, 241, 242, 0.85) 0%, rgba(254, 226, 226, 0.6) 100%); border: 1px solid rgba(244, 63, 94, 0.25); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px 20px; box-shadow: 0 4px 14px rgba(225, 29, 72, 0.06);">
-                                <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.25rem; color: #9f1239; margin: 0 0 12px 0; line-height: 1.3;">
-                                    "Irumudi" Trailer Launch Event
-                                </h4>
-                                <!-- Event Poster Image (Full Poster & Hero Face Visible) -->
-                                <div style="position: relative; border-radius: 12px; overflow: hidden; height: 260px; background: linear-gradient(180deg, #180509 0%, #2a0b14 100%); box-shadow: 0 6px 18px rgba(159, 18, 57, 0.15); border: 1px solid rgba(244, 63, 94, 0.2); display: flex; align-items: center; justify-content: center;">
-                                    <img src="assets/images/irumudi_poster.jpg" alt="Irumudi Trailer Launch Event Poster" style="max-width: 100%; max-height: 100%; width: auto; height: 100%; object-fit: contain; display: block; border-radius: 8px;">
+                            <!-- No Events Box -->
+                            <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 16px; padding: 32px 20px; text-align: center;">
+                                <div style="width: 50px; height: 50px; border-radius: 50%; background: #f1f5f9; color: #94a3b8; display: inline-flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 12px;">
+                                    <i class="far fa-calendar-times"></i>
                                 </div>
+                                <h4 style="font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.15rem; color: #334155; margin: 0 0 6px 0;">
+                                    No Live Events Currently
+                                </h4>
+                                <p style="font-size: 0.84rem; color: #64748b; margin: 0; line-height: 1.5;">
+                                    There are no active or scheduled live events at the moment. Please check back later for future department announcements!
+                                </p>
                             </div>
                         </div>
 
-                        <!-- Glassy Reddish Date & Time Pills -->
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: auto;">
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 241, 242, 0.95); border: 1px solid rgba(244, 63, 94, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #be123c; box-shadow: 0 2px 6px rgba(225, 29, 72, 0.08);">
-                                <i class="far fa-calendar-alt" style="color: #e11d48;"></i>
-                                12th August
-                            </span>
-                            <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 241, 242, 0.95); border: 1px solid rgba(244, 63, 94, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: #be123c; box-shadow: 0 2px 6px rgba(225, 29, 72, 0.08);">
-                                <i class="far fa-clock" style="color: #e11d48;"></i>
-                                From 4:30 PM
-                            </span>
+                        <!-- Status Footer Info -->
+                        <div style="display: flex; align-items: center; gap: 8px; margin-top: 18px; background: #fdfbf7; border: 1px solid #f3eae1; padding: 8px 14px; border-radius: 12px;">
+                            <i class="fas fa-info-circle" style="color: #d97706; font-size: 0.85rem;"></i>
+                            <span style="font-size: 0.78rem; color: #6f5f54; font-weight: 600;">Stay tuned for upcoming hackathons, workshops, and tech fests.</span>
                         </div>
                     </div>
                 </div>
@@ -3003,45 +3030,45 @@ include "./head.php";
                     <!-- Rotating circle border -->
                     <div class="houses-circle"></div>
 
-                    <!-- Connecting lines -->
-                    <div class="connecting-lines">
-                        <div class="line" style="width: 180px; transform: rotate(-90deg);"></div>
-                        <div class="line" style="width: 180px; transform: rotate(-18deg);"></div>
-                        <div class="line" style="width: 180px; transform: rotate(54deg);"></div>
-                        <div class="line" style="width: 180px; transform: rotate(126deg);"></div>
-                        <div class="line" style="width: 180px; transform: rotate(198deg);"></div>
+                    <!-- Connecting lines (pointer-events disabled so they never block house clicks) -->
+                    <div class="connecting-lines" style="pointer-events: none;">
+                        <div class="line" style="width: 180px; transform: rotate(-90deg); pointer-events: none;"></div>
+                        <div class="line" style="width: 180px; transform: rotate(-18deg); pointer-events: none;"></div>
+                        <div class="line" style="width: 180px; transform: rotate(54deg); pointer-events: none;"></div>
+                        <div class="line" style="width: 180px; transform: rotate(126deg); pointer-events: none;"></div>
+                        <div class="line" style="width: 180px; transform: rotate(198deg); pointer-events: none;"></div>
                     </div>
 
-                    <!-- House items -->
-                    <a href="house_detail.php?house=Agni" class="house-item house-agni" style="cursor: pointer; text-decoration: none;">
+                    <!-- House items (AFTER connecting-lines so they are on top in stacking order) -->
+                    <a href="house_detail.php?house=Agni" class="house-item house-agni" style="cursor: pointer; text-decoration: none; display: block; z-index: 100;">
                         <div class="house-button">
                             <img src="./assets/logos/3.jpg" alt="Agni">
                         </div>
                         <div class="house-name">Agni</div>
                     </a>
 
-                    <a href="house_detail.php?house=Vayu" class="house-item house-vayu" style="cursor: pointer; text-decoration: none;">
+                    <a href="house_detail.php?house=Vayu" class="house-item house-vayu" style="cursor: pointer; text-decoration: none; display: block; z-index: 100;">
                         <div class="house-button">
                             <img src="./assets/logos/2.jpg" alt="Vayu">
                         </div>
                         <div class="house-name">Vayu</div>
                     </a>
 
-                    <a href="house_detail.php?house=Prudhvi" class="house-item house-prudhvi" style="cursor: pointer; text-decoration: none;">
+                    <a href="house_detail.php?house=Prudhvi" class="house-item house-prudhvi" style="cursor: pointer; text-decoration: none; display: block; z-index: 100;">
                         <div class="house-button">
                             <img src="./assets/logos/4.jpg" alt="Prudhvi">
                         </div>
                         <div class="house-name">Prudhvi</div>
                     </a>
 
-                    <a href="house_detail.php?house=Jal" class="house-item house-jal" style="cursor: pointer; text-decoration: none;">
+                    <a href="house_detail.php?house=Jal" class="house-item house-jal" style="cursor: pointer; text-decoration: none; display: block; z-index: 100;">
                         <div class="house-button">
                             <img src="./assets/logos/1.jpg" alt="Jal">
                         </div>
                         <div class="house-name">Jal</div>
                     </a>
 
-                    <a href="house_detail.php?house=Aakash" class="house-item house-aakash" style="cursor: pointer; text-decoration: none;">
+                    <a href="house_detail.php?house=Aakash" class="house-item house-aakash" style="cursor: pointer; text-decoration: none; display: block; z-index: 100;">
                         <div class="house-button">
                             <img src="./assets/logos/5.jpg" alt="Aakash">
                         </div>

@@ -451,9 +451,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <i class="fas fa-chalkboard-teacher"></i> Faculty
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="facultyDropdown">
-                        <li><a class="dropdown-item" href="faculty.php#hod"><i class="fas fa-user-shield me-2"></i> Heads of Department</a></li>
-                        <li><a class="dropdown-item" href="faculty.php#csd"><i class="fas fa-laptop-code me-2"></i> CSD Faculty</a></li>
-                        <li><a class="dropdown-item" href="faculty.php#csit"><i class="fas fa-microchip me-2"></i> CSIT Faculty</a></li>
+                        <li><a class="dropdown-item" href="faculty.php?filter=hod#hod"><i class="fas fa-user-shield me-2"></i> Program Coordinators</a></li>
+                        <li><a class="dropdown-item" href="faculty.php?filter=csd#csd"><i class="fas fa-laptop-code me-2"></i> CSD Faculty</a></li>
+                        <li><a class="dropdown-item" href="faculty.php?filter=csit#csit"><i class="fas fa-microchip me-2"></i> CSIT Faculty</a></li>
                     </ul>
                 </li>
 
@@ -542,6 +542,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="moreDetailsDropdown" style="min-width: 230px !important;">
                         <li><h6 class="dropdown-header text-uppercase text-muted fw-bold px-3 py-1" style="font-size: 0.7rem; letter-spacing: 0.8px;">More Details</h6></li>
+                        <li><a class="dropdown-item <?= ($current_page == 'esteemed-leaders.php' || $current_page == 'esteemed-leaders') ? 'active' : '' ?>" href="esteemed-leaders.php"><i class="fas fa-user-tie me-2" style="color: #ec4899;"></i> Our Esteemed Leaders</a></li>
                         <li><a class="dropdown-item <?= $current_page == 'student_achievements.php' ? 'active' : '' ?>" href="student_achievements.php"><i class="fas fa-user-graduate me-2" style="color: #3b82f6;"></i> Student Achievements</a></li>
                         <li><a class="dropdown-item <?= $current_page == 'faculty_achievements.php' ? 'active' : '' ?>" href="faculty_achievements.php"><i class="fas fa-award me-2" style="color: #f59e0b;"></i> Faculty Achievements</a></li>
                         <li><a class="dropdown-item <?= $current_page == 'news_events.php' ? 'active' : '' ?>" href="news_events.php"><i class="fas fa-newspaper me-2" style="color: #10b981;"></i> News & Events</a></li>

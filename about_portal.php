@@ -118,7 +118,7 @@ include "./head.php";
                             </div>
                             <h5 class="text-info mb-3">Analytics & Reports</h5>
                             <p class="text-muted">
-                                Faculty and HODs can access detailed analytics and reports to monitor attendance trends, 
+                                Faculty and Program Coordinators can access detailed analytics and reports to monitor attendance trends, 
                                 identify patterns, and make data-driven decisions for academic improvement.
                             </p>
                             <ul class="list-unstyled text-start">
@@ -201,7 +201,7 @@ include "./head.php";
                                 <div class="step-number mb-3">
                                     <span class="badge bg-primary" style="font-size: 1.2rem; padding: 10px 15px;">3</span>
                                 </div>
-                                <h6 class="text-primary">For HODs</h6>
+                                <h6 class="text-primary">For Program Coordinators</h6>
                                 <p class="text-muted small">
                                     Access comprehensive analytics, export reports, and monitor overall department performance. 
                                     Full administrative access available.

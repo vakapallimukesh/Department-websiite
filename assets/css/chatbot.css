@@ -64,7 +64,6 @@
 /* ==========================================================================
    1. FLOATING CHATBOT LAUNCHER (COLORFUL PLANET ORBITAL ANIMATION)
    ========================================================================== */
-
 .chatbot-trigger-btn {
     position: fixed;
     bottom: 25px;
@@ -84,6 +83,7 @@
     justify-content: center;
     overflow: visible;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
 }
 
 .chatbot-trigger-btn:hover {
@@ -133,6 +133,7 @@
     width: 100%;
     height: 100%;
     overflow: visible;
+    pointer-events: none;
 }
 
 /* Planet Orbit Ring 60 FPS Animations */
@@ -180,6 +181,7 @@
     text-align: center;
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     animation: orbBreathing 4.5s ease-in-out infinite;
+    pointer-events: auto;
 }
 
 .chatbot-trigger-btn:hover .central-glass-orb {
@@ -243,6 +245,7 @@
     border-radius: 50%;
     z-index: 4;
     box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
+    pointer-events: auto;
 }
 
 /* Close Icon when Window is Active */
@@ -255,6 +258,7 @@
     font-size: 24px;
     color: #ffffff;
     z-index: 5;
+    pointer-events: auto;
 }
 
 .chatbot-trigger-btn.active .orbit-animation-container,
@@ -275,11 +279,8 @@
     background: linear-gradient(135deg, #d97706 0%, #1a0d06 100%);
     border: 1.5px solid rgba(243, 212, 154, 0.6);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(217, 119, 6, 0.4);
+    pointer-events: auto;
 }
-
-/* ==========================================================================
-   2. FLOATING CHATBOT PANEL (WHITE BODY & CRISP BLACK TYPOGRAPHY)
-   ========================================================================== */
 
 .chatbot-window {
     position: fixed;

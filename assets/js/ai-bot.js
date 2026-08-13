@@ -41,7 +41,7 @@
             content: `
                 <p>Our departments are guided by highly qualified professors and industry-experienced faculty members dedicated to excellence in teaching and research.</p>
                 <ul>
-                    <li><strong>Head of Department (HOD):</strong> Leads academic initiatives, research grants, and industry collaborations.</li>
+                    <li><strong>Program Coordinator:</strong> Leads academic initiatives, research grants, and industry collaborations.</li>
                     <li><strong>Specializations:</strong> Artificial Intelligence, Machine Learning, Cybersecurity, Cloud Computing, IoT, and Big Data Analytics.</li>
                     <li><strong>Faculty Appreciations:</strong> Regular awards for research publications, patent filings, and exceptional teaching quality.</li>
                 </ul>

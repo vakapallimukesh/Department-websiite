@@ -236,7 +236,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
                         <div class="category-icon">
                             <i class="fas fa-user-tie"></i>
                         </div>
-                        <h3>Head of Department</h3>
+                        <h3>Program Coordinator</h3>
                         <p>Leadership and vision</p>
                         <a href="faculty.php" class="category-link">
                             View Profile <i class="fas fa-arrow-right"></i>
