@@ -107,30 +107,33 @@ body {
     margin-top: 4px;
 }
 
-/* NPTEL Star Achievement Card */
+/* NPTEL Star Achievement Card - Decreased size by 25% */
 .nptel-card {
     background: #ffffff;
     border: 1.5px solid #f1e5d8;
-    border-radius: 24px;
+    border-radius: 18px;
     overflow: hidden;
     height: 100%;
+    max-width: 320px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
 }
 
 .nptel-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     border-color: var(--primary-gold);
-    box-shadow: 0 20px 45px rgba(217, 119, 6, 0.18);
+    box-shadow: 0 16px 35px rgba(217, 119, 6, 0.16);
 }
 
 .nptel-img-wrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4 / 4.8;
+    max-height: 250px;
     background: #1a0d06;
     overflow: hidden;
     cursor: pointer;
@@ -154,26 +157,26 @@ body {
     background: linear-gradient(180deg, transparent 50%, rgba(26, 13, 6, 0.85) 100%);
     display: flex;
     align-items: flex-end;
-    padding: 20px;
+    padding: 14px;
     opacity: 0.9;
     transition: opacity 0.3s ease;
 }
 
 .zoom-badge {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 12px;
+    right: 12px;
     background: rgba(26, 13, 6, 0.75);
     backdrop-filter: blur(8px);
     color: #ffffff;
-    padding: 6px 14px;
+    padding: 5px 11px;
     border-radius: 999px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     border: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     transition: all 0.3s ease;
 }
 
@@ -183,7 +186,7 @@ body {
 }
 
 .nptel-body {
-    padding: 26px;
+    padding: 18px 20px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -192,14 +195,14 @@ body {
 .star-title-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 7px 16px;
+    gap: 6px;
+    padding: 5px 12px;
     border-radius: 999px;
     font-family: 'Outfit', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 800;
-    letter-spacing: 0.5px;
-    margin-bottom: 14px;
+    letter-spacing: 0.4px;
+    margin-bottom: 10px;
     width: fit-content;
 }
 
@@ -217,34 +220,34 @@ body {
 
 .faculty-name {
     font-family: 'Outfit', sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.15rem;
     font-weight: 800;
     color: var(--text-dark);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .faculty-role {
-    font-size: 0.88rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--primary-gold);
-    margin-bottom: 14px;
+    margin-bottom: 10px;
 }
 
 .achievement-desc {
-    font-size: 0.92rem;
+    font-size: 0.82rem;
     color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 20px;
+    line-height: 1.5;
+    margin-bottom: 14px;
     flex-grow: 1;
 }
 
 .meta-footer {
-    padding-top: 16px;
+    padding-top: 12px;
     border-top: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.82rem;
+    font-size: 0.75rem;
     font-weight: 700;
 }
 
@@ -345,7 +348,7 @@ body {
 
         <div class="row g-4 justify-content-center">
             <!-- NPTEL Card 1 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="nptel-card">
                     <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_domain_star_trinadh_naidu.png', 'K V V S Trinadh Naidu - NPTEL Domain Star')">
                         <img src="assets/faculty_achievements/nptel_domain_star_trinadh_naidu.png" alt="K V V S Trinadh Naidu - NPTEL Domain Star" class="nptel-img">
@@ -372,7 +375,7 @@ body {
             </div>
 
             <!-- NPTEL Card 2 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="nptel-card">
                     <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_discipline_star_neti_praveen.png', 'Neti Praveen - NPTEL Discipline Star')">
                         <img src="assets/faculty_achievements/nptel_discipline_star_neti_praveen.png" alt="Neti Praveen - NPTEL Discipline Star" class="nptel-img">
@@ -399,7 +402,7 @@ body {
             </div>
 
             <!-- NPTEL Card 3 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="nptel-card">
                     <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_discipline_star_angara_satyam.png', 'Angara Satyam - NPTEL Discipline Star')">
                         <img src="assets/faculty_achievements/nptel_discipline_star_angara_satyam.png" alt="Angara Satyam - NPTEL Discipline Star" class="nptel-img">
@@ -426,7 +429,7 @@ body {
             </div>
 
             <!-- NPTEL Card 4 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="nptel-card">
                     <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_discipline_star_kasagana_srinivasa_rao.png', 'Kasagana Srinivasa Rao - NPTEL Discipline Star')">
                         <img src="assets/faculty_achievements/nptel_discipline_star_kasagana_srinivasa_rao.png" alt="Kasagana Srinivasa Rao - NPTEL Discipline Star" class="nptel-img">
@@ -453,7 +456,7 @@ body {
             </div>
 
             <!-- NPTEL Card 5 -->
-            <div class="col-md-6 col-lg-4">
+            <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="nptel-card">
                     <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_discipline_star_trinadh_naidu.png', 'K V V S Trinadh Naidu - NPTEL Discipline Star')">
                         <img src="assets/faculty_achievements/nptel_discipline_star_trinadh_naidu.png" alt="K V V S Trinadh Naidu - NPTEL Discipline Star" class="nptel-img">
