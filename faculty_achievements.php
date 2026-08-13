@@ -512,75 +512,7 @@ body {
     </div>
 </section>
 
-<!-- Additional Faculty Research & Awards Section -->
-<section class="py-5">
-    <div class="container py-3">
-        <div class="text-center mb-5">
-            <span class="hero-tag" style="background: rgba(217, 119, 6, 0.08); color: #d97706; border-color: rgba(217, 119, 6, 0.2);">Academic Leadership</span>
-            <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; color: #1a0d06;">Research &amp; <span style="color: #d97706;">Grants</span></h2>
-            <p style="color: #6f5f54; font-size: 1.05rem; max-width: 600px; margin: 0 auto;">Distinguished research accomplishments, patents, state awards, and external consultancy projects.</p>
-        </div>
 
-        <div class="row g-4">
-            <!-- Card 1 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="faculty-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-award"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">State Honor</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Best Teacher Award</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">Dr. Suresh Babu Mudunuri (HOD CSD)</p>
-                    <p class="text-secondary small mb-4">Conferred Best Teacher Award by the Government of Andhra Pradesh for outstanding contribution to technical education and AI research.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-university me-1"></i> Govt Award</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> State Awardee</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="faculty-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-hand-holding-usd"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">₹35 Lakhs Grant</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">DST Research Grant</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">Dr. G. Mahesh (HOD CSIT)</p>
-                    <p class="text-secondary small mb-4">Sanctioned major research grant from Department of Science & Technology (DST) for Smart Agriculture IoT project.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-flask me-1"></i> DST Funded</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Active Project</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="faculty-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-certificate"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">Patent Granted</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Granted International Patent</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">Dr. K. Srinivas (Professor)</p>
-                    <p class="text-secondary small mb-4">Granted International Patent for "AI-Assisted Medical Image Segmentation Framework for Early Cancer Detection".</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-globe me-1"></i> International</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Patent Granted</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Certificate Poster Lightbox Modal -->
 <div class="modal fade" id="certificateModal" tabindex="-1" aria-labelledby="certificateModalLabel" aria-hidden="true">
