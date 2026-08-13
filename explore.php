@@ -497,8 +497,6 @@ if (session_status() === PHP_SESSION_NONE) session_start();
     <!-- AOS Animation -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="explore-premium.js"></script>
-    <!-- AI Department Assistant Chatbot Component -->
-    <?php include_once __DIR__ . '/includes/chatbot.php'; ?>
 
 </body>
 </html>
