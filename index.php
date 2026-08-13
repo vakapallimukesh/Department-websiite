@@ -200,6 +200,8 @@ include "./head.php";
     .connecting-lines {
         position: absolute;
         inset: 0;
+        pointer-events: none;
+        z-index: 1;
     }
 
     .line {
@@ -210,6 +212,7 @@ include "./head.php";
         background: linear-gradient(to right, rgba(107, 114, 128, 0.3), transparent);
         transform-origin: 0 50%;
         opacity: 0.6;
+        pointer-events: none;
     }
 
     /* House positioning - Perfect 72° spacing (Pentagon Circle Orbit) */
@@ -2992,6 +2995,15 @@ include "./head.php";
                     <!-- Rotating circle border -->
                     <div class="houses-circle"></div>
 
+                    <!-- Connecting lines -->
+                    <div class="connecting-lines">
+                        <div class="line" style="width: 180px; transform: rotate(-90deg);"></div>
+                        <div class="line" style="width: 180px; transform: rotate(-18deg);"></div>
+                        <div class="line" style="width: 180px; transform: rotate(54deg);"></div>
+                        <div class="line" style="width: 180px; transform: rotate(126deg);"></div>
+                        <div class="line" style="width: 180px; transform: rotate(198deg);"></div>
+                    </div>
+
                     <!-- House items -->
                     <div class="house-item house-agni" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Agni'">
                         <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Agni'">
@@ -3026,15 +3038,6 @@ include "./head.php";
                             <img src="./assets/logos/5.jpg" alt="Aakash">
                         </button>
                         <div class="house-name">Aakash</div>
-                    </div>
-
-                    <!-- Connecting lines -->
-                    <div class="connecting-lines">
-                        <div class="line" style="width: 180px; transform: rotate(-90deg);"></div>
-                        <div class="line" style="width: 180px; transform: rotate(-18deg);"></div>
-                        <div class="line" style="width: 180px; transform: rotate(54deg);"></div>
-                        <div class="line" style="width: 180px; transform: rotate(126deg);"></div>
-                        <div class="line" style="width: 180px; transform: rotate(198deg);"></div>
                     </div>
                 </div>
             </div>
