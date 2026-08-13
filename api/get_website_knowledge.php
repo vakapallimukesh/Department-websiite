@@ -700,7 +700,15 @@ if ($appRes) {
     while ($row = mysqli_fetch_assoc($appRes)) {
         $regNo = trim($row['student_id']);
         $name = !empty($row['name']) ? trim($row['name']) : $regNo;
-        $branch = !empty($row['branch']) ? strtoupper(trim($row['branch'])) : 'CSIT';
+        $branch = !empty($row['branch']) ? strtoupper(trim($row['branch'])) : '';
+        if (empty($branch) && !empty($regNo)) {
+            if (strpos(strtoupper($regNo), '62') !== false) {
+                $branch = 'CSD';
+            } else if (strpos(strtoupper($regNo), '07') !== false) {
+                $branch = 'CSIT';
+            }
+        }
+        if (empty($branch)) $branch = 'CSD';
         $reason = trim($row['reason']);
         $year = isset($row['year']) ? $row['year'] . 'th Year' : '3rd Year';
         $sec = isset($row['section']) ? 'Sec ' . $row['section'] : 'Sec A';
@@ -741,6 +749,40 @@ if ($appRes) {
     }
 }
 
+// Fetch all enrolled students from MySQL students table if available
+$dbStudents = [];
+$stuRes = mysqli_query($conn, "SELECT s.student_id, s.name, s.branch, s.class_id, s.hid, h.name as house_name, c.year, c.section 
+                               FROM students s 
+                               LEFT JOIN houses h ON s.hid = h.hid 
+                               LEFT JOIN classes c ON s.class_id = c.class_id");
+if ($stuRes) {
+    while ($row = mysqli_fetch_assoc($stuRes)) {
+        if (!empty($row['name'])) {
+            $regNo = trim($row['student_id']);
+            $branch = !empty($row['branch']) ? strtoupper(trim($row['branch'])) : '';
+            if (empty($branch) && !empty($regNo)) {
+                if (strpos(strtoupper($regNo), '62') !== false) {
+                    $branch = 'CSD';
+                } else if (strpos(strtoupper($regNo), '07') !== false) {
+                    $branch = 'CSIT';
+                }
+            }
+            if (empty($branch)) $branch = 'CSD';
+
+            $dbStudents[] = [
+                'student_id' => $regNo,
+                'regNo' => $regNo,
+                'name' => trim($row['name']),
+                'branch' => $branch,
+                'department' => $branch,
+                'year' =>\r\n                    ($row['year'] == 1 ? '1st Year' :\r\n                    ($row['year'] == 2 ? '2nd Year' :\r\n                    ($row['year'] == 3 ? '3rd Year' :\r\n                    ($row['year'] == 4 ? '4th Year' : '3rd Year')))),
+                'section' => isset($row['section']) ? 'Sec ' . $row['section'] : 'Sec A',
+                'house' => !empty($row['house_name']) ? trim($row['house_name']) : ''
+            ];
+        }
+    }
+}
+
 $executionTime = round((microtime(true) - $startTime) * 1000, 2);
 
 $diagnostics = [
@@ -749,7 +791,7 @@ $diagnostics = [
     'totalPagesIndexed' => 18,
     'totalIndexedChunks' => 140,
     'totalFacultyRecords' => count($faculties),
-    'totalStudentRecords' => 625,
+    'totalStudentRecords' => count($dbStudents) > 0 ? count($dbStudents) : 625,
     'totalHouseRecords' => count($houses),
     'totalCRRecords' => count($classRepresentatives),
     'totalInternshipRecords' => count($dbInternships),
@@ -764,11 +806,13 @@ $diagnostics = [
 echo json_encode([
     'status' => 'success',
     'total_faculties' => count($faculties),
+    'total_students' => count($dbStudents),
     'total_houses' => count($houses),
     'total_classes' => count($classes),
     'total_internships' => count($dbInternships),
     'total_placements' => count($dbPlacements),
     'faculties' => $faculties,
+    'allStudents' => $dbStudents,
     'classRepresentatives' => $classRepresentatives,
     'programAcademics' => $programAcademics,
     'houses' => $houses,
