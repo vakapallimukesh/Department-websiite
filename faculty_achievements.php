@@ -9,27 +9,28 @@ include "./head.php";
 
 <style>
 :root {
-    --primary: #d97706;
-    --primary-light: #f59e0b;
-    --amber-gold: #d97706;
+    --primary-gold: #d97706;
+    --primary-amber: #f59e0b;
     --rich-espresso: #1a0d06;
-    --cream-white: #fdfbf7;
-    --text-primary: #1a0d06;
-    --text-secondary: #6f5f54;
-    --border-light: #f3eae1;
+    --card-bg: #ffffff;
+    --cream-bg: #fdfbf7;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+    --border-subtle: #f1e5d8;
 }
 
 body {
     font-family: 'Inter', sans-serif;
-    background: #fdfbf7;
-    color: #1a0d06;
+    background: var(--cream-bg);
+    color: var(--text-dark);
     line-height: 1.6;
 }
 
+/* Hero Section */
 .hero-banner {
-    background: linear-gradient(135deg, #1a0d06 0%, #2a150a 50%, #3d1e0e 100%);
+    background: linear-gradient(135deg, #1a0d06 0%, #2c1509 50%, #421e0b 100%);
     color: white;
-    padding: 85px 20px 65px;
+    padding: 85px 20px 70px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -39,9 +40,9 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(230, 194, 128, 0.15) 1px, transparent 1px);
-    background-size: 24px 24px;
-    opacity: 0.6;
+    background-image: radial-gradient(rgba(245, 158, 11, 0.18) 1.2px, transparent 1.2px);
+    background-size: 28px 28px;
+    opacity: 0.75;
     pointer-events: none;
 }
 
@@ -50,13 +51,14 @@ body {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #f59e0b;
+    color: var(--primary-amber);
     background: rgba(245, 158, 11, 0.12);
-    padding: 6px 18px;
+    padding: 7px 20px;
     border-radius: 999px;
     display: inline-block;
-    margin-bottom: 15px;
-    border: 1px solid rgba(245, 158, 11, 0.25);
+    margin-bottom: 16px;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
 }
 
 .hero-title {
@@ -68,43 +70,228 @@ body {
 }
 
 .hero-title span {
-    color: #f59e0b;
+    color: var(--primary-amber);
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
+/* Stat Card */
 .stat-card {
     background: #ffffff;
-    border: 1px solid #f3eae1;
+    border: 1.5px solid var(--border-subtle);
     border-radius: 20px;
-    padding: 25px;
+    padding: 26px 20px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(180, 83, 9, 0.06);
-    transition: transform 0.3s ease;
+    box-shadow: 0 10px 25px rgba(217, 119, 6, 0.05);
+    transition: all 0.3s ease;
 }
 
 .stat-card:hover {
     transform: translateY(-5px);
-    border-color: #d97706;
+    border-color: var(--primary-gold);
+    box-shadow: 0 15px 35px rgba(217, 119, 6, 0.12);
 }
 
 .stat-number {
     font-family: 'Outfit', sans-serif;
-    font-size: 2.5rem;
+    font-size: 2.6rem;
     font-weight: 900;
-    color: #d97706;
+    color: var(--primary-gold);
 }
 
 .stat-label {
     font-size: 0.9rem;
     font-weight: 700;
-    color: #1a0d06;
+    color: var(--text-dark);
     margin-top: 4px;
 }
 
+/* NPTEL Star Achievement Card */
+.nptel-card {
+    background: #ffffff;
+    border: 1.5px solid #f1e5d8;
+    border-radius: 24px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.nptel-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-gold);
+    box-shadow: 0 20px 45px rgba(217, 119, 6, 0.18);
+}
+
+.nptel-img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: #1a0d06;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.nptel-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 0.5s ease;
+}
+
+.nptel-card:hover .nptel-img {
+    transform: scale(1.05);
+}
+
+.nptel-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(26, 13, 6, 0.85) 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.zoom-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(26, 13, 6, 0.75);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.nptel-card:hover .zoom-badge {
+    background: var(--primary-gold);
+    border-color: #ffffff;
+}
+
+.nptel-body {
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.star-title-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+    width: fit-content;
+}
+
+.badge-domain {
+    background: #fff7ed;
+    color: #c2410c;
+    border: 1.5px solid #ffedd5;
+}
+
+.badge-discipline {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1.5px solid #dbeafe;
+}
+
+.faculty-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+}
+
+.faculty-role {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--primary-gold);
+    margin-bottom: 14px;
+}
+
+.achievement-desc {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.meta-footer {
+    padding-top: 16px;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.meta-period {
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.meta-issuer {
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Lightbox Modal */
+.modal-content {
+    border-radius: 24px;
+    border: none;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: #1a0d06;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 28px;
+}
+
+.modal-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+}
+
+.btn-close-white {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* General Faculty Card */
 .faculty-card {
     background: #ffffff;
-    border: 1.5px solid #f3eae1;
+    border: 1.5px solid var(--border-subtle);
     border-radius: 24px;
-    padding: 30px;
+    padding: 28px;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -114,22 +301,21 @@ body {
 
 .faculty-card:hover {
     transform: translateY(-8px);
-    border-color: #d97706;
+    border-color: var(--primary-gold);
     box-shadow: 0 20px 40px rgba(217, 119, 6, 0.15);
 }
 
 .badge-icon {
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
     border-radius: 16px;
     background: #fdfbf7;
-    border: 1px solid #f3eae1;
+    border: 1px solid var(--border-subtle);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    color: #d97706;
-    margin-bottom: 20px;
+    font-size: 1.4rem;
+    color: var(--primary-gold);
 }
 </style>
 
@@ -138,10 +324,10 @@ body {
 <!-- Hero Section -->
 <section class="hero-banner">
     <div class="container position-relative z-1">
-        <span class="hero-tag"><i class="fas fa-chalkboard-teacher me-2"></i> Faculty Hall of Excellence</span>
+        <span class="hero-tag"><i class="fas fa-award me-2"></i> Faculty Hall of Excellence</span>
         <h1 class="hero-title">Faculty <span>Achievements</span></h1>
-        <p class="lead mx-auto" style="max-width: 680px; color: #e5d5c5; font-size: 1.15rem; line-height: 1.6;">
-            Honoring research contributions, funded projects, patents, published textbooks, and academic honors of CSD & CSIT professors.
+        <p class="lead mx-auto" style="max-width: 720px; color: #e5d5c5; font-size: 1.15rem; line-height: 1.65;">
+            Celebrating national NPTEL Domain & Discipline Stars, research grants, patents, authored books, and academic honors of our CSD & CSIT faculty members.
         </p>
     </div>
 </section>
@@ -150,6 +336,12 @@ body {
 <section class="py-5">
     <div class="container">
         <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">NPTEL Star Awards</div>
+                </div>
+            </div>
             <div class="col-6 col-md-3">
                 <div class="stat-card">
                     <div class="stat-number">120+</div>
@@ -168,23 +360,165 @@ body {
                     <div class="stat-label">Patents Granted</div>
                 </div>
             </div>
-            <div class="col-6 col-md-3">
-                <div class="stat-card">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">Textbooks & Books</div>
+        </div>
+    </div>
+</section>
+
+<!-- NPTEL Stars Feature Showcase Section -->
+<section class="py-5" style="background: #ffffff; border-top: 1px solid #f1e5d8; border-bottom: 1px solid #f1e5d8;">
+    <div class="container py-3">
+        <div class="text-center mb-5">
+            <span class="hero-tag" style="background: rgba(217, 119, 6, 0.08); color: #d97706; border-color: rgba(217, 119, 6, 0.2);">National Recognition</span>
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; color: #1a0d06;">NPTEL <span style="color: #d97706;">Star Recognitions</span></h2>
+            <p style="color: #64748b; font-size: 1.05rem; max-width: 650px; margin: 0 auto;">Honoring CSD & CSIT faculty members recognized by NPTEL, SWAYAM & IIT Madras for national-level domain expertise and continuous learning.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <!-- NPTEL Card 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="nptel-card">
+                    <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_domain_star_trinadh_naidu.png', 'K V V S Trinadh Naidu - NPTEL Domain Star')">
+                        <img src="assets/faculty_achievements/nptel_domain_star_trinadh_naidu.png" alt="K V V S Trinadh Naidu - NPTEL Domain Star" class="nptel-img">
+                        <div class="zoom-badge"><i class="fas fa-search-plus"></i> View Poster</div>
+                        <div class="nptel-img-overlay">
+                            <span class="text-white fw-bold small"><i class="fas fa-certificate me-1 text-warning"></i> SWAYAM NPTEL Certificate</span>
+                        </div>
+                    </div>
+                    <div class="nptel-body">
+                        <span class="star-title-badge badge-domain">
+                            <i class="fas fa-star text-warning"></i> NPTEL DOMAIN STAR
+                        </span>
+                        <h3 class="faculty-name">K V V S Trinadh Naidu</h3>
+                        <div class="faculty-role">Asst. Professor, CSIT Department</div>
+                        <p class="achievement-desc">
+                            Awarded the prestigious <strong>NPTEL Domain Star</strong> in <em>Programming (Computer Science)</em> by IIT Madras for demonstrating exceptional domain mastery across multiple core software engineering certifications.
+                        </p>
+                        <div class="meta-footer">
+                            <span class="meta-period"><i class="far fa-calendar-alt text-amber"></i> April 2025</span>
+                            <span class="meta-issuer"><i class="fas fa-check-circle"></i> IIT Madras / NPTEL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NPTEL Card 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="nptel-card">
+                    <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_discipline_star_neti_praveen.png', 'Neti Praveen - NPTEL Discipline Star')">
+                        <img src="assets/faculty_achievements/nptel_discipline_star_neti_praveen.png" alt="Neti Praveen - NPTEL Discipline Star" class="nptel-img">
+                        <div class="zoom-badge"><i class="fas fa-search-plus"></i> View Poster</div>
+                        <div class="nptel-img-overlay">
+                            <span class="text-white fw-bold small"><i class="fas fa-certificate me-1 text-warning"></i> SWAYAM NPTEL Certificate</span>
+                        </div>
+                    </div>
+                    <div class="nptel-body">
+                        <span class="star-title-badge badge-discipline">
+                            <i class="fas fa-star text-primary"></i> NPTEL DISCIPLINE STAR
+                        </span>
+                        <h3 class="faculty-name">Neti Praveen</h3>
+                        <div class="faculty-role">Asst. Professor, CSIT Department</div>
+                        <p class="achievement-desc">
+                            Conferred the national <strong>NPTEL Discipline Star</strong> title in <em>Computer Science & Engineering</em> for completing 4+ advanced courses in a single 12-month period with elite scoring performance.
+                        </p>
+                        <div class="meta-footer">
+                            <span class="meta-period"><i class="far fa-calendar-alt"></i> Jan - Apr 2025</span>
+                            <span class="meta-issuer"><i class="fas fa-check-circle"></i> IIT Madras / NPTEL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NPTEL Card 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="nptel-card">
+                    <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_discipline_star_angara_satyam.png', 'Angara Satyam - NPTEL Discipline Star')">
+                        <img src="assets/faculty_achievements/nptel_discipline_star_angara_satyam.png" alt="Angara Satyam - NPTEL Discipline Star" class="nptel-img">
+                        <div class="zoom-badge"><i class="fas fa-search-plus"></i> View Poster</div>
+                        <div class="nptel-img-overlay">
+                            <span class="text-white fw-bold small"><i class="fas fa-certificate me-1 text-warning"></i> SWAYAM NPTEL Certificate</span>
+                        </div>
+                    </div>
+                    <div class="nptel-body">
+                        <span class="star-title-badge badge-discipline">
+                            <i class="fas fa-star text-primary"></i> NPTEL DISCIPLINE STAR
+                        </span>
+                        <h3 class="faculty-name">Angara Satyam</h3>
+                        <div class="faculty-role">Asst. Professor, CSD Department</div>
+                        <p class="achievement-desc">
+                            Honored with the national <strong>NPTEL Discipline Star</strong> award in <em>Computer Science and Engineering</em> by IIT Madras for outstanding academic achievements across core computer science tracks.
+                        </p>
+                        <div class="meta-footer">
+                            <span class="meta-period"><i class="far fa-calendar-alt"></i> Jul - Dec 2024</span>
+                            <span class="meta-issuer"><i class="fas fa-check-circle"></i> IIT Madras / NPTEL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NPTEL Card 4 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="nptel-card">
+                    <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_discipline_star_kasagana_srinivasa_rao.png', 'Kasagana Srinivasa Rao - NPTEL Discipline Star')">
+                        <img src="assets/faculty_achievements/nptel_discipline_star_kasagana_srinivasa_rao.png" alt="Kasagana Srinivasa Rao - NPTEL Discipline Star" class="nptel-img">
+                        <div class="zoom-badge"><i class="fas fa-search-plus"></i> View Poster</div>
+                        <div class="nptel-img-overlay">
+                            <span class="text-white fw-bold small"><i class="fas fa-certificate me-1 text-warning"></i> SWAYAM NPTEL Certificate</span>
+                        </div>
+                    </div>
+                    <div class="nptel-body">
+                        <span class="star-title-badge badge-discipline">
+                            <i class="fas fa-star text-primary"></i> NPTEL DISCIPLINE STAR
+                        </span>
+                        <h3 class="faculty-name">Kasagana Srinivasa Rao</h3>
+                        <div class="faculty-role">Asst. Professor, CSD Department</div>
+                        <p class="achievement-desc">
+                            Recognized as an <strong>NPTEL Discipline Star</strong> by NPTEL & SWAYAM for exemplary performance in advanced CSE coursework, reinforcing pedagogical mastery and technical leadership.
+                        </p>
+                        <div class="meta-footer">
+                            <span class="meta-period"><i class="far fa-calendar-alt"></i> Jan - Apr 2026</span>
+                            <span class="meta-issuer"><i class="fas fa-check-circle"></i> IIT Madras / NPTEL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NPTEL Card 5 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="nptel-card">
+                    <div class="nptel-img-wrapper" onclick="openCertificateModal('assets/faculty_achievements/nptel_discipline_star_trinadh_naidu.png', 'K V V S Trinadh Naidu - NPTEL Discipline Star')">
+                        <img src="assets/faculty_achievements/nptel_discipline_star_trinadh_naidu.png" alt="K V V S Trinadh Naidu - NPTEL Discipline Star" class="nptel-img">
+                        <div class="zoom-badge"><i class="fas fa-search-plus"></i> View Poster</div>
+                        <div class="nptel-img-overlay">
+                            <span class="text-white fw-bold small"><i class="fas fa-certificate me-1 text-warning"></i> SWAYAM NPTEL Certificate</span>
+                        </div>
+                    </div>
+                    <div class="nptel-body">
+                        <span class="star-title-badge badge-discipline">
+                            <i class="fas fa-star text-primary"></i> NPTEL DISCIPLINE STAR
+                        </span>
+                        <h3 class="faculty-name">K V V S Trinadh Naidu</h3>
+                        <div class="faculty-role">Asst. Professor, CSIT Department</div>
+                        <p class="achievement-desc">
+                            Honored with his second national recognition as an <strong>NPTEL Discipline Star</strong> in <em>Computer Science & Engineering</em>, setting a remarkable milestone for continuous learning excellence.
+                        </p>
+                        <div class="meta-footer">
+                            <span class="meta-period"><i class="far fa-calendar-alt"></i> Jul - Dec 2025</span>
+                            <span class="meta-issuer"><i class="fas fa-check-circle"></i> IIT Madras / NPTEL</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Featured Faculty Achievements -->
-<section class="py-5" style="background: #ffffff; border-top: 1px solid #f3eae1; border-bottom: 1px solid #f3eae1;">
+<!-- Additional Faculty Research & Awards Section -->
+<section class="py-5">
     <div class="container py-3">
         <div class="text-center mb-5">
             <span class="hero-tag" style="background: rgba(217, 119, 6, 0.08); color: #d97706; border-color: rgba(217, 119, 6, 0.2);">Academic Leadership</span>
-            <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; color: #1a0d06;">Faculty <span style="color: #d97706;">Milestones</span></h2>
-            <p style="color: #6f5f54; font-size: 1.05rem; max-width: 600px; margin: 0 auto;">Distinguished research accomplishments and professional recognition.</p>
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.8rem; font-weight: 900; color: #1a0d06;">Research &amp; <span style="color: #d97706;">Grants</span></h2>
+            <p style="color: #6f5f54; font-size: 1.05rem; max-width: 600px; margin: 0 auto;">Distinguished research accomplishments, patents, state awards, and external consultancy projects.</p>
         </div>
 
         <div class="row g-4">
@@ -199,7 +533,7 @@ body {
                     </div>
                     <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Best Teacher Award</h3>
                     <p class="fw-bold mb-3" style="color: #d97706;">Dr. Suresh Babu Mudunuri (HOD CSD)</p>
-                    <p class="text-secondary small mb-4">Awarded Best Teacher Award by Government of Andhra Pradesh for outstanding contribution to technical education and AI research.</p>
+                    <p class="text-secondary small mb-4">Conferred Best Teacher Award by the Government of Andhra Pradesh for outstanding contribution to technical education and AI research.</p>
                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
                         <span class="small text-muted fw-semibold"><i class="fas fa-university me-1"></i> Govt Award</span>
                         <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> State Awardee</span>
@@ -244,66 +578,33 @@ body {
                     </div>
                 </div>
             </div>
-
-            <!-- Card 4 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="faculty-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">Springer Publication</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Textbook Author</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">Prof. M. V. Rama Rao</p>
-                    <p class="text-secondary small mb-4">Authored textbook titled "Advanced Data Structures & Algorithms with Python" published by Springer International.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-book-open me-1"></i> Springer Text</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Published</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 5 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="faculty-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-microphone-alt"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">Keynote Speaker</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">International Keynote</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">Dr. P. V. S. R. V. Prasada Rao</p>
-                    <p class="text-secondary small mb-4">Delivered Keynote Address on "Generative AI in Cyber Defence" at IEEE International Conference in Singapore.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-plane-departure me-1"></i> Singapore</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Keynote Delivered</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 6 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="faculty-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <div class="badge-icon mb-0">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" style="font-size: 0.75rem;">Consultancy</span>
-                    </div>
-                    <h3 class="fw-bold text-dark mb-1" style="font-family: 'Outfit', sans-serif; font-size: 1.35rem;">Industry Consultancy</h3>
-                    <p class="fw-bold mb-3" style="color: #d97706;">CSD & CSIT Faculty Team</p>
-                    <p class="text-secondary small mb-4">Completed ₹15 Lakhs corporate software consultancy project for Smart City Traffic Optimization system.</p>
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
-                        <span class="small text-muted fw-semibold"><i class="fas fa-briefcase me-1"></i> Corporate Project</span>
-                        <span class="small text-success fw-bold"><i class="fas fa-check-circle me-1"></i> Delivered</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </section>
+
+<!-- Certificate Poster Lightbox Modal -->
+<div class="modal fade" id="certificateModal" tabindex="-1" aria-labelledby="certificateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="certificateModalLabel"><i class="fas fa-award text-warning me-2"></i> Faculty Achievement Certificate</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0 bg-dark text-center">
+                <img id="modalCertificateImg" src="" alt="Certificate" class="img-fluid w-100" style="max-height: 82vh; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openCertificateModal(imgSrc, title) {
+    document.getElementById('modalCertificateImg').src = imgSrc;
+    document.getElementById('certificateModalLabel').innerHTML = '<i class="fas fa-award text-warning me-2"></i> ' + title;
+    var modal = new bootstrap.Modal(document.getElementById('certificateModal'));
+    modal.show();
+}
+</script>
 
 <?php include "footer.php"; ?>
 </body>
