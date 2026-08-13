@@ -25,26 +25,43 @@
 
         if (!triggerBtn || !windowEl) return;
 
+        const formEl = document.getElementById('chatbotForm');
+        let isSendBtnDisabled = true;
+
         // Event Listeners
         triggerBtn.addEventListener('click', toggleChatWindow);
         closeBtn.addEventListener('click', closeChatWindow);
         clearBtn.addEventListener('click', clearChatHistory);
 
         sendBtn.addEventListener('click', handleSendMessage);
-        inputEl.addEventListener('keypress', function (e) {
+
+        if (formEl) {
+            formEl.addEventListener('submit', function (e) {
+                e.preventDefault();
+                handleSendMessage();
+            });
+        }
+
+        inputEl.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 handleSendMessage();
             }
         });
 
+        // Fast & Isolated Input Handler (Only mutates DOM when disabled state actually flips)
         inputEl.addEventListener('input', function () {
-            sendBtn.disabled = !inputEl.value.trim();
+            const hasText = inputEl.value.trim().length > 0;
+            const shouldDisable = !hasText;
+            if (isSendBtnDisabled !== shouldDisable) {
+                isSendBtnDisabled = shouldDisable;
+                sendBtn.disabled = shouldDisable;
+            }
         });
 
         // Keyboard accessibility: Escape key closes chat window
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && windowEl.classList.contains('active')) {
+            if (e.key === 'Escape' && windowEl && windowEl.classList.contains('active')) {
                 closeChatWindow();
             }
         });

@@ -161,6 +161,11 @@ include "./head.php";
         transition: all 0.3s ease;
         animation: houseItemCounterRotate 20s linear infinite;
         transform-origin: center center;
+        text-decoration: none !important;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .house-button {
@@ -171,6 +176,9 @@ include "./head.php";
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .house-button:hover {
@@ -200,6 +208,8 @@ include "./head.php";
     .connecting-lines {
         position: absolute;
         inset: 0;
+        pointer-events: none;
+        z-index: 1;
     }
 
     .line {
@@ -210,6 +220,7 @@ include "./head.php";
         background: linear-gradient(to right, rgba(107, 114, 128, 0.3), transparent);
         transform-origin: 0 50%;
         opacity: 0.6;
+        pointer-events: none;
     }
 
     /* House positioning - Perfect 72° spacing (Pentagon Circle Orbit) */
@@ -2992,42 +3003,6 @@ include "./head.php";
                     <!-- Rotating circle border -->
                     <div class="houses-circle"></div>
 
-                    <!-- House items -->
-                    <div class="house-item house-agni" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Agni'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Agni'">
-                            <img src="./assets/logos/3.jpg" alt="Agni">
-                        </button>
-                        <div class="house-name">Agni</div>
-                    </div>
-
-                    <div class="house-item house-vayu" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Vayu'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Vayu'">
-                            <img src="./assets/logos/2.jpg" alt="Vayu">
-                        </button>
-                        <div class="house-name">Vayu</div>
-                    </div>
-
-                    <div class="house-item house-prudhvi" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Prudhvi'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Prudhvi'">
-                            <img src="./assets/logos/4.jpg" alt="Prudhvi">
-                        </button>
-                        <div class="house-name">Prudhvi</div>
-                    </div>
-
-                    <div class="house-item house-jal" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Jal'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Jal'">
-                            <img src="./assets/logos/1.jpg" alt="Jal">
-                        </button>
-                        <div class="house-name">Jal</div>
-                    </div>
-
-                    <div class="house-item house-aakash" style="cursor: pointer;" onclick="window.location.href='house_detail.php?house=Aakash'">
-                        <button class="house-button" onclick="event.stopPropagation(); window.location.href='house_detail.php?house=Aakash'">
-                            <img src="./assets/logos/5.jpg" alt="Aakash">
-                        </button>
-                        <div class="house-name">Aakash</div>
-                    </div>
-
                     <!-- Connecting lines -->
                     <div class="connecting-lines">
                         <div class="line" style="width: 180px; transform: rotate(-90deg);"></div>
@@ -3036,6 +3011,42 @@ include "./head.php";
                         <div class="line" style="width: 180px; transform: rotate(126deg);"></div>
                         <div class="line" style="width: 180px; transform: rotate(198deg);"></div>
                     </div>
+
+                    <!-- House items -->
+                    <a href="house_detail.php?house=Agni" class="house-item house-agni" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
+                            <img src="./assets/logos/3.jpg" alt="Agni">
+                        </div>
+                        <div class="house-name">Agni</div>
+                    </a>
+
+                    <a href="house_detail.php?house=Vayu" class="house-item house-vayu" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
+                            <img src="./assets/logos/2.jpg" alt="Vayu">
+                        </div>
+                        <div class="house-name">Vayu</div>
+                    </a>
+
+                    <a href="house_detail.php?house=Prudhvi" class="house-item house-prudhvi" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
+                            <img src="./assets/logos/4.jpg" alt="Prudhvi">
+                        </div>
+                        <div class="house-name">Prudhvi</div>
+                    </a>
+
+                    <a href="house_detail.php?house=Jal" class="house-item house-jal" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
+                            <img src="./assets/logos/1.jpg" alt="Jal">
+                        </div>
+                        <div class="house-name">Jal</div>
+                    </a>
+
+                    <a href="house_detail.php?house=Aakash" class="house-item house-aakash" style="cursor: pointer; text-decoration: none;">
+                        <div class="house-button">
+                            <img src="./assets/logos/5.jpg" alt="Aakash">
+                        </div>
+                        <div class="house-name">Aakash</div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -4078,6 +4089,9 @@ include "./head.php";
     <script src="assets/js/depth-carousel.js"></script>
     <!-- Interactive ReactBits ScrollStack Component Engine -->
     <script src="assets/js/scroll-stack.js"></script>
+
+    <!-- AI Department Assistant Chatbot Component -->
+    <?php include_once __DIR__ . '/includes/chatbot.php'; ?>
 </body>
 
 </html>

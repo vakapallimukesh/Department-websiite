@@ -52,7 +52,6 @@ access_log
 .env
 .env.local
 .env.*
-assets/videos/
-
 # Instagram media cache
 cache/
+scratch/
