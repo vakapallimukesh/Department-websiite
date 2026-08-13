@@ -47,14 +47,14 @@ const ChatbotService = (function () {
 
     /**
      * =========================================================================
-     * 1. GENERIC STRING NORMALIZER & TOKENIZER
+     * 1. GENERIC STRING NORMALIZER, TOKENIZER & FUZZY MATCHING ENGINE
      * =========================================================================
      */
     function normalizePersonName(str) {
         if (!str) return '';
         let s = str.toLowerCase().trim();
         s = s.replace(/\b(dr\.|dr|prof\.|prof|professor|mr\.|mr|mrs\.|mrs|ms\.|ms|miss|sir|madam|ma'am|mam|teacher|faculty)\b/g, ' ');
-        s = s.replace(/[\?\!\.\,\;\:]/g, ' ');
+        s = s.replace(/[\?\!\.\,\;\:\-]/g, ' ');
         return s.replace(/\s+/g, ' ').trim();
     }
 
@@ -63,6 +63,73 @@ const ChatbotService = (function () {
         let clean = normalizePersonName(str);
         clean = clean.replace(/\b(who|is|are|tell|me|about|give|details|of|show|profile|the|a|an|registration|number|reg|no|which|what|belong|belongs|from|studying|branch|department|role)\b/g, ' ');
         return clean.split(/\s+/).filter(t => t.length > 0);
+    }
+
+    function levenshteinDistance(a, b) {
+        if (!a || !b) return (a || b).length;
+        const matrix = [];
+        const bLen = b.length;
+        const aLen = a.length;
+        for (let i = 0; i <= bLen; i++) matrix[i] = [i];
+        for (let j = 0; j <= aLen; j++) matrix[0][j] = j;
+
+        for (let i = 1; i <= bLen; i++) {
+            for (let j = 1; j <= aLen; j++) {
+                if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1];
+                } else {
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j - 1] + 1,
+                        matrix[i][j - 1] + 1,
+                        matrix[i - 1][j] + 1
+                    );
+                }
+            }
+        }
+        return matrix[bLen][aLen];
+    }
+
+    function stringSimilarity(s1, s2) {
+        if (!s1 || !s2) return 0;
+        const str1 = s1.toLowerCase().trim();
+        const str2 = s2.toLowerCase().trim();
+        if (str1 === str2) return 1.0;
+        const maxLen = Math.max(str1.length, str2.length);
+        if (maxLen === 0) return 1.0;
+        const dist = levenshteinDistance(str1, str2);
+        return Math.max(0, 1 - (dist / maxLen));
+    }
+
+    function generatePersonAliases(fullName) {
+        if (!fullName) return [];
+        const aliases = new Set();
+        const raw = fullName.trim();
+        aliases.add(raw.toLowerCase());
+
+        const cleanFull = raw.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+        aliases.add(cleanFull);
+
+        const stripped = cleanFull.replace(/\b(dr|prof|professor|mr|mrs|ms|miss|sir|madam)\b/g, '').replace(/\s+/g, ' ').trim();
+        if (stripped) aliases.add(stripped);
+
+        const tokens = stripped.split(' ').filter(t => t.length > 0);
+        
+        tokens.forEach(t => {
+            if (t.length >= 2) aliases.add(t);
+        });
+
+        for (let i = 0; i < tokens.length; i++) {
+            for (let j = i + 1; j < tokens.length; j++) {
+                aliases.add(`${tokens[i]} ${tokens[j]}`);
+            }
+        }
+
+        const significantTokens = tokens.filter(t => t.length > 1);
+        if (significantTokens.length >= 2) {
+            aliases.add(significantTokens.join(' '));
+        }
+
+        return Array.from(aliases);
     }
 
     /**
@@ -126,19 +193,28 @@ const ChatbotService = (function () {
         if (/\b(registration number|reg no|registration no|reg number|hallticket|pin number)\b/i.test(q)) {
             return 'REGISTRATION_NUMBER';
         }
-        if (/\b(qualification|educational qualification|degree|highest degree|university|where did|vidwan)\b/i.test(q)) {
+        if (/\b(internship|internships|intern|stipend)\b/i.test(q) || /\bwhere did (she|he|they|this person) (get|do|complete) (an )?internship\b/i.test(q)) {
+            return 'INTERNSHIP';
+        }
+        if (/\b(placement|placements|placed|package|lpa)\b/i.test(q) || /\bwhere (was|did) (she|he|they|this person) placed\b/i.test(q)) {
+            return 'PLACEMENT';
+        }
+        if (/\b(house|house points|elemental league)\b/i.test(q)) {
+            return 'HOUSE';
+        }
+        if (/\b(qualification|qualifications|educational qualification|degree|highest degree|university|vidwan)\b/i.test(q)) {
             return 'QUALIFICATION';
         }
-        if (/\b(specialization|area of interest|research area|expertise|research interests)\b/i.test(q)) {
+        if (/\b(specialization|research|area of interest|research area|expertise|research interests)\b/i.test(q)) {
             return 'SPECIALIZATION';
         }
         if (/\b(subjects|subjects taught|courses taught|teaches|teaching)\b/i.test(q)) {
             return 'SUBJECTS';
         }
-        if (/\b(experience|how many years|years of experience)\b/i.test(q)) {
+        if (/\b(experience|teaching experience|research experience|how many years|years of experience)\b/i.test(q)) {
             return 'EXPERIENCE';
         }
-        if (/\b(grants|funded projects|research projects|project funding|dbt|dst|aictes|idealab)\b/i.test(q)) {
+        if (/\b(grants|projects|funded projects|research projects|project funding|dbt|dst|aictes|idealab)\b/i.test(q)) {
             return 'GRANTS';
         }
         if (/\b(awards|recognition|honors|stanford|best faculty|best teacher|hackathon winner)\b/i.test(q)) {
@@ -152,6 +228,15 @@ const ChatbotService = (function () {
         }
         if (/\b(phone|phone number|mobile|contact number|contact)\b/i.test(q)) {
             return 'CONTACT';
+        }
+        if (/\b(internship|internships|intern|stipend|where did (she|he) get internship)\b/i.test(q)) {
+            return 'INTERNSHIP';
+        }
+        if (/\b(placement|placements|placed|package|lpa)\b/i.test(q)) {
+            return 'PLACEMENT';
+        }
+        if (/\b(house|house points|elemental league)\b/i.test(q)) {
+            return 'HOUSE';
         }
         return 'PROFILE';
     }
@@ -541,11 +626,137 @@ const ChatbotService = (function () {
 
     let MASTER_CR_INDEX = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => p.isCR));
 
+    // Master Internship & Placement Indices
+    let MASTER_INTERNSHIPS_INDEX = [
+        {
+            id: 'intern_1',
+            student_id: '23B91A0738',
+            regNo: '23B91A0738',
+            name: 'N. LEELA MADHAV RAO',
+            fullName: 'N. LEELA MADHAV RAO',
+            branch: 'CSIT',
+            department: 'CSIT',
+            year: '3rd Year (3/4)',
+            section: 'Sec A',
+            company: 'Zennith Digital Tech LLP',
+            role: 'Software Engineering Intern',
+            record_type: 'internship',
+            status: 'Selected / Active',
+            stipend: 'Paid Corporate Stipend',
+            source_url: 'internships.php'
+        },
+        {
+            id: 'intern_2',
+            student_id: '23B91A0727',
+            regNo: '23B91A0727',
+            name: 'K. S. SRIRAM CHARAN TEJA',
+            fullName: 'K. S. SRIRAM CHARAN TEJA',
+            branch: 'CSIT',
+            department: 'CSIT',
+            year: '3rd Year (3/4)',
+            section: 'Sec A',
+            company: 'Zennith Digital Tech LLP',
+            role: 'Software Engineering Intern',
+            record_type: 'internship',
+            status: 'Selected / Active',
+            stipend: 'Paid Corporate Stipend',
+            source_url: 'internships.php'
+        },
+        {
+            id: 'intern_3',
+            student_id: '23B91A0714',
+            regNo: '23B91A0714',
+            name: 'G. NIKHILA VALLI',
+            fullName: 'G. NIKHILA VALLI',
+            branch: 'CSIT',
+            department: 'CSIT',
+            year: '3rd Year (3/4)',
+            section: 'Sec A',
+            company: 'Zennith Digital Tech LLP',
+            role: 'Software Engineering Intern',
+            record_type: 'internship',
+            status: 'Selected / Active',
+            stipend: 'Paid Corporate Stipend',
+            source_url: 'internships.php'
+        },
+        {
+            id: 'intern_4',
+            student_id: '23B91A6219',
+            regNo: '23B91A6219',
+            name: 'G. MANOJ KUMAR',
+            fullName: 'G. MANOJ KUMAR',
+            branch: 'CSD',
+            department: 'CSD',
+            year: '3rd Year (3/4)',
+            section: 'Sec A',
+            company: 'Zennith Digital Tech LLP',
+            role: 'Software Engineering Intern',
+            record_type: 'internship',
+            status: 'Selected / Active',
+            stipend: 'Paid Corporate Stipend',
+            source_url: 'internships.php'
+        },
+        {
+            id: 'intern_5',
+            student_id: '24B95A6207',
+            regNo: '24B95A6207',
+            name: 'T. UMA SAI PAVAN',
+            fullName: 'T. UMA SAI PAVAN',
+            branch: 'CSD',
+            department: 'CSD',
+            year: '3rd Year (3/4)',
+            section: 'Sec A',
+            company: 'Zennith Digital Tech LLP',
+            role: 'Software Engineering Intern',
+            record_type: 'internship',
+            status: 'Selected / Active',
+            stipend: 'Paid Corporate Stipend',
+            source_url: 'internships.php'
+        }
+    ];
+
+    let MASTER_PLACEMENTS_INDEX = [];
+
+    // Index active internship students into MASTER_PERSON_INDEX at startup
+    (function indexActiveInterns() {
+        for (const item of MASTER_INTERNSHIPS_INDEX) {
+            if (item.name && item.regNo) {
+                const exists = MASTER_PERSON_INDEX.some(p => p.regNo === item.regNo || normalizePersonName(p.fullName) === normalizePersonName(item.name));
+                if (!exists) {
+                    const tokens = tokenizeName(item.name);
+                    MASTER_PERSON_INDEX.push({
+                        id: `student_${item.regNo}`,
+                        fullName: item.name,
+                        firstName: tokens[0] || item.name.toLowerCase(),
+                        lastName: tokens[tokens.length - 1] || item.name.toLowerCase(),
+                        category: `Student (${item.branch || 'CSIT'} ${item.year || ''})`,
+                        role: `Student (${item.branch || 'CSIT'})`,
+                        designation: `Student (${item.branch || 'CSIT'})`,
+                        department: item.branch || 'CSIT',
+                        branch: item.branch || 'CSIT',
+                        year: item.year || '3rd Year',
+                        section: item.section || 'Sec A',
+                        regNo: item.regNo,
+                        description: `${item.name} is a student in ${item.branch || 'CSIT'} (Reg: ${item.regNo}).`,
+                        searchableAliases: generatePersonAliases(item.name),
+                        url: 'internships.php',
+                        ctaText: 'View Internships & Placements →'
+                    });
+                }
+            }
+        }
+    })();
+
+    // Dynamic Root API URL Resolver
+    function getRootApiUrl(endpoint) {
+        return endpoint;
+    }
+
     // Dynamic Live Database Synchronization with Rich Profile & Academic Outcomes Ingestion
     async function syncWebsiteKnowledge() {
         if (isDbSynced) return;
         try {
-            const res = await fetch('api/get_website_knowledge.php');
+            const res = await fetch(getRootApiUrl('api/get_website_knowledge.php'));
             if (res.ok) {
                 const data = await res.json();
 
@@ -663,7 +874,52 @@ const ChatbotService = (function () {
                     MASTER_CR_INDEX = deduplicatePeople(MASTER_PERSON_INDEX.filter(p => p.isCR));
                 }
 
-                // 4. Ingest System Diagnostics
+                // 4. Ingest Internships & Placements Records
+                if (Array.isArray(data.internships)) {
+                    for (const item of data.internships) {
+                        const key = item.regNo + '_' + (item.company || '').toLowerCase();
+                        const exists = MASTER_INTERNSHIPS_INDEX.some(x => (x.regNo + '_' + (x.company || '').toLowerCase()) === key);
+                        if (!exists) {
+                            MASTER_INTERNSHIPS_INDEX.push(item);
+                        }
+                        if (item.name && item.regNo) {
+                            const personExists = MASTER_PERSON_INDEX.some(p => p.regNo === item.regNo);
+                            if (!personExists) {
+                                const tokens = tokenizeName(item.name);
+                                MASTER_PERSON_INDEX.push({
+                                    id: `student_${item.regNo}`,
+                                    fullName: item.name,
+                                    firstName: tokens[0] || item.name.toLowerCase(),
+                                    lastName: tokens[tokens.length - 1] || item.name.toLowerCase(),
+                                    category: `Student (${item.branch} ${item.year || ''})`,
+                                    role: `Student (${item.branch})`,
+                                    designation: `Student (${item.branch})`,
+                                    department: item.branch || 'CSIT',
+                                    branch: item.branch || 'CSIT',
+                                    year: item.year || '3rd Year',
+                                    section: item.section || 'Sec A',
+                                    regNo: item.regNo,
+                                    description: `${item.name} is a student in ${item.branch} (Reg: ${item.regNo}).`,
+                                    searchableAliases: [item.name.toLowerCase(), tokens[0], tokens[tokens.length - 1]],
+                                    url: 'internships.php',
+                                    ctaText: 'View Internships & Placements →'
+                                });
+                            }
+                        }
+                    }
+                }
+
+                if (Array.isArray(data.placements)) {
+                    for (const item of data.placements) {
+                        const key = item.regNo + '_' + (item.company || '').toLowerCase();
+                        const exists = MASTER_PLACEMENTS_INDEX.some(x => (x.regNo + '_' + (x.company || '').toLowerCase()) === key);
+                        if (!exists) {
+                            MASTER_PLACEMENTS_INDEX.push(item);
+                        }
+                    }
+                }
+
+                // 5. Ingest System Diagnostics
                 if (data.diagnostics) {
                     systemDiagnostics = { ...systemDiagnostics, ...data.diagnostics, lastSyncTime: new Date().toISOString() };
                 }
@@ -1053,70 +1309,168 @@ Both programs are 4-Year B.Tech degrees (8 Semesters, 160 Credits) approved by A
      * 9. PERSON ENTITY DETECTION IN QUERY WITH DEDUPLICATION
      * =========================================================================
      */
+    /**
+     * =========================================================================
+     * 9. ADVANCED FUZZY ENTITY RESOLUTION PIPELINE WITH CROSS-SECTION SEARCH
+     * =========================================================================
+     */
     function detectPersonInQuery(rawQuery) {
         if (!rawQuery) return null;
         const lowerRaw = rawQuery.toLowerCase().trim();
 
-        // Check Reg No Match
+        // 1. EXACT IDENTIFIER LOOKUP (Registration Number / Student ID / Faculty ID)
         const regMatch = rawQuery.match(/\b([0-9]{2}[a-z0-9]{8,10})\b/i);
         if (regMatch) {
             const searchedReg = regMatch[1].toUpperCase();
             const foundByReg = MASTER_PERSON_INDEX.find(p => p.regNo && p.regNo.toUpperCase() === searchedReg);
             if (foundByReg) {
-                return { found: true, isMultiple: false, person: foundByReg, intent: detectQueryIntent(rawQuery) };
+                return { found: true, isMultiple: false, person: foundByReg, intent: detectQueryIntent(rawQuery), score: 1.0 };
+            }
+            // Check in internships/placements index as well
+            const foundInIntern = MASTER_INTERNSHIPS_INDEX.find(i => i.regNo && i.regNo.toUpperCase() === searchedReg);
+            if (foundInIntern) {
+                const syntheticPerson = {
+                    id: `student_${foundInIntern.regNo}`,
+                    fullName: foundInIntern.name,
+                    category: `Student (${foundInIntern.branch || 'CSIT'})`,
+                    role: `Student (${foundInIntern.branch || 'CSIT'})`,
+                    department: foundInIntern.branch || 'CSIT',
+                    branch: foundInIntern.branch || 'CSIT',
+                    year: foundInIntern.year || '3rd Year',
+                    section: foundInIntern.section || 'Sec A',
+                    regNo: foundInIntern.regNo,
+                    description: `${foundInIntern.name} is a student in ${foundInIntern.branch || 'CSIT'} (Reg: ${foundInIntern.regNo}).`
+                };
+                return { found: true, isMultiple: false, person: syntheticPerson, intent: detectQueryIntent(rawQuery), score: 1.0 };
             }
         }
 
+        // 2. QUERY TOKENIZATION & CANDIDATE EXTRACTION
         let cleanQuery = lowerRaw.replace(/\b(dr\.|dr|prof\.|prof|professor|mr\.|mr|mrs\.|mrs|ms\.|ms|miss|sir|madam|ma'am|mam|teacher|faculty)\b/g, ' ');
-        cleanQuery = cleanQuery.replace(/[\?\!\.\,\;\:]/g, ' ').replace(/\s+/g, ' ').trim();
+        cleanQuery = cleanQuery.replace(/[\?\!\.\,\;\:\-]/g, ' ').replace(/\s+/g, ' ').trim();
         const queryTokens = cleanQuery.split(' ').filter(t => t.length > 0);
 
         const intent = detectQueryIntent(rawQuery);
-        const stopWords = new Set(['who', 'is', 'are', 'which', 'department', 'dept', 'branch', 'does', 'belong', 'belongs', 'to', 'from', 'what', 'role', 'designation', 'qualification', 'specialization', 'subjects', 'teach', 'teaches', 'email', 'contact', 'tell', 'me', 'about', 'can', 'know', 'the', 'a', 'an', 'in', 'of', 'work', 'working', 'studying', 'year', 'section', 'registration', 'number', 'reg', 'no']);
+
+        // Check for pronouns/follow-up query referencing activePerson
+        const isFollowupPronoun = /\b(she|he|her|his|their|this person|that person)\b/i.test(rawQuery) || /^(which department|what department|which branch|what branch|what registration number|reg no|where did (she|he) get|what house)\b/i.test(lowerRaw);
+        if (isFollowupPronoun && conversationContext.activePerson) {
+            return { found: true, isMultiple: false, person: conversationContext.activePerson, intent: intent, score: 1.0 };
+        }
+        const stopWords = new Set(['who', 'is', 'are', 'which', 'department', 'dept', 'branch', 'does', 'belong', 'belongs', 'to', 'from', 'what', 'role', 'designation', 'qualification', 'qualifications', 'educational', 'degree', 'degrees', 'specialization', 'specializations', 'subjects', 'teach', 'teaches', 'teaching', 'email', 'contact', 'tell', 'me', 'about', 'can', 'know', 'the', 'a', 'an', 'in', 'of', 'work', 'working', 'studying', 'year', 'section', 'registration', 'number', 'reg', 'no', 'internship', 'internships', 'placements', 'placement', 'house', 'where', 'did', 'she', 'he', 'get', 'got', 'her', 'his', 'their', 'research', 'experience', 'projects', 'project', 'grants', 'grant', 'publications', 'publication', 'papers', 'paper', 'awards', 'award', 'phone', 'mobile', 'details', 'detail', 'info', 'information', 'profile', 'overview']);
         const nameCandidateTokens = queryTokens.filter(t => !stopWords.has(t) && t.length >= 2);
 
         if (nameCandidateTokens.length === 0) return null;
         const candidateString = nameCandidateTokens.join(' ');
 
-        let candidates = [];
+        // Check context (CSD vs CSIT)
+        const isCSD = /\bcsd\b/i.test(rawQuery);
+        const isCSIT = /\bcsit\b/i.test(rawQuery);
+
+        // 3. MULTI-LEVEL ENTITY RESOLUTION & SCORING PIPELINE
+        const scoredCandidates = [];
+
         for (const person of MASTER_PERSON_INDEX) {
-            const normFull = normalizePersonName(person.fullName);
-            const normFirst = normalizePersonName(person.firstName);
-            const normLast = normalizePersonName(person.lastName);
-            const aliases = person.searchableAliases ? person.searchableAliases.map(a => normalizePersonName(a)) : [];
+            const canonicalFull = person.fullName;
+            const normFull = normalizePersonName(canonicalFull);
+            const generatedAliases = generatePersonAliases(canonicalFull);
+            const userAliases = person.searchableAliases ? person.searchableAliases.map(a => normalizePersonName(a)) : [];
+            const allAliases = Array.from(new Set([...generatedAliases, ...userAliases, normFull]));
 
-            if (candidateString === normFull || aliases.includes(candidateString)) {
-                return { found: true, isMultiple: false, person: person, intent: intent };
+            let bestScore = 0;
+
+            // Level A: Exact Alias / Full Name Match (Score: 1.0)
+            if (allAliases.includes(candidateString)) {
+                bestScore = 1.0;
             }
 
-            const personTokens = tokenizeName(person.fullName);
-            const allTokensInPerson = nameCandidateTokens.every(qTok => {
-                return personTokens.some(pTok => pTok === qTok) || aliases.some(alias => alias.split(/\s+/).includes(qTok));
-            });
-
-            if (allTokensInPerson) {
-                candidates.push(person);
-                continue;
-            }
-
-            if (nameCandidateTokens.length === 1) {
-                const singleTok = nameCandidateTokens[0];
-                if (singleTok === normFirst || singleTok === normLast || aliases.includes(singleTok)) {
-                    if (!candidates.includes(person)) candidates.push(person);
+            // Level B: All Candidate Tokens Match Exact Tokens in Person Aliases (Score: 0.95)
+            if (bestScore < 0.95 && nameCandidateTokens.length >= 1) {
+                const aliasTokens = new Set(allAliases.flatMap(a => a.split(/\s+/)));
+                const allMatched = nameCandidateTokens.every(qTok => aliasTokens.has(qTok));
+                if (allMatched) {
+                    bestScore = nameCandidateTokens.length === 1 ? 0.90 : 0.95;
                 }
             }
-        }
 
-        if (candidates.length === 1) return { found: true, isMultiple: false, person: candidates[0], intent: intent };
-        if (candidates.length > 1) {
-            const dedupedCandidates = deduplicatePeople(candidates);
-            if (dedupedCandidates.length === 1) {
-                return { found: true, isMultiple: false, person: dedupedCandidates[0], intent: intent };
+            // Level C: Token-Level Fuzzy Similarity (Levenshtein Edit Distance for Typos)
+            if (bestScore < 0.85) {
+                const aliasTokens = Array.from(new Set(allAliases.flatMap(a => a.split(/\s+/)))).filter(t => t.length >= 3);
+                
+                let tokenSimSum = 0;
+                let tokenMatchesCount = 0;
+
+                for (const qTok of nameCandidateTokens) {
+                    let maxTokenSim = 0;
+                    for (const aTok of aliasTokens) {
+                        const sim = stringSimilarity(qTok, aTok);
+                        if (sim > maxTokenSim) maxTokenSim = sim;
+                    }
+                    if (maxTokenSim >= 0.70) {
+                        tokenSimSum += maxTokenSim;
+                        tokenMatchesCount++;
+                    }
+                }
+
+                if (tokenMatchesCount > 0 && tokenMatchesCount === nameCandidateTokens.length) {
+                    const avgSim = tokenSimSum / tokenMatchesCount;
+                    if (avgSim * 0.90 > bestScore) {
+                        bestScore = avgSim * 0.90;
+                    }
+                }
             }
-            return { found: true, isMultiple: true, candidates: dedupedCandidates, intent: intent };
+
+            // Level D: Whole-String Fuzzy Similarity (e.g. "nikihila" vs "nikhila")
+            if (bestScore < 0.80) {
+                for (const alias of allAliases) {
+                    if (alias.length >= 3) {
+                        const strSim = stringSimilarity(candidateString, alias);
+                        if (strSim >= 0.75 && strSim * 0.88 > bestScore) {
+                            bestScore = strSim * 0.88;
+                        }
+                    }
+                }
+            }
+
+            // Contextual Boost (+0.05 for department match)
+            if (bestScore >= 0.65) {
+                if (isCSD && (person.department === 'CSD' || person.branch === 'CSD')) {
+                    bestScore += 0.05;
+                } else if (isCSIT && (person.department === 'CSIT' || person.branch === 'CSIT')) {
+                    bestScore += 0.05;
+                }
+            }
+
+            if (bestScore >= 0.70) {
+                scoredCandidates.push({ person, score: bestScore });
+            }
         }
 
-        return null;
+        // Sort descending by score
+        scoredCandidates.sort((a, b) => b.score - a.score);
+
+        if (scoredCandidates.length === 0) return null;
+
+        const topCandidate = scoredCandidates[0];
+        
+        // Check if top candidate is unambiguous (high confidence or distinct score gap)
+        if (topCandidate.score >= 0.78) {
+            if (scoredCandidates.length === 1) {
+                return { found: true, isMultiple: false, person: topCandidate.person, intent: intent, score: topCandidate.score };
+            }
+            const secondCandidate = scoredCandidates[1];
+            if (topCandidate.score - secondCandidate.score >= 0.12) {
+                return { found: true, isMultiple: false, person: topCandidate.person, intent: intent, score: topCandidate.score };
+            }
+        }
+
+        // Multiple potential candidates with similar confidence -> Ask for clarification!
+        const closeCandidates = deduplicatePeople(scoredCandidates.filter(c => c.score >= 0.70 && (topCandidate.score - c.score < 0.15)).map(c => c.person));
+        if (closeCandidates.length === 1) {
+            return { found: true, isMultiple: false, person: closeCandidates[0], intent: intent, score: topCandidate.score };
+        }
+
+        return { found: true, isMultiple: true, candidates: closeCandidates, intent: intent };
     }
 
     /**
@@ -1204,7 +1558,7 @@ Both programs are 4-Year B.Tech degrees (8 Semesters, 160 Credits) approved by A
         // 6. FACULTY FILTERING & COUNTING QUERIES
         const isFacultyQuery = /\b(faculty|faculties|teacher|teachers|professor|professors|staff)\b/i.test(q);
 
-        if (isFacultyQuery || /\b(who (teaches|has phd|has mtech|specializes in)|who has a doctorate)\b/i.test(q) || /^(list all faculty|faculty list|all faculty|show faculty)\b/i.test(q)) {
+        if (isFacultyQuery || /\b(who (teaches|has phd|has a phd|has mtech|specializes in)|who has a doctorate|phd holders|doctorate holders|faculty list|all faculty|show faculty|tell me about faculty)\b/i.test(q)) {
 
             // A. PhD Filter
             if (/\b(phd|ph\.d|ph\.d\.|doctorate|doctorates|doctor of philosophy|doctoral degree|doctoral)\b/i.test(q)) {
@@ -1291,7 +1645,7 @@ Both programs are 4-Year B.Tech degrees (8 Semesters, 160 Credits) approved by A
             }
 
             // E. List All Faculty
-            if (/^(list all faculty|faculty list|all faculty|show faculty|faculty members|who are the faculty)\??$/i.test(q)) {
+            if (isFacultyQuery || /\b(faculty list|all faculty|show faculty|faculty members|who are the faculty|tell me about faculty|about faculty|faculty directory)\b/i.test(q)) {
                 const uniqueFaculty = deduplicatePeople(MASTER_FACULTY_ROSTER);
                 return {
                     id: 'faculty_all_list',
@@ -1601,6 +1955,75 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 }
                 break;
 
+            case 'INTERNSHIP':
+                {
+                    const normN = normalizePersonName(name);
+                    const matchingInterns = MASTER_INTERNSHIPS_INDEX.filter(i => (reg && i.regNo && i.regNo.toUpperCase() === reg.toUpperCase()) || normalizePersonName(i.name) === normN);
+                    if (matchingInterns.length > 0) {
+                        answerText = `<strong>${name}</strong>'s Corporate Internship Details:<br><br>`;
+                        matchingInterns.forEach(i => {
+                            answerText += `• <strong>Company:</strong> <strong>${i.company || 'Corporate Partner'}</strong><br>`;
+                            answerText += `• <strong>Role:</strong> ${i.role}<br>`;
+                            answerText += `• <strong>Status:</strong> ${i.status || 'Selected / Active'}<br>`;
+                            if (i.stipend) answerText += `• <strong>Stipend:</strong> ${i.stipend}<br>`;
+                        });
+                        if (reg) answerText += `<br>• <strong>Registration Number:</strong> ${reg}<br>`;
+                        answerText += `• <strong>Department:</strong> ${dept}`;
+                    } else if (reg) {
+                        answerText = `I found student <strong>${name}</strong> (${dept} Department, Reg: ${reg}), but specific internship selection records for this student are not listed in current department records.`;
+                    } else {
+                        answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but corporate internship details apply to student records.`;
+                    }
+                }
+                break;
+
+            case 'PLACEMENT':
+                {
+                    const normN = normalizePersonName(name);
+                    const matchingPlacements = MASTER_PLACEMENTS_INDEX.filter(p => (reg && p.regNo && p.regNo.toUpperCase() === reg.toUpperCase()) || normalizePersonName(p.name) === normN);
+                    if (matchingPlacements.length > 0) {
+                        answerText = `<strong>${name}</strong>'s Campus Placement Details:<br><br>`;
+                        matchingPlacements.forEach(p => {
+                            answerText += `• <strong>Company / Recruiter:</strong> <strong>${p.company || 'Campus Recruiter'}</strong><br>`;
+                            answerText += `• <strong>Role / Offer:</strong> ${p.role}<br>`;
+                        });
+                        if (reg) answerText += `<br>• <strong>Registration Number:</strong> ${reg}<br>`;
+                        answerText += `• <strong>Department:</strong> ${dept}`;
+                    } else if (reg) {
+                        answerText = `I found student <strong>${name}</strong> (${dept} Department, Reg: ${reg}), but specific campus placement offer records for this student are not listed in current department records.`;
+                    } else {
+                        answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but placement details apply to student records.`;
+                    }
+                }
+                break;
+
+            case 'HOUSE':
+                {
+                    const normN = normalizePersonName(name);
+                    let foundHouse = null;
+                    let foundMember = null;
+                    for (const houseKey in MASTER_HOUSE_ROSTER) {
+                        const h = MASTER_HOUSE_ROSTER[houseKey];
+                        const m = h.members.find(mem => (reg && mem.regNo && mem.regNo.toUpperCase() === reg.toUpperCase()) || normalizePersonName(mem.name) === normN);
+                        if (m) {
+                            foundHouse = h;
+                            foundMember = m;
+                            break;
+                        }
+                    }
+                    if (foundHouse && foundMember) {
+                        answerText = `<strong>${name}</strong>'s Student House & Elemental League Details:<br><br>`;
+                        answerText += `• <strong>Student House:</strong> <strong>${foundHouse.name} House</strong><br>`;
+                        answerText += `• <strong>House Motto:</strong> ${foundHouse.description}<br>`;
+                        if (foundMember.points) answerText += `• <strong>Earned Contributor Points:</strong> ${foundMember.points} Points<br>`;
+                        if (reg) answerText += `<br>• <strong>Registration Number:</strong> ${reg}<br>`;
+                        answerText += `• <strong>Department:</strong> ${dept}`;
+                    } else {
+                        answerText = `I found <strong>${name}</strong> (${role}, ${dept} Department), but specific student house allocation details were not found in house rosters.`;
+                    }
+                }
+                break;
+
             case 'PROFILE':
             default:
                 answerText = `<strong>${name}</strong> — ${role}:<br><br>`;
@@ -1616,6 +2039,33 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 if (person.awards) answerText += `• <strong>Awards & Honors:</strong> ${person.awards}<br>`;
                 if (person.publications) answerText += `• <strong>Reputed SCI / Scopus Publications:</strong> ${person.publications}<br>`;
                 if (person.description) answerText += `• <strong>Profile Overview:</strong> ${person.description}`;
+
+                // Cross-section joins: House, Internships, Placements, CR Role
+                const normN = normalizePersonName(name);
+
+                // 1. Cross-section House check
+                for (const houseKey in MASTER_HOUSE_ROSTER) {
+                    const h = MASTER_HOUSE_ROSTER[houseKey];
+                    const m = h.members.find(mem => (reg && mem.regNo && mem.regNo.toUpperCase() === reg.toUpperCase()) || normalizePersonName(mem.name) === normN);
+                    if (m) {
+                        answerText += `<br>• <strong>Student House:</strong> <strong>${h.name} House</strong> (${m.points ? m.points + ' Points' : 'Active Member'})`;
+                        break;
+                    }
+                }
+
+                // 2. Cross-section Internship & Placement check
+                const matchingInterns = MASTER_INTERNSHIPS_INDEX.filter(i => (reg && i.regNo && i.regNo.toUpperCase() === reg.toUpperCase()) || normalizePersonName(i.name) === normN);
+                const matchingPlacements = MASTER_PLACEMENTS_INDEX.filter(p => (reg && p.regNo && p.regNo.toUpperCase() === reg.toUpperCase()) || normalizePersonName(p.name) === normN);
+
+                if (matchingInterns.length > 0 || matchingPlacements.length > 0) {
+                    answerText += `<br><br><strong>💼 Corporate Internships & Placements Records:</strong><br>`;
+                    matchingInterns.forEach(i => {
+                        answerText += `• <strong>Internship:</strong> Selected by <strong>${i.company || 'Corporate Partner'}</strong> as ${i.role} (Status: ${i.status || 'Active'})<br>`;
+                    });
+                    matchingPlacements.forEach(p => {
+                        answerText += `• <strong>Placement:</strong> Placed at <strong>${p.company || 'Recruiter'}</strong> — ${p.role}<br>`;
+                    });
+                }
                 break;
         }
 
@@ -1633,6 +2083,163 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
 
     /**
      * =========================================================================
+     * 11.5. INTERNSHIPS & PLACEMENTS HYBRID SEARCH & ENTITY RESOLUTION ENGINE
+     * =========================================================================
+     */
+    function searchInternshipsAndPlacements(rawQuery) {
+        if (!rawQuery) return null;
+        const q = rawQuery.toLowerCase().trim();
+
+        const isInternshipQuery = /\b(internship|internships|intern|interns|stipend|stipends|zennith|eduskills|future interns|track 3d|idea lab|idealab|90 heal|dms|bluconn|blucon|rhythmiqcx|aunix|aws|cognifyz|saiket|tech nirmaan|unified mentor)\b/i.test(q);
+        const isPlacementQuery = /\b(placement|placements|placed|recruiter|recruiters|package|packages|lpa|highest package|average package|placement rate|microsoft|tcs|infosys|wipro|cognizant|accenture|capgemini|tech mahindra)\b/i.test(q);
+
+        if (!isInternshipQuery && !isPlacementQuery) return null;
+
+        const isCSD = /\bcsd\b/i.test(q);
+        const isCSIT = /\bcsit\b/i.test(q);
+        const is2ndYear = /\b(2nd|second|2\/4|ii year|2nd year)\b/i.test(q);
+        const is3rdYear = /\b(3rd|third|3\/4|iii year|3rd year)\b/i.test(q);
+        const is4thYear = /\b(4th|fourth|final|4\/4|iv year|4th year|final year)\b/i.test(q);
+
+        // A. COUNT QUERIES: "how many students got internships?", "how many got placements?"
+        if (/\b(how many|count|total number|number of)\b/i.test(q)) {
+            if (isInternshipQuery) {
+                let list = MASTER_INTERNSHIPS_INDEX;
+                if (isCSD) list = list.filter(r => (r.branch || r.department) === 'CSD');
+                if (isCSIT) list = list.filter(r => (r.branch || r.department) === 'CSIT');
+                const uniqueStudents = deduplicatePeople(list);
+                let label = isCSD ? 'CSD ' : (isCSIT ? 'CSIT ' : '');
+                return {
+                    id: 'internship_count',
+                    category: 'Internships & Careers',
+                    title: `${label}Internship Statistics & Selection Counts`,
+                    content: `Total <strong>${uniqueStudents.length} ${label}Students</strong> have been selected for industrial internships across leading companies (Zennith Digital Tech LLP, Amazon, Track 3D, EduSkills, Future Interns, Idea Lab, 90 Heal, DMS, Bluconn, etc.).<br><br>Ask "Show all internship members" or "Which CSD students got internships" to view complete member listings!`,
+                    url: 'internships.php',
+                    ctaText: 'View Internships Page →'
+                };
+            }
+            if (isPlacementQuery) {
+                return {
+                    id: 'placement_count',
+                    category: 'Placements & Careers',
+                    title: 'Placement Statistics & Campus Placement Rate',
+                    content: `Placement Highlights & Statistics:<br><br>
+• <strong>Placement Rate:</strong> 66% Students Placed across CSD & CSIT.<br>
+• <strong>Highest Package:</strong> ₹12.0 LPA (Microsoft India).<br>
+• <strong>Average Package:</strong> ₹5.1 LPA.<br>
+• <strong>Top Recruiting Companies:</strong> Microsoft India, TCS, Infosys, Wipro, Cognizant, Accenture, Amazon, Capgemini, Tech Mahindra, Zennith Digital Tech LLP.<br><br>
+Ask "Show placement overview" or "Who got placed at Microsoft" to view details!`,
+                    url: 'placements.php',
+                    ctaText: 'View Placements Page →'
+                };
+            }
+        }
+
+        // B. COMPANY SPECIFIC SEARCH: "who got an internship at [company]?", "who got placed at TCS?"
+        let targetCompany = null;
+        const companies = ['zennith', 'amazon', 'microsoft', 'tcs', 'infosys', 'wipro', 'cognizant', 'accenture', 'capgemini', 'tech mahindra', 'eduskills', 'future interns', 'track 3d', 'idea lab', 'idealab', '90 heal', 'dms', 'bluconn', 'blucon', 'rhythmiqcx', 'aunix', 'aws', 'cognifyz', 'saiket', 'tech nirmaan', 'unified mentor'];
+        for (const c of companies) {
+            if (q.includes(c)) {
+                targetCompany = c;
+                break;
+            }
+        }
+
+        if (targetCompany) {
+            let pool = [...MASTER_INTERNSHIPS_INDEX, ...MASTER_PLACEMENTS_INDEX];
+            let matches = pool.filter(r => (r.company || '').toLowerCase().includes(targetCompany) || (r.role || '').toLowerCase().includes(targetCompany));
+            if (isCSD) matches = matches.filter(r => (r.branch || r.department) === 'CSD');
+            if (isCSIT) matches = matches.filter(r => (r.branch || r.department) === 'CSIT');
+
+            matches = deduplicatePeople(matches);
+
+            const compName = targetCompany.toUpperCase();
+            if (matches.length > 0) {
+                let listHTML = matches.map((m, i) => `${i + 1}. <strong>${m.name}</strong> (${m.regNo || 'Reg N/A'}) — ${m.branch || 'CSIT'} ${m.year || ''} | Role: ${m.role || 'Intern'}`).join('<br>');
+                return {
+                    id: `company_internship_${targetCompany}`,
+                    category: 'Company Selections',
+                    title: `Students Selected by ${compName}`,
+                    content: `Here are all <strong>${matches.length} Students</strong> selected by <strong>${compName}</strong>:<br><br>${listHTML}`,
+                    url: 'internships.php',
+                    ctaText: 'View Active Internships →'
+                };
+            } else {
+                return {
+                    id: `company_internship_none_${targetCompany}`,
+                    category: 'Company Selections',
+                    title: `Selections for ${compName}`,
+                    content: `Currently, <strong>${compName}</strong> is listed among our recruiting partners. For complete company-wise selection lists, you can visit the Internships & Placements section.`,
+                    url: 'placements.php',
+                    ctaText: 'View Placements & Recruiters →'
+                };
+            }
+        }
+
+        // C. MEMBER LISTINGS & GENERAL INTERNSHIP / PLACEMENT QUERIES
+        if (isInternshipQuery) {
+            let list = [...MASTER_INTERNSHIPS_INDEX];
+            if (isCSD) list = list.filter(r => (r.branch || r.department) === 'CSD');
+            if (isCSIT) list = list.filter(r => (r.branch || r.department) === 'CSIT');
+            if (is2ndYear) list = list.filter(r => (r.year || '').includes('2'));
+            if (is3rdYear) list = list.filter(r => (r.year || '').includes('3'));
+            if (is4thYear) list = list.filter(r => (r.year || '').includes('4'));
+
+            list = deduplicatePeople(list);
+
+            let filterLabel = '';
+            if (isCSD) filterLabel += 'CSD ';
+            if (isCSIT) filterLabel += 'CSIT ';
+            if (is2ndYear) filterLabel += '2nd Year ';
+            if (is3rdYear) filterLabel += '3rd Year ';
+            if (is4thYear) filterLabel += '4th Year ';
+
+            let listHTML = list.map((m, i) => `${i + 1}. <strong>${m.name}</strong> (Reg: ${m.regNo || 'N/A'}) — ${m.branch || 'CSIT'} ${m.year || ''} | Company: <strong>${m.company || 'Corporate Partner'}</strong> (${m.role || 'Intern'})`).join('<br>');
+
+            return {
+                id: 'internship_members_list',
+                category: 'Internships & Careers',
+                title: `${filterLabel.trim() || 'All'} Internship Members & Selected Students`,
+                content: `Here are all <strong>${list.length} Students</strong> selected for industrial internships:<br><br>${listHTML}`,
+                url: 'internships.php',
+                ctaText: 'View Complete Internships Page →'
+            };
+        }
+
+        if (isPlacementQuery) {
+            let list = [...MASTER_PLACEMENTS_INDEX];
+            if (isCSD) list = list.filter(r => (r.branch || r.department) === 'CSD');
+            if (isCSIT) list = list.filter(r => (r.branch || r.department) === 'CSIT');
+
+            list = deduplicatePeople(list);
+
+            let filterLabel = isCSD ? 'CSD ' : (isCSIT ? 'CSIT ' : '');
+
+            let contentText = `<strong>${filterLabel.trim() || 'Department'} Placement Overview & Recruiter Highlights:</strong><br><br>
+• <strong>Highest Package:</strong> ₹12.0 LPA (Microsoft India)<br>
+• <strong>Average Package:</strong> ₹5.1 LPA<br>
+• <strong>Placement Rate:</strong> 66% Students Placed<br>
+• <strong>Top Recruiting Companies:</strong> Microsoft India, TCS, Infosys, Wipro, Cognizant, Accenture, Amazon, Capgemini, Tech Mahindra.<br><br>`;
+
+            if (list.length > 0) {
+                contentText += `<strong>Placement Selected Members:</strong><br>` + list.map((m, i) => `${i + 1}. <strong>${m.name}</strong> (${m.regNo || 'N/A'}) — ${m.branch || 'CSIT'} | Role/Details: ${m.role || 'Placed'}`).join('<br>');
+            }
+
+            return {
+                id: 'placement_members_list',
+                category: 'Placements & Careers',
+                title: `${filterLabel.trim() || 'Department'} Placement Overview & Records`,
+                content: contentText,
+                url: 'placements.php',
+                ctaText: 'View Complete Placements Page →'
+            };
+        }
+
+        return null;
+    }
+
+    /**
+     * =========================================================================
      * 13. PRIMARY RAG HYBRID DISPATCHER ENFORCING RETRIEVAL SYSTEM
      * =========================================================================
      */
@@ -1640,14 +2247,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
         if (!rawQuery) return null;
         const lower = rawQuery.toLowerCase().trim();
 
-        // 1. PROGRAM-SPECIFIC ACADEMICS METADATA RAG FIRST
-        const academicMetadataResult = executeAcademicMetadataRAG(rawQuery);
-        if (academicMetadataResult) {
-            console.log('[CHATBOT INTENT] Academic Metadata RAG Match:', academicMetadataResult.title);
-            return academicMetadataResult;
-        }
-
-        // 2. PERSON / FACULTY / STUDENT LOOKUP
+        // 1. PERSON / FACULTY / STUDENT LOOKUP FIRST
         const personResult = detectPersonInQuery(rawQuery);
         if (personResult && personResult.found) {
             if (personResult.isMultiple) {
@@ -1666,7 +2266,21 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
             }
         }
 
-        // 3. STRUCTURED QUERY ENGINE
+        // 2. INTERNSHIPS & PLACEMENTS HYBRID SEARCH SECOND
+        const internPlacementResult = searchInternshipsAndPlacements(rawQuery);
+        if (internPlacementResult) {
+            console.log('[CHATBOT INTENT] Internship & Placement Match:', internPlacementResult.title);
+            return internPlacementResult;
+        }
+
+        // 3. PROGRAM-SPECIFIC ACADEMICS METADATA RAG
+        const academicMetadataResult = executeAcademicMetadataRAG(rawQuery);
+        if (academicMetadataResult) {
+            console.log('[CHATBOT INTENT] Academic Metadata RAG Match:', academicMetadataResult.title);
+            return academicMetadataResult;
+        }
+
+        // 4. STRUCTURED QUERY ENGINE
         const structuredResult = executeStructuredQuery(rawQuery);
         if (structuredResult) {
             console.log('[CHATBOT INTENT] Structured Query Match:', structuredResult.title);
@@ -1865,7 +2479,7 @@ Students compete in continuous hackathons, coding contests, sports, and cultural
                 return finalResponse;
             }
 
-            const proxyUrl = config.remoteApiUrl || 'api/gemini_chat.php';
+            const proxyUrl = getRootApiUrl(config.remoteApiUrl || 'api/gemini_chat.php');
             try {
                 const proxyResponse = await fetch(proxyUrl, {
                     method: 'POST',

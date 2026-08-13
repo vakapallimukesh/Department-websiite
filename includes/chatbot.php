@@ -164,7 +164,7 @@
     <!-- Footer Input Bar -->
     <div class="chatbot-footer">
         <form id="chatbotForm" class="chatbot-input-form" onsubmit="return false;">
-            <input type="text" id="chatbotInput" class="chatbot-input" placeholder="Ask anything about our department..." aria-label="Ask anything about our department" autocomplete="off">
+            <input type="text" id="chatbotInput" class="chatbot-input" placeholder="Ask anything about our department..." aria-label="Ask anything about our department" autocomplete="off" autocorrect="off" spellcheck="false">
             <button type="button" id="chatbotSendBtn" class="chatbot-send-btn" disabled aria-label="Send message">
                 <i class="fas fa-paper-plane"></i>
             </button>
