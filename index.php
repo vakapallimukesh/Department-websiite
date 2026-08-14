@@ -1569,9 +1569,10 @@ include "./head.php";
         <!-- Animated Background Elements -->
         <div class="hero-background">
             <!-- Background Video Player -->
-            <video id="bgHeroVideo" class="hero-video-bg" autoplay muted loop playsinline preload="auto">
-                <source src="assets/videos/hero-background-opt.mp4?v=2" type="video/mp4">
-                <source src="assets/videos/hero-background.mp4?v=2" type="video/mp4">
+            <video id="bgHeroVideo" class="hero-video-bg" autoplay muted loop playsinline webkit-playsinline preload="auto" style="opacity: 1 !important; visibility: visible !important; display: block !important;">
+                <source src="assets/videos/hero-background-opt.mp4?v=3" type="video/mp4">
+                <source src="assets/videos/hero-background.mp4?v=3" type="video/mp4">
+                <source src="assets/videos/0807_3.mp4?v=3" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
             <script>
@@ -1583,29 +1584,24 @@ include "./head.php";
                     v.defaultMuted = true;
                     v.playsInline = true;
                     
-                    function tryPlay() {
-                        if (v.paused) {
-                            var p = v.play();
-                            if (p && p.catch) {
-                                p.catch(function(e) {
-                                    function forcePlay() {
-                                        v.play();
-                                        window.removeEventListener('click', forcePlay);
-                                        window.removeEventListener('touchstart', forcePlay);
-                                        window.removeEventListener('scroll', forcePlay);
-                                    }
-                                    window.addEventListener('click', forcePlay);
-                                    window.addEventListener('touchstart', forcePlay);
-                                    window.addEventListener('scroll', forcePlay);
-                                });
-                            }
+                    function forcePlay() {
+                        v.muted = true;
+                        var promise = v.play();
+                        if (promise !== undefined && promise.catch) {
+                            promise.catch(function(err) {
+                                // Silent retry on user interaction
+                            });
                         }
                     }
                     
-                    tryPlay();
-                    v.addEventListener('canplay', tryPlay);
-                    v.addEventListener('loadeddata', tryPlay);
-                    window.addEventListener('load', tryPlay);
+                    forcePlay();
+                    v.addEventListener('loadeddata', forcePlay);
+                    v.addEventListener('canplay', forcePlay);
+                    v.addEventListener('canplaythrough', forcePlay);
+                    
+                    ['click', 'touchstart', 'scroll', 'mousemove', 'keydown'].forEach(function(evt) {
+                        window.addEventListener(evt, forcePlay, { once: true, passive: true });
+                    });
                 }
                 if (document.readyState === 'loading') {
                     document.addEventListener('DOMContentLoaded', initHeroVideo);
