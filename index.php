@@ -1570,7 +1570,7 @@ include "./head.php";
         <div class="hero-background">
             <!-- Background Video Player -->
             <video id="bgHeroVideo" class="hero-video-bg" autoplay muted loop playsinline preload="auto">
-                <source src="assets/videos/hero-background.mp4" type="video/mp4">
+                <source src="assets/videos/hero-background-opt.mp4?v=1" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
             <script>
